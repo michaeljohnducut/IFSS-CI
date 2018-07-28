@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from eliteMaintenance.themedesigner.in/demos/eliteMaintenance-horizontal-nav-fullwidth/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 07 Mar 2018 02:42:28 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>assets/plugins/images/fss_icon.png">
+    <title><?php echo $title; ?></title>
+    <!-- Bootstrap Core CSS -->
+    <link href="<?php echo base_url(); ?>assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <!-- Menu CSS -->
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <!-- toast CSS -->
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/toast-master/css/jquery.toast.css" rel="stylesheet">
+    <!-- morris CSS -->
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
+    <!-- animation CSS -->
+    <link href="<?php echo base_url(); ?>assets/css/animate.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet">
+    <!-- color CSS -->
+    <link href="<?php echo base_url(); ?>assets/css/colors/blue.css" id="theme" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/dropify/dist/css/dropify.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
+    
+    <style type="text/css">
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="cssload-speeding-wheel"></div>
+    </div>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header" style="background-color: #2D3640;"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="ti-menu"></i></a>
+                <div class="top-left-part"><a href="index.php"><span><img src="<?php echo base_url(); ?>assets/plugins/images/header.png" alt="home" height="60px" style="margin-left: 10px;" /></span></a></div>
+                <ul class="nav navbar-top-links navbar-left hidden-xs">
+                    <li><a href="javascript:void(0)" class="open-close hidden-xs waves-effect waves-light"><i class="icon-arrow-left-circle ti-menu"></i></a></li>
+                    <!-- <li>
+                        <form role="search" class="app-search hidden-xs">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <a href="#"><i class="fa fa-search"></i></a>
+                        </form>
+                    </li> -->
+                </ul>
+                <ul class="nav navbar-top-links navbar-right pull-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="<?php echo base_url(); ?>assets/plugins/images/users/john.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><?php echo $this->session->userdata('NAME');?></b></a>
+                        <ul class="dropdown-menu dropdown-user animated flipInY">
+                            <li><a href="javascript:changePass();"><i class="ti-user"></i> Change Password</a></li>
+                            <li><a href="<?php echo base_url('Access/logout');?>" id="logout"><i class="fa fa-power-off"></i> Logout</a></li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-header -->
+            <!-- /.navbar-top-links -->
+            <!-- /.navbar-static-side -->
+        </nav>
+        <!-- Left navbar-header -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+                <ul class="nav" id="side-menu">
+                    <li><a href="<?php echo base_url();?>Maintenance/faculty_prof" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Faculty Profile<span class="fa arrow"></span></span></a>
+                    </li>
+                    <li><a href="<?php echo base_url();?>Transaction/subject_pref" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Subject Preference<span class="fa arrow"></span></span></a>
+                    </li>
+                    <li><a href="<?php echo base_url();?>Transaction/view_schedule" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">View Schedule<span class="fa arrow"></span></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+         <a data-toggle="modal" href="#modalNewPass" id="openMod"></a>
+
+        <div class="modal fade bs-example-modal-lg" id="modalNewPass" tabindex="-1" role="dialog" aria-labelledby="modalNewPass" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h4 class="modal-title">Change Password</h4>
+                                        </div>
+                                        <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="change_pass" method="POST" enctype="multipart/form-data" data-toggle="validator">
+                                                <div class="form-group col-md-6">
+                                                    <label class="control-label">New Password:</label>
+                                                    <input class="form-control" type="password" data-toggle="validator" data-minlength="6" id="new_pass" name="new_pass" required>
+                                                    <span class="help-block">Minimum of 6 characters</span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                        <label class="control-label">Confirm Password:</label>
+                                                        <input class="form-control" type="password" id="con_pass" name="con_pass" data-match="#new_pass" data-match-error="Whoops, these don't match" required>
+                                                        <div class="help-block with-errors"></div>
+                                                </div>
+                                            
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
+                                                <button type="submit" name="btnNewPass" id="btnNewPass" class="btn btn-success waves-effect text-left">Save Password</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                
+                

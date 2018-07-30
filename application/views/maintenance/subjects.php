@@ -99,8 +99,8 @@
                                                 </div> -->
                                             
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
-                                                <button type="submit" name="btnAddSubj" class="btn btn-success waves-effect text-left">Add Subject</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
+                                                <button type="submit" name="btnAddSubj" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
                                         </div>
@@ -160,8 +160,8 @@
                                                 </div> -->
                                                 <input type="hidden" name="subj_id_hid" id="subj_id_hid" />
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Reset</button>
-                                                <button type="submit" name="btnSaveSubj" class="btn btn-success waves-effect text-left">Update Subject</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Clear</button>
+                                                <button type="submit" name="btnSaveSubj" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                         </form>
                                         </div>

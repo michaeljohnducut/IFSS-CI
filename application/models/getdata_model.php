@@ -67,9 +67,8 @@ class getdata_model extends CI_Model{
 
 		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
 
-		$query = $this->db->select('a.account_id, f.lname, f.fname, f.mname, f.email, f.contact_no, f.date_of_birth, f.gender, f.civil_status, f.place_of_birth, f.citizenship, f.residential_address, f.rzip_code, f.permanent_address, f.pzip_code, f.s_lname, f.s_fname, f.s_mname, f.faculty_type, c.course_id, f.faculty_id')
+		$query = $this->db->select('a.account_id, f.lname, f.fname, f.mname, f.email, f.contact_no, f.date_of_birth, f.gender, f.civil_status, f.citizenship, f.residential_address, f.rzip_code, f.permanent_address, f.pzip_code, f.faculty_type, f.dept, f.faculty_id')
 				->join('faculty f', 'a.faculty_id = f.faculty_id')
-				->join('course c', 'f.dept = c.course_id', 'left')
                 ->where('f.status', 1)
                 ->where('a.status', 1)
                 ->where('f.faculty_id', $faculty_id)
@@ -87,17 +86,13 @@ class getdata_model extends CI_Model{
 					$r->date_of_birth,
 					$r->gender,
 					$r->civil_status,
-					$r->place_of_birth,
 					$r->citizenship,
 					$r->residential_address,
 					$r->rzip_code,
 					$r->permanent_address,
 					$r->pzip_code,
-					$r->s_lname,
-					$r->s_fname,
-					$r->s_mname,
 					$r->faculty_type,
-					$r->course_id,
+					$r->dept,
 					$r->faculty_id,
 					);
 		}
@@ -152,19 +147,21 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
-	public function department()
+	public function course()
 	{
 		$result = array();
 
-		$query = $this->db->select('course_id, course_code, course_desc')
-                ->where('status', 1)
-                ->get('course');
+		$query = $this->db->select('c.course_id, c.course_code, c.course_desc, d.dept_code')
+				->join('department d', 'c.dept = d.dept_id')
+                ->where('c.status', 1)
+                ->get('course C');
 
 		foreach ($query->result() as $r) 
 		{
 			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->course_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
+					$r->dept_code,
 					$r->course_code,
 					$r->course_desc,
 					$btn,
@@ -175,15 +172,15 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
-	public function view_department()
+	public function view_course()
 	{
 		$result = array();
 
-		$department_id = $this->security->xss_clean($this->input->post('department_id'));
+		$course_id = $this->security->xss_clean($this->input->post('course_id'));
 
-		$query = $this->db->select('course_id, course_code, course_desc')
+		$query = $this->db->select('course_id, course_code, course_desc, dept')
                 ->where('status', 1)
-                ->where('course_id', $department_id)
+                ->where('course_id', $course_id)
                 ->get('course');
 
 		foreach ($query->result() as $r) 
@@ -191,13 +188,59 @@ class getdata_model extends CI_Model{
 			$result[] = array(
 					$r->course_id,
 					$r->course_code,
-					$r->course_desc
+					$r->course_desc,
+					$r->dept
 					);
 		}
 
 		return $result;
 	}
 
+	public function department()
+	{
+		$result = array();
+
+		$query = $this->db->select('dept_id, dept_code, dept_desc')
+                ->where('status', 1)
+                ->get('department');
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->dept_id.'"><span class="fa fa-pencil"></span></button>';
+
+			$result[] = array(
+					$r->dept_code,
+					$r->dept_desc,
+					$btn,
+					$r->dept_id
+					);
+		}
+
+		return $result;
+	}
+
+	public function view_department()
+	{
+		$result = array();
+
+		$dept_id = $this->security->xss_clean($this->input->post('department_id'));
+
+		$query = $this->db->select('dept_id, dept_code, dept_desc')
+                ->where('status', 1)
+                ->where('dept_id', $dept_id)
+                ->get('department');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->dept_id,
+					$r->dept_code,
+					$r->dept_desc
+					);
+		}
+
+		return $result;
+	}
 
 	public function subject()
 	{
@@ -441,50 +484,50 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
-	public function acad_yr()
-	{
-		$result = array();
+	// public function acad_yr()
+	// {
+	// 	$result = array();
 
-		$query = $this->db->select('acad_yr_id, acad_yr_desc')
-				->where('status', 1)
-				->order_by('acad_yr_desc', 'asc')
-                ->get('acad_year');
+	// 	$query = $this->db->select('acad_yr_id, acad_yr_desc')
+	// 			->where('status', 1)
+	// 			->order_by('acad_yr_desc', 'asc')
+ //                ->get('acad_year');
 
-		foreach ($query->result() as $r) 
-		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->acad_yr_id.'"><span class="fa fa-pencil"></span></button>';
+	// 	foreach ($query->result() as $r) 
+	// 	{
+	// 		$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->acad_yr_id.'"><span class="fa fa-pencil"></span></button>';
 
-			$result[] = array(
-					$r->acad_yr_desc,
-					$btn,
-					$r->acad_yr_id
-					);
-		}
+	// 		$result[] = array(
+	// 				$r->acad_yr_desc,
+	// 				$btn,
+	// 				$r->acad_yr_id
+	// 				);
+	// 	}
 
-		return $result;
-	}
+	// 	return $result;
+	// }
 
-	public function view_acad_yr($id)
-	{
-		$result = array();
+	// public function view_acad_yr($id)
+	// {
+	// 	$result = array();
 
-		$acadyr_id = $this->security->xss_clean($this->input->post('acadyr_id'));
+	// 	$acadyr_id = $this->security->xss_clean($this->input->post('acadyr_id'));
 
-		$query = $this->db->select('acad_yr_id, acad_yr_desc')
-				->where('acad_yr_id', $acadyr_id)
-				->where('status', 1)
-                ->get('acad_year');
+	// 	$query = $this->db->select('acad_yr_id, acad_yr_desc')
+	// 			->where('acad_yr_id', $acadyr_id)
+	// 			->where('status', 1)
+ //                ->get('acad_year');
 
-		foreach ($query->result() as $r) 
-		{
-			$result[] = array(
-					$r->acad_yr_id,
-					$r->acad_yr_desc
-					);
-		}
+	// 	foreach ($query->result() as $r) 
+	// 	{
+	// 		$result[] = array(
+	// 				$r->acad_yr_id,
+	// 				$r->acad_yr_desc
+	// 				);
+	// 	}
 
-		return $result;
-	}
+	// 	return $result;
+	// }
 
 	public function get_curriculum()
 	{
@@ -741,10 +784,9 @@ class getdata_model extends CI_Model{
 	{
 		$result = array();
 
-		$query = $this->db->select('ay.acad_yr_desc, e.sem, c.course_code, CONCAT(f.lname,", ", f.fname," ", f.mname) AS faculty_name, rating, rating_desc, evaluation_id')
+		$query = $this->db->select('acad_yr, e.sem, d.dept_code, CONCAT(f.lname,", ", f.fname," ", f.mname) AS faculty_name, rating, rating_desc, evaluation_id')
 				->join('faculty f', 'e.faculty_id = f.faculty_id')
-                ->join('acad_year ay', 'e.acad_yr = ay.acad_yr_id')
-                ->join('course c', 'e.course = c.course_id')
+                ->join('department d', 'e.dept = d.dept_id')
                 ->get('evaluation e');
 
 		foreach ($query->result() as $r) 
@@ -752,13 +794,12 @@ class getdata_model extends CI_Model{
 			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->evaluation_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
-					$r->acad_yr_desc,
+					$r->acad_yr,
 					$r->sem,
-					$r->course_code,
+					$r->dept_code,
 					$r->faculty_name,
 					$r->rating,
 					$r->rating_desc,
-					$btn,
 					$r->evaluation_id
 					);
 		}

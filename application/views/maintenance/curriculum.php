@@ -252,7 +252,7 @@
                                         </tbody>
                             </table>
 
-                            <button type="button" class="btn btn-default" onclick="resetForm3()">Reset</button>
+                            <button type="button" class="btn btn-default" onclick="resetForm3()">Clear</button>
                             <button type="submit" class="btn btn-info waves-effect text-left">Add Subjects</button>
                             
                         </form>

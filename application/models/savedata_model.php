@@ -35,15 +35,6 @@ class savedata_model extends CI_Model
             $faculty_civilstatus = '';
         }
 
-        if(isset($_POST['fact_place_birth']))
-        {
-            $faculty_placebirth = $this->input->post('fact_place_birth');
-        }
-        else
-        {
-            $faculty_placebirth = '';
-        }
-
         if(isset($_POST['fact_citizen']))
         {
             $faculty_citizen = $this->input->post('fact_citizen');
@@ -89,33 +80,6 @@ class savedata_model extends CI_Model
             $faculty_permaZip = '';
         }
 
-        if(isset($_POST['fact_slname']))
-        {
-            $faculty_slname = $this->input->post('fact_slname');
-        }
-        else
-        {
-            $faculty_slname = '';
-        }
-
-        if(isset($_POST['fact_sfname']))
-        {
-            $faculty_sfname = $this->input->post('fact_sfname');
-        }
-        else
-        {
-           $faculty_sfname = '';
-        }
-
-        if(isset($_POST['fact_smname']))
-        {
-            $faculty_smname = $this->input->post('fact_smname');
-        }
-        else
-        {
-           $faculty_smname = '';
-        }
-
 		$query = $this->db->where('account_id', $faculty_id)
 							->get('account');
 
@@ -132,15 +96,11 @@ class savedata_model extends CI_Model
 					'date_of_birth' => $faculty_birthdate,
 					'gender' => $faculty_gender,
 					'civil_status' => $faculty_civilstatus,
-					'place_of_birth' => $faculty_placebirth,
 					'citizenship' => $faculty_citizen,
 					'residential_address' => $faculty_resiAddress,
 					'rzip_code' => $faculty_resZip,
 					'permanent_address' => $faculty_permaAddress,
 					'pzip_code' => $faculty_permaZip,
-					's_lname' => $faculty_slname,
-					's_fname' => $faculty_sfname,
-					's_mname' => $faculty_smname,
 					'faculty_type' => $faculty_type,
 					'dept' => $faculty_dept,
 					'status' => 1,
@@ -264,14 +224,14 @@ class savedata_model extends CI_Model
             $faculty_civilstatus = '';
         }
 
-        if(isset($_POST['fact_place_birth']))
-        {
-            $faculty_placebirth = $this->input->post('fact_place_birth');
-        }
-        else
-        {
-            $faculty_placebirth = '';
-        }
+        // if(isset($_POST['fact_place_birth']))
+        // {
+        //     $faculty_placebirth = $this->input->post('fact_place_birth');
+        // }
+        // else
+        // {
+        //     $faculty_placebirth = '';
+        // }
 
         if(isset($_POST['fact_citizen']))
         {
@@ -318,40 +278,6 @@ class savedata_model extends CI_Model
             $faculty_permaZip = '';
         }
 
-        if(isset($_POST['fact_slname']))
-        {
-            $faculty_slname = $this->input->post('fact_slname');
-        }
-        else
-        {
-            $faculty_slname = '';
-        }
-
-        if(isset($_POST['fact_sfname']))
-        {
-            $faculty_sfname = $this->input->post('fact_sfname');
-        }
-        else
-        {
-           $faculty_sfname = '';
-        }
-
-        if(isset($_POST['fact_smname']))
-        {
-            $faculty_smname = $this->input->post('fact_smname');
-        }
-        else
-        {
-           $faculty_smname = '';
-        }
-
-		// $query = $this->db->where('account_id', $faculty_id)
-		// 					->get('account');
-
-		// $number_filter_row = $query->num_rows();
-
-		// if($number_filter_row == 0)
-		// {
 			$data = array(
 					'lname' => $faculty_sname,
 					'fname' => $faculty_fname,
@@ -361,15 +287,11 @@ class savedata_model extends CI_Model
 					'date_of_birth' => $faculty_birthdate,
 					'gender' => $faculty_gender,
 					'civil_status' => $faculty_civilstatus,
-					'place_of_birth' => $faculty_placebirth,
 					'citizenship' => $faculty_citizen,
 					'residential_address' => $faculty_resiAddress,
 					'rzip_code' => $faculty_resZip,
 					'permanent_address' => $faculty_permaAddress,
 					'pzip_code' => $faculty_permaZip,
-					's_lname' => $faculty_slname,
-					's_fname' => $faculty_sfname,
-					's_mname' => $faculty_smname,
 					'faculty_type' => $faculty_type,
 					'dept' => $faculty_dept,
 					'status' => 1,
@@ -395,12 +317,7 @@ class savedata_model extends CI_Model
 			{
 				$output = 'NOT UPDATED';
 			}
-		// }
-		// else
-		// {
-		// 	$output = 'THE DATA IS ALREADY INSERTED';
-		// }
-
+		
 		if(isset($_POST['educ_lvl']))
         {       
             $educ_lvl = $this->input->post('educ_lvl');
@@ -530,16 +447,18 @@ class savedata_model extends CI_Model
 		}
 	}
 
-	public function add_department()
+	public function add_course()
 	{
 		$output = '';
 
-		$dept_code = $this->security->xss_clean($this->input->post('dept_code'));
-		$dept_desc = $this->security->xss_clean($this->input->post('dept_desc'));
+		$course_code = $this->security->xss_clean($this->input->post('course_code'));
+		$course_desc = $this->security->xss_clean($this->input->post('course_desc'));
+		$course_dept = $this->security->xss_clean($this->input->post('course_dept'));
 
 		$query = $this->db->group_start()
-								->where('course_code', $dept_code)
-								->where('course_desc', $dept_desc)
+								->where('course_code', $course_code)
+								->where('course_desc', $course_desc)
+								->where('dept', $course_dept)
 								->where('status', 1)
 							->group_end()
 							->get('course');
@@ -549,8 +468,9 @@ class savedata_model extends CI_Model
 		if($number_filter_row == 0)
 		{
 			$data = array(
-					'course_code' => $dept_code,
-					'course_desc' => $dept_desc,
+					'course_code' => $course_code,
+					'course_desc' => $course_desc,
+					'dept' => $course_dept,
 					'status' => 1
 					);
 
@@ -571,17 +491,19 @@ class savedata_model extends CI_Model
 		return $output;
 	}
 	
-	public function edit_department()
+	public function edit_course()
 	{
 		$output = '';
 
-		$main_id = $this->security->xss_clean($this->input->post('dept_id_hid'));
-		$dept_code = $this->security->xss_clean($this->input->post('edit_dept_code'));
-		$dept_desc = $this->security->xss_clean($this->input->post('edit_dept_desc'));
+		$main_id = $this->security->xss_clean($this->input->post('course_id_hid'));
+		$course_code = $this->security->xss_clean($this->input->post('edit_course_code'));
+		$course_desc = $this->security->xss_clean($this->input->post('edit_course_desc'));
+		$course_dept = $this->security->xss_clean($this->input->post('edit_course_dept'));
 
 		$query = $this->db->group_start()
-								->where('course_code', $dept_code)
-								->where('course_desc', $dept_desc)
+								->where('course_code', $course_code)
+								->where('course_desc', $course_desc)
+								->where('dept', $course_dept)
 								->where('status', 1)
 							->group_end()
 							->get('course');
@@ -591,12 +513,96 @@ class savedata_model extends CI_Model
 		if($number_filter_row == 0)
 		{
 			$data = array(
-					'course_code' => $dept_code,
-					'course_desc' => $dept_desc
+					'course_code' => $course_code,
+					'course_desc' => $course_desc,
+					'dept' => $course_dept
 					);
 
 			if($this->db->where('course_id', $main_id)
 						->update('course', $data))
+			{
+				$output = 'UPDATED';
+			}
+			else
+			{
+				$output = 'NOT UPDATED';
+			}
+		}
+		else
+		{
+			$output = 'THE DATA IS ALREADY INSERTED';
+		}
+
+		return $output;
+	}
+
+	public function add_department()
+	{
+		$output = '';
+
+		$dept_code = $this->security->xss_clean($this->input->post('dept_code'));
+		$dept_desc = $this->security->xss_clean($this->input->post('dept_desc'));
+
+		$query = $this->db->group_start()
+								->where('dept_code', $dept_code)
+								->where('dept_desc', $dept_desc)
+								->where('status', 1)
+							->group_end()
+							->get('department');
+
+		$number_filter_row = $query->num_rows();
+
+		if($number_filter_row == 0)
+		{
+			$data = array(
+					'dept_code' => $dept_code,
+					'dept_desc' => $dept_desc,
+					'status' => 1
+					);
+
+			if($this->db->insert('department', $data))
+			{
+				$output = 'INSERTED';
+			}
+			else
+			{
+				$output = 'NOT INSERTED';
+			}
+		}
+		else
+		{
+			$output = 'THE DATA IS ALREADY INSERTED';
+		}
+
+		return $output;
+	}
+
+	public function edit_department()
+	{
+		$output = '';
+
+		$main_id = $this->security->xss_clean($this->input->post('dept_id_hid'));
+		$dept_code = $this->security->xss_clean($this->input->post('edit_dept_code'));
+		$dept_desc = $this->security->xss_clean($this->input->post('edit_dept_desc'));
+
+		$query = $this->db->group_start()
+								->where('dept_code', $dept_code)
+								->where('dept_desc', $dept_desc)
+								->where('status', 1)
+							->group_end()
+							->get('department');
+
+		$number_filter_row = $query->num_rows();
+
+		if($number_filter_row == 0)
+		{
+			$data = array(
+					'dept_code' => $dept_code,
+					'dept_desc' => $dept_desc
+					);
+
+			if($this->db->where('dept_id', $main_id)
+						->update('department', $data))
 			{
 				$output = 'UPDATED';
 			}
@@ -1018,67 +1024,67 @@ class savedata_model extends CI_Model
 		return $output;
 	}
 
-	public function add_acad_yr()
-	{
-		$output = '';
+	// public function add_acad_yr()
+	// {
+	// 	$output = '';
 
-		$new_acadyr = $this->security->xss_clean($this->input->post('new_acadyr'));
+	// 	$new_acadyr = $this->security->xss_clean($this->input->post('new_acadyr'));
 
-		$query = $this->db->where('acad_yr_desc', $new_acadyr)
-							->get('acad_year');
+	// 	$query = $this->db->where('acad_yr_desc', $new_acadyr)
+	// 						->get('acad_year');
 
-		$number_filter_row = $query->num_rows();
+	// 	$number_filter_row = $query->num_rows();
 
-		if($number_filter_row == 0)
-		{
-			if($this->db->insert('acad_year', array('acad_yr_desc' => $new_acadyr, 'status' => 1)))
-			{
-				$output = 'INSERTED';
-			}
-			else
-			{
-				$output = 'NOT INSERTED';
-			}
-		}
-		else
-		{
-			$output = 'THE DATA IS ALREADY INSERTED';
-		}
+	// 	if($number_filter_row == 0)
+	// 	{
+	// 		if($this->db->insert('acad_year', array('acad_yr_desc' => $new_acadyr, 'status' => 1)))
+	// 		{
+	// 			$output = 'INSERTED';
+	// 		}
+	// 		else
+	// 		{
+	// 			$output = 'NOT INSERTED';
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		$output = 'THE DATA IS ALREADY INSERTED';
+	// 	}
 
-		return $output;
-	}
+	// 	return $output;
+	// }
 
-	public function edit_acad_yr()
-	{
-		$output = '';
+	// public function edit_acad_yr()
+	// {
+	// 	$output = '';
 
-		$main_id = $this->security->xss_clean($this->input->post('acadyr_id_hid'));
-		$edit_acadyr = $this->security->xss_clean($this->input->post('edit_acadyr'));
+	// 	$main_id = $this->security->xss_clean($this->input->post('acadyr_id_hid'));
+	// 	$edit_acadyr = $this->security->xss_clean($this->input->post('edit_acadyr'));
 
-		$query = $this->db->where('acad_yr_desc', $edit_acadyr)
-							->get('acad_year');
+	// 	$query = $this->db->where('acad_yr_desc', $edit_acadyr)
+	// 						->get('acad_year');
 
-		$number_filter_row = $query->num_rows();
+	// 	$number_filter_row = $query->num_rows();
 
-		if($number_filter_row == 0)
-		{
-			if($this->db->where('acad_yr_id', $main_id)
-					->update('acad_year', array('acad_yr_desc' => $edit_acadyr)))
-			{
-				$output = 'UPDATED';
-			}
-			else
-			{
-				$output = 'NOT UPDATED';
-			}
-		}
-		else
-		{
-			$output = 'THE DATA IS ALREADY INSERTED';
-		}
+	// 	if($number_filter_row == 0)
+	// 	{
+	// 		if($this->db->where('acad_yr_id', $main_id)
+	// 				->update('acad_year', array('acad_yr_desc' => $edit_acadyr)))
+	// 		{
+	// 			$output = 'UPDATED';
+	// 		}
+	// 		else
+	// 		{
+	// 			$output = 'NOT UPDATED';
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		$output = 'THE DATA IS ALREADY INSERTED';
+	// 	}
 
-		return $output;
-	}
+	// 	return $output;
+	// }
 
 	public function add_to_curriculum(){
 
@@ -1442,8 +1448,6 @@ class savedata_model extends CI_Model
 										
 					$ret = $query->row_array();
 					$faculty_id = $ret['faculty_id'];
-
-					// print_r($faculty.' '.$faculty_id); die();
 
 					$data[] = array(
 						'acad_yr' => $acad_yr,

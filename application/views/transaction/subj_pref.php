@@ -41,7 +41,7 @@
                                 <label class="control-label">Acad Year:</label>
                                 <select class="form-control select2" name="acad_year" id="acad_year">
                                     <option value="0">-ACAD YEAR-</option>
-                                    <?php foreach($acad_year as $r) echo '<option value="'.$r[0].'">'.$r[1].'</option>';?>
+                                    <option value="2018-2019">2018-2019</option>
                                 </select>
                                 
                             </div>
@@ -294,7 +294,7 @@
                                             
                                         <div class="modal-footer">
                                             <!-- <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button> -->
-                                            <button type="button" name="btnCloseDisclaimer" class="btn btn-success waves-effect text-left">Agree</button>
+                                            <button type="button" name="btnCloseDisclaimer" class="btn btn-success waves-effect text-left" data-dismiss="modal">Agree</button>
                                         </div>
                                     </div>
                                 </div>

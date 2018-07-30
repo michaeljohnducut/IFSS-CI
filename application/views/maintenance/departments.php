@@ -1,11 +1,11 @@
 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                         <h4 class="page-title">Manage Courses</h4>
+                         <h4 class="page-title">Manage Departments</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <ol class="breadcrumb">
                             <li><a href="#">Maintenance</a></li>
-                            <li class="active">Courses</li>
+                            <li class="active">Departments</li>
                         </ol>
                     </div>
                 
@@ -16,14 +16,14 @@
                     <div class="col-sm-12">                            
                             <div class="row">
                                 <div class="col-md-10">
-                                    <h2>Lists of Courses</h2>
+                                    <h2>Lists of Departments</h2>
                                 </div>
                             </div>
                             <h3 class="box-title m-b-0">Legend:</h3>
                             <div class="row" style="margin-left: 20px; margin-top: 5px;">
                                 <div class="col-md-2">
                                     <button class="btn btn-success"><span class="fa fa-pencil"></span></button>&nbsp;
-                                    <label style="margin-top: 5px;">Edit Course</label>
+                                    <label style="margin-top: 5px;">Edit Department</label>
                                 </div>
                                 <!-- <div class="col-md-2">
                                     <button class="btn btn-danger"><span class="fa fa-trash"></span></button>&nbsp;
@@ -36,8 +36,8 @@
                                 <table id="dept-table" class="table colored-table inverse-tabl table-striped" >
                                     <thead>
                                         <tr>
-                                            <th width="400px;">Course Code</th>
-                                            <th>Course Name</th>
+                                            <th width="400px;">Department Code</th>
+                                            <th>Department Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -51,7 +51,7 @@
                             
                             <div class="row">
                                 <div class="col-md-3">
-                                    <button type="button" class="btn btn-info" data-toggle = "modal" data-target ="#modalNewDept">Add Course</button>
+                                    <button type="button" class="btn btn-info" data-toggle = "modal" data-target ="#modalNewDept">Add Department</button>
                                 </div>
                                 
                             </div>
@@ -73,7 +73,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h4 class="modal-title">Add a New Course</h4>
+                                            <h4 class="modal-title">Add a New Department</h4>
                                         </div>
                                         <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
@@ -81,17 +81,17 @@
                                         <div class="modal-body">
                                             <form id="add_dept_form" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label">Course Code:</label>
-                                                    <input class="form-control" type="text" maxlength="4" id="dept_code" name="dept_code" pattern="[A-Z]{1,}" title="Capital letters only." required>
+                                                    <label class="control-label">Department Code:</label>
+                                                    <input class="form-control" type="text" id="dept_code" name="dept_code" pattern="[A-Z]{1,}" title="Capital letters only." required>
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                        <label class="control-label">Course Name:</label>
-                                                        <input class="form-control" type="text" id="dept-desc" name="dept_desc" pattern="[A-Za-z\s]{1,}" title="Characters only." required>
+                                                        <label class="control-label">Department Name:</label>
+                                                        <input class="form-control" type="text" id="dept_desc" name="dept_desc" pattern="[A-Za-z\s]{1,}" title="Characters only." required>
                                                 </div>
                                             
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
-                                                <button type="submit" name="btnAddDept" id="btnAddDept" class="btn btn-success waves-effect text-left">Add Course</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
+                                                <button type="submit" name="btnAddDept" id="btnAddDept" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
                                         </div>
@@ -106,7 +106,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h4 class="modal-title">Edit Course</h4>
+                                            <h4 class="modal-title">Edit Department</h4>
                                         </div>
                                         <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
@@ -114,8 +114,8 @@
                                         <div class="modal-body">
                                             <form id="edit_dept_form" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label">Course Code:</label>
-                                                    <input class="form-control" type="text" maxlength="4" id="edit_dept_code" name="edit_dept_code" pattern="[A-Z]{1,}" title="Capital letters only." required>
+                                                    <label class="control-label">Department Code:</label>
+                                                    <input class="form-control" type="text" id="edit_dept_code" name="edit_dept_code" pattern="[A-Z]{1,}" title="Capital letters only." required>
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                         <label class="control-label">Course Name:</label>
@@ -123,8 +123,8 @@
                                                 </div>
                                                 <input type="hidden" name="dept_id_hid" id="dept_id_hid" />
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Reset</button>
-                                                <button type="submit" name="btnEditDept" id="btnEditDept" class="btn btn-success waves-effect text-left">Edit Course</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Clear</button>
+                                                <button type="submit" name="btnEditDept" id="btnEditDept" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
                                         </div>
@@ -189,7 +189,7 @@
                 { 
                     if(data == 'INSERTED')
                     {
-                        swal("Added!", "The course is added.", "success");
+                        swal("Added!", "The department is added.", "success");
                         $('#add_dept_form')[0].reset();  
                         $('#modalNewDept').modal('hide');
                         $('#dept-table').DataTable().destroy();
@@ -253,7 +253,7 @@
                 {  
                     if(data == 'UPDATED')
                     {
-                        swal("Updated!", "The course is updated.", "success");
+                        swal("Updated!", "The department is updated.", "success");
                         $('#edit_dept_form')[0].reset();  
                         $('#modalEditDept').modal('hide');
                         $('#dept-table').DataTable().destroy();

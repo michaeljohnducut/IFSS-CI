@@ -131,8 +131,8 @@
                                                     <input class="form-control" type="text" name="building" id="building" pattern="[A-Za-z,-\s'.]{2,}" title ="Characters only." required>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
-                                                <button type="submit" class="btn btn-success waves-effect text-left" id="btnAddRm" name="btnAddRm">Add Room</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
+                                                <button type="submit" class="btn btn-success waves-effect text-left" id="btnAddRm" name="btnAddRm">Save</button>
                                             </div> 
                                         </form>
                                         </div> 
@@ -171,8 +171,8 @@
                                             </div>
                                              <input type="hidden" name="room_id_hid" id="room_id_hid" /> 
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm2()" >Reset</button>
-                                                <button type="submit" class="btn btn-success waves-effect text-left" id="btnEditRm" name="btnEditRm">Edit Room</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm2()" >Clear</button>
+                                                <button type="submit" class="btn btn-success waves-effect text-left" id="btnEditRm" name="btnEditRm">Save</button>
                                             </div> 
                                         </form>
                                         </div> 

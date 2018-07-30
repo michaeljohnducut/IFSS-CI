@@ -26,7 +26,10 @@
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control" name="select_ay" id="select_ay">
                                     <option disabled selected>--ACADEMIC YEAR--</option>
-                                    <?php foreach($acad_yr as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
+                                    <option value="2018-2019">2018-2019</option>
+                                    <option value="2017-2018">2017-2018</option>
+                                    <option value="2016-2017">2016-2017</option>
+                                    <option value="2015-2016">2015-2016</option>
                                 </select>
                             </div>
 
@@ -68,7 +71,6 @@
                                         <th style="width: 300px;">Faculty Name</th>
                                         <th>Rating</th>
                                         <th>Interpretation</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -109,8 +111,11 @@
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">For Acad. Year:</label>
                                                     <select class="form-control" name="acadyr" id="acadyr" required>
-                                                            <option value ="" disabled selected>-SELECT-</option>
-                                                           <?php foreach($acad_yr as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
+                                                        <option value ="" disabled selected>-SELECT-</option>
+                                                        <option value="2018-2019">2018-2019</option>
+                                                        <option value="2017-2018">2017-2018</option>
+                                                        <option value="2016-2017">2016-2017</option>
+                                                        <option value="2015-2016">2015-2016</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-md-4">

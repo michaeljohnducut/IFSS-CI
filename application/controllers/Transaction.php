@@ -31,7 +31,6 @@ class Transaction extends CI_Controller
 		if($this->session->userdata('USERTYPE') == 'admin')
 		{
 			$data['faculty'] = $this->getdata_model->faculty();
-			$data['acad_year'] = $this->getdata_model->view_acad_year();
 			$data['subjects'] = $this->getdata_model->get_disc_subj();
 
 			$data['title'] = "IFSS | Subject Preference";
@@ -43,7 +42,6 @@ class Transaction extends CI_Controller
 		if($this->session->userdata('USERTYPE') == 'faculty')
 		{
 			$data['faculty'] = $this->getdata_model->faculty();
-			$data['acad_year'] = $this->getdata_model->view_acad_year();
 			$data['subjects'] = $this->getdata_model->get_disc_subj();
 			
 			$data['title'] = "IFSS | Subject Preference";
@@ -56,7 +54,6 @@ class Transaction extends CI_Controller
 
 	public function student_eval()
 	{
-		$data['acad_yr'] = $this->getdata_model->acad_yr();
 		$data['dept'] = $this->getdata_model->department();
 		$data['faculty'] = $this->getdata_model->faculty();
 		

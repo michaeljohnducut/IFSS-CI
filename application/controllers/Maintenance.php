@@ -14,7 +14,6 @@ class Maintenance extends CI_Controller {
     	if($this->session->userdata('USERTYPE') == 'admin')
     	{
     		$data['title'] = "IFSS | Dashboard";
-    		$data['acad_yr'] = $this->getdata_model->acad_yr();
 			$this->load->view('templates/header', $data);
 			$this->load->view('maintenance/dashboard');
 			$this->load->view('templates/footer');
@@ -253,12 +252,11 @@ class Maintenance extends CI_Controller {
 
 	public function departments()
 	{
-		$title['title'] = "IFSS | Manage Courses";
+		$title['title'] = "IFSS | Manage Departments";
 		$this->load->view('templates/header', $title);
 		$this->load->view('maintenance/departments');
 		$this->load->view('templates/footer');
 	}
-
 
 	public function get_departments()
 	{
@@ -292,6 +290,51 @@ class Maintenance extends CI_Controller {
 	public function edit_departments()
 	{
 		echo ($this->savedata_model->edit_department($_POST));
+		exit();
+	}
+
+	public function courses()
+	{
+		$data['dept'] = $this->getdata_model->department();
+
+		$data['title'] = "IFSS | Manage Courses";
+		$this->load->view('templates/header', $data);
+		$this->load->view('maintenance/courses');
+		$this->load->view('templates/footer');
+	}
+
+	public function get_courses()
+	{
+		$output = $this->getdata_model->course();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
+	public function add_courses()
+	{
+		echo ($this->savedata_model->add_course($_POST));
+		exit();
+	}
+
+	public function view_courses()
+	{
+		if(isset($_POST['course_id']))
+		{
+			echo json_encode($this->getdata_model->view_course($_POST));
+			exit();
+		}
+	}
+
+	public function edit_courses()
+	{
+		echo ($this->savedata_model->edit_course($_POST));
 		exit();
 	}
 
@@ -426,48 +469,48 @@ class Maintenance extends CI_Controller {
 		exit();
 	}
 
-	public function acad_yr()
-	{
-		$title['title'] = "IFSS | Manage Academic Year";
-		$this->load->view('templates/header', $title);
-		$this->load->view('maintenance/acad_yr');
-		$this->load->view('templates/footer');
-	}
+	// public function acad_yr()
+	// {
+	// 	$title['title'] = "IFSS | Manage Academic Year";
+	// 	$this->load->view('templates/header', $title);
+	// 	$this->load->view('maintenance/acad_yr');
+	// 	$this->load->view('templates/footer');
+	// }
 
-	public function get_acad_yrs()
-	{
-		$output = $this->getdata_model->acad_yr();
+	// public function get_acad_yrs()
+	// {
+	// 	$output = $this->getdata_model->acad_yr();
 
-		$response = array(
-			'aaData' => $output,
-			'iTotalRecords' => count($output),
-			'iTotalDisplayRecords' => count($output),
-			'iDisplayStart' => 0
-		);
-		echo json_encode($response);
-		exit();
-	}
+	// 	$response = array(
+	// 		'aaData' => $output,
+	// 		'iTotalRecords' => count($output),
+	// 		'iTotalDisplayRecords' => count($output),
+	// 		'iDisplayStart' => 0
+	// 	);
+	// 	echo json_encode($response);
+	// 	exit();
+	// }
 
-	public function add_acad_yrs()
-	{
-		echo ($this->savedata_model->add_acad_yr($_POST));
-		exit();
-	}
+	// public function add_acad_yrs()
+	// {
+	// 	echo ($this->savedata_model->add_acad_yr($_POST));
+	// 	exit();
+	// }
 
-	public function view_acad_yrs()
-	{
-		if(isset($_POST['acadyr_id']))
-		{
-			echo json_encode($this->getdata_model->view_acad_yr($_POST));
-			exit();
-		}
-	}
+	// public function view_acad_yrs()
+	// {
+	// 	if(isset($_POST['acadyr_id']))
+	// 	{
+	// 		echo json_encode($this->getdata_model->view_acad_yr($_POST));
+	// 		exit();
+	// 	}
+	// }
 
-	public function edit_acad_yrs()
-	{
-		echo ($this->savedata_model->edit_acad_yr($_POST));
-		exit();
-	}
+	// public function edit_acad_yrs()
+	// {
+	// 	echo ($this->savedata_model->edit_acad_yr($_POST));
+	// 	exit();
+	// }
 
 	public function curriculum_year()
 	{
@@ -517,7 +560,7 @@ class Maintenance extends CI_Controller {
 	{
 		$data['subjects'] = $this->getdata_model->subject();
 		$data['curr_year'] = $this->getdata_model->curriculum_year();
-		$data['department'] = $this->getdata_model->department();
+		$data['department'] = $this->getdata_model->course();
 
 		$data['title'] = "IFSS | Manage Curriculum";
 		$this->load->view('templates/header', $data);
@@ -566,7 +609,7 @@ class Maintenance extends CI_Controller {
 	public function section()
 	{
 		// $data['acad_yr'] = $this->getdata_model->acad_yr();
-		$data['dept'] = $this->getdata_model->department();
+		$data['dept'] = $this->getdata_model->course();
 
 		$data['title'] = "IFSS | Manage Section";
 		$this->load->view('templates/header', $data);

@@ -85,16 +85,16 @@
                         <div class="col-md-8 form-group">
                             <br><br>
                             <label class="control-label">Faculty ID:<span style="color:red;"> *</span></label>
-                            <input class="form-control" maxlength="15" type="text" name="fact_id" id="fact_id" required style="width: 50%;">
+                            <input class="form-control" maxlength="15" type="text" name="fact_id" id="fact_id" required style="width: 50%;" readonly>
                             <br>
                             <label class="control-label">Faculty Type:<span style="color:red;"> *</span></label>
-                                <select class="form-control" name="fact_type" id="fact_type" required style="width: 50%;">
+                                <select class="form-control" name="fact_type" id="fact_type" required style="width: 50%;" readonly>
                                     <option value="" disabled selected>--SELECT FACULTY TYPE--</option>
                                     <?php foreach($fac_type as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
                                 </select>
                             <br>
                             <label class="control-label">Department:<span style="color:red;"> *</span></label>
-                                <select class="form-control" name="fact_dept" id="fact_dept" required style="width: 50%;" required>
+                                <select class="form-control" name="fact_dept" id="fact_dept" required style="width: 50%;" readonly>
                                     <option value="" disabled selected>--SELECT DEPARTMENT--</option>
                                     <?php foreach($dept as $r) echo '<option value="'.$r[3].'">'.$r[1].'</option>';?>
                                 </select>
@@ -126,10 +126,15 @@
                             <label class="control-label">Date of Birth:<span style="color:red;"> *</span></label>
                             <input class="form-control mydatepicker" id="fact_date_birth" name="fact_date_birth" type="text" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" title="YYYY-MM-DD" placeholder="YYYY-MM-DD" required>
                         </div>
-                        <div class="col-md-4 form-group">
+                        <!-- <div class="col-md-4 form-group">
                             <br>
                             <label class="control-label">Place of Birth:</label>
                             <input class="form-control mydatepicker" id="fact_place_birth" name="fact_place_birth" type="text" pattern="[A-Za-z,\s'.-]{1,}" title="Characters only.">
+                        </div> -->
+                         <div class="col-md-4 form-group">
+                            <br>
+                            <label class="control-label">Citizenship:</label>
+                            <input class="form-control" id="fact_citizen" name="fact_citizen" type="text" pattern="[A-Za-z\s'.-]{1,}" title="Characters only.">
                         </div>
                         <div class="col-md-4 form-group" style="padding-left: 20px;">
                             <br>
@@ -144,9 +149,16 @@
 
                         <div class="col-md-4 form-group">
                             <br>
-                            <label class="control-label">Citizenship:</label>
-                            <input class="form-control" id="fact_citizen" name="fact_citizen" type="text" pattern="[A-Za-z\s'.-]{1,}" title="Characters only.">
+                             <label class="control-label">Civil Status:</label>
+                                    <select class="form-control" id="fact_civil_status" name="fact_civil_status" onchange="change_spouse()">
+                                        <option value=""  disabled selected>--OPTIONS--</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Widowed">Widowed/Widower</option>
+                                        <option value="Separated">Separated</option>
+                                    </select>
                         </div>
+
                         <div class="col-md-4 form-group">
                             <br>
                             <label class="control-label">Phone Number:<span style="color:red;"> *</span></label>
@@ -178,19 +190,7 @@
                             <input class="form-control" id="fact_zip_address" name="fact_zip_address" maxlength="4" pattern="[0-9]" title="Numbers only." type="text">
                         </div>
 
-                        <div class="col-md-3">
-                             <label class="control-label">Civil Status:</label>
-                                    <select class="form-control" id="fact_civil_status" name="fact_civil_status" onchange="change_spouse()">
-                                        <option value=""  disabled selected>--OPTIONS--</option>
-                                        <option value="Single">Single</option>
-                                        <option value="Married">Married</option>
-                                        <option value="Widowed">Widowed/Widower</option>
-                                        <option value="Separated">Separated</option>
-                                    </select>
-                            
-                        </div>
-
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <label class="control-label">Name of Spouse:</label>
                             <input class="form-control" id="fact_slname" placeholder="Surname" name="fact_slname" type="text" pattern="[A-Za-z\s'.-]{1,}" title="Characters only." disabled>
                         </div>
@@ -201,13 +201,12 @@
                         <div class="col-md-3">
                             <label class="control-label"></label>
                             <input class="form-control" id="fact_smname" name="fact_smname" placeholder="Middle Name" type="text" pattern="[A-Za-z,\s'.-]{1,}" title="Characters only." disabled>
-                        </div>
+                        </div> -->
                         <!-- <div class="col-md-1">
                             <label class="control-label">Suffix:</label>
                             <input class="form-control" placeholder="(Jr./III)" type="text">
                         </div> -->
                     </div>
-                    <br> <br>
                     <div class="row">
                         <div class="col-md-12" id="faculty_btn_update">
                             <center><button type="submit" class="btn btn-info" id="update_account" style="margin-top: 10px;">Update Faculty Details</button></center>
@@ -243,12 +242,10 @@
                                         <td>
                                             <select class="form-control" id="educ_lvl" name="educ_lvl[]" required>
                                                 <option value="" disabled selected>--SELECT LEVEL--</option>
-                                                <option value="Elementary">Elementary</option>
-                                                <option value="Secondary">Secondary</option>
-                                                <option value="Vocational">Vocational</option>
                                                 <option value="College">College</option>
-                                                <option value="Masters">Masters</option>
-                                                <option value="Doctorate">Doctorate</option>
+                                                <option value="PBD">Post Baccalaureate Degree</option>
+                                                <option value="Masteral Degree">Masteral Degree</option>
+                                                <option value="Doctoral Degree">Doctoral Degree</option>
                                             </select>
                                         </td>
                                         <td>
@@ -366,12 +363,10 @@
                                                     <label class="control-label">Level:<span style="color:red;"> *</span></label>
                                                     <select class="form-control" id="educ_lvl_edit" name="educ_lvl_edit" required>
                                                         <option value="" disabled selected>--SELECT LEVEL--</option>
-                                                        <option value="Elementary">Elementary</option>
-                                                        <option value="Secondary">Secondary</option>
-                                                        <option value="Vocational">Vocational</option>
                                                         <option value="College">College</option>
-                                                        <option value="Masters">Masters</option>
-                                                        <option value="Doctorate">Doctorate</option>
+                                                        <option value="PBD">Post Baccalaureate Degree</option>
+                                                        <option value="Masteral Degree">Masteral Degree</option>
+                                                        <option value="Doctoral Degree">Doctoral Degree</option>
                                             </select>
                                             </div>
                                             <div class="form-group col-md-6">
@@ -391,7 +386,7 @@
                                             </div>
                                             <input type="hidden" name="educbg_id_hid" id="educbg_id_hid" />
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" onclick="resetForm()">Reset</button>
+                                            <button type="button" class="btn btn-default" onclick="resetForm()">Clear</button>
                                             <button type="submit" id="btnEditEducBg" name="btnEditEducBg" class="btn btn-success waves-effect text-left">Update Educational Background</button>
                                         </div>
                                     </form>
@@ -494,8 +489,8 @@
                         dataType: "json",
                         success:function(data){
                              $('#fact_id').val(data[0][0]);
-                             $('#fact_type').val(data[0][18]);
-                             $('#fact_dept').val(data[0][19]);
+                             $('#fact_type').val(data[0][14]);
+                             $('#fact_dept').val(data[0][15]);
                              $('#fact_sname').val(data[0][1]);
                              $('#fact_fname').val(data[0][2]);
                              $('#fact_mname').val(data[0][3]);
@@ -504,16 +499,12 @@
                              $('#fact_date_birth').val(data[0][6]);
                              $('#fact_civil_status').val(data[0][8]);
                              $("input[name=rad_gender][value="+data[0][7]+"]").prop('checked', true);
-                             $('#fact_place_birth').val(data[0][9]);
-                             $('#fact_citizen').val(data[0][10]);
-                             $('#fact_res_address').val(data[0][11]);
-                             $('#fact_zip_res').val(data[0][12]);
-                             $('#fact_address').val(data[0][13]);
-                             $('#fact_zip_address').val(data[0][14]);
-                             $('#fact_slname').val(data[0][15]);
-                             $('#fact_sfname').val(data[0][16]);
-                             $('#fact_smname').val(data[0][17]);
-                             $('#faculty_id_hid').val(data[0][20]);
+                             $('#fact_citizen').val(data[0][9]);
+                             $('#fact_res_address').val(data[0][10]);
+                             $('#fact_zip_res').val(data[0][11]);
+                             $('#fact_address').val(data[0][12]);
+                             $('#fact_zip_address').val(data[0][13]);
+                             $('#faculty_id_hid').val(data[0][16]);
                              change_spouse();
                         },
                         error: function (data) {

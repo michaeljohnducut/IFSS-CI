@@ -105,8 +105,8 @@
                                                 
                                             
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
-                                                <button type="submit" name="btnAddLimit" class="btn btn-success waves-effect text-left">Add Limit</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
+                                                <button type="submit" name="btnAddLimit" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
                                         </div>
@@ -151,8 +151,8 @@
                                                 
                                             
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Reset</button>
-                                                <button type="submit" name="btnEditLimit" class="btn btn-success waves-effect text-left">Edit Limit</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Clear</button>
+                                                <button type="submit" name="btnEditLimit" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
                                         </div>

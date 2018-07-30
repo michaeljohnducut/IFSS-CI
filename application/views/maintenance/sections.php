@@ -134,8 +134,8 @@
                                                         <input class="form-control" type="text" name="sec_desc" id="sec_desc" maxlength="5" pattern="[A-Z0-9]|[A-Z]|[0-9][A-Z]" title="Input valid section." placeholder="1N" required>
                                                 </div>      
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
-                                                <button type="submit" name="btnAddSection" id="btnAddSection" class="btn btn-success waves-effect text-left">Add Section</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
+                                                <button type="submit" name="btnAddSection" id="btnAddSection" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
                                         </div>
@@ -195,8 +195,8 @@
                                                 </div>
                                                 <input type="hidden" name="section_id_hid" id="section_id_hid" />      
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Reset</button>
-                                                <button type="submit" name="btnEditSection" id="btnEditSection" class="btn btn-success waves-effect text-left">Update Section</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Clear</button>
+                                                <button type="submit" name="btnEditSection" id="btnEditSection" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
                                         </div>

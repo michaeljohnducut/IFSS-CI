@@ -127,10 +127,15 @@
                             <label class="control-label">Date of Birth:<span style="color:red;"> *</span></label>
                             <input class="form-control mydatepicker" id="fact_date_birth" name="fact_date_birth" type="text" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" title="YYYY-MM-DD" placeholder="YYYY-MM-DD" required>
                         </div>
-                        <div class="col-md-4 form-group">
+                        <!-- <div class="col-md-4 form-group">
                             <br>
                             <label class="control-label">Place of Birth:</label>
                             <input class="form-control mydatepicker" id="fact_place_birth" name="fact_place_birth" type="text" pattern="[A-Za-z,\s'.-]{1,}" title="Characters only.">
+                        </div> -->
+                        <div class="col-md-4 form-group">
+                            <br>
+                            <label class="control-label">Citizenship:</label>
+                            <input class="form-control" id="fact_citizen" name="fact_citizen" type="text" pattern="[A-Za-z\s'.-]{1,}" title="Characters only.">
                         </div>
                         <div class="col-md-4 form-group" style="padding-left: 20px;">
                             <br>
@@ -140,13 +145,18 @@
                             &nbsp;&nbsp; 
                             <input type="radio" id="gen_female" name="rad_gender" value="female" style="margin-top: 10px; margin-left: 10px;">
                             <label for="gen_female">Female</label>
-                            
                         </div>
 
                         <div class="col-md-4 form-group">
                             <br>
-                            <label class="control-label">Citizenship:</label>
-                            <input class="form-control" id="fact_citizen" name="fact_citizen" type="text" pattern="[A-Za-z\s'.-]{1,}" title="Characters only.">
+                             <label class="control-label">Civil Status:</label>
+                                    <select class="form-control" id="fact_civil_status" name="fact_civil_status">
+                                        <option value=""  disabled selected>--OPTIONS--</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Widowed">Widowed/Widower</option>
+                                        <option value="Separated">Separated</option>
+                                    </select>
                         </div>
                         <div class="col-md-4 form-group">
                             <br>
@@ -179,19 +189,7 @@
                             <input class="form-control" id="fact_zip_address" name="fact_zip_address" maxlength="4" pattern="[0-9]" title="Numbers only." type="text">
                         </div>
 
-                        <div class="col-md-3">
-                             <label class="control-label">Civil Status:</label>
-                                    <select class="form-control" id="fact_civil_status" name="fact_civil_status" onchange="change_spouse()">
-                                        <option value=""  disabled selected>--OPTIONS--</option>
-                                        <option value="Single">Single</option>
-                                        <option value="Married">Married</option>
-                                        <option value="Widowed">Widowed/Widower</option>
-                                        <option value="Separated">Separated</option>
-                                    </select>
-                            
-                        </div>
-
-                        <div class="col-md-3">
+                       <!--  <div class="col-md-3">
                             <label class="control-label">Name of Spouse:</label>
                             <input class="form-control" id="fact_slname" placeholder="Surname" name="fact_slname" type="text" pattern="[A-Za-z\s'.-]{1,}" title="Characters only." disabled>
                         </div>
@@ -202,16 +200,15 @@
                         <div class="col-md-3">
                             <label class="control-label"></label>
                             <input class="form-control" id="fact_smname" name="fact_smname" placeholder="Middle Name" type="text" pattern="[A-Za-z,\s'.-]{1,}" title="Characters only." disabled>
-                        </div>
+                        </div> -->
                         <!-- <div class="col-md-1">
                             <label class="control-label">Suffix:</label>
                             <input class="form-control" placeholder="(Jr./III)" type="text">
                         </div> -->
                     </div>
-                    <br> <br>
                     <div class="row">
                         <div class="col-md-12" id="faculty_btn_reset">
-                            <center><button class="btn btn-info" id="reset_account" onclick="resetForm2()" style="margin-top: 10px;">Reset</button></center>
+                            <center><button class="btn btn-info" id="reset_account" onclick="resetForm2()" style="margin-top: 10px;">Clear</button></center>
                         </div>
                     </div>
                     <div class="row" id="faculty_btn_add">
@@ -254,12 +251,10 @@
                                         <td>
                                             <select class="form-control" id="educ_lvl" name="educ_lvl[]" required>
                                                 <option value="" disabled selected>--SELECT LEVEL--</option>
-                                                <option value="Elementary">Elementary</option>
-                                                <option value="Secondary">Secondary</option>
-                                                <option value="Vocational">Vocational</option>
                                                 <option value="College">College</option>
-                                                <option value="Masters">Masters</option>
-                                                <option value="Doctorate">Doctorate</option>
+                                                <option value="PBD">Post Baccalaureate Degree</option>
+                                                <option value="Masteral Degree">Masteral Degree</option>
+                                                <option value="Doctoral Degree">Doctoral Degree</option>
                                             </select>
                                         </td>
                                         <td>
@@ -375,12 +370,10 @@
                                                     <label class="control-label">Level:<span style="color:red;"> *</span></label>
                                                     <select class="form-control" id="educ_lvl_edit" name="educ_lvl_edit" required>
                                                         <option value="" disabled selected>--SELECT LEVEL--</option>
-                                                        <option value="Elementary">Elementary</option>
-                                                        <option value="Secondary">Secondary</option>
-                                                        <option value="Vocational">Vocational</option>
                                                         <option value="College">College</option>
-                                                        <option value="Masters">Masters</option>
-                                                        <option value="Doctorate">Doctorate</option>
+                                                        <option value="PBD">Post Baccalaureate Degree</option>
+                                                        <option value="Masteral Degree">Masteral Degree</option>
+                                                        <option value="Doctoral Degree">Doctoral Degree</option>
                                             </select>
                                             </div>
                                             <div class="form-group col-md-6">
@@ -400,7 +393,7 @@
                                             </div>
                                             <input type="hidden" name="educbg_id_hid" id="educbg_id_hid" />
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" onclick="resetForm()">Reset</button>
+                                            <button type="button" class="btn btn-default" onclick="resetForm()">Clear</button>
                                             <button type="submit" id="btnEditEducBg" name="btnEditEducBg" class="btn btn-success waves-effect text-left">Update Educational Background</button>
                                         </div>
                                     </form>
@@ -452,23 +445,23 @@
         }
 
 
-        function change_spouse()
-        {
-            var civil_status = $('#fact_civil_status').val();
+        // function change_spouse()
+        // {
+        //     var civil_status = $('#fact_civil_status').val();
 
-            if(civil_status == 'Married')
-            {
-                $('#fact_sfname').prop("disabled",false);
-                $('#fact_slname').prop("disabled",false);
-                $('#fact_smname').prop("disabled",false);
-            }
-            else
-            {
-                $('#fact_sfname').prop("disabled",true);
-                $('#fact_slname').prop("disabled",true);
-                $('#fact_smname').prop("disabled",true);
-            }
-        }
+        //     if(civil_status == 'Married')
+        //     {
+        //         $('#fact_sfname').prop("disabled",false);
+        //         $('#fact_slname').prop("disabled",false);
+        //         $('#fact_smname').prop("disabled",false);
+        //     }
+        //     else
+        //     {
+        //         $('#fact_sfname').prop("disabled",true);
+        //         $('#fact_slname').prop("disabled",true);
+        //         $('#fact_smname').prop("disabled",true);
+        //     }
+        // }
 
         $(document).ready(function(){
             loadtable();
@@ -581,7 +574,6 @@
                 $('#fact_civil_status').prop("disabled",false);
                 $('#gen_male').prop("disabled",false);
                 $('#gen_female').prop("disabled",false);
-                $('#fact_place_birth').prop("disabled",false);
                 $('#fact_citizen').prop("disabled",false);
                 $('#fact_res_address').prop("disabled",false);
                 $('#fact_zip_res').prop("disabled",false);
@@ -648,8 +640,8 @@
                     dataType: "json",
                     success:function(data){
                          $('#fact_id').val(data[0][0]);
-                         $('#fact_type').val(data[0][18]);
-                         $('#fact_dept').val(data[0][19]);
+                         $('#fact_type').val(data[0][14]);
+                         $('#fact_dept').val(data[0][15]);
                          $('#fact_sname').val(data[0][1]);
                          $('#fact_fname').val(data[0][2]);
                          $('#fact_mname').val(data[0][3]);
@@ -658,15 +650,11 @@
                          $('#fact_date_birth').val(data[0][6]);
                          $('#fact_civil_status').val(data[0][8]);
                          $("input[name=rad_gender][value="+data[0][7]+"]").prop('checked', true);
-                         $('#fact_place_birth').val(data[0][9]);
-                         $('#fact_citizen').val(data[0][10]);
-                         $('#fact_res_address').val(data[0][11]);
-                         $('#fact_zip_res').val(data[0][12]);
-                         $('#fact_address').val(data[0][13]);
-                         $('#fact_zip_address').val(data[0][14]);
-                         $('#fact_slname').val(data[0][15]);
-                         $('#fact_sfname').val(data[0][16]);
-                         $('#fact_smname').val(data[0][17]);
+                         $('#fact_citizen').val(data[0][9]);
+                         $('#fact_res_address').val(data[0][10]);
+                         $('#fact_zip_res').val(data[0][11]);
+                         $('#fact_address').val(data[0][12]);
+                         $('#fact_zip_address').val(data[0][13]);
                     },
                          error: function (data) {
                         alert(JSON.stringify(data));
@@ -805,7 +793,6 @@
                     $('#fact_civil_status').prop("disabled",false);
                     $('#gen_male').prop("disabled",false);
                     $('#gen_female').prop("disabled",false);
-                    $('#fact_place_birth').prop("disabled",false);
                     $('#fact_citizen').prop("disabled",false);
                     $('#fact_res_address').prop("disabled",false);
                     $('#fact_zip_res').prop("disabled",false);
@@ -813,6 +800,10 @@
                     $('#fact_zip_address').prop("disabled",false);
                     $('#add_fac_educ_form').show();
                     $("#Educ_bg :input").prop("disabled", false);
+                    $('#educ_lvl').val('');
+                    $('#educ_school').val('');
+                    $('#educ_degree').val('');
+                    $('#educ_yr').val('');
 
                    e.preventDefault();
                    var id = $(this).data("id");
@@ -842,8 +833,8 @@
                         dataType: "json",
                         success:function(data){
                              $('#fact_id').val(data[0][0]);
-                             $('#fact_type').val(data[0][18]);
-                             $('#fact_dept').val(data[0][19]);
+                             $('#fact_type').val(data[0][14]);
+                             $('#fact_dept').val(data[0][15]);
                              $('#fact_sname').val(data[0][1]);
                              $('#fact_fname').val(data[0][2]);
                              $('#fact_mname').val(data[0][3]);
@@ -852,16 +843,12 @@
                              $('#fact_date_birth').val(data[0][6]);
                              $('#fact_civil_status').val(data[0][8]);
                              $("input[name=rad_gender][value="+data[0][7]+"]").prop('checked', true);
-                             $('#fact_place_birth').val(data[0][9]);
-                             $('#fact_citizen').val(data[0][10]);
-                             $('#fact_res_address').val(data[0][11]);
-                             $('#fact_zip_res').val(data[0][12]);
-                             $('#fact_address').val(data[0][13]);
-                             $('#fact_zip_address').val(data[0][14]);
-                             $('#fact_slname').val(data[0][15]);
-                             $('#fact_sfname').val(data[0][16]);
-                             $('#fact_smname').val(data[0][17]);
-                             $('#faculty_id_hid').val(data[0][20]);
+                             $('#fact_citizen').val(data[0][9]);
+                             $('#fact_res_address').val(data[0][10]);
+                             $('#fact_zip_res').val(data[0][11]);
+                             $('#fact_address').val(data[0][12]);
+                             $('#fact_zip_address').val(data[0][13]);
+                             $('#faculty_id_hid').val(data[0][16]);
                              change_spouse();
                         },
                         error: function (data) {
@@ -969,7 +956,7 @@
                     {  
                         if(data == 'UPDATED')
                         {
-                            swal("Updated!", "The account is updated.", "success");
+                            swal("Updated!", "The faculty details is updated.", "success");
                             $('#fact-profile').hide();
                             $('#faculty_btn_add').hide();
                             $('#faculty_btn_update').hide();

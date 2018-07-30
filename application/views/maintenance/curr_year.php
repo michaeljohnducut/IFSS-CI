@@ -63,10 +63,10 @@
                                             
                                             <div class="col-md-6">
                                                 <div class="col-md-3">
-                                                    <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
+                                                    <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="submit" class="btn btn-success waves-effect text-left">Add Year</button>
+                                                    <button type="submit" class="btn btn-success waves-effect text-left">Save</button>
                                                 </div> 
                                             </div>
                                             </form>
@@ -99,10 +99,10 @@
                                             
                                             <div class="col-md-6">
                                                 <div class="col-md-3">
-                                                    <button type="button" class="btn btn-default" onclick="resetForm2()">Reset</button>
+                                                    <button type="button" class="btn btn-default" onclick="resetForm2()">Clear</button>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="submit" class="btn btn-success waves-effect text-left">Update Year</button>
+                                                    <button type="submit" class="btn btn-success waves-effect text-left">Save</button>
                                                 </div> 
                                             </div>
                                             </form>

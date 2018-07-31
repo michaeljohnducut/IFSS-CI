@@ -34,7 +34,11 @@
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control select2" id="sched_acad_year">
                                     <option>-ACAD YEAR-</option>
-                                    <?php foreach($acad_year as $r) echo '<option value="'.$r[0].'">'.$r[1].'</option>';?>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
                                 </select>
                             </div>
                             <div class="col-md-2">

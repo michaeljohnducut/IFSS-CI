@@ -24,19 +24,20 @@
                             </div>
                                 <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control" name="select_ay" id="select_ay">
-                                    <option disabled selected>--ACADEMIC YEAR--</option>
-                                    <option value="2018-2019">2018-2019</option>
-                                    <option value="2017-2018">2017-2018</option>
-                                    <option value="2016-2017">2016-2017</option>
-                                    <option value="2015-2016">2015-2016</option>
+                                <select class="form-control select2" name="select_ay" id="select_ay">
+                                     <option value="0">-ACAD YEAR-</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
                                 </select>
                             </div>
 
                             <div class="col-md-2">
                                 <label class="control-label">Select Semester</label>
-                                <select class="form-control" name="select_sem" id="select_sem">
-                                    <option disabled selected>--SEMESTER--</option>
+                                <select class="form-control select2" name="select_sem" id="select_sem">
+                                    <option value="0" disabled selected>--SEMESTER--</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option>
                                     <option value="Summer">Summer</option>
@@ -45,7 +46,7 @@
 
                             <div class="col-md-2">
                                 <label class="control-label">Select Department</label>
-                                <select class="form-control" name="select_dept" id="select_dept">
+                                <select class="form-control select2" name="select_dept" id="select_dept">
                                     <option disabled selected>--DEPARTMENT--</option>
                                     <?php foreach($dept as $r) echo '<option value="'.$r[3].'">'.$r[0].'</option>';?>
                                 </select>
@@ -111,11 +112,12 @@
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">For Acad. Year:</label>
                                                     <select class="form-control" name="acadyr" id="acadyr" required>
-                                                        <option value ="" disabled selected>-SELECT-</option>
-                                                        <option value="2018-2019">2018-2019</option>
-                                                        <option value="2017-2018">2017-2018</option>
-                                                        <option value="2016-2017">2016-2017</option>
-                                                        <option value="2015-2016">2015-2016</option>
+                                                         <option value="0" disabled selected>-ACAD YEAR-</option>
+                                                            <?php 
+                                                                for ($i = date("Y"); $i > 1900; $i-- ){
+                                                                    echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                                                }
+                                                            ?>
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-md-4">

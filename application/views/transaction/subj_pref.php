@@ -41,7 +41,11 @@
                                 <label class="control-label">Acad Year:</label>
                                 <select class="form-control select2" name="acad_year" id="acad_year">
                                     <option value="0">-ACAD YEAR-</option>
-                                    <option value="2018-2019">2018-2019</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
                                 </select>
                                 
                             </div>

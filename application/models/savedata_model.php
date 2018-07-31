@@ -1549,7 +1549,7 @@ class savedata_model extends CI_Model
 		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
 		$end = $this->security->xss_clean($this->input->post('end'));
 
-		if($this->db->query("INSERT INTO `preferred_time`(day, start_time, end_time, acad_yr, sem, faculty_id) VALUES ('$day', '$start', '$end', $acad_year, '$sem', $fac_id)"))
+		if($this->db->query("INSERT INTO `preferred_time`(day, start_time, end_time, acad_yr, sem, faculty_id) VALUES ('$day', '$start', '$end', '$acad_year', '$sem', $fac_id)"))
 		{
 			$output = "INSERTED";
 		}
@@ -1601,7 +1601,7 @@ class savedata_model extends CI_Model
 		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
 		
 		if($this->db->query("INSERT INTO `preferred_subj`(acad_yr, sem, subj_code, faculty_id) 
-                        VALUES ($acad_year , '$sem', '$subj_code' , $fac_id)"))
+                        VALUES ('$acad_year', '$sem', '$subj_code' , $fac_id)"))
 		{
 			$output = "INSERTED";
 		}

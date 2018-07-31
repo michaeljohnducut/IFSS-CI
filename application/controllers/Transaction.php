@@ -131,7 +131,7 @@ class Transaction extends CI_Controller
 		else{
 			$data['title'] = "IFSS | New Schedule";
 			$data['faculty'] = $this->getdata_model->faculty();
-			$data['acad_year'] = $this->getdata_model->view_acad_year();
+			// $data['acad_year'] = $this->getdata_model->view_acad_year();
 			// $data['sections'] = $this->getdata_model->section();
 			$data['subjects'] = $this->getdata_model->get_disc_subj();
 			$this->load->view('templates/header', $data);

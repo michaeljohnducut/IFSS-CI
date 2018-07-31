@@ -26,7 +26,7 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-3" id="for_hiding">
                                 <label class="control-label">Select Faculty:</label>
                                 <select class="form-control select2 " id="fac_list" name="fac_list">
                                     <option value="0">-SELECT FACULTY-</option>
@@ -375,6 +375,19 @@
 
     <script type="text/javascript">
 
+        function hide_dropdown()
+        {
+            var data = "<?php echo $acc_type?>";
+
+            if(data == 'faculty')
+            {
+                $('#for_hiding').hide();
+            }
+            else
+            {
+                $('#for_hiding').show();
+            }
+        }
 
 function loadtable(faculty_id, acad_year, sem){
 
@@ -696,7 +709,7 @@ $(document).ready(function(){
     $(".select2").select2();
     $('.selectpicker').selectpicker();
 
-
+    hide_dropdown();
 
 });
 

@@ -32,6 +32,7 @@ class Transaction extends CI_Controller
 		{
 			$data['faculty'] = $this->getdata_model->faculty();
 			$data['subjects'] = $this->getdata_model->get_disc_subj();
+			$data['acc_type'] = 'admin';
 
 			$data['title'] = "IFSS | Subject Preference";
 			$this->load->view('templates/header', $data);
@@ -43,6 +44,7 @@ class Transaction extends CI_Controller
 		{
 			$data['faculty'] = $this->getdata_model->faculty();
 			$data['subjects'] = $this->getdata_model->get_disc_subj();
+			$data['acc_type'] = 'faculty';
 			
 			$data['title'] = "IFSS | Subject Preference";
 			$this->load->view('templates/header_f', $data);
@@ -160,6 +162,8 @@ class Transaction extends CI_Controller
 		if($this->session->userdata('USERTYPE') == 'admin')
 		{
 			$data['title'] = "IFSS | View Schedule";
+			$data['acc_type'] = 'admin';
+
 			$this->load->view('templates/header', $data);
 			$this->load->view('transaction/view_sched');
 			$this->load->view('templates/footer');

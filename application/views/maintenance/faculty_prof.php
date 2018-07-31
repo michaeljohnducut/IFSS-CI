@@ -581,12 +581,10 @@
                x++;  
                $('#dynamic_field').append('<tr id="row'+x+'" class="dynamic-added">'+
                 '<td><select class="form-control" name="educ_lvl[]" required><option value="" disabled selected>--SELECT LEVEL--</option>'+
-                    '<option value="Elementary">Elementary</option>'+
-                    '<option value="Secondary">Secondary</option>'+
-                    '<option value="Vocational">Vocational</option>'+
                     '<option value="College">College</option>'+
-                    '<option value="Masters">Masters</option>'+
-                    '<option value="Doctorate">Doctorate</option>'+
+                    '<option value="PBD">Post Baccalaureate Degree</option>'+
+                    '<option value="Masteral Degree">Masteral Degree</option>'+
+                    '<option value="Doctoral Degree">Doctoral Degree</option>'+
                     '</select></td>'+
                 '<td><input class="form-control" type="text" name="educ_school[]" required></td>'+
                 '<td><input class="form-control" type="text" name="educ_degree[]" required></td>'+
@@ -599,203 +597,6 @@
                var button_id = $(this).attr("id");   
                $('#row'+button_id+'').remove();  
             });
-
-            //ADD FACULTY PROFILE DISPLAY
-            $(document).on('click', '#create_account', function(e)
-            {
-                openCity(event, 'Personal_Info');
-                $('#fact-profile').show();
-                $('#faculty_btn_add').show();
-                $('#add_account').prop("disabled",false);
-                $('#faculty_btn_update').hide();
-                $('#faculty_btn_reset').show();
-                $('#reset_account').prop("disabled", false);
-                $('#educ-bg-table').hide();
-                $('#educ-bg-table').DataTable().destroy();
-                hide_educ_table();
-
-                $('html, body').animate({
-            scrollTop: $("#fact-profile").offset().top
-                }, 1000);
-
-                $('#add_fac_educ_form').show();
-                // $("#Personal_Info :input").prop("disabled", false);
-                $('#fact_id').prop("disabled",false);
-                $('#fact_type').prop("disabled",false);
-                $('#fact_dept').prop("disabled",false);
-                $('#fact_sname').prop("disabled",false);
-                $('#fact_fname').prop("disabled",false);
-                $('#fact_mname').prop("disabled",false);
-                $('#fact_email').prop("disabled",false);
-                $('#fact_contact_no').prop("disabled",false);
-                $('#fact_date_birth').prop("disabled",false);
-                $('#fact_civil_status').prop("disabled",false);
-                $('#gen_male').prop("disabled",false);
-                $('#gen_female').prop("disabled",false);
-                $('#fact_place_birth').prop("disabled",false);
-                $('#fact_citizen').prop("disabled",false);
-                $('#fact_res_address').prop("disabled",false);
-                $('#fact_zip_res').prop("disabled",false);
-                $('#fact_address').prop("disabled",false);
-                $('#fact_zip_address').prop("disabled",false);
-                $("div[id=fact-profile").find("input[type=text]").val("");
-                $("div[id=fact-profile").find("input[type=email]").val("");
-                $("div[id=fact-profile").find("input[type=date]").val("");
-                $('#fact_civil_status').val('');
-                $('#fact_type').val('');
-                $('#fact_dept').val('');
-                $("#gen_male").prop("checked", true);
-                $("#Educ_bg :input").prop("disabled", false);
-                $('#educ_lvl').val('');
-                $('input:checkbox').removeAttr('checked');
-                $('#add_spec_fac_form').show();
-                $('#fac_course_spec_div').hide();
-                $("#fac_course_spec").empty();
-                $('#edit_spec_fac_form').hide();
-            });
-
-            //VIEW FACULTY DETAILS
-            $(document).on('click', '#view_data', function(e)
-            {
-                openCity(event, 'Personal_Info');
-                $('#fact-profile').show();
-                $('#faculty_btn_add').hide();
-                $('#faculty_btn_update').hide();
-                $('#faculty_btn_reset').hide();
-                $('#add_fac_educ_form').hide();
-                $('#educ-bg-table').show();
-
-                $('html, body').animate({
-            scrollTop: $("#fact-profile").offset().top
-                }, 1000);
-
-                $("div[id=fact-profile").find("input[type=text]").val("");
-                $("div[id=fact-profile").find("input[type=email]").val("");
-                $("div[id=fact-profile").find("input[type=date]").val("");
-                $('#fact_civil_status').val('');
-                $('#fact_type').val('');
-                $('#fact_dept').val('');
-                $('#educ_lvl').val('');
-                $("#gen_male").prop("checked", true);
-
-                $("#Personal_Info :input").prop("disabled", true);
-                $("#Educ_bg :input").prop("disabled", true);
-
-                $('input:checkbox').removeAttr('checked');
-                $('#add_spec_fac_form').hide();
-                $('#fac_course_spec_div').show();
-                $("#fac_course_spec").empty();
-                $("#edit_spec_fac_form").hide();
-
-                e.preventDefault();
-                var id = $(this).data("id");
-
-                show_educ_table2(id);
-
-                $.ajax({  
-                    url:"<?php echo base_url('Maintenance/view_faculty')?>", 
-                    method:"POST",  
-                    data:'faculty_id='+id,  
-                    dataType: "json",
-                    success:function(data){
-                         $('#fact_id').val(data[0][0]);
-                         $('#fact_type').val(data[0][18]);
-                         $('#fact_dept').val(data[0][19]);
-                         $('#fact_sname').val(data[0][1]);
-                         $('#fact_fname').val(data[0][2]);
-                         $('#fact_mname').val(data[0][3]);
-                         $('#fact_email').val(data[0][4]);
-                         $('#fact_contact_no').val(data[0][5]);
-                         $('#fact_date_birth').val(data[0][6]);
-                         $('#fact_civil_status').val(data[0][8]);
-                         $("input[name=rad_gender][value="+data[0][7]+"]").prop('checked', true);
-                         $('#fact_place_birth').val(data[0][9]);
-                         $('#fact_citizen').val(data[0][10]);
-                         $('#fact_res_address').val(data[0][11]);
-                         $('#fact_zip_res').val(data[0][12]);
-                         $('#fact_address').val(data[0][13]);
-                         $('#fact_zip_address').val(data[0][14]);
-                         $('#fact_slname').val(data[0][15]);
-                         $('#fact_sfname').val(data[0][16]);
-                         $('#fact_smname').val(data[0][17]);
-                    },
-                         error: function (data) {
-                        alert(JSON.stringify(data));
-                    }
-               });
-
-
-                $.ajax({  
-                    url:"<?php echo base_url('Maintenance/view_spec')?>", 
-                    method:"POST",  
-                    data:'faculty_id='+id,  
-                    dataType: "json",
-                    success:function(data){
-                        var len = data.length;
-                        for(var i=0; i<len; i++)
-                        {
-                            var spec_desc = data[i][1];
-                    
-                            var tr_str = "<li>" + spec_desc + "</li>";
-
-                            $("#fac_course_spec").append(tr_str);
-                        }
-                    },
-                         error: function (data) {
-                        alert(JSON.stringify(data));
-                    }
-               });
-
-               });
-
-                //ADD FACULTY PROFILE
-                $("#add_fac_prof_form").on("submit", function(event)
-                {
-                    openCity(event, 'Personal_Info');
-                    event.preventDefault();
-                    $.ajax({
-                        type: "POST",
-                        url: "<?php echo base_url('Maintenance/add_faculty')?>",
-                        data: $("#add_fac_prof_form").serialize() + "&" + $("#add_fac_educ_form").serialize() + "&" + $("#add_spec_fac_form").serialize(),
-                        success: function(data)
-                        {       
-                            if(data == 'INSERTED')
-                            {
-                                swal("Added!", "The account is added.", "success");
-                                $('#fact-profile').hide();
-                                $('#faculty_btn_add').hide();
-                                $('#faculty_btn_update').hide();
-                                $('.dynamic-added').remove();
-                                $('#account-table').DataTable().destroy();
-                                loadtable();
-                            }
-
-                            if(data == 'NOT INSERTED')
-                            {
-                                swal("Not Added!", "Something blew up.", "error");
-                                $('#fact-profile').hide();
-                                $('#faculty_btn_add').hide();
-                                $('#faculty_btn_update').hide();
-                                $('.dynamic-added').remove();
-
-                            }
-
-                            if(data == 'THE DATA IS ALREADY INSERTED')
-                            {
-                                swal("Not Added!", "The faculty ID is already inserted.", "error");
-                                $('#fact-profile').hide();
-                                $('#faculty_btn_add').hide();
-                                $('#faculty_btn_update').hide();
-                                $('.dynamic-added').remove();
-                                $('#account-table').DataTable().destroy();
-                                loadtable();
-                            }
-                        },
-                        error: function (data) {
-                            alert(JSON.stringify(data));
-                        }
-                    });
-                });
 
                 //UPDATE FACULTY SPECIALIZATION (TOGGLE)
                 $("input[name = 'edit_fac_spec']").on('change', function()
@@ -839,111 +640,6 @@
                         }); 
                     }
                   });
-
-                //EDIT FACULTY DETAILS VIEW 
-                $(document).on('click', '#edit_data', function(e)
-                {  
-                    openCity(event, 'Personal_Info');
-                    $('#fact_id').prop("disabled",false);
-                    $('#fact_type').prop("disabled",false);
-                    $('#fact_dept').prop("disabled",false);
-                    $('#fact_sname').prop("disabled",false);
-                    $('#fact_fname').prop("disabled",false);
-                    $('#fact_mname').prop("disabled",false);
-                    $('#fact_email').prop("disabled",false);
-                    $('#fact_contact_no').prop("disabled",false);
-                    $('#fact_date_birth').prop("disabled",false);
-                    $('#fact_civil_status').prop("disabled",false);
-                    $('#gen_male').prop("disabled",false);
-                    $('#gen_female').prop("disabled",false);
-                    $('#fact_place_birth').prop("disabled",false);
-                    $('#fact_citizen').prop("disabled",false);
-                    $('#fact_res_address').prop("disabled",false);
-                    $('#fact_zip_res').prop("disabled",false);
-                    $('#fact_address').prop("disabled",false);
-                    $('#fact_zip_address').prop("disabled",false);
-                    $('#add_fac_educ_form').show();
-                    $("#Educ_bg :input").prop("disabled", false);
-
-                   e.preventDefault();
-                   var id = $(this).data("id");
-
-                   $('#educ-bg-table').show();
-                   $('#educ-bg-table').DataTable().destroy();
-                   show_educ_table(id);
-                   $('#fact-profile').show();
-                   $('#faculty_btn_add').hide();
-                   $('#faculty_btn_update').show();
-                   $('#update_account').prop("disabled", false);
-                   $('#faculty_btn_reset').show();
-                   $('#reset_account').prop("disabled", false);
-                   $('#add_spec_fac_form').hide();
-                   $('#fac_course_spec_div').hide();
-                   $("#fac_course_spec").empty();
-                   $('#edit_spec_fac_form').show();
-
-                   $('html, body').animate({
-                scrollTop: $("#fact-profile").offset().top
-                    }, 1000);
-                   
-                   $.ajax({  
-                        url:"<?php echo base_url('Maintenance/view_faculty')?>", 
-                        method:"POST",  
-                        data:'faculty_id='+id,  
-                        dataType: "json",
-                        success:function(data){
-                             $('#fact_id').val(data[0][0]);
-                             $('#fact_type').val(data[0][18]);
-                             $('#fact_dept').val(data[0][19]);
-                             $('#fact_sname').val(data[0][1]);
-                             $('#fact_fname').val(data[0][2]);
-                             $('#fact_mname').val(data[0][3]);
-                             $('#fact_email').val(data[0][4]);
-                             $('#fact_contact_no').val(data[0][5]);
-                             $('#fact_date_birth').val(data[0][6]);
-                             $('#fact_civil_status').val(data[0][8]);
-                             $("input[name=rad_gender][value="+data[0][7]+"]").prop('checked', true);
-                             $('#fact_place_birth').val(data[0][9]);
-                             $('#fact_citizen').val(data[0][10]);
-                             $('#fact_res_address').val(data[0][11]);
-                             $('#fact_zip_res').val(data[0][12]);
-                             $('#fact_address').val(data[0][13]);
-                             $('#fact_zip_address').val(data[0][14]);
-                             $('#fact_slname').val(data[0][15]);
-                             $('#fact_sfname').val(data[0][16]);
-                             $('#fact_smname').val(data[0][17]);
-                             $('#faculty_id_hid').val(data[0][20]);
-                             change_spouse();
-                        },
-                        error: function (data) {
-                            alert(JSON.stringify(data));
-                        }
-                   }); 
-
-
-                    $.ajax({  
-                        url:"<?php echo base_url('Maintenance/view_spec')?>", 
-                        method:"POST",  
-                        data:'faculty_id='+id,  
-                        dataType: "json",
-                        success:function(data){
-
-                            // $("input[name = 'fac_spec']").prop('checked', false);
-                            $('input:checkbox').removeAttr('checked');
-                            var len = data.length;
-                            for(var i=0; i<len; i++)
-                            {
-                                var spec_id = data[i][0];
-                        
-                               $("input[value ="+ "'" + spec_id + "'" + "]").prop('checked',true);
-                            }
-                            
-                        },
-                             error: function (data) {
-                            alert(JSON.stringify(data));
-                        }
-                   });
-                }); 
                 
                 //EDIT EDUCBG VIEW DETAILS
                 $(document).on('click', '#edit_educbg_data', function(e)
@@ -1010,6 +706,7 @@
                 //EDIT FACULTY DETAILS PROCESS
                 $("#update_account").on("click", function(event)
                 {  
+                    var id = "<?php echo $id?>";
                     openCity(event, 'Personal_Info');
                     event.preventDefault();  
                     $.ajax({  
@@ -1020,22 +717,19 @@
                     {  
                         if(data == 'UPDATED')
                         {
-                            swal("Updated!", "The account is updated.", "success");
+                            swal("Updated!", "The faculty details is updated.", "success");
                             $('#fact-profile').show();
                             $('.dynamic-added').remove();
+                            show_educ_table(id);
+                            $('#educ_lvl').val('');
+                            $('#educ_school').val('');
+                            $('#educ_degree').val('');
+                            $('#educ_yr').val('');
                         }
 
                         if(data == 'NOT UPDATED')
                         {
                             swal("Not Updated!", "Something blew up.", "error");
-                        }
-
-                        if(data == 'THE DATA IS ALREADY INSERTED')
-                        {
-                            swal("Not Updated!", "The faculty ID is already inserted.", "error");
-                            $('#fact-profile').show();
-                            $('#faculty_btn_update').hide();
-                            $('.dynamic-added').remove();
                         }
                     }
                     });  

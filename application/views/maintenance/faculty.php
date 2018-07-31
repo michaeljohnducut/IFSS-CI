@@ -523,12 +523,10 @@
                x++;  
                $('#dynamic_field').append('<tr id="row'+x+'" class="dynamic-added">'+
                 '<td><select class="form-control" name="educ_lvl[]" required><option value="" disabled selected>--SELECT LEVEL--</option>'+
-                    '<option value="Elementary">Elementary</option>'+
-                    '<option value="Secondary">Secondary</option>'+
-                    '<option value="Vocational">Vocational</option>'+
                     '<option value="College">College</option>'+
-                    '<option value="Masters">Masters</option>'+
-                    '<option value="Doctorate">Doctorate</option>'+
+                    '<option value="PBD">Post Baccalaureate Degree</option>'+
+                    '<option value="Masteral Degree">Masteral Degree</option>'+
+                    '<option value="Doctoral Degree">Doctoral Degree</option>'+
                     '</select></td>'+
                 '<td><input class="form-control" type="text" name="educ_school[]" required></td>'+
                 '<td><input class="form-control" type="text" name="educ_degree[]" required></td>'+

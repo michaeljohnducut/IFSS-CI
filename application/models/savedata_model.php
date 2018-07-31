@@ -362,6 +362,7 @@ class savedata_model extends CI_Model
 								->where('name_of_school', $educ_school_edit)
 								->where('basic_educ_degree', $educ_degree_edit)
 								->where('yr_graduated', $educ_yr_edit)
+								->where('educ_bg_id', $educbg_id_hid)
 								->where('status', 1)
 							->group_end()
 							->get('educ_bg');
@@ -1424,8 +1425,6 @@ class savedata_model extends CI_Model
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$dept = $this->security->xss_clean($this->input->post('dept'));
 
-		$fac_count = $this->db->count_all('faculty');
-
 			$path = $_FILES["file"]["tmp_name"];
 			$object = PHPExcel_IOFactory::load($path);
 			
@@ -1434,27 +1433,36 @@ class savedata_model extends CI_Model
 				$highestRow = $worksheet->getHighestRow();
 				$highestColumn = $worksheet->getHighestColumn();
 				$ctr = 0;
-				for($row=2; $row<=$highestRow; $row++)
+				for($row=8; $row<=$highestRow-1; $row++)
 				{
-					$rating = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
-					$interpretation = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
-					$faculty = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+					$rating = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
+					$interpretation = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
+					$faculty = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
 
 					$query = $this->db->query("SELECT faculty_id
 												FROM faculty
 												WHERE CONCAT(lname, ', ', fname) = '$faculty'
 												OR CONCAT(lname, ', ', fname, ' ', mname) = '$faculty'
-												OR CONCAT(lname, ', ', fname, ' ', SUBSTR(mname, 1, 1)) = '$faculty'");
+												OR CONCAT(lname, ', ', fname, ' ', SUBSTR(mname, 1, 1)) = '$faculty'
+												OR CONCAT(lname, ', ', fname, ' ', CONCAT(SUBSTR(mname, 1, 1)), '.') = '$faculty'");
 										
 					$ret = $query->row_array();
-					$faculty_id = $ret['faculty_id'];
+					
+					if($ret['faculty_id'] == NULL)
+					{
+						$faculty_id = NULL;
+					}
+					else
+					{
+						$faculty_id = $ret['faculty_id'];
+					}
 
 					$data[] = array(
 						'acad_yr' => $acad_yr,
 						'sem' => $sem,
 						'rating' =>	$rating,
 						'rating_desc' => $interpretation,
-						'course' => $dept,
+						'dept' => $dept,
 						'faculty_id' => $faculty_id
 					);
 				}

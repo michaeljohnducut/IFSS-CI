@@ -147,9 +147,9 @@
                                                  </div>
                                          </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
                                                 <button type="submit" name="btnAddEval" id="btnAddEval
-                                                " class="btn btn-success waves-effect text-left">Import Student Evaluation</button>
+                                                " class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
                                         </div>

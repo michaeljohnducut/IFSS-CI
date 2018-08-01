@@ -625,7 +625,7 @@ class getdata_model extends CI_Model{
 	{
 		$result = array();
 
-		$query = $this->db->select('d.dept_code, year_lvl, section_desc, ay.acad_yr_desc, sem, section_id')
+		$query = $this->db->select('d.dept_code, section_desc, ay.acad_yr_desc, sem, section_id')
 				->join('department d', 's.dept = d.dept_id')
 				->join('acad_year ay', 's.acad_yr = ay.acad_yr_id')
                 ->where('s.status', 1)
@@ -639,7 +639,6 @@ class getdata_model extends CI_Model{
 
 			$result[] = array(
 					$r->dept_code,
-					$r->year_lvl,
 					$r->section_desc,
 					$r->acad_yr_desc,
 					$r->sem,
@@ -655,7 +654,7 @@ class getdata_model extends CI_Model{
 	{
 		$result = array();
 
-		$query = $this->db->select('c.course_code, year_lvl, section_desc, section_id')
+		$query = $this->db->select('c.course_code, section_desc, section_id')
 				->join('course c', 's.course = c.course_id')
                 ->where('s.status', 1)
                 ->get('section s');
@@ -666,7 +665,6 @@ class getdata_model extends CI_Model{
 
 			$result[] = array(
 					$r->course_code,
-					$r->year_lvl,
 					$r->section_desc,
 					$btn,
 					$r->section_id
@@ -684,7 +682,7 @@ class getdata_model extends CI_Model{
 
 		$section_id = $this->security->xss_clean($this->input->post('section_id'));
 
-		$query = $this->db->select('c.course_id, year_lvl, section_desc, section_id')
+		$query = $this->db->select('c.course_id, section_desc, section_id')
 				->join('course c', 's.course = c.course_id')
                 ->where('s.status', 1)
                 ->where('s.section_id', $section_id)
@@ -694,7 +692,6 @@ class getdata_model extends CI_Model{
 		{	
 			$result[] = array(
 					$r->course_id,
-					$r->year_lvl,
 					$r->section_desc,
 					$r->section_id
 					);
@@ -888,6 +885,15 @@ class getdata_model extends CI_Model{
 	public function get_disc_subj(){
 
 		$result = array();
+		$temp_date = date("m");
+
+		if($temp_date == '01' || $temp_date == '02' || $temp_date == '03' || $temp_date == '04' || $temp_date == '05' || $temp_date == '06'){
+			$sem = '1st';
+		}
+
+		else if($temp_date == '07' || $temp_date == '08' || $temp_date == '09' || $temp_date == '10' || $temp_date == '11' || $temp_date == '12'){
+			$sem = '2nd';
+		}
 
 		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
 				->distinct()
@@ -896,6 +902,7 @@ class getdata_model extends CI_Model{
 	                    FROM curriculum_year
 	                    WHERE is_used = 1)', NULL, FALSE)
 				->where('s.isMajor', 1)
+				->where('c.sem', $sem)
                 ->get('curriculum c');
 
 

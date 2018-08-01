@@ -57,7 +57,6 @@ class Transaction extends CI_Controller
 	public function student_eval()
 	{
 		$data['dept'] = $this->getdata_model->department();
-		$data['faculty'] = $this->getdata_model->faculty();
 		
 		$data['title'] = "IFSS | Student Evaluation";
 		$this->load->view('templates/header', $data);

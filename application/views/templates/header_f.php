@@ -29,7 +29,7 @@
     <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>assets/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet" />
-    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/dropify/dist/css/dropify.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/bower_components/dropify/dist/css/dropify.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
     <link href="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
@@ -122,7 +122,7 @@
             </div>
         </div>
 
-         <a data-toggle="modal" href="#modalNewPass" id="openMod"></a>
+         <a data-toggle="modal" href="#modalNewPass" id="openMod1"></a>
 
         <div class="modal fade bs-example-modal-lg" id="modalNewPass" tabindex="-1" role="dialog" aria-labelledby="modalNewPass" aria-hidden="true" style="display: none;">
                                 <div class="modal-dialog modal-lg">

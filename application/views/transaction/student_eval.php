@@ -25,7 +25,7 @@
                                 <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control select2" name="select_ay" id="select_ay">
-                                     <option value="0">-ACAD YEAR-</option>
+                                     <option value="" disabled selected>-ACAD YEAR-</option>
                                     <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
                                             echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -37,7 +37,7 @@
                             <div class="col-md-2">
                                 <label class="control-label">Select Semester</label>
                                 <select class="form-control select2" name="select_sem" id="select_sem">
-                                    <option value="0" disabled selected>--SEMESTER--</option>
+                                    <option value="" disabled selected>--SEMESTER--</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option>
                                     <option value="Summer">Summer</option>
@@ -108,11 +108,12 @@
                                         <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
                                         </div>
                                         <div class="modal-body">
-                                            <form id="add_eval_form" method="POST" enctype="multipart/form-data">
+                                        <form id="add_eval_form" method="POST" enctype="multipart/form-data">
+                                            
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">For Acad. Year:</label>
                                                     <select class="form-control" name="acadyr" id="acadyr" required>
-                                                         <option value="0" disabled selected>-ACAD YEAR-</option>
+                                                         <option value="" disabled selected>-ACAD YEAR-</option>
                                                             <?php 
                                                                 for ($i = date("Y"); $i > 1900; $i-- ){
                                                                     echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -123,7 +124,7 @@
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">Semester:</label>
                                                     <select class="form-control" name="sem" id="sem" required>
-                                                            <option value ="" disabled selected>-SELECT-</option>
+                                                            <option value="" disabled selected>-SEMESTER-</option>
                                                             <option value="1st">1st</option>
                                                             <option value="2nd">2nd</option>
                                                             <option value="Summer">Summer</option>
@@ -132,7 +133,7 @@
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">Department:</label>
                                                         <select class="form-control" name="dept" id="dept" required>
-                                                            <option value ="" disabled selected>-SELECT-</option>
+                                                            <option value="" disabled selected>-DEPARTMENT-</option>
                                                             <?php foreach($dept as $r) echo '<option value="'.$r[3].'">'.$r[0].'</option>';?>
                                                         </select>
                                                 </div>
@@ -142,18 +143,18 @@
                                                 <div class="form-group col-md-10">
                                                     <label class="control-label">Add File:</label>
                                                     <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="height: 20%">
-                                                            <input class="dropify" type="file" name="file" id="file" accept=".xls, .xlsx" />
+                                                            <input class="dropify" type="file" name="file" id="file" accept=".xls, .xlsx" data-allowed-file-extensions="xls xlsx"  required />
                                                       
                                                     </div>
                                                 </div>
                                                  </div>
-                                         </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm()">Clear</button>
                                                 <button type="submit" name="btnAddEval" id="btnAddEval
                                                 " class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
+                                        </div>
                                         </div>
                                     </div>
                                     <!-- /.modal-content -->
@@ -178,7 +179,7 @@
                                                     <label class="control-label">For Acad. Year:</label>
                                                     <select class="form-control" name="edit_acad" id="edit_acad" required>
                                                         <option value ="" disabled selected>-SELECT-</option>
-                                                        <?php foreach($acad_yr as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
+                                                        
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-md-4">
@@ -194,14 +195,14 @@
                                                     <label class="control-label">Department:</label>
                                                         <select class="form-control" name="edit_dept" id="edit_dept" required>
                                                             <option value ="" disabled selected>-SELECT-</option>
-                                                            <?php foreach($dept as $r) echo '<option value="'.$r[3].'">'.$r[0].'</option>';?>
+                                                            
                                                         </select>
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label class="control-label">Faculty Name:</label>
                                                        <select class="form-control" name="edit_fac" id="edit_fac" required>
                                                             <option value ="" disabled selected>-SELECT-</option>
-                                                            <?php foreach($faculty as $r) echo '<option value="'.$r[8].'">'.$r[1].', '.$r[2].' '.$r[3].'</option>';?>
+                                                            
                                                         </select>
                                                 </div>
                                                 <div class="form-group col-md-2">
@@ -221,7 +222,7 @@
                                                 </div>
                                                 <input type="hidden" name="eval_id" id="eval_id">
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
+                                                <button type="button" class="btn btn-default">Reset</button>
                                                 <button type="submit" name="btnEditEval" id="btnEditEval" class="btn btn-success waves-effect text-left">Edit Evaluation</button>
                                             </div>
                                             </form>
@@ -245,15 +246,18 @@
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
 
     <!-- jQuery file upload -->
-    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/dropify/dist/js/dropify.js"></script>
 
     <script type="text/javascript">
         //File Upload
         $('.dropify').dropify();
 
-        function resetForm1()
+        function resetForm()
         {
-            $('#add_eval_form')[0].reset();  
+            $('#acadyr').val("");
+            $('#sem').val("");
+            $('#dept').val("");
+            // $('.dropify-clear').click();
         }
 
         function loadtable()

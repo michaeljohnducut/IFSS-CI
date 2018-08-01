@@ -28,8 +28,6 @@
 
     <script src="<?php echo base_url(); ?>assets/js/validator.js"></script>
 
-    
-
     <!-- Sparkline chart JavaScript -->
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script>

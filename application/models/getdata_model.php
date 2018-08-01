@@ -840,7 +840,8 @@ class getdata_model extends CI_Model{
 		
 		if(!empty($_POST['ay']))
 		{
-			$statement .= " AND ay.acad_yr_id = ".$this->security->xss_clean($this->input->post('ay'));
+			$acad_yr = $this->security->xss_clean($this->input->post('ay'));
+			$statement .= " AND e.acad_yr = '$acad_yr'";
 		}
 		if(!empty($_POST['sem']))
 		{
@@ -849,16 +850,14 @@ class getdata_model extends CI_Model{
 		}
 		if(!empty($_POST['dept']))
 		{
-			$statement .= " AND c.course_id = ".$this->security->xss_clean($this->input->post('dept'));
+			$statement .= " AND d.dept_id = ".$this->security->xss_clean($this->input->post('dept'));
 		}
 
-		$query = $this->db->query("SELECT ay.acad_yr_desc, e.sem, c.course_code, CONCAT(f.lname,', ', f.fname,' ', f.mname) AS faculty_name, rating, rating_desc, evaluation_id
+		$query = $this->db->query("SELECT e.acad_yr, e.sem, d.dept_code, CONCAT(f.lname,', ', f.fname,' ', f.mname) AS faculty_name, rating, rating_desc, evaluation_id
 									FROM evaluation e JOIN faculty f 
 									ON e.faculty_id = f.faculty_id
-									JOIN acad_year ay
-									ON e.acad_yr = ay.acad_yr_id
-									JOIN course c
-									ON e.course = c.course_id
+									JOIN department d
+									ON e.dept = d.dept_id
 									WHERE 1 = 1 $statement");
 
 		foreach($query->result() as $r)
@@ -866,9 +865,9 @@ class getdata_model extends CI_Model{
 			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->evaluation_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
-					$r->acad_yr_desc,
+					$r->acad_yr,
 					$r->sem,
-					$r->course_code,
+					$r->dept_code,
 					$r->faculty_name,
 					$r->rating,
 					$r->rating_desc,

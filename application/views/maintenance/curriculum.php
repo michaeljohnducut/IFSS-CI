@@ -48,7 +48,7 @@
                                     <center><label class="control-label">Course:</label></center>
                                     <select class="form-control select2" id="department_sf">
                                     <option value="0">--Course--</option>
-                                    <?php foreach($department as $r) echo '<option value="'.$r[3].'">'.$r[0].'</option>';?>
+                                    <?php foreach($department as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
                                     </select>
                                 </div>
 
@@ -204,7 +204,7 @@
                             <label class="control-label">Select Course</label>
                             <select class="form-control select2" id="edit_dept" name="edit_dept">
                                 <option>--COURSE--</option>
-                                <?php foreach($department as $r) echo '<option value="'.$r[3].'">'.$r[0].'</option>';?>
+                                <?php foreach($department as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
                             </select>
                         </div>
                         <div class="col-md-3">

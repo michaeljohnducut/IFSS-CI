@@ -57,7 +57,7 @@
                                 <thead>
                                     <tr>
                                         <th>Course</th>
-                                        <th>Year Level</th>
+                                        <!-- <th>Year Level</th> -->
                                         <th>Section Description</th>
                                         <th>Action</th>
                                     </tr>
@@ -116,10 +116,10 @@
                                                     <label class="control-label">Course:</label>
                                                         <select class="form-control" name="sec_dept" id="sec_dept" required>
                                                             <option value ="" disabled selected>-SELECT-</option>
-                                                            <?php foreach($dept as $r) echo '<option value="'.$r[3].'">'.$r[0].'</option>';?>
+                                                            <?php foreach($dept as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
                                                         </select>
                                                 </div>
-                                                <div class="form-group col-md-4">
+                                                <!-- <div class="form-group col-md-4">
                                                     <label class="control-label">Year Level:</label>
                                                         <select class="form-control" name="sec_yrlvl" id="sec_yrlvl" required>
                                                             <option value ="" disabled selected>-SELECT-</option>
@@ -128,17 +128,17 @@
                                                             <option value="3rd">3rd</option>
                                                             <option value="4th">4th</option>
                                                         </select>
-                                                </div>
+                                                </div> -->
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Section Description:</label>
                                                         <input class="form-control" type="text" name="sec_desc" id="sec_desc" maxlength="5" pattern="[A-Z0-9]|[A-Z]|[0-9][A-Z]" title="Input valid section." placeholder="1N" required>
-                                                </div>      
+                                                </div>    
+                                            </div>  
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
                                                 <button type="submit" name="btnAddSection" id="btnAddSection" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
-                                        </div>
                                     </div>
                                     <!-- /.modal-content -->
                                 </div>
@@ -176,10 +176,10 @@
                                                     <label class="control-label">Course:</label>
                                                         <select class="form-control" name="sec_edit_dept" id="sec_edit_dept" required>
                                                             <option value ="" disabled selected>-SELECT-</option>
-                                                            <?php foreach($dept as $r) echo '<option value="'.$r[3].'">'.$r[0].'</option>';?>
+                                                            <?php foreach($dept as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
                                                         </select>
                                                 </div>
-                                                <div class="form-group col-md-4">
+                                               <!--  <div class="form-group col-md-4">
                                                     <label class="control-label">Year Level:</label>
                                                         <select class="form-control" name="sec_edit_yrlvl" id="sec_edit_yrlvl" required>
                                                             <option value ="" disabled selected>-SELECT-</option>
@@ -188,18 +188,18 @@
                                                             <option value="3rd">3rd</option>
                                                             <option value="4th">4th</option>
                                                         </select>
-                                                </div>
+                                                </div> -->
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Section Description:</label>
                                                         <input class="form-control" type="text" name="sec_edit_desc" id="sec_edit_desc" maxlength="4" pattern="[A-Z0-9]|[A-Z]|[0-9][A-Z]" title="Input valid section." required>
                                                 </div>
-                                                <input type="hidden" name="section_id_hid" id="section_id_hid" />      
+                                                <input type="hidden" name="section_id_hid" id="section_id_hid" />     
+                                            </div>   
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" onclick="resetForm2()">Clear</button>
                                                 <button type="submit" name="btnEditSection" id="btnEditSection" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
-                                        </div>
                                     </div>
                                     <!-- /.modal-content -->
                                 </div>
@@ -346,8 +346,8 @@
                          // $('#sec_edit_acad').val(data[0][3]);
                          // $('#sec_edit_sem').val(data[0][4]);
                          $('#sec_edit_dept').val(data[0][0]);
-                         $('#sec_edit_yrlvl').val(data[0][1]);
-                         $('#sec_edit_desc').val(data[0][2]);
+                         // $('#sec_edit_yrlvl').val(data[0][1]);
+                         $('#sec_edit_desc').val(data[0][1]);
                          $('#section_id_hid').val(data[0][3]);
                          $('#openMod').trigger('click');
                     },

@@ -451,7 +451,7 @@
             var id = $(this).data("id");
 
               swal({
-                        title: "Remove subject",
+                        title: "Unselect subject",
                         text: "from the curriculum?", 
                         icon: "warning",
                         buttons: true,
@@ -468,7 +468,7 @@
                       {
                          if(data == 'DELETED'){
                             fetch_data(year_temp, dept_temp, sem_temp);
-                            swal("Success!", "Subject has been removed.", "success");   
+                            swal("Success!", "Subject unselected.", "success");   
                          }
 
                          else{

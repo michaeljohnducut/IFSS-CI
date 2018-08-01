@@ -548,7 +548,7 @@ class getdata_model extends CI_Model{
 
 		foreach($query->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-danger" id="delete_data" data-id="'.$r->curriculum_id.'" >x</button>';
+			$btn = '<button class="btn btn-sm  btn-danger" id="delete_data" data-id="'.$r->curriculum_id.'" >Unselect</button>';
 					
 			$result[] = array(
 					$r->subj_code,

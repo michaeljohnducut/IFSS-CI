@@ -375,19 +375,19 @@
 
     <script type="text/javascript">
 
-        function hide_dropdown()
+function hide_dropdown()
+    {
+        var data = "<?php echo $acc_type?>";
+        if(data == 'faculty')
         {
-            var data = "<?php echo $acc_type?>";
-
-            if(data == 'faculty')
-            {
-                $('#for_hiding').hide();
-            }
-            else
-            {
-                $('#for_hiding').show();
-            }
+            $('#for_hiding').hide();   
         }
+        else
+        {
+            $('#for_hiding').show();
+        }
+    }
+
 
 function loadtable(faculty_id, acad_year, sem){
 
@@ -459,9 +459,15 @@ function getPrefTime(faculty_id, acad_year, sem){
 
     function addMoreTime(day, start, end){
 
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin'){
+            var fac_id = $('#fac_list').val();
+        }
+        else{
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
          $.ajax({  
             url:"<?php echo base_url('Transaction/add_pref_time')?>",  
@@ -660,9 +666,15 @@ function getPrefTime(faculty_id, acad_year, sem){
     $('#fac_list').on('change', function(e){
 
         e.preventDefault();
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin'){
+            var fac_id = $('#fac_list').val();
+        }
+        else{
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         if(fac_id != 0){
             getPrefTime(fac_id, acad_year, sem);
@@ -675,9 +687,15 @@ function getPrefTime(faculty_id, acad_year, sem){
     $('#selected_sem').on('change', function(e){
 
         e.preventDefault();
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin'){
+            var fac_id = $('#fac_list').val();
+        }
+        else{
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         if(fac_id != 0){
             getPrefTime(fac_id, acad_year, sem);
@@ -690,9 +708,15 @@ function getPrefTime(faculty_id, acad_year, sem){
     $('#acad_year').on('change', function(e){
 
         e.preventDefault();
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin'){
+            var fac_id = $('#fac_list').val();
+        }
+        else{
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         if(fac_id != 0){
             getPrefTime(fac_id, acad_year, sem);
@@ -727,7 +751,6 @@ $(document).ready(function(){
         var start = $('#strtMon').val();
         var end = $('#endMon').val();
         var day = 'Monday';
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
 
@@ -750,7 +773,6 @@ $(document).ready(function(){
         var start = $('#strTue').val();
         var end = $('#endTue').val();
         var day = 'Tuesday';
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
 
@@ -773,7 +795,6 @@ $(document).ready(function(){
         var start = $('#strWed').val();
         var end = $('#endWed').val();
         var day = 'Wednesday';
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
 
@@ -797,7 +818,6 @@ $(document).ready(function(){
         var start = $('#strThr').val();
         var end = $('#endThr').val();
         var day = 'Thursday';
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
 
@@ -821,10 +841,8 @@ $(document).ready(function(){
         var start = $('#strFri').val();
         var end = $('#endFri').val();
         var day = 'Friday';
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
-
         var value = checkTimeValidity(start, end);
 
         if(value == 'invalid'){
@@ -844,7 +862,6 @@ $(document).ready(function(){
         var start = $('#strSat').val();
         var end = $('#endSat').val();
         var day = 'Saturday';
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
 
@@ -865,8 +882,15 @@ $(document).ready(function(){
 
     $("input[name = 'set_time']").on('change',function(){
 
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin'){
+            var fac_id = $('#fac_list').val();
+        }
+        else{
+            var fac_id = "<?php echo $fac_id?>";
+        }
+
         var val = $(this).attr('value');
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
         var start = '';
@@ -1201,6 +1225,60 @@ $(document).ready(function(){
          }
 
     });
+
+    $(document).on('click', '#remove_pref', function(e){  
+
+        var sem = $('#selected_sem').val();
+        var acad_year = $('#acad_year').val();
+        var id = $(this).data("id");
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin'){
+            var fac_id = $('#fac_list').val();
+        }
+        else{
+            var fac_id = "<?php echo $fac_id?>";
+        }
+
+              swal({
+                        title: "Unselect time preference?",
+                        // text: "from your time preferences?", 
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+              })
+                .then((willApprove) => {
+                  if (willApprove) {
+                    alert(id);
+                    $.ajax({   
+                      url:"<?php echo base_url('Transaction/delete_pref_time_id')?>",  
+                      method: "POST",
+                      data:{id},
+                      success: function (data) 
+                      {
+                         if(data == 'DELETED'){
+                            loadtable(fac_id, acad_year, sem);
+                            getPrefTime(fac_id, acad_year, sem);
+                            swal("Success!", "Time preference unselected.", "success");   
+                         }
+
+                         else{
+
+                            swal("Not Deleted!", "Failed to unselect time.", "error");
+                            alert(JSON.stringify(data));
+                         } 
+                      },
+                      error: function (data) {
+                        swal("Not Deleted!", "Failed to remove subject.", "error");
+                        alert(JSON.stringify(data));
+                      }
+                    });
+                  } 
+
+                  else {
+                    swal("Cancelled", "");
+                  }
+                });
+        });
 
 
     </script>

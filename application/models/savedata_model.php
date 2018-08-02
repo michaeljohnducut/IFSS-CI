@@ -1638,5 +1638,25 @@ class savedata_model extends CI_Model
 		return $output;
 
 	}
+
+	public function delete_pref_time_id(){
+
+		$output = "";
+		$id = $this->security->xss_clean($this->input->post('id'));
+
+		if($this->db->query("DELETE FROM `preferred_time` 
+			WHERE preferred_time_id = $id"))
+			{
+				$output = 'DELETED';
+			}
+			else
+			{
+				$output = 'NOT DELETED';
+			}
+
+
+		return $output;
+
+	}
 }
 ?>

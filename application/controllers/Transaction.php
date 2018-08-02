@@ -33,6 +33,7 @@ class Transaction extends CI_Controller
 			$data['faculty'] = $this->getdata_model->faculty();
 			$data['subjects'] = $this->getdata_model->get_disc_subj();
 			$data['acc_type'] = 'admin';
+			$data['fac_id'] = $this->session->userdata('USERID');
 
 			$data['title'] = "IFSS | Subject Preference";
 			$this->load->view('templates/header', $data);
@@ -45,6 +46,7 @@ class Transaction extends CI_Controller
 			$data['faculty'] = $this->getdata_model->faculty();
 			$data['subjects'] = $this->getdata_model->get_disc_subj();
 			$data['acc_type'] = 'faculty';
+			$data['fac_id'] = $this->session->userdata('USERID');
 			
 			$data['title'] = "IFSS | Subject Preference";
 			$this->load->view('templates/header_f', $data);
@@ -185,6 +187,7 @@ class Transaction extends CI_Controller
 
 	public function add_pref_time()
 	{
+
 		echo ($this->savedata_model->add_pref_time($_POST));
 		exit();
 	}
@@ -237,6 +240,12 @@ class Transaction extends CI_Controller
 			'iDisplayStart' => 0
 		);
 		echo json_encode($response);
+		exit();
+	}
+
+	public function delete_pref_time_id()
+	{
+		echo ($this->savedata_model->delete_pref_time_id($_POST));
 		exit();
 	}
 

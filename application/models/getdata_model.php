@@ -955,7 +955,7 @@ class getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="remove_pref" data-id="'.$r->preferred_time_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-primary" id="remove_pref" data-id="'.$r->preferred_time_id.'">UNSELECT</button>';
 
 			$result[] = array(
 					$r->day,
@@ -1003,10 +1003,6 @@ class getdata_model extends CI_Model{
 
 	}
 
-
-// ==========================================================================
-// -----------------------------NEW UPDATE (7-31-18)------------------------
-// ==========================================================================
 
 }
 ?>

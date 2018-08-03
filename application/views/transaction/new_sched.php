@@ -703,6 +703,46 @@
             }
         }
 
+        //FUNCTION TO VIEW AVAILABLE SECTIONS FOR A SPECIFIC TIME
+        function getAvailSections(){
+
+        }
+
+        //FUNCTION GO GET THE HOURS OF THE SUBJECT
+        function getSubjHours(){
+
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_prof_subj')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    var len = data.length;
+                    // alert(len);
+                     $("#sched_subj").empty();  //RESETS SUBJECTS FOR FACULTY
+                     for( var i = 0; i<len; i++){
+
+                            var id = data[i][0];
+                            var code = data[i][1];
+                            var name = data[i][2];
+                            
+                            $("#sched_subj").append("<option value='"+id+"'>"+code+" - "+name+"</option>");
+                        }
+                     
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        //FUNCTION TO GET THE AVAILABLE ROOMS FOR A SPECIFIC TIME
+        function getAvailRooms(day, time){
+
+
+        }
+
         $(document).ready(function(){
 
             $(".select2").select2();

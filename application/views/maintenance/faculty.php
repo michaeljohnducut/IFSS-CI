@@ -789,6 +789,7 @@
                     $('#fact_contact_no').prop("disabled",false);
                     $('#fact_date_birth').prop("disabled",false);
                     $('#fact_civil_status').prop("disabled",false);
+                    $('#faculty_id_hid').prop("disabled", false);
                     $('#gen_male').prop("disabled",false);
                     $('#gen_female').prop("disabled",false);
                     $('#fact_citizen').prop("disabled",false);
@@ -847,7 +848,6 @@
                              $('#fact_address').val(data[0][12]);
                              $('#fact_zip_address').val(data[0][13]);
                              $('#faculty_id_hid').val(data[0][16]);
-                             change_spouse();
                         },
                         error: function (data) {
                             alert(JSON.stringify(data));

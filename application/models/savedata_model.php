@@ -298,7 +298,7 @@ class savedata_model extends CI_Model
 					);
 
 			if($this->db->where('faculty_id', $main_id)
-						->update('faculty f', $data))
+						->update('faculty', $data))
 			{
 				$output = 'UPDATED';
 

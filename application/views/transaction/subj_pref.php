@@ -1248,7 +1248,6 @@ $(document).ready(function(){
               })
                 .then((willApprove) => {
                   if (willApprove) {
-                    alert(id);
                     $.ajax({   
                       url:"<?php echo base_url('Transaction/delete_pref_time_id')?>",  
                       method: "POST",

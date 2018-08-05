@@ -56,8 +56,9 @@
                             <table id="section-table" class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th>Academic Year</th>
                                         <th>Course</th>
-                                        <!-- <th>Year Level</th> -->
+                                        <th>Year Level</th>
                                         <th>Section Description</th>
                                         <th>Action</th>
                                     </tr>
@@ -96,14 +97,18 @@
                                         </div>
                                         <div class="modal-body">
                                             <form id="add_section_form" method="POST" enctype="multipart/form-data">
-                                                <!-- <div class="form-group col-md-4">
+                                                <div class="form-group col-md-3">
                                                     <label class="control-label">For Acad. Year:</label>
                                                     <select class="form-control" name="sec_acad" id="sec_acad" required>
-                                                        <option value ="" disabled selected>-SELECT-</option>
-                                                        <?php //foreach($acad_yr as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
+                                                        <option value="" disabled selected>-SELECT-</option>
+                                                        <?php 
+                                                            for ($i = date("Y"); $i > 1900; $i-- ){
+                                                                echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                                            }
+                                                        ?>
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-md-4">
+                                                <!-- <div class="form-group col-md-4">
                                                     <label class="control-label">Semester:</label>
                                                     <select class="form-control" name="sec_sem" id="sec_sem" required>
                                                             <option value ="" disabled selected>-SELECT-</option>
@@ -112,30 +117,30 @@
                                                             <option value="Summer">Summer</option>
                                                     </select>    
                                                 </div> -->
-                                                <div class="form-group col-md-4">
+                                                <div class="form-group col-md-3">
                                                     <label class="control-label">Course:</label>
                                                         <select class="form-control" name="sec_dept" id="sec_dept" required>
-                                                            <option value ="" disabled selected>-SELECT-</option>
+                                                            <option value="" disabled selected>-SELECT-</option>
                                                             <?php foreach($dept as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
                                                         </select>
                                                 </div>
-                                                <!-- <div class="form-group col-md-4">
+                                                <div class="form-group col-md-3">
                                                     <label class="control-label">Year Level:</label>
                                                         <select class="form-control" name="sec_yrlvl" id="sec_yrlvl" required>
-                                                            <option value ="" disabled selected>-SELECT-</option>
+                                                            <option value="" disabled selected>-SELECT-</option>
                                                             <option value="1st">1st</option>
                                                             <option value="2nd">2nd</option>
                                                             <option value="3rd">3rd</option>
                                                             <option value="4th">4th</option>
                                                         </select>
-                                                </div> -->
-                                                <div class="form-group col-md-4">
+                                                </div>
+                                                <div class="form-group col-md-3">
                                                         <label class="control-label">Section Description:</label>
                                                         <input class="form-control" type="text" name="sec_desc" id="sec_desc" maxlength="5" pattern="[A-Z0-9]|[A-Z]|[0-9][A-Z]" title="Input valid section." placeholder="1N" required>
                                                 </div>    
                                             </div>  
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
+                                                <button type="button" class="btn btn-default" onclick="resetForm()">Clear</button>
                                                 <button type="submit" name="btnAddSection" id="btnAddSection" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
@@ -156,14 +161,18 @@
                                         </div>
                                         <div class="modal-body">
                                             <form id="edit_section_form" method="POST" enctype="multipart/form-data">
-                                                <!-- <div class="form-group col-md-4">
+                                                <div class="form-group col-md-3">
                                                     <label class="control-label">For Acad. Year:</label>
                                                     <select class="form-control" name="sec_edit_acad" id="sec_edit_acad" required>
-                                                        <option value ="" disabled selected>-SELECT-</option>
-                                                        <?php //foreach($acad_yr as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>    
+                                                        <option value="" disabled selected>-SELECT-</option>
+                                                        <?php 
+                                                            for ($i = date("Y"); $i > 1900; $i-- ){
+                                                                echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                                            }
+                                                        ?> 
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-md-4">
+                                                <!-- <div class="form-group col-md-4">
                                                     <label class="control-label">Semester:</label>
                                                     <select class="form-control" name="sec_edit_sem" id="sec_edit_sem" required>
                                                             <option value ="" disabled selected>-SELECT-</option>
@@ -172,24 +181,24 @@
                                                             <option value="Summer">Summer</option>
                                                     </select>    
                                                 </div> -->
-                                                <div class="form-group col-md-4">
+                                                <div class="form-group col-md-3">
                                                     <label class="control-label">Course:</label>
                                                         <select class="form-control" name="sec_edit_dept" id="sec_edit_dept" required>
-                                                            <option value ="" disabled selected>-SELECT-</option>
+                                                            <option value="" disabled selected>-SELECT-</option>
                                                             <?php foreach($dept as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
                                                         </select>
                                                 </div>
-                                               <!--  <div class="form-group col-md-4">
+                                                <div class="form-group col-md-3">
                                                     <label class="control-label">Year Level:</label>
                                                         <select class="form-control" name="sec_edit_yrlvl" id="sec_edit_yrlvl" required>
-                                                            <option value ="" disabled selected>-SELECT-</option>
+                                                            <option value="" disabled selected>-SELECT-</option>
                                                             <option value="1st">1st</option>
                                                             <option value="2nd">2nd</option>
                                                             <option value="3rd">3rd</option>
                                                             <option value="4th">4th</option>
                                                         </select>
-                                                </div> -->
-                                                <div class="form-group col-md-4">
+                                                </div>
+                                                <div class="form-group col-md-3">
                                                         <label class="control-label">Section Description:</label>
                                                         <input class="form-control" type="text" name="sec_edit_desc" id="sec_edit_desc" maxlength="4" pattern="[A-Z0-9]|[A-Z]|[0-9][A-Z]" title="Input valid section." required>
                                                 </div>
@@ -251,15 +260,19 @@
               "sAjaxSource": "<?php echo base_url('Maintenance/get_sections')?>",
               "deferLoading": 10,
               "bPaginate": true,
-              "aaSorting": [[1,'asc']],
+              "aaSorting": [[0,'asc']],
               "fnInitComplete": function(){
                         
               }
           });
         }
 
-        function resetForm1()
+        function resetForm()
         {
+            // $('#sec_acad').val("");
+            // $('#sec_dept').val("");
+            // $('#sec_yrlvl').val("");
+            // $('#sec_desc').val("");
             $('#add_section_form')[0].reset();
         }
 
@@ -343,12 +356,12 @@
                     data:'section_id='+id,  
                     dataType: "json",
                     success:function(data){  
-                         // $('#sec_edit_acad').val(data[0][3]);
+                         $('#sec_edit_acad').val(data[0][2]);
                          // $('#sec_edit_sem').val(data[0][4]);
                          $('#sec_edit_dept').val(data[0][0]);
-                         // $('#sec_edit_yrlvl').val(data[0][1]);
+                         $('#sec_edit_yrlvl').val(data[0][3]);
                          $('#sec_edit_desc').val(data[0][1]);
-                         $('#section_id_hid').val(data[0][3]);
+                         $('#section_id_hid').val(data[0][4]);
                          $('#openMod').trigger('click');
                     },
                     error: function (data) {

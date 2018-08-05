@@ -1237,13 +1237,14 @@ class savedata_model extends CI_Model
 	{
 		$output = '';
 
-		// $sec_acad = $this->security->xss_clean($this->input->post('sec_acad'));
+		 $sec_acad = $this->security->xss_clean($this->input->post('sec_acad'));
   //       $sec_sem = $this->security->xss_clean($this->input->post('sec_sem'));
         $sec_dept = $this->security->xss_clean($this->input->post('sec_dept'));
         $sec_yrlvl = $this->security->xss_clean($this->input->post('sec_yrlvl'));
         $sec_desc = $this->security->xss_clean($this->input->post('sec_desc'));
 
 		$query = $this->db->group_start()
+								->where('acad_yr', $sec_acad)
 								->where('section_desc', $sec_desc)
 								->where('course', $sec_dept)
 								->where('year_lvl', $sec_yrlvl)
@@ -1256,6 +1257,7 @@ class savedata_model extends CI_Model
 		if($number_filter_row == 0)
 		{
 			$data = array(
+				    'acad_yr' => $sec_acad,
 					'section_desc' => $sec_desc,
 					'course' => $sec_dept,
 					'year_lvl' => $sec_yrlvl,
@@ -1284,13 +1286,14 @@ class savedata_model extends CI_Model
 		$output = '';
 
         $main_id = $this->security->xss_clean($this->input->post('section_id_hid'));
-		// $sec_edit_acad = $this->security->xss_clean($this->input->post('sec_edit_acad'));
+		$sec_edit_acad = $this->security->xss_clean($this->input->post('sec_edit_acad'));
   //       $sec_edit_sem = $this->security->xss_clean($this->input->post('sec_edit_sem'));
         $sec_edit_dept = $this->security->xss_clean($this->input->post('sec_edit_dept'));
         $sec_edit_yrlvl = $this->security->xss_clean($this->input->post('sec_edit_yrlvl'));
         $sec_edit_desc = $this->security->xss_clean($this->input->post('sec_edit_desc'));
 
 		$query = $this->db->group_start()
+								->where('acad_yr', $sec_edit_acad)
 								->where('section_desc', $sec_edit_desc)
 								->where('course', $sec_edit_dept)
 								->where('year_lvl', $sec_edit_yrlvl)
@@ -1303,6 +1306,7 @@ class savedata_model extends CI_Model
 		if($number_filter_row == 0)
 		{
 			$data = array(
+					'acad_yr' => $sec_edit_acad,
 					'section_desc' => $sec_edit_desc,
 					'course' => $sec_edit_dept,
 					'year_lvl' => $sec_edit_yrlvl,

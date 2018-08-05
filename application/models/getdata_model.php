@@ -887,11 +887,11 @@ class getdata_model extends CI_Model{
 		$temp_date = date("m");
 
 		if($temp_date == '01' || $temp_date == '02' || $temp_date == '03' || $temp_date == '04' || $temp_date == '05' || $temp_date == '06'){
-			$sem = '1st';
+			$sem = '2nd';
 		}
 
 		else if($temp_date == '07' || $temp_date == '08' || $temp_date == '09' || $temp_date == '10' || $temp_date == '11' || $temp_date == '12'){
-			$sem = '2nd';
+			$sem = '1st';
 		}
 
 		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
@@ -955,7 +955,7 @@ class getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-primary" id="remove_pref" data-id="'.$r->preferred_time_id.'">UNSELECT</button>';
+			$btn = '<button class="btn btn-sm  btn-danger" id="remove_pref" data-id="'.$r->preferred_time_id.'">UNSELECT</button>';
 
 			$result[] = array(
 					$r->day,
@@ -995,7 +995,8 @@ class getdata_model extends CI_Model{
 			$result[] = array(
 					$r->subj_id,
 					$r->subj_code,
-					$r->subj_desc
+					$r->subj_desc,
+
 					);
 		}
 

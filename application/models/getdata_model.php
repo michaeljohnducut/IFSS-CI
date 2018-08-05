@@ -654,7 +654,7 @@ class getdata_model extends CI_Model{
 	{
 		$result = array();
 
-		$query = $this->db->select('c.course_code, section_desc, section_id')
+		$query = $this->db->select('s.acad_yr, c.course_code, s.year_lvl, section_desc, section_id')
 				->join('course c', 's.course = c.course_id')
                 ->where('s.status', 1)
                 ->get('section s');
@@ -664,7 +664,9 @@ class getdata_model extends CI_Model{
 			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->section_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
+					$r->acad_yr,
 					$r->course_code,
+					$r->year_lvl,
 					$r->section_desc,
 					$btn,
 					$r->section_id
@@ -682,7 +684,7 @@ class getdata_model extends CI_Model{
 
 		$section_id = $this->security->xss_clean($this->input->post('section_id'));
 
-		$query = $this->db->select('c.course_id, section_desc, section_id')
+		$query = $this->db->select('acad_yr, year_lvl, c.course_id, section_desc, section_id')
 				->join('course c', 's.course = c.course_id')
                 ->where('s.status', 1)
                 ->where('s.section_id', $section_id)
@@ -693,7 +695,9 @@ class getdata_model extends CI_Model{
 			$result[] = array(
 					$r->course_id,
 					$r->section_desc,
-					$r->section_id
+					$r->acad_yr,
+					$r->year_lvl,
+					$r->section_id					
 					);
 		}
 

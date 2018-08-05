@@ -24,10 +24,122 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="assets/css/util.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
-<!--===============================================================================================-->
+<style>
+.container-dots {
+  height: 100%;
+  width: 100%;
+  font-family: Poppins-regular;
+  font-size: 100%;
+  background-color: #2D3640;
+}
+
+.loader {
+  height: 20px;
+  width: 250px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.loader--dot {
+  animation-name: loader;
+  animation-timing-function: ease-in-out;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+  background-color: black;
+  position: absolute;
+  
+}
+.loader--dot:first-child {
+  background-color: #8cc759;
+  animation-delay: 0.5s;
+}
+.loader--dot:nth-child(2) {
+  background-color: #8c6daf;
+  animation-delay: 0.4s;
+}
+.loader--dot:nth-child(3) {
+  background-color: #ef5d74;
+  animation-delay: 0.3s;
+}
+.loader--dot:nth-child(4) {
+  background-color: #f9a74b;
+  animation-delay: 0.2s;
+}
+.loader--dot:nth-child(5) {
+  background-color: #60beeb;
+  animation-delay: 0.1s;
+}
+.loader--dot:nth-child(6) {
+  background-color: #fbef5a;
+  animation-delay: 0s;
+}
+.loader--text {
+  position: absolute;
+  top: 200%;
+  left: 0;
+  right: 0;
+  width: 10rem;
+  margin: auto;
+  color: #fff;
+}
+.loader--text:after {
+  content: "Loading";
+  font-weight: bold;
+  animation-name: loading-text;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loader {
+  15% {
+    transform: translateX(0);
+  }
+  45% {
+    transform: translateX(230px);
+  }
+  65% {
+    transform: translateX(230px);
+  }
+  95% {
+    transform: translateX(0);
+  }
+}
+@keyframes loading-text {
+  0% {
+    content: "Loading";
+  }
+  25% {
+    content: "Loading.";
+  }
+  50% {
+    content: "Loading..";
+  }
+  75% {
+    content: "Loading...";
+  }
+}
+
+</style>
 </head>
 <body>
-	
+	<div class='container-dots' style='display: none;' id="dots">
+  <div class='loader'>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--text'></div>
+  </div>
+</div>
+
 	<div class="limiter">
 		<div class="container-login" style="background-image: url(assets/images/bg-img.jpg);">
 			<div class="wrap-login">
@@ -97,6 +209,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('#login_form').on("submit", function(e){
+
 					e.preventDefault();
 					var username = $('#username').val();
 					var password = $('#password').val();
@@ -111,15 +224,16 @@
 					{
 						if (data['IsError'] == 0)
 						{
-							swal({
-  								title: "Correct!",
-  								text: "Entering the system",
-  								icon: "success",
-  								button: false
-								});
+							document.getElementById("dots").style.display = 'block';
+							// swal({
+  					// 			title: "Correct!",
+  					// 			text: "Entering the system",
+  					// 			icon: "success",
+  					// 			button: false
+							// 	});
 						 	setTimeout(function(){
 								window.location.replace(data['url'])
-						    },500);
+						    },2500);
 
 					    }
 					    if (data['IsError'] == 1)

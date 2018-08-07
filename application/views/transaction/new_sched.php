@@ -550,9 +550,9 @@
             var added_hour = parseInt(temp_hour) + parseInt(lec_hrs) + parseInt(lab_hrs);
             var end_time = added_hour + ':' + start[3] + start[4] + ':00';
 
-            alert(end_time);
+            // alert(end_time);
            // alert(day + start + id);
-           // $('#modalSelectParam').modal('show'); //SHOWS MODAL WHERE USER CAN SELECT AVAIL ROOMS AND LABS
+           $('#modalSelectParam').modal('show'); //SHOWS MODAL WHERE USER CAN SELECT AVAIL ROOMS AND LABS
 
 
         }
@@ -567,6 +567,34 @@
 
         //FUNCTION TO GET THE AVAILABLE SECTION FOR THE CHOSEN TIME AND SUBJECT
         function showAvailSections(){
+
+            var subj_id = $('#sched_subj').val();
+            var sem = $('#sched_sem').val();
+            alert(sem);
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_sections')?>", 
+                method:"POST", 
+                data:{subj_id:subj_id, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                     var len = data.length;
+                    // alert(len);
+                     $("#avail_sections").empty(); 
+                     $("#avail_sections").append('<option value = "0">--Available Sections--</option>');
+
+                     for( var i = 0; i<len; i++){
+
+                            var id = data[i][1];
+                            var section = data[i][0] + ' ' + data[i][2][0] + ' - ' + data[i][3]; 
+                            $("#avail_sections").append("<option value='"+id+"'>"+section +"</option>");
+                        }
+
+
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
 
 
         } 
@@ -794,11 +822,13 @@
 
         //CLICKING OF TIME SHOWN
         $(document).on('click', '.btn-info', function(){
+
             var x = $(this).attr('value');
             var id = $(this).attr('id');
             var day = x[9] + x[10] + x[11];
             var time = x[0] + x[1] + ':' + x[3] + x[4] + ':00';
             getSubjHours(day, time, id);
+            showAvailSections();
         });
 
     </script>

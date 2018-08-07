@@ -1008,6 +1008,43 @@ class getdata_model extends CI_Model{
 
 	}
 
+	public function get_avail_sections(){ //GETS AVAILABLE SECTIONS FOR A SPECIFIC SUBJECT
+
+		$subj_id = $this->security->xss_clean($this->input->post('subj_id'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('c.course_code, s.section_id, s.year_lvl, s.section_desc')
+				->distinct()
+				->where('s.year_lvl IN (SELECT cr.year_lvl
+                    FROM curriculum cr
+                    WHERE cr.subj_code = '.$subj_id.'
+                    AND cr.sem = "'.$sem.'"
+                    AND cr.curriculum_yr = (SELECT cy.curr_year_id
+                                            FROM curriculum_year cy
+                                            WHERE cy.is_used = 1))', NULL, FALSE)
+				->where('s.course IN (SELECT cr.course
+                    FROM curriculum cr
+                    WHERE cr.subj_code = '.$subj_id.'
+                   	AND cr.sem = "'.$sem.'")', NULL, FALSE)
+				->join('course c','s.course = c.course_id')
+                ->get('section s');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->course_code,
+					$r->section_id,
+					$r->year_lvl,
+					$r->section_desc
+					);
+		}
+
+		return $result;
+
+
+	}
+
 
 }
 ?>

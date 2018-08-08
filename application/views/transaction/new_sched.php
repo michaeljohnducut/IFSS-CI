@@ -546,9 +546,36 @@
             var units = arr[0];
             var lec_hrs = arr[1];
             var lab_hrs = arr[2];
+            var start_time = start;
             var temp_hour = start[0] + start[1];
             var added_hour = parseInt(temp_hour) + parseInt(lec_hrs) + parseInt(lab_hrs);
             var end_time = added_hour + ':' + start[3] + start[4] + ':00';
+            var temp_day = '';
+            switch(day){
+                case 'mon':
+                        temp_day = 'Monday';
+                        break;
+                case 'tue': 
+                        temp_day = 'Tuesday';
+                        break;
+                case 'wed': 
+                        temp_day = 'Wednesday';
+                        break;
+                case 'thu': 
+                        temp_day = 'Thursday';
+                        break;
+                case 'fri':
+                        temp_day = 'Friday';
+                        break; 
+                case 'sat': 
+                        temp_day = 'Saturday';
+                        break;
+                default: 
+                        temp_day = 'Sunday';
+            }
+
+            showAvailSections();
+            showAvailRoom(temp_day, start_time, end_time);
 
             // alert(end_time);
            // alert(day + start + id);
@@ -561,7 +588,30 @@
         //FUNCTION TO GET THE AVAILABLE ROOMS FOR THE CHOSEN TIME AND SUBJECT
         function showAvailRoom(day, start_time, end){
 
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_rooms')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
 
+                     var len = data.length;
+                     $("#avail_rooms").empty(); 
+                     $("#avail_rooms").append('<option value = "0">--Available Rooms--</option>');
+
+                     for( var i = 0; i<len; i++){
+
+                        var opt_val = data[i][0];
+                        var opt_name = data[i][1];
+                        $("#avail_rooms").append("<option value='"+opt_val+"'>"+opt_name +"</option>");
+                        }
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
         }
 
 
@@ -570,7 +620,6 @@
 
             var subj_id = $('#sched_subj').val();
             var sem = $('#sched_sem').val();
-            alert(sem);
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_avail_sections')?>", 
                 method:"POST", 
@@ -828,7 +877,6 @@
             var day = x[9] + x[10] + x[11];
             var time = x[0] + x[1] + ':' + x[3] + x[4] + ':00';
             getSubjHours(day, time, id);
-            showAvailSections();
         });
 
     </script>

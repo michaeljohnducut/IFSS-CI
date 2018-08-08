@@ -255,6 +255,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function get_avail_rooms(){
+
+		echo json_encode($this->getdata_model->get_avail_rooms($_POST));
+		exit();
+	}
+
 } 
 
 ?>

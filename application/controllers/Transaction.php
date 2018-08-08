@@ -249,6 +249,24 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function get_avail_sections(){
+
+		echo json_encode($this->getdata_model->get_avail_sections($_POST));
+		exit();
+	}
+
+	public function get_avail_rooms(){
+
+		echo json_encode($this->getdata_model->get_avail_rooms($_POST));
+		exit();
+	}
+
+	public function add_to_sched()
+	{
+		echo ($this->savedata_model->add_to_sched($_POST));
+		exit();
+	}
+
 } 
 
 ?>

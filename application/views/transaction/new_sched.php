@@ -446,16 +446,21 @@
                         <form method="POST" enctype="multipart/form-data" id="addSchedForm">
                             <div class="form-group col-md-6">
                                 <label class="control-label">Select Section:</label>
-                                <select class="form-control select2" id="avail_sections">
+                                <select class="form-control select2" id="avail_sections" required="">
                                     <option>--Available Sections--</option>
                                 </select>                                
                             </div>
                             <div class="form-group col-md-6">
                                     <label class="control-label">Select Room:</label>
-                                    <select class="form-control select2" id="avail_rooms">
+                                    <select class="form-control select2" id="avail_rooms" required="">
                                         <option>--Available Rooms--</option>
                                     </select>
                             </div>
+
+                            <input type="hidden" name="hid_start" id="hid_start">
+                            <input type="hidden" name="hid_end" id="hid_end">
+                        <div class="modal-footer">
+                            <input type="hidden" name="hid_day" id="hid_day">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
                             <button type="submit" name="btnAddSched" id="btnAddSched" class="btn btn-success waves-effect text-left">Add to schedule</button>
@@ -546,13 +551,43 @@
             var units = arr[0];
             var lec_hrs = arr[1];
             var lab_hrs = arr[2];
+            var start_time = start;
             var temp_hour = start[0] + start[1];
             var added_hour = parseInt(temp_hour) + parseInt(lec_hrs) + parseInt(lab_hrs);
             var end_time = added_hour + ':' + start[3] + start[4] + ':00';
+            var temp_day = '';
+            switch(day){
+                case 'mon':
+                        temp_day = 'Monday';
+                        break;
+                case 'tue': 
+                        temp_day = 'Tuesday';
+                        break;
+                case 'wed': 
+                        temp_day = 'Wednesday';
+                        break;
+                case 'thu': 
+                        temp_day = 'Thursday';
+                        break;
+                case 'fri':
+                        temp_day = 'Friday';
+                        break; 
+                case 'sat': 
+                        temp_day = 'Saturday';
+                        break;
+                default: 
+                        temp_day = 'Sunday';
+            }
+            $('#hid_start').val(start_time); 
+            $('#hid_end').val(end_time);
+            $('#hid_day').val(temp_day);
 
-            alert(end_time);
+            showAvailSections();
+            showAvailRoom(temp_day, start_time, end_time);
+
+            // alert(end_time);
            // alert(day + start + id);
-           // $('#modalSelectParam').modal('show'); //SHOWS MODAL WHERE USER CAN SELECT AVAIL ROOMS AND LABS
+           $('#modalSelectParam').modal('show'); //SHOWS MODAL WHERE USER CAN SELECT AVAIL ROOMS AND LABS
 
 
         }
@@ -561,12 +596,62 @@
         //FUNCTION TO GET THE AVAILABLE ROOMS FOR THE CHOSEN TIME AND SUBJECT
         function showAvailRoom(day, start_time, end){
 
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_rooms')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
 
+                     var len = data.length;
+                     $("#avail_rooms").empty(); 
+                     $("#avail_rooms").append('<option value = "0">--Available Rooms--</option>');
+
+                     for( var i = 0; i<len; i++){
+
+                        var opt_val = data[i][0];
+                        var opt_name = data[i][1];
+                        $("#avail_rooms").append("<option value='"+opt_val+"'>"+opt_name +"</option>");
+                        }
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
         }
 
 
         //FUNCTION TO GET THE AVAILABLE SECTION FOR THE CHOSEN TIME AND SUBJECT
         function showAvailSections(){
+
+            var subj_id = $('#sched_subj').val();
+            var sem = $('#sched_sem').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_sections')?>", 
+                method:"POST", 
+                data:{subj_id:subj_id, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                     var len = data.length;
+                    // alert(len);
+                     $("#avail_sections").empty(); 
+                     $("#avail_sections").append('<option value = "0">--Available Sections--</option>');
+
+                     for( var i = 0; i<len; i++){
+
+                            var id = data[i][1];
+                            var section = data[i][0] + ' ' + data[i][2][0] + ' - ' + data[i][3]; 
+                            $("#avail_sections").append("<option value='"+id+"'>"+section +"</option>");
+                        }
+
+
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
 
 
         } 
@@ -755,9 +840,45 @@
         }
 
         $(document).ready(function(){
-
+            //SELECT2
             $(".select2").select2();
             $('.selectpicker').selectpicker();
+
+            //ADDING SCHEDULES
+            $('#addSchedForm').on("submit", function(event)
+            {   
+                var temp_room = $('#avail_rooms').val();
+                var temp_subj = $('#sched_subj').val();
+                var temp_start = $('#hid_start').val();
+                var temp_end = $('#hid_end').val();
+                var temp_section = $('#avail_sections').val();
+                var temp_day = $('#hid_day').val();
+                var temp_acadyr = $('#sched_acad_year').val();
+                var temp_sem = $('#sched_sem').val();
+                var temp_faculty = $('#sched_faculty').val();
+                var temp_load = 'R';
+
+                event.preventDefault();  
+                $.ajax({  
+                url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+                method:"POST",
+                dataType:'JSON',
+                data:{temp_room:temp_room, temp_subj:temp_subj, temp_start:temp_start, temp_end:temp_end, temp_section:temp_section, temp_day:temp_day, temp_acadyr:temp_acadyr, temp_sem:temp_sem, temp_faculty:temp_faculty, temp_load:temp_load},
+                success:function(data)
+                { 
+                    if(data == 'INSERTED')
+                    {
+                       
+                    }
+
+                    if(data == 'NOT INSERTED')
+                    {
+                       
+                    }
+
+                }
+                });  
+            });
 
             //FACULTY MEMBER ON CHANGE
             $('#sched_faculty').on('change',function(){
@@ -794,6 +915,7 @@
 
         //CLICKING OF TIME SHOWN
         $(document).on('click', '.btn-info', function(){
+
             var x = $(this).attr('value');
             var id = $(this).attr('id');
             var day = x[9] + x[10] + x[11];

@@ -1008,6 +1008,68 @@ class getdata_model extends CI_Model{
 
 	}
 
+	public function get_avail_sections(){ //GETS AVAILABLE SECTIONS FOR A SPECIFIC SUBJECT
+
+		$subj_id = $this->security->xss_clean($this->input->post('subj_id'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('c.course_code, s.section_id, s.year_lvl, s.section_desc')
+				->distinct()
+				->where('s.year_lvl IN (SELECT cr.year_lvl
+                    FROM curriculum cr
+                    WHERE cr.subj_code = '.$subj_id.'
+                    AND cr.sem = "'.$sem.'"
+                    AND cr.curriculum_yr = (SELECT cy.curr_year_id
+                                            FROM curriculum_year cy
+                                            WHERE cy.is_used = 1))', NULL, FALSE)
+				->where('s.course IN (SELECT cr.course
+                    FROM curriculum cr
+                    WHERE cr.subj_code = '.$subj_id.'
+                   	AND cr.sem = "'.$sem.'")', NULL, FALSE)
+				->order_by('course_code', 'asc')
+				->join('course c','s.course = c.course_id')
+                ->get('section s');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->course_code,
+					$r->section_id,
+					$r->year_lvl,
+					$r->section_desc
+					);
+		}
+
+		return $result;
+	}
+
+	public function get_avail_rooms(){ //GETS AVAILABLE ROOMS FOR A SPECIFIC TIME
+
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$result = array();
+
+		$query = $this->db->select('r.room_id, r.room_code')
+				->where('r.room_id NOT IN (SELECT ta.room_id
+                        FROM teaching_assign_sched ta WHERE ta.acad_yr = "'.$acad_year.'" AND ta.sem = "'.$sem.'" AND ta.time_start BETWEEN "'.$start_time.'" AND "'.$end.'" OR ta.time_finish BETWEEN "'.$start_time.'" AND "'.$end.'" AND ta.day = "'.$day.'" )', NULL, FALSE)
+				->order_by('room_code', 'asc')
+                ->get('room r');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->room_id,
+					$r->room_code
+					);
+		}
+
+		return $result;
+	}
+
 
 }
 ?>

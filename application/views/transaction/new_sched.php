@@ -446,16 +446,21 @@
                         <form method="POST" enctype="multipart/form-data" id="addSchedForm">
                             <div class="form-group col-md-6">
                                 <label class="control-label">Select Section:</label>
-                                <select class="form-control select2" id="avail_sections">
+                                <select class="form-control select2" id="avail_sections" required="">
                                     <option>--Available Sections--</option>
                                 </select>                                
                             </div>
                             <div class="form-group col-md-6">
                                     <label class="control-label">Select Room:</label>
-                                    <select class="form-control select2" id="avail_rooms">
+                                    <select class="form-control select2" id="avail_rooms" required="">
                                         <option>--Available Rooms--</option>
                                     </select>
                             </div>
+
+                            <input type="hidden" name="hid_start" id="hid_start">
+                            <input type="hidden" name="hid_end" id="hid_end">
+                        <div class="modal-footer">
+                            <input type="hidden" name="hid_day" id="hid_day">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
                             <button type="submit" name="btnAddSched" id="btnAddSched" class="btn btn-success waves-effect text-left">Add to schedule</button>
@@ -573,6 +578,9 @@
                 default: 
                         temp_day = 'Sunday';
             }
+            $('#hid_start').val(start_time); 
+            $('#hid_end').val(end_time);
+            $('#hid_day').val(temp_day);
 
             showAvailSections();
             showAvailRoom(temp_day, start_time, end_time);
@@ -832,9 +840,45 @@
         }
 
         $(document).ready(function(){
-
+            //SELECT2
             $(".select2").select2();
             $('.selectpicker').selectpicker();
+
+            //ADDING SCHEDULES
+            $('#addSchedForm').on("submit", function(event)
+            {   
+                var temp_room = $('#avail_rooms').val();
+                var temp_subj = $('#sched_subj').val();
+                var temp_start = $('#hid_start').val();
+                var temp_end = $('#hid_end').val();
+                var temp_section = $('#avail_sections').val();
+                var temp_day = $('#hid_day').val();
+                var temp_acadyr = $('#sched_acad_year').val();
+                var temp_sem = $('#sched_sem').val();
+                var temp_faculty = $('#sched_faculty').val();
+                var temp_load = 'R';
+
+                event.preventDefault();  
+                $.ajax({  
+                url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+                method:"POST",
+                dataType:'JSON',
+                data:{temp_room:temp_room, temp_subj:temp_subj, temp_start:temp_start, temp_end:temp_end, temp_section:temp_section, temp_day:temp_day, temp_acadyr:temp_acadyr, temp_sem:temp_sem, temp_faculty:temp_faculty, temp_load:temp_load},
+                success:function(data)
+                { 
+                    if(data == 'INSERTED')
+                    {
+                       
+                    }
+
+                    if(data == 'NOT INSERTED')
+                    {
+                       
+                    }
+
+                }
+                });  
+            });
 
             //FACULTY MEMBER ON CHANGE
             $('#sched_faculty').on('change',function(){

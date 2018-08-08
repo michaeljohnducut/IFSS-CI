@@ -261,6 +261,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function add_to_sched()
+	{
+		echo ($this->savedata_model->add_to_sched($_POST));
+		exit();
+	}
+
 } 
 
 ?>

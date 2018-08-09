@@ -424,13 +424,41 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <textarea class="form-control" rows="5"></textarea>
+                                <br><br><br>
                             </div>
                         </div>
+
+<div>
+    <h2>Summary</h2>
+</div>
+
+<div class="table-responsive">
+    <table id="tbl_sched_sum" class="table colored-table table-bordered inverse-tabl table-striped" style="margin-top: 50px;">
+        <thead>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject Description</th>
+                <th>Units</th>
+                <th width="150px">Year and Section</th>
+                <th width="200px">Time</th>
+                <th>Day/s</th>
+                <th>Room</th>
+            </tr>
+        </thead>
+
+         <tbody>
+
+        </tbody>
+    </table>
+
+</div>
                    
                         </div>
             
                     </div>
                 </div>
+
+ 
 
 <div class="modal fade bs-example-modal-lg" id="modalSelectParam" tabindex="-1" role="dialog" aria-labelledby="modalSelectParam" aria-hidden="true" style="margin-top: 30px;">
             <div class="modal-dialog modal-lg">
@@ -446,13 +474,13 @@
                         <form method="POST" enctype="multipart/form-data" id="addSchedForm">
                             <div class="form-group col-md-6">
                                 <label class="control-label">Select Section:</label>
-                                <select class="form-control select2" id="avail_sections" required="">
+                                <select class="form-control" id="avail_sections" required="">
                                     <option>--Available Sections--</option>
                                 </select>                                
                             </div>
                             <div class="form-group col-md-6">
                                     <label class="control-label">Select Room:</label>
-                                    <select class="form-control select2" id="avail_rooms" required="">
+                                    <select class="form-control" id="avail_rooms" required="">
                                         <option>--Available Rooms--</option>
                                     </select>
                             </div>
@@ -473,6 +501,8 @@
             <!-- /.modal-dialog -->
         </div>
 
+
+
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
 
@@ -485,6 +515,26 @@
     <!-- CUSTOM SELECT -->
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
     <script type="text/javascript">
+
+        function loadSchedTable(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+            var dataTable = $('#tbl_sched_sum').DataTable({           
+              "processing" : true,
+              "serverSide" : true,
+              "order" : [],
+              destroy:true,
+              "ajax" : {
+               url:"<?php echo base_url('Transaction/load_sched_table')?>",
+               data:{sem: sem, acad_year:acad_year, fac_id:fac_id},
+               type:"POST"
+              }
+             });
+
+        }
 
         function getProfSubj(){
 
@@ -499,18 +549,15 @@
                 dataType: "json",
                 success:function(data){
                     var len = data.length;
-                    // alert(len);
                      $("#sched_subj").empty();  //RESETS SUBJECTS FOR FACULTY
                      $("#sched_subj").append('<option value = "0">--Subjects--</option>');
                      for( var i = 0; i<len; i++){
 
                             var id = data[i][0];
                             var code = data[i][1];
-                            var name = data[i][2];
-                            
+                            var name = data[i][2];   
                             $("#sched_subj").append("<option value='"+id+"'>"+code+" - "+name+"</option>");
                         }
-                     
                 },
                 error: function (data) {
                 alert(JSON.stringify(data));
@@ -622,16 +669,16 @@
            });
         }
 
-
         //FUNCTION TO GET THE AVAILABLE SECTION FOR THE CHOSEN TIME AND SUBJECT
         function showAvailSections(){
 
             var subj_id = $('#sched_subj').val();
             var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_avail_sections')?>", 
                 method:"POST", 
-                data:{subj_id:subj_id, sem:sem}, 
+                data:{subj_id:subj_id, sem:sem, acad_year:acad_year}, 
                 dataType: "json",
                 success:function(data){
                      var len = data.length;
@@ -645,15 +692,11 @@
                             var section = data[i][0] + ' ' + data[i][2][0] + ' - ' + data[i][3]; 
                             $("#avail_sections").append("<option value='"+id+"'>"+section +"</option>");
                         }
-
-
                 },
                 error: function (data) {
                 alert(JSON.stringify(data));
                 }
            });
-
-
         } 
 
          function getPrefTime(){
@@ -862,13 +905,16 @@
                 $.ajax({  
                 url:"<?php echo base_url('Transaction/add_to_sched')?>",  
                 method:"POST",
-                dataType:'JSON',
                 data:{temp_room:temp_room, temp_subj:temp_subj, temp_start:temp_start, temp_end:temp_end, temp_section:temp_section, temp_day:temp_day, temp_acadyr:temp_acadyr, temp_sem:temp_sem, temp_faculty:temp_faculty, temp_load:temp_load},
                 success:function(data)
                 { 
                     if(data == 'INSERTED')
                     {
-                       
+                        $('#modalSelectParam').modal('hide');
+                        swal("Success!", "Added to schedule!", "success");
+                        $('#avail_sections').val('0');
+                        $('#avail_rooms').val('0');
+                        loadSchedTable();
                     }
 
                     if(data == 'NOT INSERTED')
@@ -886,6 +932,7 @@
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
                 getPrefTime();
+                loadSchedTable();
 
             });
 
@@ -895,6 +942,7 @@
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
                 getPrefTime();
+                loadSchedTable();
             });
 
             //SEM ON CHANGE
@@ -903,6 +951,7 @@
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
                 getPrefTime();
+                loadSchedTable();
             });
 
             //SUBJECT ON CHANGE

@@ -267,6 +267,22 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function load_sched_table(){
+		
+		$output = $this->getdata_model->load_sched_table();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
+
+
 } 
 
 ?>

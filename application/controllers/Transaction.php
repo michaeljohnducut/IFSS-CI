@@ -287,6 +287,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function reflect_sched_table(){
+		
+		echo json_encode($this->getdata_model->load_sched_table($_POST));
+		exit();
+	}
+
 
 
 } 

@@ -537,6 +537,43 @@
 
         }
 
+        function reflectSchedTable(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        function changeSchedColor(arr){
+            var len = arr.length;
+            var temp_val = ''; 
+            var temp_day = '';
+            var temp_hour_start = '';
+            var temp_hour_end = '';
+            var temp_mins = '';
+
+            for (ctr = 0 ; ctr < len ; ctr++){
+
+                temp_hour_start = arr[ctr][4][0] + arr[ctr][4][1];
+                alert(temp_hour);
+
+            }
+        }
+
         function getUnitsUsed(){
 
             var sem = $('#sched_sem').val();
@@ -1012,6 +1049,7 @@
                 getPrefTime();
                 loadSchedTable();
                 getUnitsUsed();
+                reflectSchedTable();
 
             });
 
@@ -1023,6 +1061,7 @@
                 getPrefTime();
                 loadSchedTable();
                 getUnitsUsed();
+                reflectSchedTable();
             });
 
             //SEM ON CHANGE
@@ -1033,6 +1072,7 @@
                 getPrefTime();
                 loadSchedTable();
                 getUnitsUsed();
+                reflectSchedTable();
             });
 
             //SUBJECT ON CHANGE

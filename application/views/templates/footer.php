@@ -27,6 +27,7 @@
     <script src="<?php echo base_url(); ?>assets/js/dashboard1.js"></script>
 
     <script src="<?php echo base_url(); ?>assets/js/validator.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jasny-bootstrap.js"></script>
 
     <!-- Sparkline chart JavaScript -->
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>

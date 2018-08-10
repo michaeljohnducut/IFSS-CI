@@ -25,7 +25,7 @@
                                 <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control select2" name="select_ay" id="select_ay">
-                                     <option value="" disabled selected>-ACAD YEAR-</option>
+                                    <option value="" disabled selected>-ACAD YEAR-</option>
                                     <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
                                             echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 

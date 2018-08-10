@@ -1678,5 +1678,34 @@ class savedata_model extends CI_Model
 		return $output;
 
 	}
+
+	public function add_to_sched(){
+
+		$output = "";
+		$temp_room = $this->security->xss_clean($this->input->post('temp_room'));
+		$temp_subj = $this->security->xss_clean($this->input->post('temp_subj'));
+		$temp_start = $this->security->xss_clean($this->input->post('temp_start'));
+		$temp_end = $this->security->xss_clean($this->input->post('temp_end'));
+		$temp_section = $this->security->xss_clean($this->input->post('temp_section'));
+		$temp_day = $this->security->xss_clean($this->input->post('temp_day'));
+		$temp_acadyr = $this->security->xss_clean($this->input->post('temp_acadyr'));
+		$temp_sem = $this->security->xss_clean($this->input->post('temp_sem'));
+		$temp_faculty = $this->security->xss_clean($this->input->post('temp_faculty'));
+		$temp_load = $this->security->xss_clean($this->input->post('temp_load'));
+
+		if($this->db->query("INSERT INTO `teaching_assign_sched`(`room_id`, `subj_code`, `time_start`, `time_finish`, `section`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type`) 
+			VALUES ($temp_room, $temp_subj, '$temp_start', '$temp_end', $temp_section, '$temp_day', '$temp_acadyr', '$temp_sem', $temp_faculty, '$temp_load')"))
+			{
+				$output = 'INSERTED';
+			}
+			else
+			{
+				$output = 'NOT INSERTED';
+			}
+
+
+		return $output;
+
+	}
 }
 ?>

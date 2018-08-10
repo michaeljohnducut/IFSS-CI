@@ -67,19 +67,19 @@
                         <br>
                         <div class="row">
                             <div class="col-md-2" style="text-align: right; color: red;">
-                                <p>Allowed units:</p>
+                                <p>Load Count:</p>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
-                                <p>Regular Load: </p>
+                                <p id="RLoad_id">Regular Load: </p>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
-                                <p>Part-time Load: </p>
+                                <p id="PTLoad_id">Part-time Load: </p>
                             </div>
                             <div class="col-md-3" style="text-align: right;">
-                                <p>Temporary Substitution: 0</p>
+                                <p id="TSLoad_id">Temporary Substitution: </p>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
-                                <p>Total Units Used: 0</p>
+                                <p id="units_used">Total Units Used: </p>
                             </div>
                         </div>
 
@@ -424,13 +424,41 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <textarea class="form-control" rows="5"></textarea>
+                                <br><br><br>
                             </div>
                         </div>
+
+<div>
+    <h2>Summary</h2>
+</div>
+
+<div class="table-responsive">
+    <table id="tbl_sched_sum" class="table colored-table table-bordered inverse-tabl table-striped" style="margin-top: 50px;">
+        <thead>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject Description</th>
+                <th>Units</th>
+                <th width="150px">Year and Section</th>
+                <th width="200px">Time</th>
+                <th>Day/s</th>
+                <th>Room</th>
+            </tr>
+        </thead>
+
+         <tbody>
+
+        </tbody>
+    </table>
+
+</div>
                    
                         </div>
             
                     </div>
                 </div>
+
+ 
 
 <div class="modal fade bs-example-modal-lg" id="modalSelectParam" tabindex="-1" role="dialog" aria-labelledby="modalSelectParam" aria-hidden="true" style="margin-top: 30px;">
             <div class="modal-dialog modal-lg">
@@ -446,16 +474,22 @@
                         <form method="POST" enctype="multipart/form-data" id="addSchedForm">
                             <div class="form-group col-md-6">
                                 <label class="control-label">Select Section:</label>
-                                <select class="form-control select2" id="avail_sections">
+                                <select class="form-control" id="avail_sections" required="">
                                     <option>--Available Sections--</option>
                                 </select>                                
                             </div>
                             <div class="form-group col-md-6">
                                     <label class="control-label">Select Room:</label>
-                                    <select class="form-control select2" id="avail_rooms">
+                                    <select class="form-control" id="avail_rooms" required="">
                                         <option>--Available Rooms--</option>
                                     </select>
                             </div>
+
+                            <input type="hidden" name="hid_start" id="hid_start">
+                            <input type="hidden" name="hid_end" id="hid_end">
+                            <input type="hidden" name="hid_units_used" id="hid_units_used">
+                        <div class="modal-footer">
+                            <input type="hidden" name="hid_day" id="hid_day">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
                             <button type="submit" name="btnAddSched" id="btnAddSched" class="btn btn-success waves-effect text-left">Add to schedule</button>
@@ -467,6 +501,8 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+
+
 
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
@@ -481,6 +517,127 @@
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
     <script type="text/javascript">
 
+        function loadSchedTable(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+            var dataTable = $('#tbl_sched_sum').DataTable({           
+              "processing" : true,
+              "serverSide" : true,
+              "order" : [],
+              destroy:true,
+              "ajax" : {
+               url:"<?php echo base_url('Transaction/load_sched_table')?>",
+               data:{sem: sem, acad_year:acad_year, fac_id:fac_id},
+               type:"POST"
+              }
+             });
+
+        }
+
+        function reflectSchedTable(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        function changeSchedColor(arr){
+            var len = arr.length;
+            var temp_val = ''; 
+            var temp_day = '';
+            var temp_hour_start = '';
+            var temp_hour_end = '';
+            var temp_mins = '';
+
+            for (ctr = 0 ; ctr < len ; ctr++){
+
+                temp_hour_start = arr[ctr][4][0] + arr[ctr][4][1];
+                alert(temp_hour);
+
+            }
+        }
+
+        function getUnitsUsed(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_units_used')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    
+                    if (data[0][1] == null){
+
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('Total Units Used: ');
+                        $('#RLoad_id').append('Regular Load: ');
+                        $('#PTLoad_id').append('Part-time Load: ');
+                        $('#TSLoad_id').append('Temporary Substitution: ');
+                        $('#hid_units_used').val(data[0][1]);
+                    }
+                    else{
+
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#units_used').append('Total Units Used: ' + data[0][1]);
+                        $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+
+                        if(data[0][3] == null){
+                            $('#PTLoad_id').empty();
+                            $('#TSLoad_id').empty();
+                            $('#PTLoad_id').append('Part-time Load: ');
+                            $('#TSLoad_id').append('Temporary Substitution: ');
+                        }
+                        else if(data[0][4] == null){
+                            $('#TSLoad_id').empty();
+                            $('#TSLoad_id').append('Temporary Substitution: ');
+                        }
+
+                        else{
+                            $('#units_used').empty();
+                            $('#RLoad_id').empty();
+                            $('#PTLoad_id').empty();
+                            $('#TSLoad_id').empty();
+                            $('#units_used').append('Total Units Used: ' + data[0][1]);
+                            $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+                            $('#PTLoad_id').append('Part-time Load: ' + data[0][3]);
+                            $('#TSLoad_id').append('Temporary Substitution: ' + data[0][4]);
+                            $('#hid_units_used').val(data[0][1]);
+                                }
+                    }
+                    
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
         function getProfSubj(){
 
             var sem = $('#sched_sem').val();
@@ -494,18 +651,15 @@
                 dataType: "json",
                 success:function(data){
                     var len = data.length;
-                    // alert(len);
                      $("#sched_subj").empty();  //RESETS SUBJECTS FOR FACULTY
                      $("#sched_subj").append('<option value = "0">--Subjects--</option>');
                      for( var i = 0; i<len; i++){
 
                             var id = data[i][0];
                             var code = data[i][1];
-                            var name = data[i][2];
-                            
+                            var name = data[i][2];   
                             $("#sched_subj").append("<option value='"+id+"'>"+code+" - "+name+"</option>");
                         }
-                     
                 },
                 error: function (data) {
                 alert(JSON.stringify(data));
@@ -573,6 +727,9 @@
                 default: 
                         temp_day = 'Sunday';
             }
+            $('#hid_start').val(start_time); 
+            $('#hid_end').val(end_time);
+            $('#hid_day').val(temp_day);
 
             showAvailSections();
             showAvailRoom(temp_day, start_time, end_time);
@@ -614,16 +771,16 @@
            });
         }
 
-
         //FUNCTION TO GET THE AVAILABLE SECTION FOR THE CHOSEN TIME AND SUBJECT
         function showAvailSections(){
 
             var subj_id = $('#sched_subj').val();
             var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_avail_sections')?>", 
                 method:"POST", 
-                data:{subj_id:subj_id, sem:sem}, 
+                data:{subj_id:subj_id, sem:sem, acad_year:acad_year}, 
                 dataType: "json",
                 success:function(data){
                      var len = data.length;
@@ -637,15 +794,11 @@
                             var section = data[i][0] + ' ' + data[i][2][0] + ' - ' + data[i][3]; 
                             $("#avail_sections").append("<option value='"+id+"'>"+section +"</option>");
                         }
-
-
                 },
                 error: function (data) {
                 alert(JSON.stringify(data));
                 }
            });
-
-
         } 
 
          function getPrefTime(){
@@ -832,9 +985,61 @@
         }
 
         $(document).ready(function(){
-
+            //SELECT2
             $(".select2").select2();
             $('.selectpicker').selectpicker();
+
+            //ADDING SCHEDULES
+            $('#addSchedForm').on("submit", function(event)
+            {   
+                var temp_room = $('#avail_rooms').val();
+                var temp_subj = $('#sched_subj').val();
+                var temp_start = $('#hid_start').val();
+                var temp_end = $('#hid_end').val();
+                var temp_section = $('#avail_sections').val();
+                var temp_day = $('#hid_day').val();
+                var temp_acadyr = $('#sched_acad_year').val();
+                var temp_sem = $('#sched_sem').val();
+                var temp_faculty = $('#sched_faculty').val();
+                var total_units = $('#hid_units_used').val();
+                var parsed_total = parseInt(total_units);
+                var temp_load = '';
+
+                if (total_units < 15){
+                    temp_load = 'R';
+                }
+                else if (total_units >= 15 && total_units < 27){
+                    temp_load = 'PT';
+                }
+                else if (total_units >= 27){
+                    temp_load = 'TS';   
+                }
+
+                event.preventDefault();  
+                $.ajax({  
+                url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+                method:"POST",
+                data:{temp_room:temp_room, temp_subj:temp_subj, temp_start:temp_start, temp_end:temp_end, temp_section:temp_section, temp_day:temp_day, temp_acadyr:temp_acadyr, temp_sem:temp_sem, temp_faculty:temp_faculty, temp_load:temp_load},
+                success:function(data)
+                { 
+                    if(data == 'INSERTED')
+                    {
+                        $('#modalSelectParam').modal('hide');
+                        swal("Success!", "Added to schedule!", "success");
+                        $('#avail_sections').val('0');
+                        $('#avail_rooms').val('0');
+                        loadSchedTable();
+                        getUnitsUsed();
+                    }
+
+                    if(data == 'NOT INSERTED')
+                    {
+                       
+                    }
+
+                }
+                });  
+            });
 
             //FACULTY MEMBER ON CHANGE
             $('#sched_faculty').on('change',function(){
@@ -842,6 +1047,9 @@
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
                 getPrefTime();
+                loadSchedTable();
+                getUnitsUsed();
+                reflectSchedTable();
 
             });
 
@@ -851,6 +1059,9 @@
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
                 getPrefTime();
+                loadSchedTable();
+                getUnitsUsed();
+                reflectSchedTable();
             });
 
             //SEM ON CHANGE
@@ -859,6 +1070,9 @@
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
                 getPrefTime();
+                loadSchedTable();
+                getUnitsUsed();
+                reflectSchedTable();
             });
 
             //SUBJECT ON CHANGE

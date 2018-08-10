@@ -279,6 +279,40 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function add_to_sched()
+	{
+		echo ($this->savedata_model->add_to_sched($_POST));
+		exit();
+	}
+
+	public function load_sched_table(){
+		
+		$output = $this->getdata_model->load_sched_table();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
+	public function get_units_used(){
+
+		echo json_encode($this->getdata_model->get_units_used($_POST));
+		exit();
+	}
+
+	public function reflect_sched_table(){
+		
+		echo json_encode($this->getdata_model->load_sched_table($_POST));
+		exit();
+	}
+
+
+
 } 
 
 ?>

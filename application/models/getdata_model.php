@@ -985,7 +985,7 @@ class getdata_model extends CI_Model{
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc ')
+		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
 				->distinct()
 				->where('faculty_id', $fac_id)
 				->where('acad_yr', $acad_year)
@@ -1076,7 +1076,7 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
-	public function load_sched_table(){	//GETS FACULTY'S PREFERRED TIME
+	public function load_sched_table(){	//GETS FACULTY'S SUMMARY OF SCHEDULES
 
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
@@ -1111,6 +1111,63 @@ class getdata_model extends CI_Model{
 		}
 
 		return $result;	
+	}
+
+	public function get_units_used(){	//GETS FACULTY'S PREFERRED SUBJECTS
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("ta. faculty_id, (SELECT SUM(s.units)
+						FROM teaching_assign_sched ta 
+							JOIN subject s 
+						    ON s.subj_id = ta.subj_code
+						WHERE ta.faculty_id = ".$fac_id." 
+						AND ta.acad_yr = '".$acad_year."' 
+						AND ta.sem = '".$sem."' ) AS 'Total_units', 
+						(SELECT SUM(s.units)
+						 FROM teaching_assign_sched ta 
+						 JOIN subject s 
+						 ON s.subj_id = ta.subj_code
+						 WHERE ta.faculty_id = ".$fac_id." 
+						 AND ta.acad_yr = '".$acad_year."'  
+						 AND ta.sem = '".$sem."'
+						 AND ta.load_type = 'R') AS 'Regular_load',
+						  (SELECT SUM(s.units)
+						  FROM teaching_assign_sched ta 
+						  JOIN subject s 
+						  ON s.subj_id = ta.subj_code
+						  WHERE ta.faculty_id = ".$fac_id." 
+						  AND ta.acad_yr = '".$acad_year."' 
+						  AND ta.sem = '".$sem."'
+						  AND ta.load_type = 'PT') AS 'PT_load', 
+						  (SELECT SUM(s.units)
+						   FROM teaching_assign_sched ta 
+						   JOIN subject s 
+						   ON s.subj_id = ta.subj_code
+						   WHERE ta.faculty_id = ".$fac_id." 
+						   AND ta.acad_yr = '".$acad_year."' 
+						   AND ta.sem = '".$sem."'
+						   AND ta.load_type = 'TS') AS 'TS_load'")
+				->group_by('ta.faculty_id')
+                ->get('teaching_assign_sched ta');
+
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->faculty_id,
+					$r->Total_units, 
+					$r->Regular_load,
+					$r->PT_load,
+					$r->TS_load,
+					);
+		}
+
+		return $result;
+
 	}
 
 

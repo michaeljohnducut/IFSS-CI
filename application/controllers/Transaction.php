@@ -281,6 +281,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function get_units_used(){
+
+		echo json_encode($this->getdata_model->get_units_used($_POST));
+		exit();
+	}
+
 
 
 } 

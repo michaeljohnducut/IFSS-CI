@@ -67,19 +67,19 @@
                         <br>
                         <div class="row">
                             <div class="col-md-2" style="text-align: right; color: red;">
-                                <p>Allowed units:</p>
+                                <p>Load Count:</p>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
-                                <p>Regular Load: </p>
+                                <p id="RLoad_id">Regular Load: </p>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
-                                <p>Part-time Load: </p>
+                                <p id="PTLoad_id">Part-time Load: </p>
                             </div>
                             <div class="col-md-3" style="text-align: right;">
-                                <p>Temporary Substitution: 0</p>
+                                <p id="TSLoad_id">Temporary Substitution: </p>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
-                                <p>Total Units Used: 0</p>
+                                <p id="units_used">Total Units Used: </p>
                             </div>
                         </div>
 
@@ -487,6 +487,7 @@
 
                             <input type="hidden" name="hid_start" id="hid_start">
                             <input type="hidden" name="hid_end" id="hid_end">
+                            <input type="hidden" name="hid_units_used" id="hid_units_used">
                         <div class="modal-footer">
                             <input type="hidden" name="hid_day" id="hid_day">
                         <div class="modal-footer">
@@ -533,6 +534,70 @@
                type:"POST"
               }
              });
+
+        }
+
+        function getUnitsUsed(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_units_used')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    
+                    if (data[0][1] == null){
+
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('Total Units Used: ');
+                        $('#RLoad_id').append('Regular Load: ');
+                        $('#PTLoad_id').append('Part-time Load: ');
+                        $('#TSLoad_id').append('Temporary Substitution: ');
+                        $('#hid_units_used').val(data[0][1]);
+                    }
+                    else{
+
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#units_used').append('Total Units Used: ' + data[0][1]);
+                        $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+
+                        if(data[0][3] == null){
+                            $('#PTLoad_id').empty();
+                            $('#TSLoad_id').empty();
+                            $('#PTLoad_id').append('Part-time Load: ');
+                            $('#TSLoad_id').append('Temporary Substitution: ');
+                        }
+                        else if(data[0][4] == null){
+                            $('#TSLoad_id').empty();
+                            $('#TSLoad_id').append('Temporary Substitution: ');
+                        }
+
+                        else{
+                            $('#units_used').empty();
+                            $('#RLoad_id').empty();
+                            $('#PTLoad_id').empty();
+                            $('#TSLoad_id').empty();
+                            $('#units_used').append('Total Units Used: ' + data[0][1]);
+                            $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+                            $('#PTLoad_id').append('Part-time Load: ' + data[0][3]);
+                            $('#TSLoad_id').append('Temporary Substitution: ' + data[0][4]);
+                            $('#hid_units_used').val(data[0][1]);
+                                }
+                    }
+                    
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
 
         }
 
@@ -899,7 +964,19 @@
                 var temp_acadyr = $('#sched_acad_year').val();
                 var temp_sem = $('#sched_sem').val();
                 var temp_faculty = $('#sched_faculty').val();
-                var temp_load = 'R';
+                var total_units = $('#hid_units_used').val();
+                var parsed_total = parseInt(total_units);
+                var temp_load = '';
+
+                if (total_units < 15){
+                    temp_load = 'R';
+                }
+                else if (total_units >= 15 && total_units < 27){
+                    temp_load = 'PT';
+                }
+                else if (total_units >= 27){
+                    temp_load = 'TS';   
+                }
 
                 event.preventDefault();  
                 $.ajax({  
@@ -915,6 +992,7 @@
                         $('#avail_sections').val('0');
                         $('#avail_rooms').val('0');
                         loadSchedTable();
+                        getUnitsUsed();
                     }
 
                     if(data == 'NOT INSERTED')
@@ -933,6 +1011,7 @@
                 getProfSubj();
                 getPrefTime();
                 loadSchedTable();
+                getUnitsUsed();
 
             });
 
@@ -943,6 +1022,7 @@
                 getProfSubj();
                 getPrefTime();
                 loadSchedTable();
+                getUnitsUsed();
             });
 
             //SEM ON CHANGE
@@ -952,6 +1032,7 @@
                 getProfSubj();
                 getPrefTime();
                 loadSchedTable();
+                getUnitsUsed();
             });
 
             //SUBJECT ON CHANGE

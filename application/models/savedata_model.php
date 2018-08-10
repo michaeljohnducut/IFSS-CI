@@ -1429,6 +1429,17 @@ class savedata_model extends CI_Model
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$dept = $this->security->xss_clean($this->input->post('dept'));
 
+		$query = $this->db->group_start()
+								->where('acad_yr', $acad_yr)
+								->where('sem', $sem)
+								->where('dept', $dept)
+							->group_end()
+							->count_all_results('evaluation');
+
+		//$number_filter_row = $query->count_all_results();
+
+		if($query == 0)
+		{
 			$path = $_FILES["file"]["tmp_name"];
 			$object = PHPExcel_IOFactory::load($path);
 			
@@ -1481,6 +1492,11 @@ class savedata_model extends CI_Model
 				$output = 'NOT INSERTED';
 				echo $this->db->error();
 			}
+		}
+		else
+		{
+			$output = 'THE DATA IS ALREADY INSERTED';
+		}
 
 		return $output;
 	}	
@@ -1503,7 +1519,7 @@ class savedata_model extends CI_Model
 								->where('sem', $sem)
 								->where('rating', $rating)
 								->where('rating_desc', $inter)
-								->where('course', $dept)
+								->where('dept', $dept)
 								->where('faculty_id', $fac)
 							->group_end()
 							->get('evaluation');

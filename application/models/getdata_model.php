@@ -788,6 +788,7 @@ class getdata_model extends CI_Model{
 		$query = $this->db->select('acad_yr, e.sem, d.dept_code, CONCAT(f.lname,", ", f.fname," ", f.mname) AS faculty_name, rating, rating_desc, evaluation_id')
 				->join('faculty f', 'e.faculty_id = f.faculty_id')
                 ->join('department d', 'e.dept = d.dept_id')
+                ->order_by('e.acad_yr DESC, e.sem DESC')
                 ->get('evaluation e');
 
 		foreach ($query->result() as $r) 
@@ -859,7 +860,8 @@ class getdata_model extends CI_Model{
 									ON e.faculty_id = f.faculty_id
 									JOIN department d
 									ON e.dept = d.dept_id
-									WHERE 1 = 1 $statement");
+									WHERE 1 = 1 $statement
+									ORDER BY acad_yr DESC, sem DESC");
 
 		foreach($query->result() as $r)
 		{
@@ -874,6 +876,69 @@ class getdata_model extends CI_Model{
 					$r->rating_desc,
 					$btn,
 					$r->evaluation_id
+					);
+		}
+
+		return $result;
+	}
+
+	public function get_consec()
+	{
+		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		$result = array();
+		$statement = "";
+
+		$trackRating = "SATISFACTORY";
+		$ctr = 0;
+
+		$query = $this->db->select('acad_yr, sem, faculty_id, rating, rating_desc')
+				->where('faculty_id', $faculty_id)
+				->order_by('acad_yr DESC, sem DESC')
+                ->get('evaluation');
+
+		foreach($query->result() as $r)
+		{
+			if($r->rating_desc == $trackRating)
+			{
+			  $ctr++;
+			}
+			else
+			{
+			  $ctr = 0;
+			//$trackRating = $r->rating_desc;
+			}
+
+			if($ctr >= 3)
+			{
+				$statement = 'CONSECUTIVE';
+			}
+			else
+			{
+				$statement = 'NONE';
+			}	
+		}
+
+		return $statement;
+	}
+
+	public function eval_summary()
+	{
+		$result = array();
+		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		$query = $this->db->select('acad_yr, sem, rating, rating_desc')
+				->where('faculty_id', $faculty_id)
+				->order_by('acad_yr DESC, sem DESC')
+                ->get('evaluation');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->acad_yr,
+					$r->sem,
+					$r->rating,
+					$r->rating_desc,
 					);
 		}
 

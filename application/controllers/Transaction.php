@@ -59,6 +59,7 @@ class Transaction extends CI_Controller
 	public function student_eval()
 	{
 		$data['dept'] = $this->getdata_model->department();
+		$data['faculty'] = $this->getdata_model->faculty();
 		
 		$data['title'] = "IFSS | Student Evaluation";
 		$this->load->view('templates/header', $data);
@@ -98,8 +99,6 @@ class Transaction extends CI_Controller
 		}
 	}
 
-	//NEW CODE ADD THIS
-
 	public function edit_evals()
 	{
 		echo ($this->savedata_model->edit_eval($_POST));
@@ -120,6 +119,25 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function get_consec()
+	{
+		echo ($this->getdata_model->get_consec($_POST));
+		exit();
+	}
+
+	public function get_eval_summary()
+	{
+		$output = $this->getdata_model->eval_summary($_POST);
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
 
 	public function new_schedule()
 	{

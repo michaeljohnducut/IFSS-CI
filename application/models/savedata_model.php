@@ -1555,6 +1555,66 @@ class savedata_model extends CI_Model
 		return $output;
 	}
 
+	public function add_service()
+	{
+		$output = "";
+		$sec = $this->security->xss_clean($this->input->post('sec'));
+		$sub_desc = $this->security->xss_clean($this->input->post('sub_desc'));
+		$sub_code = $this->security->xss_clean($this->input->post('sub_code'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+
+		$sched_day = $this->input->post('sched_day');
+        $sched_timein = $this->input->post('sched_timein');
+        $sched_timeout = $this->input->post('sched_timeout');
+        $sched_room = $this->input->post('sched_room');
+
+        $query = $this->db->group_start()
+								->where('acad_yr', $acadyr)
+								->where('sem', $sem)
+								->where('section', $sec)
+								->where('subj_code', $sub_code)
+								->where('subj_desc', $sub_desc)
+							->group_end()
+							->get('services_assign');
+
+		$number_filter_row = $query->num_rows();
+
+		if($number_filter_row == 0)
+		{
+			$i = 0;
+
+			foreach($sched_day as $e)
+			{
+				$data = array(
+					'subj_code' => $sub_code,
+					'subj_desc' => $sub_desc,
+					'section' => $sec,
+					'acad_yr' => $acadyr,
+					'sem' => $sem,
+					'day' => $sched_day[$i],
+					'time_start' => $sched_timein[$i],
+					'time_end' => $sched_timeout[$i],
+			 		'room' => $sched_room[$i],
+				);
+
+				$this->db->insert('services_assign', $data);
+
+				$i++;
+
+				$output = 'INSERTED';
+			}
+		}
+		else
+		{
+			$output = 'THE DATA IS ALREADY INSERTED';
+		}
+
+            
+
+		return $output;
+	}
+
 	// ==================================================================
 	// -------------------------UPDATED 7-11 ----------------------------
 	// ==================================================================

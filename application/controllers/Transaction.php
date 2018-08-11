@@ -176,6 +176,40 @@ class Transaction extends CI_Controller
 		$this->load->view('templates/footer');
 	}
 
+	public function get_services()
+	{
+		$output = $this->getdata_model->services();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
+	public function get_services_search()
+	{
+		$output = $this->getdata_model->get_service_search($_POST);
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
+	public function add_services()
+	{
+		echo ($this->savedata_model->add_service($_POST));
+		exit();
+	}
+
 	public function view_schedule()
 	{
 		if($this->session->userdata('USERTYPE') == 'admin')

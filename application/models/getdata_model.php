@@ -943,6 +943,76 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
+	public function services()
+	{
+		$result = array();
+
+		$query = $this->db->select('acad_yr, sem, subj_code, subj_desc, section, GROUP_CONCAT(day," ", time_start," - ",time_end SEPARATOR "<br>") AS schedule, GROUP_CONCAT(room SEPARATOR "<br>") AS room, CONCAT(lname,", ",fname," ",mname) AS faculty, services_id')
+				->join('faculty f', 'sa.faculty_id = f.faculty_id', 'left')
+                ->group_by('section')
+                ->get('services_assign sa');
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-success">A</button>
+					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
+
+			$result[] = array(
+					$r->acad_yr,
+					$r->sem,
+					$r->subj_code,
+					$r->subj_desc,
+					$r->section,
+					$r->schedule,
+					$r->room,
+					$r->faculty,
+					$btn,
+					);
+		}
+		return $result;
+	}
+
+	public function get_service_search()
+	{
+		$result = array();
+		$statement = "";
+		
+		if(!empty($_POST['ay']))
+		{
+			$acad_yr = $this->security->xss_clean($this->input->post('ay'));
+			$statement .= " AND acad_yr = '$acad_yr'";
+		}
+		if(!empty($_POST['sem']))
+		{
+			$sem = $this->security->xss_clean($this->input->post('sem'));
+			$statement .= " AND sem ='$sem'";
+		}
+
+		$query = $this->db->query("SELECT acad_yr, sem, subj_code, subj_desc, section, GROUP_CONCAT(DAY, time_start, time_end SEPARATOR '\n') AS schedule, GROUP_CONCAT(room SEPARATOR '\n') AS room, CONCAT(lname,', ',fname,' ', mname) AS faculty, services_id
+									FROM services_assign sa LEFT JOIN faculty f
+									ON sa.faculty_id = f.faculty_id
+									WHERE 1 = 1 $statement
+									GROUP BY section");
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-success">A</button>
+					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
+
+			$result[] = array(
+					$r->acad_yr,
+					$r->sem,
+					$r->subj_code,
+					$r->subj_desc,
+					$r->section,
+					$r->schedule,
+					$r->room,
+					$r->faculty,
+					$btn,
+					);
+		}
+		return $result;
+	}
 	
 // ==========================================================================
 // -----------------------------NEW UPDATE (7-11-18)------------------------

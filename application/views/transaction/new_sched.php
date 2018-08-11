@@ -560,16 +560,78 @@
 
         function changeSchedColor(arr){
             var len = arr.length;
-            var temp_val = ''; 
             var temp_day = '';
             var temp_hour_start = '';
+            var temp_min_start = '';
             var temp_hour_end = '';
+            var temp_min_end = '';
             var temp_mins = '';
+            var day_id = '';
+            var final_val = '';
 
             for (ctr = 0 ; ctr < len ; ctr++){
 
+                switch(arr[ctr][5]){
+                    case 'Monday': 
+                            day_id = '_mon';
+                            break;
+
+                    case 'Tuesday': 
+                            day_id = '_tue';
+                            break;
+
+                    case 'Wednesday': 
+                            day_id = '_wed';
+                            break;
+
+                    case 'Thursday': 
+                            day_id = '_thu';
+                            break;
+
+                    case 'Friday': 
+                            day_id = '_fri';
+                            break;
+
+                    case 'Saturday': 
+                            day_id = '_sat';
+                            break;
+
+                    default: 
+                            day_id = '_sun';
+                }//END SWITCH
+                
                 temp_hour_start = arr[ctr][4][0] + arr[ctr][4][1];
-                alert(temp_hour);
+                temp_min_start = arr[ctr][4][3] + arr[ctr][4][4];
+                temp_hour_end = arr[ctr][4][11] + arr[ctr][4][12];
+                temp_min_end = arr[ctr][4][14] + arr[ctr][4][15];
+                // alert(temp_hour_end + ':' + temp_min_end);
+
+                var looper = parseInt(temp_hour_start);
+                while (looper < temp_hour_end){
+                    final_val = looper + ':' + temp_min_start + ':00' + day_id;
+                    alert(final_val);
+
+                    $('button[type="button"][value="'+final_val+'"]').removeClass("btn btn-info").addClass("btn btn-success");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-success");
+                    final_val = '';
+                    looper ++;
+                }
+
+                if (looper == temp_hour_end){
+
+                    final_val = looper + '00:00' + day_id;
+                    $('button[type="button"][value="'+final_val+'"]').removeClass("btn btn-info").addClass("btn btn-success");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-success");
+
+                    if(temp_min_end == '30'){
+
+                        final_val = looper + '30:00' + day_id;
+                        $('button[type="button"][value="'+final_val+'"]').removeClass("btn btn-info").addClass("btn btn-success");                 
+                        $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-success");
+                    }
+
+                    final_val = '';
+                }
 
             }
         }

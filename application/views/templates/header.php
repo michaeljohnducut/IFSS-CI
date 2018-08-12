@@ -71,6 +71,45 @@
             border: 1px solid #ccc;
             border-top: none;
         }
+
+        .schedBorder{
+            border:1px #000000 solid;
+            height:30px;
+            text-align:center;
+            font-family:tahoma;
+            font-size:11px;
+        }
+
+        .schedBorderMid{
+            /*border:1px #000000 solid;*/
+            border-left:1px #000000 solid;
+            border-right:1px #000000 solid;
+            height:30px;
+            text-align:center;
+            font-family:tahoma;
+            font-size:11px;
+        }
+
+        .schedBorderTop{
+            border-top:1px #000000 solid;
+            border-left:1px #000000 solid;
+            border-right:1px #000000 solid;
+            height:30px;
+            text-align:center;
+            font-family:tahoma;
+            font-size:11px;
+        }
+
+        .schedBorderBot{
+            border-bottom:1px #000000 solid;
+            border-left:1px #000000 solid;
+            border-right:1px #000000 solid;
+            height:30px;
+            text-align:center;
+            font-family:tahoma;
+            font-size:11px;
+        }
+
     </style>
 </head>
 
@@ -128,7 +167,7 @@
                             <li><a href="<?php echo base_url();?>Maintenance/curriculum_year">Curriculum Years</a></li>
                             <li><a href="<?php echo base_url();?>Maintenance/curriculum">Curriculum Management</a></li>
                             <li><a href="<?php echo base_url();?>Maintenance/faculty">Faculty Members</a></li>
-                            <li><a href="<?php echo base_url();?>Maintenance/section">Sections</a></li>
+                            <li><a href="<?php echo base_url();?>Maintenance/section">Section Management</a></li>
                             <li><a href="<?php echo base_url();?>Maintenance/room_labs">Rooms and Labs</a></li>
                         </ul>
                     </li>

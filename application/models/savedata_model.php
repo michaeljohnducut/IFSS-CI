@@ -1784,9 +1784,6 @@ class savedata_model extends CI_Model
 			$output = 'EXISTING';
 		}
 
-		
-
-
 		return $output;
 
 	}

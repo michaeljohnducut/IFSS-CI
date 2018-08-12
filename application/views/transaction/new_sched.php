@@ -314,23 +314,23 @@
 
 <tr>
   <td rowspan='2' align='center' style='font-size:18px;border:1px #000000 solid;background:#D4D9E5;font-family:tahoma;'><font style='font-size:9px;'>05:00 PM</font><br>05:30 PM<br><font style='font-size:9px;'>05:59 PM</font></td>
-  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="m50p" value="19:00:00_mon">5:00PM</button></td>
-  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="t50p" value="19:00:00_tue">5:00PM</button></td>
-  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="w50p" value="19:00:00_wed">5:00PM</button></td>
-  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="th50p" value="19:00:00_thu">5:00PM</button></td>
-  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="f50p" value="19:00:00_fri">5:00PM</button></td>
-  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="sa50p" value="19:00:00_sat">5:00PM</button></td>
-  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="su50p" value="19:00:00_sun">5:00PM</button></td>
+  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="m50p" value="17:00:00_mon">5:00PM</button></td>
+  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="t50p" value="17:00:00_tue">5:00PM</button></td>
+  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="w50p" value="17:00:00_wed">5:00PM</button></td>
+  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="th50p" value="17:00:00_thu">5:00PM</button></td>
+  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="f50p" value="17:00:00_fri">5:00PM</button></td>
+  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="sa50p" value="17:00:00_sat">5:00PM</button></td>
+  <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="su50p" value="17:00:00_sun">5:00PM</button></td>
 </tr>
 
 <tr>
-    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="m53p" value="19:30:00_mon">5:30PM</button></td>
-    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="t53p" value="19:30:00_tue">5:30PM</button></td>
-    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="w53p" value="19:30:00_wed">5:30PM</button></td>
-    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="th53p" value="19:30:00_thu">5:30PM</button></td>
-    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="f53p" value="19:30:00_fri">5:30PM</button></td>
-    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="sa53p" value="19:30:00_sat">5:30PM</button></td>
-    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="su53p" value="19:30:00_sun">5:30PM</button></td>
+    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="m53p" value="17:30:00_mon">5:30PM</button></td>
+    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="t53p" value="17:30:00_tue">5:30PM</button></td>
+    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="w53p" value="17:30:00_wed">5:30PM</button></td>
+    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="th53p" value="17:30:00_thu">5:30PM</button></td>
+    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="f53p" value="17:30:00_fri">5:30PM</button></td>
+    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="sa53p" value="17:30:00_sat">5:30PM</button></td>
+    <td width='12.5%' style='border:1px #000000 solid;height:30px;text-align:center;font-family:tahoma;font-size:11px;' rowspan='1'><button type="button" class="btn btn-default" style="width:150px; height: 35px;" id="su53p" value="17:30:00_sun">5:30PM</button></td>
 </tr>
 
 <tr>
@@ -894,6 +894,95 @@
            });
         }
 
+        function resetPlottingForm(){
+
+            var ctr = 0; 
+            var day_val = '';
+            var final_val = '';
+            var hour_loop = 0;
+            var no_mins_val = ''; 
+            var with_mins_val = '';
+            var btn_text_a = '';
+            var btn_text_b = '';
+            var aft_temp = 0;
+
+            for (ctr = 0 ; ctr < 7 ; ctr ++){
+
+                switch (ctr){
+                    case 0:
+                        day_val = '_mon';
+                        break;
+
+                    case 1:
+                        day_val = '_tue';
+                        break;
+
+                    case 2:
+                        day_val = '_wed';
+                        break;
+
+                    case 3:
+                        day_val = '_thu';
+                        break;
+
+                    case 4:
+                        day_val = '_fri';
+                        break;
+
+                    case 5:
+                        day_val = '_sat';
+                        break;
+
+                    case 6:
+                        day_val = '_sun';
+                        break;
+
+                    default:
+                        day_val = '';
+                }
+
+                for (hour_loop = 7 ; hour_loop <= 21 ; hour_loop++){
+
+                    if (hour_loop < 10){
+                        no_mins_val = '0' + hour_loop + ':00:00' + day_val;
+                        with_mins_val = '0' + hour_loop + ':30:00' + day_val;
+                        btn_text_a = hour_loop + ':00AM';
+                        btn_text_b = hour_loop + ':30AM'; 
+                    }
+                    else{
+                        no_mins_val =  hour_loop + ':00:00' + day_val;
+                        with_mins_val = hour_loop + ':30:00' + day_val;
+                        btn_text_a = hour_loop + ':00AM';
+                        btn_text_b = hour_loop + ':30AM'; 
+
+                        if (hour_loop == 12){
+                            btn_text_a = hour_loop + ':00NN';
+                            btn_text_b = hour_loop + ':30NN'; 
+                        }
+                        else if (hour_loop >12){
+                            aft_temp = hour_loop; 
+                            aft_temp -= 12;
+                            btn_text_a = aft_temp + ':00PM';
+                            btn_text_b = aft_temp + ':30PM'; 
+                        }
+                    }
+
+                     $('button[type="button"][value="'+no_mins_val+'"]').removeClass().addClass("btn btn-default"); 
+                     $('button[type="button"][value="'+with_mins_val+'"]').removeClass().addClass("btn btn-default"); 
+                     $('button[type="button"][value="'+no_mins_val+'"]').text(''+btn_text_a);
+                     $('button[type="button"][value="'+with_mins_val+'"]').text(''+btn_text_b);
+
+                    var no_mins_val = ''; 
+                    var with_mins_val = '';
+                    var btn_text_a = '';
+                    var btn_text_b = '';
+
+                }
+
+
+            }
+        }
+
         function reflectPrefTime(arr){  //CHANGES THE BUTTON COLORS TO GREEN BASED FROM TIME PREFERENCES
 
             var len = arr.length;
@@ -1106,9 +1195,13 @@
 
                     if(data == 'NOT INSERTED')
                     {
-                       
+                       swal("Not Added!", "Something went wrong", "error");
                     }
 
+                    if(data == 'EXISTING')
+                    {
+                       swal("CONFLICT!", "Schedules overlap", "error");
+                    }
                 }
                 });  
             });
@@ -1118,6 +1211,7 @@
                 $('.btn-info').removeClass("btn-info").addClass("btn-default");                 
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
+                resetPlottingForm();
                 getPrefTime();
                 loadSchedTable();
                 getUnitsUsed();
@@ -1130,6 +1224,7 @@
                 $('.btn-info').removeClass("btn-info").addClass("btn-default");                 
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
+                resetPlottingForm();
                 getPrefTime();
                 loadSchedTable();
                 getUnitsUsed();
@@ -1141,6 +1236,7 @@
                 $('.btn-info').removeClass("btn-info").addClass("btn-default");                 
                 $('.btn-info').addClass("btn-default"); 
                 getProfSubj();
+                resetPlottingForm();
                 getPrefTime();
                 loadSchedTable();
                 getUnitsUsed();

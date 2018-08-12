@@ -1753,7 +1753,21 @@ class savedata_model extends CI_Model
 		$temp_faculty = $this->security->xss_clean($this->input->post('temp_faculty'));
 		$temp_load = $this->security->xss_clean($this->input->post('temp_load'));
 
-		if($this->db->query("INSERT INTO `teaching_assign_sched`(`room_id`, `subj_code`, `time_start`, `time_finish`, `section`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type`) 
+		$query = $this->db->group_start()
+								->where('faculty_id', $temp_faculty)
+								->where('acad_yr', $temp_acadyr)
+								->where('sem', $temp_sem)
+								->where('time_start BETWEEN "'.$temp_start.'" AND "'.$temp_end.'" OR time_finish BETWEEN "'.$temp_start.'"AND "'.$temp_end.'"',NULL, FALSE)
+								->where('day', $temp_day)
+							->group_end()
+							->get('teaching_assign_sched');
+
+		$number_filter_row = $query->num_rows();
+
+		if($number_filter_row == 0)
+		{
+
+			if($this->db->query("INSERT INTO `teaching_assign_sched`(`room_id`, `subj_code`, `time_start`, `time_finish`, `section`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type`) 
 			VALUES ($temp_room, $temp_subj, '$temp_start', '$temp_end', $temp_section, '$temp_day', '$temp_acadyr', '$temp_sem', $temp_faculty, '$temp_load')"))
 			{
 				$output = 'INSERTED';
@@ -1762,6 +1776,15 @@ class savedata_model extends CI_Model
 			{
 				$output = 'NOT INSERTED';
 			}
+			
+
+		}
+		else
+		{
+			$output = 'EXISTING';
+		}
+
+		
 
 
 		return $output;

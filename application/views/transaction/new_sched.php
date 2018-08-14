@@ -102,7 +102,7 @@
     <th width='12.5%' style='padding: 10px;border:1px #000000 solid;background:#D4D9E5;font-family:tahoma;font-size:11px;'>Sunday</th>
 </tr>
 
-<tr id="row_7">
+<tr>
   <td rowspan='2' align='center' style='font-size:18px;border:1px #000000 solid;background:#D4D9E5;font-family:tahoma;'><font style='font-size:9px;'>07:00 AM</font><br>07:30 AM<br><font style='font-size:9px;'>07:59 AM</font></td>
   <td id="07_00_mon_d" width='12.5%' class="schedBorder" rowspan='1' ><button type="button" class="btn btn-default" style="width:100%; height: 40px;" id="m70a" value="07:00:00_mon">7:00AM</button></td>
   <td id="07_00_tue_d" width='12.5%' class="schedBorder" rowspan='1' ><button type="button" class="btn btn-default" style="width:100%; height: 40px;" id="t70a" value="07:00:00_tue">7:00AM</button></td>
@@ -562,7 +562,10 @@
         //CHANGES PLOTTING FORM COLOR TO GREEN
         function changeSchedColor(arr){
             var len = arr.length;
+            var temp_subj = '';
+            var temp_sec = '';
             var temp_day = '';
+            var temp_room = '';
             var temp_hour_start = '';
             var temp_min_start = '';
             var temp_hour_end = '';
@@ -575,8 +578,15 @@
             var div_id_bot = '';
             var div_id_mid1 = '';
             var div_id_mid2 = '';
+            var last_box = '';
+            var last_text = '';
+            var put_label = 0;
 
             for (ctr = 0 ; ctr < len ; ctr++){
+
+                temp_subj = arr[ctr][0]; //GETS SUBJECT 
+                temp_sec = arr[ctr][3]; //GETS SECTION
+                temp_room = arr[ctr][6]; //GETS ROOM
 
                 switch(arr[ctr][5]){
                     case 'Monday': 
@@ -611,54 +621,117 @@
                 temp_min_start = arr[ctr][4][3] + arr[ctr][4][4];
                 temp_hour_end = arr[ctr][4][11] + arr[ctr][4][12];
                 temp_min_end = arr[ctr][4][14] + arr[ctr][4][15];
-                // alert(temp_hour_end + ':' + temp_min_end);
                 var min_temp = temp_min_start = arr[ctr][4][3] + arr[ctr][4][4];
+                //FIRST LOOP TO COLOR BLOCKS
                 var looper = parseInt(temp_hour_start);
-                while (looper <= temp_hour_end){
+                while (looper < temp_hour_end){
+                    put_label ++;
                     if (looper < 10){
                         if(min_temp == '30'){
                             final_val = '0' + looper + ':' + min_temp + ':00' + day_id;
                             min_temp = '00';
                             div_id_mid1 = '0' + looper + '_' + min_temp + day_id + '_d';
+                            put_label = 1;
                         }
                         else{
                             final_val = '0' + looper + ':00:00' + day_id;
                             final_val2 = '0' + looper + ':30:00' + day_id;
                             div_id_mid1 = '0' + looper + '_00'  + day_id + '_d';
                             div_id_mid2 = '0' + looper + '_30' + day_id + '_d';
+                            put_label = 2;
                         }
                     }
+
                     else{
                         if(min_temp == '30'){
                             final_val = looper + ':' + min_temp + ':00' + day_id;
                             min_temp = '00';
                             div_id_mid1 = looper + '_' + min_temp + day_id + '_d';
+                            put_label = 1; 
+                            
                         }
                         else{
                             final_val = looper + ':00:00' + day_id;
                             final_val2 = looper + ':30:00' + day_id;
                             div_id_mid1 = looper + '_00'  + day_id + '_d';
                             div_id_mid2 = looper + '_30' + day_id + '_d';
+                            put_label = 2;
                         }
                     }
 
-                    $('button[type="button"][value="'+final_val+'"]').removeClass("btn btn-info").addClass("btn btn-success");                 
+                    $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-success");                 
                     $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-success");
-                    $('button[type="button"][value="'+final_val2+'"]').removeClass("btn btn-info").addClass("btn btn-success");                 
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-success");                 
                     $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
                     $('button[type="button"][value="'+final_val2+'"]').text('');
                     $('button[type="button"][value="'+final_val+'"]').text('');
+
+
+                    var first_btn = '';
+                    var second_btn = '';
+                    var third_btn = '';
+                    var parsed_hour = parseInt(temp_hour_start);
+                    if(put_label == 1){
+                        if( parsed_hour < 10){
+                            first_btn = temp_hour_start + ':30:00' +day_id ; 
+                            second_btn = '0' + (parsed_hour + 1) + ':00:00' + day_id ; 
+                            third_btn = '0' + (parsed_hour + 1) + ':30:00' + day_id ;
+                            alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
+                        }
+                        else{
+                            first_btn = temp_hour_start + ':30:00' +day_id ; 
+                            second_btn = (parsed_hour + 1) + ':00:00' + day_id ; 
+                            third_btn = (parsed_hour + 1) + ':30:00' + day_id ; 
+                        }
+                        $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
+                        $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
+                        $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
+                        // put_label = 0;
+                    }
+                    else if (put_label == 2){
+                        if(parsed_hour < 10){
+                            first_btn = '0' + temp_hour_start + ':00:00' +day_id ; 
+                            second_btn = '0' + temp_hour_start + ':30:00' + day_id ; 
+                            third_btn = '0' + (parsed_hour + 1) + ':00:00' + day_id ; 
+                        }
+                        else{
+                            first_btn =  temp_hour_start + ':00:00' +day_id ; 
+                            second_btn = temp_hour_start + ':30:00' + day_id ; 
+                            third_btn = (parseInt(temp_hour_start) + 1) + ':00:00' + day_id ;
+                        }
+                        $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
+                        $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
+                        $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
+                        // put_label = 0;
+                    }
+
+                    //UNDER DEVELOPMENT
                     // $('#'+div_id_mid1).removeClass();
                     // $('#'+div_id_mid2).removeClass();
                     // $('#'+div_id_mid1).addClass('schedBorderMid');
                     // $('#'+div_id_mid2).addClass('schedBorderMid');
-                    alert(div_id_mid1);
-                    final_val = '';
-                    final_val2 = '';
-                    div_id_mid1 = '';
-                    div_id_mid2 = '';
                     looper ++;
                 }
+
+                if (temp_min_end == '30'){
+                    final_val2 = looper + ':00:00' + day_id;
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass();
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                $('button[type="button"][value="'+final_val2+'"]').text(''); 
+                }
+
+                // 
+                // if (looper < 10){
+
+                //     last_box = '0' + looper + ':' + temp_min_end + ':00' + day_id; 
+                //     last_text = looper + ':'
+                // }
+                // else{
+                //     last_box = looper + ':' + temp_min_end + ':00' + day_id; 
+                // }
+
+                // $('button[type="button"][value="'+last_box+'"]').removeClass().addClass("btn btn-default"); 
+                // $('button[type="button"][value="'+last_box+'"]').text('');
 
             }
         }

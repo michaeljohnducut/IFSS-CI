@@ -1753,13 +1753,16 @@ class savedata_model extends CI_Model
 		$temp_faculty = $this->security->xss_clean($this->input->post('temp_faculty'));
 		$temp_load = $this->security->xss_clean($this->input->post('temp_load'));
 
-		$query = $this->db->group_start()
-								->where('faculty_id', $temp_faculty)
+		$query = $this->db->where('faculty_id', $temp_faculty)
 								->where('acad_yr', $temp_acadyr)
 								->where('sem', $temp_sem)
-								->where('time_start BETWEEN "'.$temp_start.'" AND "'.$temp_end.'" OR time_finish BETWEEN "'.$temp_start.'"AND "'.$temp_end.'"',NULL, FALSE)
+								->where('time_start BETWEEN "'.$temp_start.'" AND "'.$temp_end.'"',NULL, FALSE)
 								->where('day', $temp_day)
-							->group_end()
+								->or_where('faculty_id', $temp_faculty)
+								->where('acad_yr', $temp_acadyr)
+								->where('sem', $temp_sem)
+								->where('time_finish BETWEEN "'.$temp_start.'" AND "'.$temp_end.'"',NULL, FALSE)
+								->where('day', $temp_day)
 							->get('teaching_assign_sched');
 
 		$number_filter_row = $query->num_rows();

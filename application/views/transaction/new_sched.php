@@ -622,23 +622,30 @@
                 temp_hour_end = arr[ctr][4][11] + arr[ctr][4][12];
                 temp_min_end = arr[ctr][4][14] + arr[ctr][4][15];
                 var min_temp = temp_min_start = arr[ctr][4][3] + arr[ctr][4][4];
+
+                //CONTROLS WHERE TO PUT THE LABELS OF THE SCHEDULE
+                if (min_temp == '30'){
+                    put_label = 1;
+                }
+                else{
+                    put_label = 2;
+                }
+
                 //FIRST LOOP TO COLOR BLOCKS
                 var looper = parseInt(temp_hour_start);
                 while (looper < temp_hour_end){
-                    put_label ++;
+                    // put_label ++;
                     if (looper < 10){
                         if(min_temp == '30'){
                             final_val = '0' + looper + ':' + min_temp + ':00' + day_id;
                             min_temp = '00';
                             div_id_mid1 = '0' + looper + '_' + min_temp + day_id + '_d';
-                            put_label = 1;
                         }
                         else{
                             final_val = '0' + looper + ':00:00' + day_id;
                             final_val2 = '0' + looper + ':30:00' + day_id;
                             div_id_mid1 = '0' + looper + '_00'  + day_id + '_d';
                             div_id_mid2 = '0' + looper + '_30' + day_id + '_d';
-                            put_label = 2;
                         }
                     }
 
@@ -647,7 +654,6 @@
                             final_val = looper + ':' + min_temp + ':00' + day_id;
                             min_temp = '00';
                             div_id_mid1 = looper + '_' + min_temp + day_id + '_d';
-                            put_label = 1; 
                             
                         }
                         else{
@@ -655,7 +661,6 @@
                             final_val2 = looper + ':30:00' + day_id;
                             div_id_mid1 = looper + '_00'  + day_id + '_d';
                             div_id_mid2 = looper + '_30' + day_id + '_d';
-                            put_label = 2;
                         }
                     }
 
@@ -667,44 +672,6 @@
                     $('button[type="button"][value="'+final_val+'"]').text('');
 
 
-                    var first_btn = '';
-                    var second_btn = '';
-                    var third_btn = '';
-                    var parsed_hour = parseInt(temp_hour_start);
-                    if(put_label == 1){
-                        if( parsed_hour < 10){
-                            first_btn = temp_hour_start + ':30:00' +day_id ; 
-                            second_btn = '0' + (parsed_hour + 1) + ':00:00' + day_id ; 
-                            third_btn = '0' + (parsed_hour + 1) + ':30:00' + day_id ;
-                            alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
-                        }
-                        else{
-                            first_btn = temp_hour_start + ':30:00' +day_id ; 
-                            second_btn = (parsed_hour + 1) + ':00:00' + day_id ; 
-                            third_btn = (parsed_hour + 1) + ':30:00' + day_id ; 
-                        }
-                        $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
-                        $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
-                        $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
-                        // put_label = 0;
-                    }
-                    else if (put_label == 2){
-                        if(parsed_hour < 10){
-                            first_btn = '0' + temp_hour_start + ':00:00' +day_id ; 
-                            second_btn = '0' + temp_hour_start + ':30:00' + day_id ; 
-                            third_btn = '0' + (parsed_hour + 1) + ':00:00' + day_id ; 
-                        }
-                        else{
-                            first_btn =  temp_hour_start + ':00:00' +day_id ; 
-                            second_btn = temp_hour_start + ':30:00' + day_id ; 
-                            third_btn = (parseInt(temp_hour_start) + 1) + ':00:00' + day_id ;
-                        }
-                        $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
-                        $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
-                        $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
-                        // put_label = 0;
-                    }
-
                     //UNDER DEVELOPMENT
                     // $('#'+div_id_mid1).removeClass();
                     // $('#'+div_id_mid2).removeClass();
@@ -712,6 +679,60 @@
                     // $('#'+div_id_mid2).addClass('schedBorderMid');
                     looper ++;
                 }
+
+                    var first_btn = '';
+                    var second_btn = '';
+                    var third_btn = '';
+                    var parsed_hour = parseInt(temp_hour_start);
+                    if(put_label == 1){
+                        if( parsed_hour < 10){
+                            if(parsed_hour == 9){
+                                first_btn = temp_hour_start + ':30:00' +day_id ; 
+                                second_btn = (parsed_hour + 1) + ':00:00' + day_id ; 
+                                third_btn = (parsed_hour + 1) + ':30:00' + day_id ;
+                            }
+                            else{
+                                first_btn = temp_hour_start + ':30:00' +day_id ; 
+                                second_btn = '0' + (parsed_hour + 1) + ':00:00' + day_id ; 
+                                third_btn = '0' + (parsed_hour + 1) + ':30:00' + day_id ;
+                            }
+                            
+                        }
+                        else{
+                            first_btn = temp_hour_start + ':' + temp_min_start + ':00' +day_id ; 
+                            second_btn = (parsed_hour + 1) + ':00:00' + day_id ; 
+                            third_btn = (parsed_hour + 1) + ':30:00' + day_id ; 
+                        }
+                        $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
+                        $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
+                        $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
+                        alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
+                        // put_label = 0;
+                    }
+                    else if (put_label == 2){
+                        if(parsed_hour < 10){
+                            if(parsed_hour == 9){
+                                first_btn =  temp_hour_start + ':' + temp_min_start +':00' +day_id ; 
+                                second_btn = temp_hour_start + ':30:00' + day_id ; 
+                                third_btn = (parsed_hour + 1) + ':00:00' + day_id ;
+                            }
+                            else{
+                                first_btn =  temp_hour_start + ':' + temp_min_start +':00' +day_id ; 
+                                second_btn = temp_hour_start + ':30:00' + day_id ; 
+                                third_btn = '0' + (parsed_hour + 1) + ':00:00' + day_id ;
+                            }  
+                        }
+                        else{
+                            first_btn =  temp_hour_start + ':' + temp_min_start + ':00' +day_id ; 
+                            second_btn = temp_hour_start + ':30:00' + day_id ; 
+                            third_btn = (parseInt(temp_hour_start) + 1) + ':00:00' + day_id ;
+                        }
+                        $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
+                        $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
+                        $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
+                        alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
+                        // put_label = 0;
+                    }
 
                 if (temp_min_end == '30'){
                     final_val2 = looper + ':00:00' + day_id;

@@ -508,7 +508,8 @@
                     "bPaginate": true,
                     "aaSorting": [[0,'asc']],
                     "sAjaxSource": "<?php echo base_url()?>Maintenance/get_educbg/"+fac_id,
-                    "fnInitComplete": function(){
+                    "fnInitComplete": function()
+                    {
                         
                     }
                 });

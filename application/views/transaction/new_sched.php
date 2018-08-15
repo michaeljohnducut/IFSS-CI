@@ -22,7 +22,7 @@
                                 <h2>Create new schedule</h2>
                             </div>
                             <div class="col-md-3">
-                                <button style="margin-top: 10px; margin-left: 90px;" type="button" class="btn btn-success" data-toggle = "modal" data-target ="#modalGenerateStart">AUTO GENERATE SCHEDULE</button>
+                                <button style="margin-top: 10px; margin-left: 90px;" type="button" class="btn btn-success" id="btnOpenGenerate" data-toggle = "modal" data-target ="#modalGenerateStart">AUTO GENERATE SCHEDULE</button>
                             </div>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
@@ -426,6 +426,8 @@
                                 <textarea class="form-control" rows="5"></textarea>
                                 <br><br><br>
                             </div>
+                            <input type="hidden" name="hid_room" id="hid_room">
+                            <input type="hidden"  name="hid_section" id="hid_section">
                         </div>
 
 <div>
@@ -470,7 +472,7 @@
                     </div>
                     <div class="modal-body">
                             <div class="form-group col-md-12">
-                                <h4>Generate schedule for:</h4>                              
+                                <h4>Generate schedule for:<span id="gen_fac_name"></span></h4>                              
                             </div>
                             <div class="form-group col-md-12">
                                 <h4>Load Limits:</h4>
@@ -485,6 +487,18 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
+                                <h3>Assign maximum sections for each subjects</h3>
+                            </div>
+                            <div class="col-md-12" id="subject_to_section">
+                                <div class="col-md-6 form-control">
+                                    <h4>SUBJECT<h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <br>
                                 <p style="color: red">WARNING: Once the generation of schedule starts, all existing schedule of the faculty member for this selected semester and academic year will be changed. Click 'Start' to begin the process.</p>
                             </div>
                     </div>
@@ -531,6 +545,11 @@
                             <input type="hidden" name="hid_limit_b" id="hid_limit_b">
                             <input type="hidden" name="hid_limit_c" id="hid_limit_c">
                             <input type="hidden" name="hid_units_used" id="hid_units_used">
+                            <input type="hidden" name="hid_total_fac" id="hid_total_fac">
+                            <input type="hidden" name="hid_subj_id" id="hid_subj_id">
+
+
+
                         <!-- <div class="modal-footer"> -->
                             <input type="hidden" name="hid_day" id="hid_day">
                         <div class="modal-footer">
@@ -902,13 +921,12 @@
         }
 
         //INITIALLY GETS THE HOURS OF THE SUBJECTS
-        function getSubjHours(day, start, btn_id){
+        function getSubjHours(day, start, id){
 
-            var id = $('#sched_subj').val();
             var subj_details = {};
             var temp_day = day; 
             var temp_start = start;
-            var temp_id = btn_id;
+            // var temp_id = btn_id;
 
            $.ajax({  
                 url:"<?php echo base_url('Maintenance/view_subjects')?>", 
@@ -919,7 +937,7 @@
                     subj_details[0] = data[0][3];   //UNITS
                     subj_details[1] = data[0][5];   //LECTURE HOURS
                     subj_details[2] = data[0][4];   //LAB HOURS
-                    setToTable(subj_details, temp_day, temp_start, temp_id);   //CALLS FUNCTION
+                    setToTable(subj_details, temp_day, temp_start);   //CALLS FUNCTION
                 },
                 error: function (data) {
                     alert(JSON.stringify(data));
@@ -928,7 +946,7 @@
         }
 
         //FUNCTION TO PLOT THE SUBJECT IN THE TABLE
-        function setToTable(arr, day, start, id){
+        function setToTable(arr, day, start){
 
             var units = arr[0];
             var lec_hrs = arr[1];
@@ -937,6 +955,7 @@
             var temp_hour = start[0] + start[1];
             var added_hour = parseInt(temp_hour) + parseInt(lec_hrs) + parseInt(lab_hrs);
             var end_time = added_hour + ':' + start[3] + start[4] + ':00';
+
             var temp_day = '';
             switch(day){
                 case 'mon':
@@ -960,14 +979,18 @@
                 default: 
                         temp_day = 'Sunday';
             }
+            alert(start_time + ' ' + end_time + ' ' +temp_day);
             $('#hid_start').val(start_time); 
             $('#hid_end').val(end_time);
             $('#hid_day').val(temp_day);
+            // alert(temp_day + ' ' + start_time + ' ' + end_time);
 
-            showAvailSections();
+            showAvailSections(start_time, end_time, temp_day);
             showAvailRoom(temp_day, start_time, end_time);
-           $('#modalSelectParam').modal('show'); //SHOWS MODAL WHERE USER CAN SELECT AVAIL ROOMS AND LABS
-
+            var a = $('#hid_room').val();
+            $('#modalSelectParam').modal('show'); //SHOWS MODAL WHERE USER CAN SELECT AVAIL ROOMS AND LABS
+            var return_val = addGeneratedSched();
+            // alert(return_val);
 
         }
 
@@ -993,24 +1016,32 @@
                         var opt_val = data[i][0];
                         var opt_name = data[i][1];
                         $("#avail_rooms").append("<option value='"+opt_val+"'>"+opt_name +"</option>");
+                        var room = data[0][0];
+                        $('#hid_room').val(room);
                         }
+
                 },
                 error: function (data) {
                 alert(JSON.stringify(data));
                 }
            });
+
+           
         }
 
         //FUNCTION TO GET THE AVAILABLE SECTION FOR THE CHOSEN TIME AND SUBJECT
-        function showAvailSections(){
+        function showAvailSections(start, end, day){
 
             var subj_id = $('#sched_subj').val();
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
+            var start_time = start; 
+            var end_time = end;
+            var day_temp = day;
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_avail_sections')?>", 
                 method:"POST", 
-                data:{subj_id:subj_id, sem:sem, acad_year:acad_year}, 
+                data:{subj_id:subj_id, sem:sem, acad_year:acad_year, start_time:start_time, end_time:end_time, day_temp:day_temp}, 
                 dataType: "json",
                 success:function(data){
                      var len = data.length;
@@ -1023,12 +1054,16 @@
                             var id = data[i][1];
                             var section = data[i][0] + ' ' + data[i][2][0] + ' - ' + data[i][3]; 
                             $("#avail_sections").append("<option value='"+id+"'>"+section +"</option>");
+                            var sec = data[0][1];
+                            $('#hid_section').val(sec);
                         }
+                        
                 },
                 error: function (data) {
                 alert(JSON.stringify(data));
                 }
            });
+            
         } 
 
          function getPrefTime(){
@@ -1320,7 +1355,7 @@
                 }
            });
         }
-        
+
         //GETS THE LOAD LIMIT FOR EACH PROFESSOR
         function getRegularController(){
             var fac_type = $('#hid_factype').val();
@@ -1331,19 +1366,187 @@
                 dataType: "json",
                 success:function(data){
                     $('#hid_limit_a').val(data[0]); //REGULAR LOAD CONTROLLER
-                    $('#hid_limit_b').val(data[1])
+                    $('#hid_limit_b').val(data[1]); //PART TIME LOAD CONTROLLER
                 },
                 error: function (data) {
                 alert(JSON.stringify(data));
                 }
            });
         }
-        
+
+        //INITIALIZES THE GENERATION OF SCHED
+        function startGenerationProcess(control,subj_id){
+            var first_cycle = $('#hid_limit_a').val();
+            var second_cycle = $('#hid_limit_b').val();
+            var load_count = 0;
+            var start_time = '';
+            var end_time = '';
+            var day = '';
+            var acad_year = $('#sched_acad_year').val();
+            var sem = $('#sched_sem').val();
+            var fac_id = $('#sched_faculty').val();
+            var hold = 0;
+            var temp_hour = 7; 
+            var short_day = '';
+            $('#hid_subj_id').val(subj_id);
+            var subject = $('#hid_subj_id').val();
+            var return_val = '';
+            // while(hold < control){
+
+            //     // alert(hold);
+            //     while(temp_hour <= 16){
+            //         day = 'mon';
+            //         if(temp_hour <= 9){
+            //             start_time = '0' + temp_hour + ':30:00';
+            //         }
+            //         else{
+            //             start_time = temp_hour + ':30:00';
+            //         }
+                    start_time = '0' + temp_hour + ':30:00';
+                    getSubjHours(day, start_time,subject);
+            //         // return_val = addGeneratedSched();
+            //         // if(return_val == 'INSERTED'){
+            //         //     hold +=1; 
+            //         //     day = 'tue';
+            //         // }
+            //         // else if (return_val == 'NOT INSERTED' || return_val == 'EXISTING'){
+            //         //     temp_hour += 1;
+            //         // }
+
+            //     }
+            // }//END FIRST CYCLE
+        }
+
+        function addGeneratedSched(section, room){
+                var temp_room = room;
+                var temp_subj = $('#hid_subj_id').val(); //NEEDED
+                var temp_start = $('#hid_start').val();
+                var temp_end = $('#hid_end').val();
+                var temp_section = section;
+                var temp_day = $('#hid_day').val();
+                var temp_acadyr = $('#sched_acad_year').val();
+                var temp_sem = $('#sched_sem').val();
+                var temp_faculty = $('#sched_faculty').val();
+                var total_units = $('#hid_units_used').val();
+                var parsed_total = parseInt(total_units);
+                var temp_load = '';
+
+                if (total_units < 15){
+                    temp_load = 'R';
+                }
+                else if (total_units >= 15 && total_units < 27){
+                    temp_load = 'PT';
+                }
+                else if (total_units >= 27){
+                    temp_load = 'TS';   
+                }
+
+                event.preventDefault();  
+                $.ajax({  
+                url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+                method:"POST",
+                data:{temp_room:temp_room, temp_subj:temp_subj, temp_start:temp_start, temp_end:temp_end, temp_section:temp_section, temp_day:temp_day, temp_acadyr:temp_acadyr, temp_sem:temp_sem, temp_faculty:temp_faculty, temp_load:temp_load},
+                success:function(data)
+                { 
+                    if(data == 'INSERTED')
+                    {
+                        // $('#modalSelectParam').modal('hide');
+                        // swal("Success!", "Added to schedule!", "success");
+                        // $('#avail_sections').val('0');
+                        // $('#avail_rooms').val('0');
+                        loadSchedTable();
+                        getUnitsUsed();
+                        reflectSchedTable();
+                    }
+
+                    if(data == 'NOT INSERTED')
+                    {
+                       swal("Not Added!", "Something went wrong", "error");
+                    }
+
+                    if(data == 'EXISTING')
+                    {
+                       swal("CONFLICT!", "Schedules overlap", "error");
+                    }
+                 return data;
+                }
+                });  
+
+        }
+
+        function showSubjectsToGenerate(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+            var start = 0;
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_prof_subj')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    var len = 0;
+                    len = data.length;
+                     for( var i = 0; i<len; i++){
+
+                            var id = data[i][0];
+                            var code = data[i][1];
+                            var name = data[i][2];   
+                            $("#subject_to_section").append('<div class = "col-md-12"> <div class = "col-md-6"><h5>'+code+' - '+name+'</h5></div><div class = "col-md-2"><input class="form-control" type = "number" id = "tb' +id+  '"></div></div>');
+                        }
+
+                    $('#btnStartGenerate').on('click',function(){
+                        var i = 0;
+                        while(i < len){
+                            var id = data[i][0];
+                            var cycle = $('#tb' +id).val();
+                            $('#hid_subj_id').val(id);
+                            $('#sched_subj').val(id);
+                            startGenerationProcess(cycle, id);
+                            i++;
+                        }
+                    });
+
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        //FUNCTION TO GET HOW MANY FACULTY MEMBERS PREFER THOSE SUBJECTS
+        function getTotalProf(){
+
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_regular_controller')?>", 
+                method:"POST", 
+                data:{fac_type:fac_type}, 
+                dataType: "json",
+                success:function(data){
+                    $('#hid_limit_a').val(data[0]); //REGULAR LOAD CONTROLLER
+                    $('#hid_limit_b').val(data[1]); //PART TIME LOAD CONTROLLER
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
         $(document).ready(function(){
 
+            //CLOSES THE PRE-GENERATE MODAL
             $('#btnStartGenerate').on('click', function(){
-                $('modalGenerateStart').modal('hide');
+                $('#modalGenerateStart').modal('hide');
                 getFacType();
+            });
+
+            //SETS SUBJECTS BEFORE AUTO GENERATION
+            $('#btnOpenGenerate').on('click', function(){
+                $('#subject_to_section').empty();
+                showSubjectsToGenerate();
             });
 
             //SELECT2
@@ -1365,8 +1568,6 @@
                 var total_units = $('#hid_units_used').val();
                 var parsed_total = parseInt(total_units);
                 var temp_load = '';
-
-                alert(total_units);
 
                 if (total_units < 15){
                     temp_load = 'R';
@@ -1455,9 +1656,9 @@
 
         //CLICKING OF TIME SHOWN
         $(document).on('click', '.btn-info', function(){
+            var id = $('#sched_subj').val();
 
             var x = $(this).attr('value');
-            var id = $(this).attr('id');
             var day = x[9] + x[10] + x[11];
             var time = x[0] + x[1] + ':' + x[3] + x[4] + ':00';
             getSubjHours(day, time, id);
@@ -1465,9 +1666,8 @@
 
         //CLICKING OF TIME SHOWN
         $(document).on('click', '.btn-default', function(){
-
+            var id = $('#sched_subj').val();
             var x = $(this).attr('value');
-            var id = $(this).attr('id');
             var day = x[9] + x[10] + x[11];
             var time = x[0] + x[1] + ':' + x[3] + x[4] + ':00';
             getSubjHours(day, time, id);

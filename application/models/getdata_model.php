@@ -1146,6 +1146,9 @@ class getdata_model extends CI_Model{
 		$subj_id = $this->security->xss_clean($this->input->post('subj_id'));
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end_time = $this->security->xss_clean($this->input->post('end_time'));
+		$day_temp = $this->security->xss_clean($this->input->post('day_temp'));
 		$result = array();
 
 		$query = $this->db->select('c.course_code, s.section_id, s.year_lvl, s.section_desc')
@@ -1166,6 +1169,16 @@ class getdata_model extends CI_Model{
 					WHERE acad_yr = "'.$acad_year.'"
 					AND sem = "'.$sem.'"
 					AND subj_code = '.$subj_id.')', NULL, FALSE)
+				->where('s.section_id NOT IN (SELECT ta.section
+					FROM teaching_assign_sched ta
+					WHERE ta.time_start > "'.$start_time.'" AND ta.time_start < "'.$end_time.'" 
+					AND ta.day = "'.$day_temp.'" 
+					OR ta.time_finish > "'.$start_time.'" 
+					AND ta.time_finish < "'.$end_time.'" 
+					AND ta.day = "'.$day_temp.'" 
+					OR ta.time_start = "'.$start_time.'"
+					AND ta.time_finish = "'.$end_time.'" 
+					AND ta.day = "'.$day_temp.'")', NULL, FALSE)
 				->order_by('course_code', 'asc')
 				->join('course c','s.course = c.course_id')
                 ->get('section s');
@@ -1194,7 +1207,16 @@ class getdata_model extends CI_Model{
 
 		$query = $this->db->select('r.room_id, r.room_code')
 				->where('r.room_id NOT IN (SELECT ta.room_id
-                        FROM teaching_assign_sched ta WHERE ta.acad_yr = "'.$acad_year.'" AND ta.sem = "'.$sem.'" AND ta.time_start BETWEEN "'.$start_time.'" AND "'.$end.'" OR ta.time_finish BETWEEN "'.$start_time.'" AND "'.$end.'" AND ta.day = "'.$day.'" )', NULL, FALSE)
+					FROM teaching_assign_sched ta
+					WHERE ta.time_start > "'.$start_time.'"
+					AND ta.time_start < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					OR ta.time_finish > "'.$start_time.'"
+					AND ta.time_finish < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					OR ta.time_start = "'.$start_time.'"
+					AND ta.time_finish = "'.$end.'"
+					AND ta.day = "'.$day.'")', NULL, FALSE)
 				->order_by('room_code', 'asc')
                 ->get('room r');
 

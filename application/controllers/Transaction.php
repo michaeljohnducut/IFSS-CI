@@ -357,6 +357,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function set_sections_to_subj(){
+		
+		echo json_encode($this->getdata_model->get_prof_subj($_POST));
+			exit();
+	}
+
 
 
 } 

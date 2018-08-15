@@ -32,7 +32,7 @@
                                 <table id="curr-yr-table" class="table colored-table inverse-tabl table-striped">
                                     <thead>
                                         <tr>
-                                            <th width="500px;">Curriculum Year</th>
+                                            <th width="80%;">Curriculum Year</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>

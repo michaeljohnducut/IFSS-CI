@@ -36,7 +36,7 @@
                                 <table id="spec-table" class="table colored-table inverse-tabl table-striped" >
                                     <thead>
                                         <tr>
-                                            <th width="500px;">Specialization</th>
+                                            <th width="80%;">Specialization</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>

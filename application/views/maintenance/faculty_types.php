@@ -32,7 +32,7 @@
                                 <table id="fac_type_table" class="table colored-table inverse-tabl table-striped">
                                     <thead>
                                         <tr>
-                                            <th width="500px;">Faculty Type</th>
+                                            <th width="80%;">Faculty Type</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>

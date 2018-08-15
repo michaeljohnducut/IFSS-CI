@@ -315,7 +315,7 @@
                          $('#room_id_hid').val(data[0][0]);  
                          $('#room_edit_code').val(data[0][1]);
                          $('#room_edit_desc').val(data[0][2]);
-                         $('#edit_building').val(data[0][3])
+                         $('#edit_building').val(data[0][3]);
                          $('#openMod').trigger('click');
                     },
                     error: function (data) {

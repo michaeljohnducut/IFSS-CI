@@ -1610,10 +1610,138 @@ class savedata_model extends CI_Model
 			$output = 'THE DATA IS ALREADY INSERTED';
 		}
 
-            
+		return $output;
+	}
+
+	public function edit_service_sched()
+	{
+		$output = '';
+
+		$sched_id_hid = $this->security->xss_clean($this->input->post('sched_id_hid'));
+		$edit_sched_day = $this->security->xss_clean($this->input->post('edit_sched_day'));
+		$edit_sched_timein = $this->security->xss_clean($this->input->post('edit_sched_timein'));
+		$edit_sched_timeout = $this->security->xss_clean($this->input->post('edit_sched_timeout'));
+		$edit_sched_room = $this->security->xss_clean($this->input->post('edit_sched_room'));
+		
+		$query = $this->db->group_start()
+								->where('day', $edit_sched_day)
+								->where('time_start', $edit_sched_timein)
+								->where('time_end', $edit_sched_timeout)
+								->where('room', $edit_sched_room)
+							->group_end()
+							->get('services_assign');
+
+		$number_filter_row = $query->num_rows();
+
+		if($number_filter_row == 0)
+		{
+			$data = array(
+					'day' => $edit_sched_day, 
+					'time_start' => $edit_sched_timein,
+					'time_end'=> $edit_sched_timeout,
+					'room' => $edit_sched_room
+					);
+
+			if($this->db->where('services_id', $sched_id_hid)
+						->update('services_assign', $data))
+			{
+				$output = 'UPDATED';
+			}
+			else
+			{
+				$output = 'NOT UPDATED';
+			}
+		}
+		else
+		{
+			$output = 'THE DATA IS ALREADY INSERTED';
+		}
 
 		return $output;
 	}
+
+	public function edit_service()
+	{
+		$output = '';
+
+		$id = $this->security->xss_clean($this->input->post('service_id_hid'));
+		$edit_acadyr = $this->security->xss_clean($this->input->post('edit_acadyr'));
+		$edit_sem = $this->security->xss_clean($this->input->post('edit_sem'));
+		$edit_sec = $this->security->xss_clean($this->input->post('edit_sec'));
+		$edit_sub_code = $this->security->xss_clean($this->input->post('edit_sub_code'));
+		$edit_sub_desc = $this->security->xss_clean($this->input->post('edit_sub_desc'));
+	
+		$query1 = $this->db->select('acad_yr, sem, section, subj_code, subj_desc')
+							->where('services_id', $id)
+                			->get('services_assign');
+
+        foreach($query1->result() as $r) 
+		{
+			$acadyr = $r->acad_yr;
+			$sem = $r->sem;
+			$section = $r->section;
+			$subj_code = $r->subj_code;
+			$subj_desc = $r->subj_desc;
+		}
+
+		$query2 = $this->db->select('services_id')
+							->group_start()
+								->where('acad_yr', $acadyr)
+								->where('sem', $sem)
+								->where('section', $section)
+								->where('subj_code', $subj_code)
+								->where('subj_desc', $subj_desc)
+							->group_end()
+                			->get('services_assign');
+
+        $number_filter_row = $query2->num_rows();		
+
+        foreach($query2->result() as $s) 
+		{
+			$service_id = $s->services_id;
+
+			$data = array(
+					'acad_yr' => $edit_acadyr, 
+					'sem' => $edit_sem,
+					'section'=> $edit_sec,
+					'subj_code' => $edit_sub_code,
+					'subj_desc' => $edit_sub_desc
+					);
+
+			if($this->db->where('services_id', $service_id)
+						->update('services_assign', $data))
+			{
+				$output = 'UPDATED';
+			}
+			else
+			{
+				$output = 'NOT UPDATED';
+			}
+		}
+
+		return $output;
+	}
+
+	public function delete_service_sched()
+	{
+		$output = '';
+
+		$id = $this->security->xss_clean($this->input->post('service_sched_id'));
+
+		if($this->db->where('services_id', $id)
+					->delete('services_assign'))
+		{
+			$output = 'DELETED';
+		}
+		else
+		{
+			$output = 'NOT DELETED';
+		}
+
+		return $output;
+	}
+
+
 
 	// ==================================================================
 	// -------------------------UPDATED 7-11 ----------------------------

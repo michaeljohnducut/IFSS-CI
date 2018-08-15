@@ -44,8 +44,7 @@ class getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_educbg_data" data-id="'.$r->educ_bg_id.'"><span class="fa fa-pencil"></span></button>
-         			<button class="btn btn-sm  btn-danger" id="delete_educbg_data" data-id="'.$r->educ_bg_id.'"><span class="fa fa-trash-o" ></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" id="edit_educbg_data" data-id="'.$r->educ_bg_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->level,
@@ -56,6 +55,8 @@ class getdata_model extends CI_Model{
 					$r->educ_bg_id
 					);
 		}
+
+		//<button class="btn btn-sm  btn-danger" id="delete_educbg_data" data-id="'.$r->educ_bg_id.'"><span class="fa fa-trash-o" ></span></button>
 
 		return $result;
 	}
@@ -930,7 +931,7 @@ class getdata_model extends CI_Model{
 				->order_by('acad_yr DESC, sem DESC')
                 ->get('evaluation');
 
-		foreach ($query->result() as $r) 
+		foreach($query->result() as $r) 
 		{
 			$result[] = array(
 					$r->acad_yr,
@@ -949,10 +950,10 @@ class getdata_model extends CI_Model{
 
 		$query = $this->db->select('acad_yr, sem, subj_code, subj_desc, section, GROUP_CONCAT(day," ", time_start," - ",time_end SEPARATOR "<br>") AS schedule, GROUP_CONCAT(room SEPARATOR "<br>") AS room, CONCAT(lname,", ",fname," ",mname) AS faculty, services_id')
 				->join('faculty f', 'sa.faculty_id = f.faculty_id', 'left')
-                ->group_by('section')
+                ->group_by('acad_yr, sem, section')
                 ->get('services_assign sa');
 
-		foreach ($query->result() as $r) 
+		foreach($query->result() as $r) 
 		{
 			$btn = '<button class="btn btn-sm  btn-success">A</button>
 					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
@@ -969,6 +970,94 @@ class getdata_model extends CI_Model{
 					$btn,
 					);
 		}
+		return $result;
+	}
+
+	public function view_service()
+	{
+		$result = array();
+
+		$service_id = $this->security->xss_clean($this->input->post('service_id'));
+
+		$query = $this->db->select('acad_yr, sem, subj_code, subj_desc, section, services_id')
+				->where('services_id', $service_id)
+                ->get('services_assign');
+
+		foreach($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->acad_yr,
+					$r->sem,
+					$r->subj_code,
+					$r->subj_desc,
+					$r->section,
+					$r->services_id
+					);
+		}
+
+		return $result;	
+	}
+
+	public function service_sched()
+	{
+		$result = array();
+
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$section = $this->security->xss_clean($this->input->post('section'));
+		$code = $this->security->xss_clean($this->input->post('code'));
+		$desc = $this->security->xss_clean($this->input->post('desc'));
+
+		$query = $this->db->select('day, time_start, time_end, room, services_id')
+							->group_start()
+								->where('acad_yr', $acadyr)
+								->where('sem', $sem)
+								->where('section', $section)
+								->where('subj_code', $code)
+								->where('subj_desc', $desc)
+							->group_end()
+                			->get('services_assign');
+
+        $number_filter_row = $query->num_rows();
+
+		foreach($query->result() as $r) 
+		{
+			($number_filter_row == 1)?$btn = '<button class="btn btn-sm  btn-success" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>':$btn = '<button class="btn btn-sm  btn-success" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button><button class="btn btn-sm  btn-danger" id="delete_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-trash-o "></span></button>';
+
+			$result[] = array(
+					$r->day,
+					$r->time_start,
+					$r->time_end,
+					$r->room,
+					$btn,
+					$r->services_id,
+					);
+		}
+	
+		return $result;	
+	}
+
+	public function view_service_sched()
+	{
+		$result = array();
+
+		$id = $this->security->xss_clean($this->input->post('service_sched_id'));
+
+		$query = $this->db->select('day, time_start, time_end, room, services_id')
+                ->where('services_id', $id)
+                ->get('services_assign');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->day,
+					$r->time_start,
+					$r->time_end,
+					$r->room,
+					$r->services_id
+					);
+		}
+
 		return $result;
 	}
 
@@ -994,7 +1083,7 @@ class getdata_model extends CI_Model{
 									WHERE 1 = 1 $statement
 									GROUP BY section");
 
-		foreach ($query->result() as $r) 
+		foreach($query->result() as $r) 
 		{
 			$btn = '<button class="btn btn-sm  btn-success">A</button>
 					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';

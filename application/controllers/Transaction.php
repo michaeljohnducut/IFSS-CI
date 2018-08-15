@@ -210,6 +210,60 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function view_services()
+	{
+		if(isset($_POST['service_id']))
+		{
+			echo json_encode($this->getdata_model->view_service($_POST));
+			exit();
+		}
+	}
+
+	public function get_services_sched()
+	{
+		$output = $this->getdata_model->service_sched($_POST);
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+
+		echo json_encode($response);
+		exit();
+	}
+
+	public function view_services_sched()
+	{
+		if(isset($_POST['service_sched_id']))
+		{
+			echo json_encode($this->getdata_model->view_service_sched($_POST));
+			exit();
+		}
+	}
+
+	public function edit_services_sched()
+	{
+		echo ($this->savedata_model->edit_service_sched($_POST));
+		exit();
+	}
+
+	public function delete_services_sched()
+	{
+		if(isset($_POST['service_sched_id']))
+		{
+			echo ($this->savedata_model->delete_service_sched($_POST));
+			exit();
+		}
+	}
+
+	public function edit_services()
+	{
+		echo ($this->savedata_model->edit_service($_POST));
+		exit();
+	}
+
 	public function view_schedule()
 	{
 		if($this->session->userdata('USERTYPE') == 'admin')

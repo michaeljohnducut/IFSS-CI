@@ -1303,6 +1303,51 @@ class getdata_model extends CI_Model{
 
 	}
 
+	public function get_fac_type(){
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$result = array();
+
+		$query = $this->db->select('fa.faculty_type')
+				->where('fa.faculty_id', $fac_id)
+                ->get('faculty fa');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->faculty_type
+					);
+		}
+
+		return $result;	
+
+	}
+
+	public function get_regular_controller(){
+
+		$fac_type = $this->security->xss_clean($this->input->post('fac_type'));
+		$result = array();
+
+		$query = $this->db->select('ft.num_hrs')
+				->where('ft.fac_type_desc', $fac_type)
+				->where("ft.fac_load_desc LIKE ('%regular%') UNION 
+				SELECT ft.num_hrs
+				FROM faculty_load_type ft
+				WHERE ft.fac_type_desc = 1 
+				AND ft.fac_load_desc LIKE ('%part%')", NULL, FALSE)
+                ->get('faculty_load_type ft');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->num_hrs
+					);
+		}
+
+		return $result;	
+
+	}
+
 
 }
 ?>

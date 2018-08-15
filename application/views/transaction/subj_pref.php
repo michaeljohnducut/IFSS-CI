@@ -482,7 +482,7 @@ function getPrefTime(faculty_id, acad_year, sem){
                     }
 
                     else{
-                        alert(data);
+                        // alert(data);
                     }
                 }, 
 
@@ -1025,7 +1025,7 @@ $(document).ready(function(){
                     }
 
                     else{
-                        alert(data);
+                        // alert(data);
                         loadtable(fac_id, acad_year, sem);
                     }
                 }, 
@@ -1191,7 +1191,7 @@ $(document).ready(function(){
 
                 success:function(data)
                 {  
-                    alert(data);
+                    // alert(data);
 
                 }, 
 

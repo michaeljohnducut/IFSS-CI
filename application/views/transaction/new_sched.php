@@ -22,7 +22,7 @@
                                 <h2>Create new schedule</h2>
                             </div>
                             <div class="col-md-3">
-                                <button style="margin-top: 10px; margin-left: 90px;" type="button" class="btn btn-success"="">AUTO GENERATE SCHEDULE</button>
+                                <button style="margin-top: 10px; margin-left: 90px;" type="button" class="btn btn-success" data-toggle = "modal" data-target ="#modalGenerateStart">AUTO GENERATE SCHEDULE</button>
                             </div>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
@@ -458,6 +458,45 @@
                     </div>
                 </div>
 
+<div class="modal fade bs-example-modal-lg" id="modalGenerateStart" tabindex="-1" role="dialog" aria-labelledby="modalGenerateStart" aria-hidden="true" style=" display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirm Auto-Generation</h4>
+                    </div>
+                    <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                    </div>
+                    <div class="modal-body">
+                            <div class="form-group col-md-12">
+                                <h4>Generate schedule for:</h4>                              
+                            </div>
+                            <div class="form-group col-md-12">
+                                <h4>Load Limits:</h4>
+                                <div class="col-md-4">
+                                    <p>Regular Load:</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Part-Time Load Load:</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Temporary Substitution:</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <p style="color: red">WARNING: Once the generation of schedule starts, all existing schedule of the faculty member for this selected semester and academic year will be changed. Click 'Start' to begin the process.</p>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-success waves-effect text-left" id="btnStartGenerate">Start</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+</div>
+
  
 
 <div class="modal fade bs-example-modal-lg" id="modalSelectParam" tabindex="-1" role="dialog" aria-labelledby="modalSelectParam" aria-hidden="true" style="margin-top: 30px;">
@@ -487,8 +526,12 @@
 
                             <input type="hidden" name="hid_start" id="hid_start">
                             <input type="hidden" name="hid_end" id="hid_end">
+                            <input type="hidden" name="hid_factype" id="hid_factype">
+                            <input type="hidden" name="hid_limit_a" id="hid_limit_a">
+                            <input type="hidden" name="hid_limit_b" id="hid_limit_b">
+                            <input type="hidden" name="hid_limit_c" id="hid_limit_c">
                             <input type="hidden" name="hid_units_used" id="hid_units_used">
-                        <div class="modal-footer">
+                        <!-- <div class="modal-footer"> -->
                             <input type="hidden" name="hid_day" id="hid_day">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" onclick="resetForm1()">Reset</button>
@@ -500,7 +543,9 @@
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
-        </div>
+</div>
+
+
 
 
 
@@ -664,10 +709,10 @@
                         }
                     }
 
-                    $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-success");                 
-                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-success");
-                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-success");                 
-                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                    $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-inverse");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-inverse");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-inverse");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-inverse");
                     $('button[type="button"][value="'+final_val2+'"]').text('');
                     $('button[type="button"][value="'+final_val+'"]').text('');
 
@@ -706,7 +751,7 @@
                         $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
                         $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
                         $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
-                        alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
+                        // alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
                         // put_label = 0;
                     }
                     else if (put_label == 2){
@@ -730,14 +775,14 @@
                         $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
                         $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
                         $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
-                        alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
+                        // alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
                         // put_label = 0;
                     }
 
                 if (temp_min_end == '30'){
                     final_val2 = looper + ':00:00' + day_id;
                     $('button[type="button"][value="'+final_val2+'"]').removeClass();
-                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-inverse");
                 $('button[type="button"][value="'+final_val2+'"]').text(''); 
                 }
 
@@ -789,6 +834,7 @@
                         $('#RLoad_id').empty();
                         $('#units_used').append('Total Units Used: ' + data[0][1]);
                         $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+                        $('#hid_units_used').val(data[0][1]);
 
                         if(data[0][3] == null){
                             $('#PTLoad_id').empty();
@@ -798,6 +844,8 @@
                         }
                         else if(data[0][4] == null){
                             $('#TSLoad_id').empty();
+                            $('#PTLoad_id').empty();
+                            $('#PTLoad_id').append('Part-time Load: ') + data[0][3];
                             $('#TSLoad_id').append('Temporary Substitution: ');
                         }
 
@@ -811,7 +859,7 @@
                             $('#PTLoad_id').append('Part-time Load: ' + data[0][3]);
                             $('#TSLoad_id').append('Temporary Substitution: ' + data[0][4]);
                             $('#hid_units_used').val(data[0][1]);
-                                }
+                        }
                     }
                     
                 },
@@ -1255,7 +1303,49 @@
             }
         }
 
+        //FUNCTIONS FOR AUTO GENERATION
+        function getFacType(){
+            var fac_id = $('#sched_faculty').val();
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/get_fac_type')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id}, 
+                dataType: "json",
+                success:function(data){
+                    $('#hid_factype').val(data);
+                    getRegularController();
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+        
+        //GETS THE LOAD LIMIT FOR EACH PROFESSOR
+        function getRegularController(){
+            var fac_type = $('#hid_factype').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_regular_controller')?>", 
+                method:"POST", 
+                data:{fac_type:fac_type}, 
+                dataType: "json",
+                success:function(data){
+                    $('#hid_limit_a').val(data[0]); //REGULAR LOAD CONTROLLER
+                    $('#hid_limit_b').val(data[1])
+                },
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+        
         $(document).ready(function(){
+
+            $('#btnStartGenerate').on('click', function(){
+                $('modalGenerateStart').modal('hide');
+                getFacType();
+            });
+
             //SELECT2
             $(".select2").select2();
             $('.selectpicker').selectpicker();
@@ -1275,6 +1365,8 @@
                 var total_units = $('#hid_units_used').val();
                 var parsed_total = parseInt(total_units);
                 var temp_load = '';
+
+                alert(total_units);
 
                 if (total_units < 15){
                     temp_load = 'R';
@@ -1363,6 +1455,16 @@
 
         //CLICKING OF TIME SHOWN
         $(document).on('click', '.btn-info', function(){
+
+            var x = $(this).attr('value');
+            var id = $(this).attr('id');
+            var day = x[9] + x[10] + x[11];
+            var time = x[0] + x[1] + ':' + x[3] + x[4] + ':00';
+            getSubjHours(day, time, id);
+        });
+
+        //CLICKING OF TIME SHOWN
+        $(document).on('click', '.btn-default', function(){
 
             var x = $(this).attr('value');
             var id = $(this).attr('id');

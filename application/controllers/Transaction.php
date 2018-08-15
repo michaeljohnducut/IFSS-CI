@@ -345,6 +345,18 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function get_fac_type(){
+
+		echo json_encode($this->getdata_model->get_fac_type($_POST));
+		exit();
+	}
+
+	public function get_regular_controller(){
+		
+		echo json_encode($this->getdata_model->get_regular_controller($_POST));
+		exit();
+	}
+
 
 
 } 

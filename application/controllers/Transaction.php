@@ -67,6 +67,14 @@ class Transaction extends CI_Controller
 		$this->load->view('templates/footer');
 	}
 
+	public function load_subjects()
+	{
+		$data['title'] = "IFSS | Load Subjects";
+		$this->load->view('templates/header', $data);
+		$this->load->view('transaction/load_subjects');
+		$this->load->view('templates/footer');
+	}
+
 	public function student_import()
 	{
 		if(isset($_FILES["file"]["name"]))

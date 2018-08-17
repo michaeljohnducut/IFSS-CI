@@ -176,8 +176,9 @@
                     </li>
                     <li><a href="javascript:;" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Transactions &nbsp;  <span class="ti-angle-down"></span><span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="<?php echo base_url();?>Transaction/subject_pref">Subject Preference</a></li>
+                            <li><a href="<?php echo base_url();?>Transaction/load_subjects">Load Subjects</a></li>
                             <li><a href="<?php echo base_url();?>Transaction/student_eval">Student Evaluations</a></li>
+                            <li><a href="<?php echo base_url();?>Transaction/subject_pref">Subject Preference</a></li>
                             <li><a href="<?php echo base_url();?>Transaction/new_schedule">Plot Schedules</a></li>
                             <li><a href="<?php echo base_url();?>Transaction/services">Services</a></li>
                         </ul>

@@ -1,0 +1,38 @@
+body {
+    font-family: sans-serif;
+    font-size: small;
+}
+
+canvas {
+    border: 1px solid black;
+    margin-bottom: 4px;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.desc {
+    max-width: 800px;
+}
+
+#status-container {
+    margin-bottom: 6px;
+}
+
+#search {
+    margin-bottom: 16px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    text-decoration: underline;
+}
+
+li:hover {
+    color: #0000ee;
+}

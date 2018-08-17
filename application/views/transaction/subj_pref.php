@@ -52,7 +52,7 @@
                             <div class="col-md-3">
                                 <label class="control-label">Semester:</label>
                                 <select class="form-control select2" name="selected_sem" id="selected_sem">
-                                    <option>-SELECT SEM-</option>
+                                    <option value="0">-SELECT SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
                                     <option value="summer">Summer</option>        
@@ -676,7 +676,7 @@ function getPrefTime(faculty_id, acad_year, sem){
             var fac_id = "<?php echo $fac_id?>";
         }
 
-        if(fac_id != 0){
+        if(fac_id != 0 ){
             getPrefTime(fac_id, acad_year, sem);
             getPrefSubj(fac_id, acad_year, sem);
             loadtable(fac_id, acad_year, sem);
@@ -897,7 +897,12 @@ $(document).ready(function(){
         var end = '';
         var day = '';
 
-        if($(this).prop("checked")){
+        if(fac_id == 0 || sem == 0 || acad_year == 0){
+            alert('Complete parameters first!');
+            $(this).prop("checked", false);
+        }
+        else{
+            if($(this).prop("checked")){
 
             switch(val){
                 case 'mon_mor': 
@@ -1167,6 +1172,7 @@ $(document).ready(function(){
                  }
             }); 
             
+        }
         }
 
     });

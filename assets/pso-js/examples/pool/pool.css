@@ -1,0 +1,50 @@
+body {
+    font-family: sans-serif;
+    font-size: small;
+}
+
+.app {
+    width: 808px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+canvas {
+    border: solid grey 1px;
+    position: relative;
+    cursor: crosshair;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.desc {
+    max-width: 800px;
+}
+
+#status-container {
+    font-weight: bold;
+    padding-left: 1px;
+    margin-bottom: 16px;
+}
+
+#status {
+    font-weight: normal;
+}
+
+.spaced {
+    padding-right: 24px;
+}
+
+select {
+    width: 48px;
+}
+
+button {
+    width: 64px;
+}
+
+td {
+    padding-left: 0;
+}

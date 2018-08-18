@@ -355,23 +355,18 @@
                             <h3>Student Evaluation Ratings</h3>
                         </div>
                         <div class="table-responsive">
-                                    <table class="table colored-table inverse-table table-striped" style="margin-top: 20px">
+                                    <table class="table colored-table inverse-table table-striped" style="margin-top: 20px" id="student_eval_table">
                                         <thead>
                                             <tr>
-                                                <th>Acad Year</th>
-                                                <th>Sem</th>
+                                                <th>Academic Year</th>
+                                                <th>Semester</th>
                                                 <th>Rating</th>
                                                 <th>Interpretation</th>
                                             </tr>
                                         </thead>
 
                                          <tbody>
-                                            <tr>
-                                                <td>2017-2018</td>
-                                                <td>2nd</td>
-                                                <td>94.4%</td>
-                                                <td>Very Satisfactory</td>
-                                            </tr>
+                                            
                                         </tbody>
                                     </table>
 
@@ -475,23 +470,23 @@
         }
 
 
-        function change_spouse()
-        {
-            var civil_status = $('#fact_civil_status').val();
+        // function change_spouse()
+        // {
+        //     var civil_status = $('#fact_civil_status').val();
 
-            if(civil_status == 'Married')
-            {
-                $('#fact_sfname').prop("disabled",false);
-                $('#fact_slname').prop("disabled",false);
-                $('#fact_smname').prop("disabled",false);
-            }
-            else
-            {
-                $('#fact_sfname').prop("disabled",true);
-                $('#fact_slname').prop("disabled",true);
-                $('#fact_smname').prop("disabled",true);
-            }
-        }
+        //     if(civil_status == 'Married')
+        //     {
+        //         $('#fact_sfname').prop("disabled",false);
+        //         $('#fact_slname').prop("disabled",false);
+        //         $('#fact_smname').prop("disabled",false);
+        //     }
+        //     else
+        //     {
+        //         $('#fact_sfname').prop("disabled",true);
+        //         $('#fact_slname').prop("disabled",true);
+        //         $('#fact_smname').prop("disabled",true);
+        //     }
+        // }
 
         function show_educ_table(fac_id)
             {
@@ -507,6 +502,24 @@
                     "sAjaxSource": "<?php echo base_url()?>Maintenance/get_educbg/"+fac_id,
                     "fnInitComplete": function(){
                         
+                    }
+                });
+            }
+
+        function loadsummary(id)
+            {
+                $('#student_eval_table').show();
+                $('#student_eval_table').dataTable().fnClearTable();
+                $('#student_eval_table').dataTable().fnDraw();
+                $('#student_eval_table').dataTable().fnDestroy();
+                $('#student_eval_table').dataTable({
+                    "processing" : true,
+                    "serverSide" : false,
+                    "order" : [],
+                    "ajax" : {
+                        url:"<?php echo base_url('Maintenance/get_stud_eval')?>",
+                        data:{faculty_id:id},
+                        type:"POST"
                     }
                 });
             }
@@ -542,7 +555,7 @@
                              $('#fact_address').val(data[0][12]);
                              $('#fact_zip_address').val(data[0][13]);
                              $('#faculty_id_hid').val(data[0][16]);
-                             change_spouse();
+                             loadsummary(id);
                         },
                         error: function (data) {
                             alert(JSON.stringify(data));

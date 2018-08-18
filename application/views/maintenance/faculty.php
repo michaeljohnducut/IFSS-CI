@@ -73,7 +73,7 @@
                   <button class="tablinks" onclick="openCity(event, 'Personal_Info')" id="defaultOpen">Personal Info</button>
                   <button class="tablinks" onclick="openCity(event, 'Educ_bg')">Educational Background</button>
                   <button class="tablinks" onclick="openCity(event, 'Course_spec')">Course Specialization</button>
-                  <button class="tablinks" onclick="openCity(event, 'Stud_eval')">Student Evaluations</button>
+                  <button class="tablinks" id="btn_stud_eval" onclick="openCity(event, 'Stud_eval')">Student Evaluations</button>
                 </div>
 
                 <!-- Tab content -->
@@ -365,31 +365,21 @@
                             <h3>Student Evaluation Ratings</h3>
                         </div>
                         <div class="table-responsive">
-                                    <table class="table colored-table inverse-table table-striped" style="margin-top: 20px">
+                                    <table class="table colored-table inverse-table table-striped" style="margin-top: 20px" id="student_eval_table">
                                         <thead>
                                             <tr>
-                                                <th>Acad Year</th>
-                                                <th>Sem</th>
+                                                <th>Academic Year</th>
+                                                <th>Semester</th>
                                                 <th>Rating</th>
                                                 <th>Interpretation</th>
                                             </tr>
                                         </thead>
-
                                          <tbody>
-                                            <tr>
-                                                <td>2017-2018</td>
-                                                <td>2nd</td>
-                                                <td>94.4%</td>
-                                                <td>Very Satisfactory</td>
-                                            </tr>
+                                         
                                         </tbody>
                                     </table>
-
-                                </div>
-                        
-                        
-                    </div>
-                   
+                        </div> 
+                    </div>     
             </div>
             <br>
             
@@ -556,6 +546,24 @@
                 dataTable.column(4).visible(false);
             }
 
+            function loadsummary(id)
+            {
+                $('#student_eval_table').show();
+                $('#student_eval_table').dataTable().fnClearTable();
+                $('#student_eval_table').dataTable().fnDraw();
+                $('#student_eval_table').dataTable().fnDestroy();
+                $('#student_eval_table').dataTable({
+                    "processing" : true,
+                    "serverSide" : false,
+                    "order" : [],
+                    "ajax" : {
+                        url:"<?php echo base_url('Maintenance/get_stud_eval')?>",
+                        data:{faculty_id:id},
+                        type:"POST"
+                    }
+                });
+            }
+
             var x = 1;
         
             $('#add_field').click(function()
@@ -584,6 +592,7 @@
             $(document).on('click', '#create_faculty', function(e)
             {
                 openCity(event, 'Personal_Info');
+                $('#btn_stud_eval').hide();
                 $('#fact-profile').show();
                 $('#faculty_btn_add').show();
                 $('#add_account').prop("disabled",false);
@@ -637,6 +646,7 @@
             $(document).on('click', '#view_data', function(e)
             {
                 openCity(event, 'Personal_Info');
+                $('#btn_stud_eval').show();
                 $('#fact-profile').show();
                 $('#faculty_btn_add').hide();
                 $('#faculty_btn_update').hide();
@@ -693,6 +703,7 @@
                          $('#fact_zip_res').val(data[0][11]);
                          $('#fact_address').val(data[0][12]);
                          $('#fact_zip_address').val(data[0][13]);
+                         loadsummary(id);
                     },
                          error: function (data) {
                         alert(JSON.stringify(data));
@@ -819,6 +830,7 @@
                 $(document).on('click', '#edit_data', function(e)
                 {  
                     openCity(event, 'Personal_Info');
+                    $('#btn_stud_eval').hide();
                     $('#fact_id').prop("disabled",false);
                     $('#fact_type').prop("disabled",false);
                     $('#fact_dept').prop("disabled",false);

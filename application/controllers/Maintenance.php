@@ -157,6 +157,20 @@ class Maintenance extends CI_Controller {
 		}
 	}
 
+	public function get_stud_eval()
+	{
+		$output = $this->getdata_model->eval_summary($_POST);
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
 	public function subjects()
 	{
 		$data['spec'] = $this->getdata_model->specialization();

@@ -72,6 +72,7 @@
                   <button class="tablinks" onclick="openCity(event, 'Personal_Info')" id="defaultOpen">Personal Info</button>
                   <button class="tablinks" onclick="openCity(event, 'Educ_bg')">Educational Background</button>
                   <button class="tablinks" onclick="openCity(event, 'Course_spec')">Course Specialization</button>
+                  <button class="tablinks" onclick="openCity(event, 'Stud_eval')">Student Evaluation</button>
                 </div>
 
                 <!-- Tab content -->
@@ -299,7 +300,7 @@
 
                 <div id="Course_spec" class="tabcontent">
                     <div class="row">
-                        <br><br>
+                        <br>
                         <div class="col-md-2" style="padding-top: 30px;">
                             <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
                         </div>
@@ -343,7 +344,43 @@
                     </div>
                    
             </div>
-            <br>
+
+            <div id="Stud_eval" class="tabcontent">
+                    <div class="row">
+                        <br><br>
+                        <div class="col-md-2" style="padding-top: 30px;">
+                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                        </div>
+                        <div class="col-md-12">
+                            <h3>Student Evaluation Ratings</h3>
+                        </div>
+                        <div class="table-responsive">
+                                    <table class="table colored-table inverse-table table-striped" style="margin-top: 20px">
+                                        <thead>
+                                            <tr>
+                                                <th>Acad Year</th>
+                                                <th>Sem</th>
+                                                <th>Rating</th>
+                                                <th>Interpretation</th>
+                                            </tr>
+                                        </thead>
+
+                                         <tbody>
+                                            <tr>
+                                                <td>2017-2018</td>
+                                                <td>2nd</td>
+                                                <td>94.4%</td>
+                                                <td>Very Satisfactory</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                        
+                        
+                    </div>
+                   
+            </div>
             
         
 

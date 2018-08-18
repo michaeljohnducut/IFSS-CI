@@ -72,12 +72,20 @@
                                 <label style="margin-top: 40px" class="control-label">Available Sections:</label>
                                 <select class="form-control select2" style="height: 40px;">
                                     <option value="0">-Sections-</option>
-                                    <option>BSIT 1 - 2&nbsp;&nbsp;&nbsp;(4/9)</option>
+                                    <option>BSIT 1 - 2</option>
                                 </select>
                             </div>
                             <div class="col-md-7">
+                                <div class="col-md-4">
+                                    <br>
+                                    <label  class="control-label">Filter by faculty type:</label>
+                                    <select class="form-control select2" style="height: 40px;">
+                                    <option value="0">-Faculty Type-</option>
+                                    <option>BSIT 1 - 2</option>
+                                </select>
+                                </div>
                                 <div class="table-responsive">
-                                <table class="table colored-table inverse-table table-striped" style="margin-top: 40px">
+                                <table class="table colored-table inverse-table table-striped" style="margin-top: 20px">
                                     <thead>
                                         <tr>
                                             <th>Faculty Name</th>
@@ -137,7 +145,7 @@
 
             <div class="col-sm-12">
                 <div class="white-box">
-                        <h2>DITO KO ILALAGAY YUNG PAG AASSIGN NG SECTIONS. WAG NYO ALISIN</h2>
+                        <h2>DITO KO ILALAGAY YUNG NAKA-ASSIGN NA SUBJECTS KADA SECTION. WAG NYO ALISIN</h2>
 
                 </div>
             </div>

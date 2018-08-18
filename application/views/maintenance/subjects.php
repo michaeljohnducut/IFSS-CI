@@ -1,11 +1,11 @@
 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                         <h4 class="page-title">Manage Subject</h4>
+                         <h4 class="page-title">Manage Subjects</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <ol class="breadcrumb">
                             <li><a href="#">Maintenance</a></li>
-                            <li class="active">Subject</li>
+                            <li class="active">Subjects</li>
                         </ol>
                     </div>
                 
@@ -34,6 +34,7 @@
                                         <tr>
                                             <th>Course Code</th>
                                             <th>Course Title</th>
+                                            <th>Specialization</th>
                                             <th>Credits</th>
                                             <th>Lec Hours</th>
                                             <th>Lab Hours</th>
@@ -62,13 +63,20 @@
                                         </div>
                                         <div class="modal-body">
                                             <form id="add_subj_form" method="POST" enctype="multipart/form-data">
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-4">
                                                     <label class="control-label">Course Code:</label>
                                                     <input class="form-control" type="text" name="subj_code" id="subj_code" maxlength="10" required>
                                                 </div>
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-4">
                                                         <label class="control-label">Course Title:</label>
                                                         <input class="form-control" type="text" name="subj_desc" id="subj_desc" pattern="[a-zA-Z0-9\s-,'.\/]{2,}" title="Characters only." required>
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                        <label class="control-label">Specialization:</label>
+                                                        <select class="form-control" name="spec" id="spec">
+                                                        <option value="" disabled selected>--SELECT--</option>
+                                                        <?php foreach($spec as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
+                                                        </select>
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Credits:</label>
@@ -99,7 +107,7 @@
                                                 </div> -->
                                             
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm1()">Clear</button>
+                                                <button type="button" class="btn btn-default" id="clear_btn_add">Clear</button>
                                                 <button type="submit" name="btnAddSubj" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                             </form>
@@ -122,13 +130,20 @@
                                         </div>
                                         <div class="modal-body">
                                             <form id="edit_subj_form" method="POST" enctype="multipart/form-data">
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-4">
                                                     <label class="control-label">Course Code:</label>
                                                     <input class="form-control" type="text" name="edit_subj_code" id="edit_subj_code" maxlength="10" required>
                                                 </div>
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-4">
                                                         <label class="control-label">Course Title:</label>
                                                         <input class="form-control" type="text" name="edit_subj_desc" id="edit_subj_desc" pattern="[a-zA-Z0-9,-\s'.\/]{2,}" title="Characters only." required>
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                        <label class="control-label">Specialization:</label>
+                                                        <select class="form-control" name="edit_spec" id="edit_spec">
+                                                        <option value="" disabled selected>--SELECT--</option>
+                                                        <?php foreach($spec as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
+                                                        </select>
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Credits:</label>
@@ -160,7 +175,7 @@
                                                 </div> -->
                                                 <input type="hidden" name="subj_id_hid" id="subj_id_hid" />
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" onclick="resetForm2()">Clear</button>
+                                                <button type="button" class="btn btn-default" id="clear_btn_edit">Clear</button>
                                                 <button type="submit" name="btnSaveSubj" class="btn btn-success waves-effect text-left">Save</button>
                                             </div>
                                         </form>
@@ -201,18 +216,6 @@
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        function resetForm1()
-    {
-        $('#add_subj_form')[0].reset();
-        $('#prereq').select2().val('').trigger('change');
-
-    }
-
-    function resetForm2()
-    {
-        $('#edit_subj_form')[0].reset();
-        $('#edit_prereq').select2().val('').trigger('change');
-    }
 
     function loadtable()
         {
@@ -319,6 +322,7 @@
                      $('#edit_units').val(data[0][3]);
                      $('#edit_lec_hrs').val(data[0][5]);
                      $('#edit_lab_hrs').val(data[0][4]);
+                     $('#edit_spec').val(data[0][8]);
                      // $("input[name=edit_major][value="+data[0][7]+"]").prop('checked', true);
                      $('#showMod').trigger('click');   
                 },
@@ -416,6 +420,16 @@
                        alert('An error occured. Please reload the page and try again.');
                     }
                 }); 
+        });
+
+        $(document).on('click', '#clear_btn_add', function(e)
+        {  
+            $('#add_subj_form')[0].reset();
+        });
+
+        $(document).on('click', '#clear_btn_edit', function(e)
+        {  
+            $('#edit_subj_form')[0].reset();
         });
 
     });

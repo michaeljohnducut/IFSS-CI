@@ -242,7 +242,7 @@
                                                 <td width="600px">
                                                     <select class="form-control select2" id="edit_subj" name="edit_subj[]">
                                                     <option>--SUBJECT--</option>
-                                                    <?php foreach($subjects as $r) echo '<option value="'.$r[6].'">'.$r[0].' - '.$r[1].'</option>';?>
+                                                    <?php foreach($subjects as $r) echo '<option value="'.$r[7].'">'.$r[0].' - '.$r[1].'</option>';?>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -364,7 +364,7 @@
 
            
            $('#dynamic_field_update').append('<tr id="row_update'+i+'" class="dynamic-added-update">'+
-                '<td width = "600px"><select class="form-control select2'+i+'" name="edit_subj[]"><option>--SUBJECT--</option>'+ '<?php foreach($subjects as $r) echo '<option value="'.$r[6].'">'.$r[0].' - '.$r[1].'</option>';?>' +'</select></td>'+
+                '<td width = "600px"><select class="form-control select2'+i+'" name="edit_subj[]"><option>--SUBJECT--</option>'+ '<?php foreach($subjects as $r) echo '<option value="'.$r[7].'">'.$r[0].' - '.$r[1].'</option>';?>' +'</select></td>'+
                 '<td><button type="button"  id="update'+i+'" class="btn btn-danger remove_update">x</button></td>'+
                 '</tr>');  
 

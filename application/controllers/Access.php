@@ -26,7 +26,17 @@ class Access extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('login');
+		if($this->session->userdata('USERID'))
+		{
+			if($this->session->userdata('USERTYPE'))
+				redirect(base_url('Maintenance'));
+			else
+				$this->load->view('login');
+		}
+		else
+		{
+			$this->load->view('login');
+		}
 	}
 
 	public function validatecredentials()

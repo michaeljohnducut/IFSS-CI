@@ -1,11 +1,11 @@
 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                         <h4 class="page-title">Manage Subject Prerequisite</h4>
+                         <h4 class="page-title">Manage Subject Prerequisites</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <ol class="breadcrumb">
                             <li><a href="#">Maintenance</a></li>
-                            <li class="active">Subject Prerequisite</li>
+                            <li class="active">Subject Prerequisites</li>
                         </ol>
                     </div>
                 
@@ -16,7 +16,7 @@
                     <div class="col-sm-12">                            
                             <div class="row">
                                 <div class="col-md-10">
-                                    <h2>All Subjects Prerequisite</h2>
+                                    <h2>All Subject Prerequisites</h2>
                                 </div>
                             </div>
                             <h3 class="box-title m-b-0">Legend:</h3>
@@ -64,7 +64,7 @@
                                                     <label class="control-label">Subject:</label>
                                                     <select class="form-control" id="subject" name="subject" required>
                                                     <option value="" disabled selected>--SELECT SUBJECT--</option>
-                                                    <?php foreach($subjects as $r) echo '<option value="'.$r[6].'">'.$r[0].' - '.$r[1].'</option>';?>
+                                                    <?php foreach($subjects as $r) echo '<option value="'.$r[7].'">'.$r[0].' - '.$r[1].'</option>';?>
                                                     </select>                         
                                                 </div>
                                                 
@@ -103,7 +103,7 @@
                                                     <label class="control-label">Subject:</label>
                                                     <select class="form-control" id="edit_subject" name="edit_subject" disabled>
                                                     <option value="" disabled selected>--SELECT SUBJECT--</option>
-                                                    <?php foreach($subjects as $r) echo '<option value="'.$r[6].'">'.$r[0].' - '.$r[1].'</option>';?>
+                                                    <?php foreach($subjects as $r) echo '<option value="'.$r[7].'">'.$r[0].' - '.$r[1].'</option>';?>
                                                     </select>                         
                                                 </div>
                                             

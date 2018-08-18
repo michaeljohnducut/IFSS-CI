@@ -13,7 +13,7 @@
             <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box">
-                            <h2 class="box-title m-b-0">List of Accounts</h2>
+                            <h2 class="box-title m-b-0">List of Faculty Members</h2>
                             <br>    
                             <h3 class="box-title m-b-0">Legend:</h3>
                             <div class="row" style="margin-left: 20px; margin-top: 5px;">

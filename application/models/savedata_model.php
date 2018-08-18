@@ -631,6 +631,15 @@ class savedata_model extends CI_Model
         $lab_hrs = $this->security->xss_clean($this->input->post('lab_hrs'));
         // $major = $this->security->xss_clean($this->input->post('major'));
 
+        if(isset($_POST['spec']))
+        {
+            $spec = $this->security->xss_clean($this->input->post('spec'));
+        }
+        else
+        {
+        	$spec = NULL;
+        }
+
 		$query = $this->db->group_start()
 								->where('subj_code', $subj_code)
 								->where('subj_desc', $subj_desc)
@@ -652,6 +661,7 @@ class savedata_model extends CI_Model
 					'units' => $units,
 					'lab_hrs' => $lab_hrs,
 					'lec_hrs' => $lec_hrs,
+					'specialization' => $spec,
 					'isMajor' => 1
 					);
 
@@ -684,12 +694,22 @@ class savedata_model extends CI_Model
         $lab_hrs = $this->security->xss_clean($this->input->post('edit_lab_hrs'));
         // $major = $this->security->xss_clean($this->input->post('edit_major'));
 
+        if(isset($_POST['edit_spec']))
+        {
+            $spec = $this->security->xss_clean($this->input->post('edit_spec'));
+        }
+        else
+        {
+        	$spec = NULL;
+        }
+
         $query = $this->db->group_start()
 								->where('subj_code', $subj_code)
 								->where('subj_desc', $subj_desc)
 								->where('units', $units)
 								->where('lab_hrs', $lab_hrs)
 								->where('lec_hrs', $lec_hrs)
+								->where('specialization', $spec)
 								->where('isMajor', 1)
 							->group_end()
 							->get('subject');
@@ -705,6 +725,7 @@ class savedata_model extends CI_Model
 					'units' => $units,
 					'lab_hrs' => $lab_hrs,
 					'lec_hrs' => $lec_hrs,
+					'specialization' => $spec,
 					'isMajor' => 1
 					);
 

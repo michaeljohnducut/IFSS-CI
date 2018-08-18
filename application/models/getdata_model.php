@@ -247,8 +247,8 @@ class getdata_model extends CI_Model{
 	{
 		$result = array();
 
-		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs')
-
+		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, spec.spec_desc')
+		        ->join('specialization spec', 's.specialization = spec.spec_id', 'left')
                 ->get('subject s');
 
 
@@ -259,6 +259,7 @@ class getdata_model extends CI_Model{
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
+					$r->spec_desc,
 					$r->units,
 					$r->lec_hrs,
 					$r->lab_hrs,
@@ -276,7 +277,7 @@ class getdata_model extends CI_Model{
 
 		$subj_code = $this->security->xss_clean($this->input->post('subj_code'));
 
-		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, GROUP_CONCAT(pr.pre_req_desc) AS pre_requisite, s.isMajor')
+		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, GROUP_CONCAT(pr.pre_req_desc) AS pre_requisite, s.isMajor, s.specialization')
 				->join('pre_requisite pr','s.subj_id = pr.subj_code', 'left')
                 ->group_by('s.subj_code')
                 ->having('s.subj_id', $subj_code)
@@ -292,7 +293,8 @@ class getdata_model extends CI_Model{
 					$r->lab_hrs,
 					$r->lec_hrs,
 					$r->pre_requisite,
-					$r->isMajor
+					$r->isMajor,
+					$r->specialization
 					);
 		}
 

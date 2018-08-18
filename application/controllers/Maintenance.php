@@ -159,7 +159,7 @@ class Maintenance extends CI_Controller {
 
 	public function subjects()
 	{
-		// $data['subjects'] = $this->getdata_model->subject();
+		$data['spec'] = $this->getdata_model->specialization();
 
 		$data['title'] = "IFSS | Manage Subject";
 		$this->load->view('templates/header', $data);

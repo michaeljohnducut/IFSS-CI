@@ -161,8 +161,8 @@
                     <li><a href="javascript:;" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Maintenance &nbsp;  <span class="ti-angle-down"></span> <span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level two-li">
                             <li><a href="<?php echo base_url();?>Maintenance/subjects">Subjects</a></li>
-                            <li><a href="<?php echo base_url();?>Maintenance/prerequisites">Subject Prerequisite</a></li>
-                            <li><a href="<?php echo base_url();?>Maintenance/departments">Department</a></li>
+                            <li><a href="<?php echo base_url();?>Maintenance/prerequisites">Subject Prerequisites</a></li>
+                            <li><a href="<?php echo base_url();?>Maintenance/departments">Departments</a></li>
                             <li><a href="<?php echo base_url();?>Maintenance/courses">Courses</a></li>
                             <li><a href="<?php echo base_url();?>Maintenance/faculty_types">Faculty Types</a></li>
                             <li><a href="<?php echo base_url();?>Maintenance/load_limits">Faculty Load Limits</a></li>
@@ -171,7 +171,7 @@
                             <li><a href="<?php echo base_url();?>Maintenance/curriculum">Curriculum Management</a></li>
                             <li><a href="<?php echo base_url();?>Maintenance/faculty">Faculty Members</a></li>
                             <li><a href="<?php echo base_url();?>Maintenance/section">Section Management</a></li>
-                            <li><a href="<?php echo base_url();?>Maintenance/room_labs">Rooms and Labs</a></li>
+                            <li><a href="<?php echo base_url();?>Maintenance/room_labs">Rooms and Laboratories</a></li>
                         </ul>
                     </li>
                     <li><a href="javascript:;" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Transactions &nbsp;  <span class="ti-angle-down"></span><span class="fa arrow"></span></span></a>

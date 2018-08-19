@@ -338,7 +338,7 @@
                 dataType: "json",
                 success:function(data){
                      $('#curr_year_use').val(data);
-                     // alert(data);
+                     $('#curr_year_use').trigger('change');
                 },
                      error: function (data) {
                     alert(JSON.stringify(data));

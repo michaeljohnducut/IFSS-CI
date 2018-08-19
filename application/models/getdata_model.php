@@ -1104,7 +1104,188 @@ class getdata_model extends CI_Model{
 		}
 		return $result;
 	}
+
+	public function get_subject_per_sem()
+	{
+		$result = array();
+
+		$sem = $this->security->xss_clean($this->input->post('temp_sem'));
+
+		$query = $this->db->select('CONCAT(s.subj_code, " - ", s.subj_desc) AS subject_code, s.subj_id')
+				->join('curriculum c', 's.subj_id = c.subj_code')
+				->join('curriculum_year cy', 'c.curriculum_yr = cy.curr_year_id')
+				->group_start()
+                	->where('c.sem', $sem)
+                	->where('cy.is_used = 1')
+                ->group_end()
+                ->get('subject s');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->subject_code,
+					$r->subj_id,
+					);
+		}
+
+		return $result;
+	}
 	
+	public function view_subject_details($id)
+	{
+		$result = array();
+
+		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
+
+		$query = $this->db->select('cy.curr_year_desc, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, s.subj_id')
+				->join('curriculum c', 's.subj_id = c.subj_code')
+				->join('curriculum_year cy', 'c.curriculum_yr = cy.curr_year_id')
+				->group_start()
+                	->where('s.subj_id', $subject)
+                	->where('cy.is_used = 1')
+                ->group_end()
+                ->get('subject s');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->subj_id,
+					$r->curr_year_desc,
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units,
+					$r->lab_hrs,
+					$r->lec_hrs,
+					);
+		}
+
+		return $result;
+	}
+
+	public function view_subject_sections($id)
+	{
+		$result = array();
+		$year_lvl = '';
+		$course = '';
+		$statement = "";
+
+		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
+
+		if(!empty($_POST['temp_acadyr']))
+		{
+			$acad_yr = $this->security->xss_clean($this->input->post('temp_acadyr'));
+			$statement .= " AND s.acad_yr = '$acad_yr'";
+		}
+
+		$query = $this->db->select('year_lvl, course')
+				->where('subj_code', $subject)
+                ->get('curriculum');
+
+		foreach($query->result() as $r)
+		{		
+			$year_lvl = $r->year_lvl;
+			$course = $r->course;
+		}
+
+		$query2 = $this->db->query("SELECT CONCAT(c.course_code, ' ', SUBSTR(s.year_lvl, 1, 1), '-', s.section_desc) AS section, s.section_id
+								FROM section s JOIN course c
+								ON s.course = c.course_id
+							WHERE s.year_lvl = '$year_lvl' AND s.course = $course $statement");
+
+        foreach ($query2->result() as $r) 
+		{
+			$result[] = array(
+					$r->section,
+					$r->section_id
+					);
+		}
+
+		return $result;
+	}
+
+	public function view_subject_faculty($id)
+	{
+		$result = array();
+		$spec = '';
+		$statement = "";
+		$statement2 = "";
+
+		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
+		$type = $this->security->xss_clean($this->input->post('temp_type'));
+
+		if($type != 0)
+		{	
+			$statement2 .= " AND ft.fac_type_id = '$type'";
+		}
+		else
+		{
+			$statement2 .= " ";
+		}
+
+		$query = $this->db->select('specialization')
+				->where('subj_id', $subject)
+                ->get('subject');
+
+		foreach($query->result() as $r)
+		{		
+			$spec = $r->specialization;
+		}
+
+		$query2 = $this->db->query("SELECT f.faculty_id, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) AS fac_name, ft.fac_type_desc
+									FROM faculty f JOIN faculty_type ft
+									ON f.faculty_type = ft.fac_type_id
+									JOIN faculty_spec fs
+									ON f.faculty_id = fs.faculty_id
+									WHERE fs.spec_id = '$spec' $statement2");
+
+        foreach ($query2->result() as $r) 
+		{
+			$trackRating = "SATISFACTORY";
+			$ctr = 0;
+
+			$query3 = $this->db->select('acad_yr, sem, faculty_id, rating, rating_desc')
+					->where('faculty_id', $r->faculty_id)
+					->order_by('acad_yr DESC, sem DESC')
+	                ->get('evaluation');
+
+			foreach($query3->result() as $s)
+			{
+				if($s->rating_desc == $trackRating)
+				{
+				  $ctr++;
+				}
+				else
+				{
+				  $ctr = 0;
+				}
+
+				if($ctr >= 3)
+				{
+					$statement = 'CONSECUTIVE';
+				}
+				else
+				{
+					$statement = 'NONE';
+				}	
+			}
+
+			($statement == 'CONSECUTIVE')?$consec = 'WITH CONSECUTIVE SATISFACTORY RATING':$consec = 'WITHOUT CONSECUTIVE SATISFACTORY RATING';
+
+			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success">Assign</button>';
+
+			$result[] = array(
+					$r->fac_name,
+					$r->fac_type_desc,
+					$consec,
+					$btn
+					);
+		}
+
+		return $result;
+	}
+
+
+
 // ==========================================================================
 // -----------------------------NEW UPDATE (7-11-18)------------------------
 // ==========================================================================

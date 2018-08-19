@@ -149,7 +149,7 @@
 				<form class="login-form validate-form" id="login_form">
 					<div class="wrap-input validate-input m-b-26" data-validate="Username is required">
 						<span class="label-input">Faculty ID</span>
-						<input class="input" type="number" id ="username" name="username" placeholder="Enter Faculty ID">
+						<input class="input" type="number" id ="username" name="username" placeholder="Enter Faculty ID" autocomplete="on">
 						<span class="focus-input" autocomplete ="off"></span>
 					</div>
 

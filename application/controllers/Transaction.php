@@ -69,10 +69,53 @@ class Transaction extends CI_Controller
 
 	public function load_subjects()
 	{
+		$data['faculty_type'] = $this->getdata_model->faculty_type();
+		
 		$data['title'] = "IFSS | Load Subjects";
 		$this->load->view('templates/header', $data);
 		$this->load->view('transaction/load_subjects');
 		$this->load->view('templates/footer');
+	}
+
+	public function get_subjects_per_sem()
+	{
+		if(isset($_POST['temp_sem']))
+		{
+		   echo json_encode($this->getdata_model->get_subject_per_sem($_POST));
+		}
+	}
+
+	public function view_subjects_details()
+	{
+		if(isset($_POST['temp_subject']))
+		{
+			echo json_encode($this->getdata_model->view_subject_details($_POST));
+			exit();
+		}
+	}
+
+	public function view_subjects_sections()
+	{
+		if(isset($_POST['temp_subject']))
+		{
+			echo json_encode($this->getdata_model->view_subject_sections($_POST));
+			exit();
+		}
+	}
+
+	public function view_subjects_faculty()
+	{
+		$output = $this->getdata_model->view_subject_faculty($_POST);
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+
+		echo json_encode($response);
+		exit();
 	}
 
 	public function student_import()

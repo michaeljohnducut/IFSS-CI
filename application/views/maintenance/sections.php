@@ -239,7 +239,7 @@
                     "serverSide" : false,
                     "deferLoading": 10,
                     "bPaginate": true,
-                    "aaSorting": [[1,'asc']],
+                    "aaSorting": [[0,'desc']],
                     "sAjaxSource": "<?php echo base_url()?>Maintenance/get_sectiontbl/"+val,
                     "fnInitComplete": function(){
                         
@@ -260,7 +260,7 @@
               "sAjaxSource": "<?php echo base_url('Maintenance/get_sections')?>",
               "deferLoading": 10,
               "bPaginate": true,
-              "aaSorting": [[0,'asc']],
+              "aaSorting": [[0,'desc']],
               "fnInitComplete": function(){
                         
               }

@@ -96,11 +96,8 @@ class Transaction extends CI_Controller
 
 	public function view_subjects_sections()
 	{
-		if(isset($_POST['temp_subject']))
-		{
-			echo json_encode($this->getdata_model->view_subject_sections($_POST));
-			exit();
-		}
+		echo json_encode($this->getdata_model->view_subject_sections($_POST));
+		exit();
 	}
 
 	public function view_subjects_faculty()

@@ -1111,7 +1111,7 @@ class getdata_model extends CI_Model{
 
 		$sem = $this->security->xss_clean($this->input->post('temp_sem'));
 
-		$query = $this->db->select('CONCAT(s.subj_code, " - ", s.subj_desc) AS subject_code, s.subj_id')
+		$query = $this->db->select('DISTINCT CONCAT(s.subj_code, " - ", s.subj_desc) AS subject_code, s.subj_id')
 				->join('curriculum c', 's.subj_id = c.subj_code')
 				->join('curriculum_year cy', 'c.curriculum_yr = cy.curr_year_id')
 				->group_start()
@@ -1176,28 +1176,34 @@ class getdata_model extends CI_Model{
 			$acad_yr = $this->security->xss_clean($this->input->post('temp_acadyr'));
 			$statement .= " AND s.acad_yr = '$acad_yr'";
 		}
+		else
+		{
+			$statement .= " ";
+		}
 
-		$query = $this->db->select('year_lvl, course')
-				->where('subj_code', $subject)
-                ->get('curriculum');
+		$query = $this->db->select('c.year_lvl, c.course')
+				->distinct('c.year_lvl, c.course')
+				->join('subject s', 'c.subj_code = s.subj_id')
+				->where('s.subj_id', $subject)
+                ->get('curriculum c');
 
 		foreach($query->result() as $r)
 		{		
 			$year_lvl = $r->year_lvl;
 			$course = $r->course;
-		}
 
-		$query2 = $this->db->query("SELECT CONCAT(c.course_code, ' ', SUBSTR(s.year_lvl, 1, 1), '-', s.section_desc) AS section, s.section_id
+			$query2 = $this->db->query("SELECT CONCAT(c.course_code, ' ', SUBSTR(s.year_lvl, 1, 1), '-', s.section_desc) AS section, s.section_id
 								FROM section s JOIN course c
 								ON s.course = c.course_id
 							WHERE s.year_lvl = '$year_lvl' AND s.course = $course $statement");
 
-        foreach ($query2->result() as $r) 
-		{
-			$result[] = array(
-					$r->section,
-					$r->section_id
-					);
+	        foreach ($query2->result() as $r) 
+			{
+				$result[] = array(
+						$r->section,
+						$r->section_id
+						);
+			}
 		}
 
 		return $result;

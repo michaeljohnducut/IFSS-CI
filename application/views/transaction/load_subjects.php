@@ -154,67 +154,44 @@
         {
             $("#select_section").prop("disabled", true);
 
-            $('#select_acadyr').on('click', function()
+            $('#select_acadyr').on('change', function()
             {
                 $("#select_section").prop("disabled", false);
 
-               //  var subject = $('#select_subject').val();
-               //  var acad_yr = $('#select_acadyr').val();
+                var subject = $('#select_subject').val();
+                var acad_yr = $('#select_acadyr').val();
 
-               //  $.ajax({
-               //  method:"POST",
-               //  url:"<?php //echo base_url('Transaction/view_subjects_sections')?>",
-               //  dataType: "json",
-               //  data:{temp_subject:subject, temp_acadyr:acad_yr},
-               //  success:function(data)
-               //  {   
-               //      $('#select_section').empty();
-               //      $('#select_section').append('<option value="0" disabled selected>-Sections-</option>');
-               //      var len = data.length;
-               //      for (var i=0; i<len; i++)
-               //      {
-               //        var temp_val = data[i][1];
-               //        var temp_text = data[i][0];
-               //        $('#select_section').append($('<option>',{
-               //           value: temp_val,
-               //           text: temp_text
-               //       }));
-               //      }
-               //  }
-               // });
+                if(subject)
+                {
+                    $.ajax({
+                    method:"POST",
+                    url:"<?php echo base_url('Transaction/view_subjects_sections')?>",
+                    dataType: "json",
+                    data:{temp_subject:subject, temp_acadyr:acad_yr},
+                    success:function(data)
+                    {   
+                        $('#select_section').empty();
+                        $('#select_section').append('<option value="0" disabled selected>-Sections-</option>');
+                        var len = data.length;
+                        for (var i=0; i<len; i++)
+                        {
+                          var temp_val = data[i][1];
+                          var temp_text = data[i][0];
+                          $('#select_section').append($('<option>',{
+                             value: temp_val,
+                             text: temp_text
+                         }));
+                        }
+                    }
+                   });
+                }
+
             });
-
-            // $('#select_acadyr').on('change', function()
-            // {
-            //     var subject = $('#select_subject').val();
-            //     var acad_yr = $('#select_acadyr').val();
-
-            //     $.ajax({
-            //     method:"POST",
-            //     url:"<?php //echo base_url('Transaction/view_subjects_sections')?>",
-            //     dataType: "json",
-            //     data:{temp_subject:subject, temp_acadyr:acad_yr},
-            //     success:function(data)
-            //     {   
-            //         $('#select_section').empty();
-            //         $('#select_section').append('<option value="0" disabled selected>-Sections-</option>');
-            //         var len = data.length;
-            //         for (var i=0; i<len; i++)
-            //         {
-            //           var temp_val = data[i][1];
-            //           var temp_text = data[i][0];
-            //           $('#select_section').append($('<option>',{
-            //              value: temp_val,
-            //              text: temp_text
-            //          }));
-            //         }
-            //     }
-            //    });
-            // });
 
             $('#select_sem').on('change', function()
             {
                 var sem = $('#select_sem').val();
+
                 $.ajax({
                 method:"POST",
                 url:"<?php echo base_url('Transaction/get_subjects_per_sem')?>",
@@ -289,7 +266,10 @@
                 var select_type = $('#select_faculty_type').val();
                 var subject = $('#select_subject').val();
 
-                loadfaculty(subject, select_type);
+                if(subject)
+                {
+                    loadfaculty(subject, select_type);
+                }
             });
 
         });

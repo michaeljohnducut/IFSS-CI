@@ -70,7 +70,7 @@ class Transaction extends CI_Controller
 	public function load_subjects()
 	{
 		$data['faculty_type'] = $this->getdata_model->faculty_type();
-		
+		$data['courses'] = $this->getdata_model->course();
 		$data['title'] = "IFSS | Load Subjects";
 		$this->load->view('templates/header', $data);
 		$this->load->view('transaction/load_subjects');
@@ -465,7 +465,51 @@ class Transaction extends CI_Controller
 			exit();
 	}
 
+	public function get_faculty_specs(){
 
+		echo json_encode($this->getdata_model->get_faculty_specs($_POST));
+			exit();
+	}
+
+	public function add_subj_match()
+	{
+		echo ($this->savedata_model->add_subj_match($_POST));
+		exit();
+	}
+
+	public function view_facload_tbl(){
+		
+		$output = $this->getdata_model->view_facload_tbl();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
+	public function get_all_sections(){
+
+		echo json_encode($this->getdata_model->get_all_sections($_POST));
+			exit();
+	}
+
+	public function get_section_load_tbl(){
+		
+		$output = $this->getdata_model->get_section_load_tbl();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
 
 } 
 

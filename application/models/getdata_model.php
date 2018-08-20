@@ -1136,6 +1136,7 @@ class getdata_model extends CI_Model{
 		$result = array();
 
 		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
+		$btn = 
 
 		$query = $this->db->select('cy.curr_year_desc, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, s.subj_id')
 				->join('curriculum c', 's.subj_id = c.subj_code')
@@ -1170,6 +1171,7 @@ class getdata_model extends CI_Model{
 		$statement = "";
 
 		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
 
 		if(!empty($_POST['temp_acadyr']))
 		{
@@ -1195,7 +1197,12 @@ class getdata_model extends CI_Model{
 			$query2 = $this->db->query("SELECT CONCAT(c.course_code, ' ', SUBSTR(s.year_lvl, 1, 1), '-', s.section_desc) AS section, s.section_id
 								FROM section s JOIN course c
 								ON s.course = c.course_id
-							WHERE s.year_lvl = '$year_lvl' AND s.course = $course $statement");
+							WHERE s.year_lvl = '$year_lvl' AND s.course = $course $statement
+							AND s.section_id NOT IN (SELECT sm.section
+							FROM subject_match sm
+							WHERE sm.acad_yr = '$acad_yr' 
+							AND sm.sem =  '$sem'
+							AND sm.subj_id = $subject)");
 
 	        foreach ($query2->result() as $r) 
 			{
@@ -1277,7 +1284,7 @@ class getdata_model extends CI_Model{
 
 			($statement == 'CONSECUTIVE')?$consec = 'WITH CONSECUTIVE SATISFACTORY RATING':$consec = 'WITHOUT CONSECUTIVE SATISFACTORY RATING';
 
-			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success">Assign</button>';
+			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
 
 			$result[] = array(
 					$r->fac_name,
@@ -1646,6 +1653,127 @@ class getdata_model extends CI_Model{
 
 		return $result;	
 
+	}
+
+	public function get_faculty_specs(){
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("a.account_id, CONCAT(f.lname, ', ', f.fname, ' ',  f.mname) AS 'fac_name', ft.fac_type_desc, GROUP_CONCAT(DISTINCT(s.spec_desc) SEPARATOR '<br>') AS 'spec', SUM(sb.units) as 'units'")
+				->where('f.faculty_id', $fac_id)
+				->where('sm.acad_yr', $acad_yr)
+				->where('sm.sem', $sem)
+				->join('faculty f', 'a.faculty_id = f.faculty_id')
+				->join('faculty_type ft', 'f.faculty_type = ft.fac_type_id')
+				->join('faculty_spec fs', 'fs.faculty_id = f.faculty_id')
+				->join('specialization s ', 's.spec_id = fs.spec_id')
+				->join('subject_match sm', 'on f.faculty_id = sm.faculty_id')
+				->join('subject sb ', 'sb.subj_id = sm.subj_id')
+                ->get('account a');
+
+
+         foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->account_id, 
+					$r->fac_name, 
+					$r->fac_type_desc, 
+					$r->spec, 
+					$r->units
+					);
+		}
+
+		return $result;	
+
+	}
+
+	public function view_facload_tbl(){
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("CONCAT(c.course_code, ' ',  LEFT(s.year_lvl, 1), ' - ', s.section_desc) AS 'section', sb.subj_code, sb.subj_desc, sm.subj_match_id")
+				->where('sm.faculty_id', $fac_id)
+				->where('sm.acad_yr', $acad_yr)
+				->where('sm.sem', $sem)
+				->join('section s','s.section_id = sm.section')
+				->join('subject sb  ','sb.subj_id = sm.subj_id')
+				->join('course c  ','c.course_id = s.course')
+                ->get(' subject_match sm');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-info" id="view_data" data-id="'.$r->subj_match_id.'"><span class="fa fa-pencil"></span></button>';
+
+			$result[] = array(
+					$r->section,
+					$r->subj_code,
+					$r->subj_desc, 
+					$btn
+					);
+		}
+
+		return $result;	
+
+	}
+
+	public function get_all_sections(){
+
+		$course_id = $this->security->xss_clean($this->input->post('course_id'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$result = array();
+		$query = $this->db->select("s.section_id, CONCAT(LEFT(s.year_lvl, 1), '-', s.section_desc) as 'section'")
+				->where('s.course ', $course_id)
+				->where('s.acad_yr', $acad_yr)
+				->order_by('s.year_lvl', 'asc')
+                ->get(' section s');
+
+        foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->section_id,
+					$r->section
+					);
+		}
+
+		return $result;	
+	}
+
+	public function get_section_load_tbl(){
+
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$result = array();
+		$query = $this->db->select("s.subj_code, s.subj_desc, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname', s.units, s.lab_hrs, s.lec_hrs, sm.subj_match_id")
+				->where('sm.section ', $section_id)
+				->where('sm.acad_yr', $acad_yr)
+				->where('sm.sem', $sem)
+				->join('subject_match sm', 's.subj_id = sm.subj_id')
+				->join('faculty f', 'f.faculty_id = sm.faculty_id')
+                ->get('subject s');
+
+        foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->subj_match_id.'"><span class="fa fa-pencil"></span></button>';
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->facname,
+					$r->units,
+					$r->lab_hrs,
+					$r->lec_hrs, 
+					$btn
+					);
+		}
+
+		return $result;	
 	}
 
 

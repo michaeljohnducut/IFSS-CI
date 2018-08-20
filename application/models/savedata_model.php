@@ -1944,5 +1944,27 @@ class savedata_model extends CI_Model
 		return $output;
 
 	}
+
+	public function add_subj_match(){
+
+		$output = "";
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$subj_id = $this->security->xss_clean($this->input->post('subj_id'));
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		if($this->db->query("INSERT INTO `subject_match`(`acad_yr`, `sem`, `subj_id`, `section`, `faculty_id`) VALUES ('$acad_yr','$sem', $subj_id, $section_id, $fac_id)"))
+			{
+				$output = 'INSERTED';
+			}
+			else
+			{
+				$output = 'NOT INSERTED';
+			}
+			
+		return $output;
+
+	}
 }
 ?>

@@ -107,7 +107,7 @@
                                     <!-- /.modal-content -->
                                 </div>
                                 <!-- /.modal-dialog -->
-                            </div>
+    </div>
 
     <div class="modal fade bs-example-modal-lg" id="modalEditCourse" tabindex="-1" role="dialog" aria-labelledby="modalEditCourse" aria-hidden="true" style="display: none;">
                                 <div class="modal-dialog modal-lg">

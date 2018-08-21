@@ -1762,8 +1762,6 @@ class savedata_model extends CI_Model
 		return $output;
 	}
 
-
-
 	// ==================================================================
 	// -------------------------UPDATED 7-11 ----------------------------
 	// ==================================================================
@@ -1964,7 +1962,25 @@ class savedata_model extends CI_Model
 			}
 			
 		return $output;
+	}
 
+	public function delete_match_data()
+	{
+		$output = '';
+
+		$id = $this->security->xss_clean($this->input->post('match_id'));
+
+		if($this->db->where('subj_match_id', $id)
+					->delete('subject_match'))
+		{
+			$output = 'DELETED';
+		}
+		else
+		{
+			$output = 'NOT DELETED';
+		}
+
+		return $output;
 	}
 }
 ?>

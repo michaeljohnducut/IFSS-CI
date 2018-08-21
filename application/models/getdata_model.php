@@ -1661,30 +1661,48 @@ class getdata_model extends CI_Model{
 		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
+		$account_id = '';
+		$fac_name = '';
+		$fac_type = '';
+		$spec = '';
+		$unit = '';
 
-		$query = $this->db->select("a.account_id, CONCAT(f.lname, ', ', f.fname, ' ',  f.mname) AS 'fac_name', ft.fac_type_desc, GROUP_CONCAT(DISTINCT(s.spec_desc) SEPARATOR '<br>') AS 'spec', SUM(sb.units) as 'units'")
+		$query = $this->db->select("a.account_id, CONCAT(f.lname, ', ', f.fname, ' ',  f.mname) AS 'fac_name', ft.fac_type_desc, GROUP_CONCAT(DISTINCT(s.spec_desc) SEPARATOR '<br>') AS 'spec'")
 				->where('f.faculty_id', $fac_id)
-				->where('sm.acad_yr', $acad_yr)
-				->where('sm.sem', $sem)
-				->join('faculty f', 'a.faculty_id = f.faculty_id')
+				->join('account a', 'f.faculty_id = a.faculty_id')
 				->join('faculty_type ft', 'f.faculty_type = ft.fac_type_id')
 				->join('faculty_spec fs', 'fs.faculty_id = f.faculty_id')
 				->join('specialization s ', 's.spec_id = fs.spec_id')
-				->join('subject_match sm', 'on f.faculty_id = sm.faculty_id')
-				->join('subject sb ', 'sb.subj_id = sm.subj_id')
-                ->get('account a');
+                ->get('faculty f');
 
-
-         foreach ($query->result() as $r) 
+        foreach ($query->result() as $r) 
 		{
-			$result[] = array(
-					$r->account_id, 
-					$r->fac_name, 
-					$r->fac_type_desc, 
-					$r->spec, 
-					$r->units
-					);
+			$account_id = $r->account_id;
+			$fac_name = $r->fac_name;
+			$fac_type = $r->fac_type_desc;
+			$spec = $r->spec;
 		}
+
+		$query2 = $this->db->select("SUM(sb.units) as 'units'")
+							->join('subject_match sm', 'f.faculty_id = sm.faculty_id')
+							->join('subject sb ', 'sb.subj_id = sm.subj_id')
+							->where('f.faculty_id', $fac_id)
+							->where('sm.acad_yr', $acad_yr)
+							->where('sm.sem', $sem)
+							->get('faculty f');
+
+		foreach ($query2->result() as $s) 
+		{
+			($s->units == '')?$unit = 0:$unit = $s->units;
+		}
+
+		$result[] = array(
+					$account_id,
+					$fac_name,
+					$fac_type,
+					$spec,
+					$unit	
+					);
 
 		return $result;	
 
@@ -1704,12 +1722,12 @@ class getdata_model extends CI_Model{
 				->join('section s','s.section_id = sm.section')
 				->join('subject sb  ','sb.subj_id = sm.subj_id')
 				->join('course c  ','c.course_id = s.course')
-                ->get(' subject_match sm');
+                ->get('subject_match sm');
                 // ->order_by('ta.day', 'asc');
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-danger" id="view_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-danger" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
 
 			$result[] = array(
 					$r->section,
@@ -1751,7 +1769,7 @@ class getdata_model extends CI_Model{
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
 		$result = array();
-		$query = $this->db->select("s.subj_code, s.subj_desc, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname', s.units, s.lab_hrs, s.lec_hrs, sm.subj_match_id")
+		$query = $this->db->select("s.subj_code, s.subj_desc, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname', s.units, s.lab_hrs, s.lec_hrs, sm.subj_match_id")
 				->where('sm.section ', $section_id)
 				->where('sm.acad_yr', $acad_yr)
 				->where('sm.sem', $sem)
@@ -1761,7 +1779,7 @@ class getdata_model extends CI_Model{
 
         foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-danger" id="edit_sec_subj" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-danger" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,

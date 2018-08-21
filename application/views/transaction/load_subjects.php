@@ -44,42 +44,42 @@
                                 </select>
                                 <br><br><br>
                             </div>
-                        </div> 
-                        </div> 
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="white-box" id="div_1">
+                            <div class="col-md-3">
                                 <br>
                                 <label class="control-label">Select subject:</label>
-                                <select class="form-control select2" id="select_subject" style="height: 40px;">
+                                <select class="form-control select2" id="select_subject" >
                                     <option value="0" disabled selected>-Subjects-</option>
                                 </select>
-                                <div class="col-md-12">
-                                <div class="col-md-5" style="padding-left: 20px;">
-                                    <h4>CURRICULUM on USE:</h4>
-                                    <h4>SUBJECT CODE:</h4>
-                                    <h4>UNITS:</h4>
-                                    <h4>LECTURE HOURS:</h4>
-                                    <h4>LABORATORY HOURS:</h4>
-                                </div>
-                                <div class="col-md-7">
-                                    <h4 id="label_curr_use"></h4>
-                                    <h4 id="label_subj_code"></h4>
-                                    <h4 id="label_units"></h4>
-                                    <h4 id="label_lec_hrs"></h4>
-                                    <h4 id="label_lab_hrs"></h4>
-                                </div>
-                                </div>
-                                <!-- <div class="col-md-12"> -->
-                                    <label style="margin-top: 40px" class="control-label">Available Sections:</label>
-                                    <select class="form-control select2" id="select_section" style="height: 40px;">
+                            </div>
+                            <div class="col-md-3">
+                                <br>
+                                <label class="control-label">Available Sections:</label>
+                                    <select class="form-control select2" id="select_section">
                                         <option value="0" disabled selected>-Sections-</option>
                                     </select>
-                                <!-- </div> -->
-                                </div>
                             </div>
-                            <div class="col-md-7" >
+                            <div class="col-md-3">
+                                <p><b>CURRICULUM on USE:</b><p id="label_curr_use"></p></p>
+                            </div>
+                            <div class="col-md-3">
+                                <p><b>SUBJECT CODE:</b><p id="label_subj_code"></p></p>
+                            </div>
+                            <div class="col-md-2">
+                                <p><b>UNITS:</b><p id="label_units"></p></p>
+                            </div>
+                            <div class="col-md-2">
+                                <p><b>LECTURE HOURS:</b><p id="label_lec_hrs"></p></p>
+                            </div>
+                            <div class="col-md-2">
+                                <p><b>LAB HOURS:</b><p id="label_lab_hrs"></p></p>
+                            </div>
+                        </div> 
+                        </div>
+                            <div class="col-md-12" >
                                 <div class="white-box" id="div_2">
+                                <div class="col-md-12">
+                                    <h3>List of available faculty</h3>
+                                </div>
                                     
                                 <div class="col-md-4">
                                     <br>

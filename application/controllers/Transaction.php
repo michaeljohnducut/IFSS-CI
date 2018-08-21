@@ -534,6 +534,13 @@ class Transaction extends CI_Controller
 
 	}
 
+	public function get_faculty_type(){
+
+		echo json_encode($this->getdata_model->get_faculty_type($_POST));
+			exit();
+
+	}
+
 } 
 
 ?>

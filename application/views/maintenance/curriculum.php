@@ -236,7 +236,6 @@
                         <br>
                         
                             <table class="table colored-table inverse-tabl table-striped" id="dynamic_field_update">
-                                        
                                         <tbody>
                                             <tr>
                                                 <td width="600px">

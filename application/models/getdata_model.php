@@ -1502,6 +1502,7 @@ class getdata_model extends CI_Model{
 					OR ta.time_start = "'.$start_time.'"
 					AND ta.time_finish = "'.$end.'"
 					AND ta.day = "'.$day.'")', NULL, FALSE)
+				->where('r.room_desc = "Lecture Room"', NULL, FALSE)
 				->order_by('room_code', 'asc')
                 ->get('room r');
 
@@ -1818,6 +1819,25 @@ class getdata_model extends CI_Model{
 		}
 
 		return $result;
+	}
+
+	public function get_faculty_type(){
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$result = array();
+		$query = $this->db->select("ft.fac_type_id")
+				->where('f.faculty_id', $fac_id)
+				->join('faculty f ', 'f.faculty_type = ft.fac_type_id')
+                ->get('faculty_type ft');
+
+         foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->fac_type_id
+					);
+		}
+
+		return $result;
+
 	}
 
 

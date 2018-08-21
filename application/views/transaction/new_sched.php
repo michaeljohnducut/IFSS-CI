@@ -446,6 +446,7 @@
                 <th width="200px">Time</th>
                 <th>Day/s</th>
                 <th>Room</th>
+                <th>Action</th>
             </tr>
         </thead>
 
@@ -515,26 +516,36 @@
                           <label style="margin-top: 15px;" for="chk_split">Split hours</label>
                         </div>
                       </div>
+                      <form id="add_sched_form" method="POST">
+                        <!-- <input type="hidden" name="f_acadyear" id="f_acadyear">
+                        <input type="hidden" name="f_sem" id="f_sem">
+                        <input type="hidden" name="f_load_id" id="f_load_id">
+                        <input type="hidden" name="f_load_type" id="f_load_type"> -->
                       <div class="col-md-12" id="sched_a">
                         <div class="col-md-3">
                           <label class="control-label">Start time:</label>
-                          <select class="form-control select2">
-                            
-                          </select>
+                          <input type="time" id="starttime_a" name="start_time[]" class="form-control">
                         </div>
                         <div class="col-md-3">
                           <label class="control-label">End time:</label>
-                          <input type="text" id="endtime_a" class="form-control" readonly="">
+                          <input type="time" id="endtime_a" name="end_time[]" readonly="" class="form-control">
                         </div>
                         <div class="col-md-3">
                           <label class="control-label">Day:</label>
-                          <select class="form-control select2">
-                            
+                          <select class="form-control select2" id="day_a" name="day[]">
+                            <option value="0">-Day-</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
                           </select>
                       </div>
                       <div class="col-md-3">
-                          <label class="control-label">Room:</label>
-                          <select class="form-control select2">
+                          <label class="control-label">Lecture Room:</label>
+                          <select class="form-control select2" id="rooms_a" name="rooms[]">
                             
                           </select>
                           <br>
@@ -545,26 +556,66 @@
                         <div class="col-md-3">
                           <br>
                           <label class="control-label">Start time:</label>
-                          <select class="form-control select2">
-                            
-                          </select>
+                          <input type="time" id="starttime_b" name="start_time[]" class="form-control">
                         </div>
                         <div class="col-md-3">
                           <br>
                           <label class="control-label">End time:</label>
-                          <input type="text" id="endtime_b" class="form-control" readonly="">
+                          <input type="time" id="endtime_b" name="end_time[]" readonly="" class="form-control">
                         </div>
                         <div class="col-md-3">
                           <br>
                           <label class="control-label">Day:</label>
-                          <select class="form-control select2">
-                            
+                          <select class="form-control select2" id="day_b" name="day[]">
+                            <option value="0">-Day-</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
                           </select>
                       </div>
                       <div class="col-md-3">
                         <br>
-                          <label class="control-label">Room:</label>
-                          <select class="form-control select2">
+                          <label class="control-label">Lecture Room:</label>
+                          <select class="form-control select2" id="rooms_b"  name="rooms[]">
+                            
+                          </select>
+                          <br>
+                        </div>
+                        
+                      </div>
+                      <div class="col-md-12" id="sched_lab">
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">Start time (Lab):</label>
+                          <input type="time" id="sched_lab_start" name="start_time[]" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">End time (Lab):</label>
+                          <input type="time" id="endtime_lab" name="end_time[]" readonly="" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">Day:</label>
+                          <select class="form-control select2" id="day_lab" name="day[]">
+                            <option value="0">-Day-</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                          </select>
+                      </div>
+                      <div class="col-md-3">
+                        <br>
+                          <label class="control-label">Lab Room:</label>
+                          <select class="form-control select2" name="rooms[]">
                             
                           </select>
                           <br>
@@ -572,8 +623,9 @@
                         
                       </div>
                     <div class="modal-footer">
-                            <button type="button" class="btn btn-success waves-effect text-left" id="btnStartGenerate">Save</button>
+                            <button type="submit" class="btn btn-success waves-effect text-left">Save</button>
                     </div>
+                  </form>
                 </div>
                 <!-- /.modal-content -->
             </div>
@@ -595,6 +647,8 @@
     <!-- PARTICLE SWARM OPTIMIZATION -->
     <script src="<?php echo base_url(); ?>assets/pso-js/src/pso.js"></script>
     <script type="text/javascript">
+
+      var global_factype;
 
       //FUNCTIONS
       function getFacultyLoads(){
@@ -621,28 +675,122 @@
                    });
       }
 
-      //SELECT2
-      $(".select2").select2();
-      $('.selectpicker').selectpicker();
+      function showAvailRoom(day, start_time, end, dropdown_id){
 
-      $(document).ready(function(){
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_rooms')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
 
-        $('#sched_b').hide();
+                     var len = data.length;
+                     $('#'+ dropdown_id).empty();
+                     $('#'+ dropdown_id).append('<option value = "0">-Room-</option>');
+                     for(var i = 0 ; i < len ; i++){
+                        $('#'+ dropdown_id).append('<option value = "' + data[i][0]+ '">' + data[i][1] + '</option>');
+                     }
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
 
-        $('#sched_faculty').on('change', function(){
-            getFacultyLoads();
-        });
+      function getFacultyType(){
+        var fac_id =  $('#sched_faculty').val();
+        $.ajax({
+                method:"POST",
+                url:"<?php echo base_url('Transaction/get_faculty_type')?>",
+                dataType: "json",
+                data:{fac_id:fac_id},
+                success:function(data)
+                {   
+                   global_factype = data;
+                }, 
+                async:false
 
-        $('#sched_acad_year').on('change', function(){
-            getFacultyLoads();
-        });
+               });
+      }
 
-        $('#sched_sem').on('change', function(){
-            getFacultyLoads();
-        });
+      function getUnitsUsed(){
 
-        $('#sched_load').on('change', function(){
-            var load_id = $('#sched_load').val();
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_units_used')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    
+                    if (data[0][1] == null){
+
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('Total Units Used: ');
+                        $('#RLoad_id').append('Regular Load: ');
+                        $('#PTLoad_id').append('Part-time Load: ');
+                        $('#TSLoad_id').append('Temporary Substitution: ');
+                        $('#hid_units_used').val(data[0][1]);
+                    }
+                    else{
+
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#units_used').append('Total Units Used: ' + data[0][1]);
+                        $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+                        $('#hid_units_used').val(data[0][1]);
+
+                        if(data[0][3] == null){
+                            $('#PTLoad_id').empty();
+                            $('#TSLoad_id').empty();
+                            $('#PTLoad_id').append('Part-time Load: ');
+                            $('#TSLoad_id').append('Temporary Substitution: ');
+                        }
+                        else if(data[0][4] == null){
+                            $('#TSLoad_id').empty();
+                            $('#PTLoad_id').empty();
+                            $('#PTLoad_id').append('Part-time Load: ') + data[0][3];
+                            $('#TSLoad_id').append('Temporary Substitution: ');
+                        }
+
+                        else{
+                            $('#units_used').empty();
+                            $('#RLoad_id').empty();
+                            $('#PTLoad_id').empty();
+                            $('#TSLoad_id').empty();
+                            $('#units_used').append('Total Units Used: ' + data[0][1]);
+                            $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+                            $('#PTLoad_id').append('Part-time Load: ' + data[0][3]);
+                            $('#TSLoad_id').append('Temporary Substitution: ' + data[0][4]);
+                            $('#hid_units_used').val(data[0][1]);
+                        }
+                    }
+                    
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+      function showTeachAssignModal(){
+        var load_id = $('#sched_load').val();
+        // var temp_acadyr = $('#sched_acad_year').val();
+        // var temp_sem = $('#sched_sem').val();
+        // var temp_load_type = 'R';
+        // $('#f_load_id').val(load_id);
+        // $('#f_acadyear').val(temp_acadyr);
+        // $('#f_sem').val(temp_sem);
+        // $('#f_load_type').val(temp_load_type);
             $.ajax({
                     method:"POST",
                     url:"<?php echo base_url('Transaction/get_subj_details')?>",
@@ -664,16 +812,128 @@
                       $('#lbl_labhrs').append(data[0][5]);
                       var temp = data[0][5];
                       if(temp == 3){
-                        $('#sched_b').show();
+                        $('#sched_lab').show();
                         $('#divsplit').hide();
                       }
                       else{
                         $('#sched_b').hide();
+                        $('#sched_lab').hide();
+                        $('#divsplit').show();
                       }
                       $('#openMod').trigger('click');
                     }
 
                    });
+      }
+
+      //SELECT2
+      $(".select2").select2();
+      $('.selectpicker').selectpicker();
+
+      $(document).ready(function(){
+
+        $('#sched_b').hide();
+        $('#divsplit').hide();
+        $('#sched_lab').hide();
+
+        $('#starttime_a').on('blur',function(){
+          var temp_start = $('#starttime_a').val();
+          var added_value = '';
+          var adder;
+          var end_value;
+          if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+            var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+            var temp_start_mins = temp_start[3] + temp_start[4];
+            if($('#chk_split').prop("checked")){
+              if(temp_start_mins == '30'){
+                adder = 2;
+                temp_start_mins = '00';
+              }
+              else{
+                adder = 1;
+                temp_start_mins = '30';
+              }
+            }
+            else{
+              adder = 3;
+            }
+
+            temp_start_hour += adder;
+            if (temp_start_hour < 10){
+              end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+            }
+            else{
+              end_value = temp_start_hour + ':' + temp_start_mins;
+            }
+
+            $('#endtime_a').val(end_value);
+          }
+
+          else{
+            alert('Time is not valid since the faculty is a Designee');
+            $('#starttime_a').val('');
+            $('#endtime_a').val('');
+          }
+        });
+
+        $('#starttime_b').on('blur',function(){
+          var temp_start = $('#starttime_b').val();
+          var added_value = '';
+          var adder;
+          var end_value;
+          if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+            var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+            var temp_start_mins = temp_start[3] + temp_start[4];
+
+              if(temp_start_mins == '30'){
+                adder = 2;
+                temp_start_mins = '00';
+              }
+              else{
+                adder = 1;
+                temp_start_mins = '30';
+              }
+
+            temp_start_hour += adder;
+            if (temp_start_hour < 10){
+              end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+            }
+            else{
+              end_value = temp_start_hour + ':' + temp_start_mins;
+            }
+
+            $('#endtime_b').val(end_value);
+          }
+
+          else{
+            alert('Time is not valid since the faculty is a Designee');
+            $('#starttime_b').val('');
+            $('#endtime_b').val('');
+          }
+        });
+
+        $('#sched_faculty').on('change', function(){
+            getFacultyLoads();
+            getUnitsUsed();
+            getFacultyType();
+        });
+
+        $('#sched_acad_year').on('change', function(){
+            getFacultyLoads();
+            getUnitsUsed();
+        });
+
+        $('#sched_sem').on('change', function(){
+            getFacultyLoads();
+            getUnitsUsed();
+        });
+
+        $('#sched_load').on('change', function(){
+          showTeachAssignModal();
+        });
+
+        $('#sched_load').on('click', function(){
+          showTeachAssignModal();
         });
 
         $('#chk_split').on('change', function(){
@@ -685,9 +945,45 @@
             }
         });
 
+        $('#day_a').on('change', function(){
+            var day = $('#day_a').val();
+            var start = $('#starttime_a').val();
+            var end = $('#endtime_a').val();
+            showAvailRoom(day, start, end,'rooms_a');
+        });
 
+        $('#day_b').on('change', function(){
+            var day = $('#day_b').val();
+            var start = $('#starttime_b').val();
+            var end = $('#endtime_b').val();
+            showAvailRoom(day, start, end,'rooms_b');
+        });
+
+        $('#add_sched_form').on('submit', function(event){
+          event.preventDefault();
+            var acad_yr = $('#sched_acad_year').val();
+            var sem = $('#sched_sem').val();
+            var load_id = $('#sched_load').val();
+            var $form = $('form');
+            var data = {
+              'acad_yr': acad_yr, 
+              'sem': sem, 
+              'load_id': load_id, 
+              'load_type': 'R'
+            };
+           $.ajax({  
+            url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+            type:"POST",  
+            data: $('#add_sched_form').serialize() + '&' + $.param(data), 
+            success:function(data)
+            {  
+                alert(data);
+            },
+             error: function (data) {
+                    alert(JSON.stringify(data));
+            }
+            });  
+        });
       });
-
-      
 
     </script>

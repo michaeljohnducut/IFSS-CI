@@ -1733,7 +1733,8 @@ class getdata_model extends CI_Model{
 					$r->section,
 					$r->subj_code,
 					$r->subj_desc, 
-					$btn
+					$btn, 
+					$r->subj_match_id
 					);
 		}
 
@@ -1792,6 +1793,31 @@ class getdata_model extends CI_Model{
 		}
 
 		return $result;	
+	}
+
+	public function get_subj_details(){
+		$load_id = $this->security->xss_clean($this->input->post('load_id'));
+		$result = array();
+		$query = $this->db->select("s.subj_code, s.subj_desc,  CONCAT(c.course_code, ' ', LEFT(se.year_lvl, 1) , ' - ', se.section_desc) as 'section', s.units, s.lec_hrs, s.lab_hrs")
+				->where('sm.subj_match_id ', $load_id)
+				->join('subject s ', 'sm.subj_id = s.subj_id')
+				->join('section se ', 'sm.section = se.section_id')
+				->join('course c', 'c.course_id = se.course')
+                ->get('subject_match sm ');
+
+         foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->section,
+					$r->units,
+					$r->lec_hrs,
+					$r->lab_hrs
+					);
+		}
+
+		return $result;
 	}
 
 

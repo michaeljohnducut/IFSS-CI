@@ -22,7 +22,7 @@
                                 <h2>Plotting Form</h2>
                             </div>
                             <div class="col-md-3">
-                                <button style="margin-top: 10px; margin-left: 90px;" type="button" class="btn btn-success" id="btnOpenGenerate" data-toggle = "modal" data-target ="#modalGenerateStart">AUTO GENERATE SCHEDULE</button>
+                                <!-- <button style="margin-top: 10px; margin-left: 90px;" type="button" class="btn btn-success" id="btnOpenGenerate" data-toggle = "modal" data-target ="#modalAddTime">AUTO GENERATE SCHEDULE</button> -->
                             </div>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-md-5">
                                 <label class="control-label">Teaching Loads:</label>
-                                <select class="form-control select2" id="sched_subj">
+                                <select class="form-control select2" id="sched_load">
                                     <option>-Loads-</option>
                                 </select>    
                             </div>
@@ -460,51 +460,119 @@
             
                     </div>
                 </div>
+<a data-toggle="modal" href="#modalAddTime" id="openMod"></a>
 
-<div class="modal fade bs-example-modal-lg" id="modalGenerateStart" tabindex="-1" role="dialog" aria-labelledby="modalGenerateStart" aria-hidden="true" style=" display: none;">
+<div class="modal fade bs-example-modal-lg" id="modalAddTime" tabindex="-1" role="dialog" aria-labelledby="modalAddTime" aria-hidden="true" style=" display: none;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Confirm Auto-Generation</h4>
+                        <h4 class="modal-title">Teaching load breakdown</h4>
                     </div>
                     <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
                     </div>
                     <div class="modal-body">
-                            <div class="form-group col-md-12">
-                                <h4>Generate schedule for:<span id="gen_fac_name"></span></h4>                              
-                            </div>
-                            <div class="form-group col-md-12">
-                                <h4>Load Limits:</h4>
-                                <div class="col-md-4">
-                                    <p>Regular Load:</p>
-                                </div>
-                                <div class="col-md-4">
-                                    <p>Part-Time Load Load:</p>
-                                </div>
-                                <div class="col-md-4">
-                                    <p>Temporary Substitution:</p>
-                                </div>
+                            <div class="col-md-12">
+                              <div class="form-group col-md-6">
+                                <h4><b>Subject Code:</b></h4><span id="lbl_subj_code"></span>
+                              </div>
+                              <div class="form-group col-md-6">
+                                  <h4><b>Subject Description:</b></h4><span id="lbl_subj_desc"></span>
+                              </div>
                             </div>
                             <div class="col-md-12">
-                                <h3>Assign maximum sections for each subjects</h3>
-                            </div>
-                            <div class="col-md-12" id="subject_to_section">
-                                <div class="col-md-6 form-control">
-                                    <h4>SUBJECT<h4>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="text" class="form-control">
-                                </div>
+                              <div class="form-group col-md-6">
+                                <h4><b>Assigned Section:</b></h4><span id="lbl_section"></span>
+                              </div>
+                              <div class="col-md-6">
+                                  <h4><b>Units:</b></h4><span id="lbl_units"></span>
+                              </div>
                             </div>
                             <div class="col-md-12">
+                              <div class="col-md-6">
+                                <h4><b>Lecture Hours:</b></h4><span id="lbl_lechrs"></span>
+                              </div>
+                              <div class="col-md-6">
+                                  <h4><b>Lab Hours:</b></h4><span id="lbl_labhrs"></span>
+                              </div>
+                            </div>
+                            <!-- <div class="col-md-12">
                                 <br>
                                 <p style="color: red">WARNING: Once the generation of schedule starts, all existing schedule of the faculty member for this selected semester and academic year will be changed. Click 'Start' to begin the process.</p>
-                            </div>
+                            </div> -->
                     </div>
+                    <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                    </div>
+                    <div class="modal-body">
+                      <div class="col-md-12">
+                        <div class="col-md-8">
+                          <h4>Assign day, time and room</h4>
+                        </div>
+                        <div class="col-md-4" id="divsplit" style="text-align:right;">
+                          <input style="margin-top: 15px;" type="checkbox" id="chk_split">
+                          <label style="margin-top: 15px;" for="chk_split">Split hours</label>
+                        </div>
+                      </div>
+                      <div class="col-md-12" id="sched_a">
+                        <div class="col-md-3">
+                          <label class="control-label">Start time:</label>
+                          <select class="form-control select2">
+                            
+                          </select>
+                        </div>
+                        <div class="col-md-3">
+                          <label class="control-label">End time:</label>
+                          <input type="text" id="endtime_a" class="form-control" readonly="">
+                        </div>
+                        <div class="col-md-3">
+                          <label class="control-label">Day:</label>
+                          <select class="form-control select2">
+                            
+                          </select>
+                      </div>
+                      <div class="col-md-3">
+                          <label class="control-label">Room:</label>
+                          <select class="form-control select2">
+                            
+                          </select>
+                          <br>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12" id="sched_b">
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">Start time:</label>
+                          <select class="form-control select2">
+                            
+                          </select>
+                        </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">End time:</label>
+                          <input type="text" id="endtime_b" class="form-control" readonly="">
+                        </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">Day:</label>
+                          <select class="form-control select2">
+                            
+                          </select>
+                      </div>
+                      <div class="col-md-3">
+                        <br>
+                          <label class="control-label">Room:</label>
+                          <select class="form-control select2">
+                            
+                          </select>
+                          <br>
+                        </div>
+                        
+                      </div>
                     <div class="modal-footer">
-                            <button type="button" class="btn btn-success waves-effect text-left" id="btnStartGenerate">Start</button>
+                            <button type="button" class="btn btn-success waves-effect text-left" id="btnStartGenerate">Save</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -527,8 +595,98 @@
     <!-- PARTICLE SWARM OPTIMIZATION -->
     <script src="<?php echo base_url(); ?>assets/pso-js/src/pso.js"></script>
     <script type="text/javascript">
+
+      //FUNCTIONS
+      function getFacultyLoads(){
+        var fac_id =  $('#sched_faculty').val();
+            var acad_yr =  $('#sched_acad_year').val();
+            var sem =  $('#sched_sem').val();
+            $.ajax({
+                    method:"POST",
+                    url:"<?php echo base_url('Transaction/get_prof_load')?>",
+                    dataType: "json",
+                    data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {   
+                        $('#sched_load').empty();
+                        $('#sched_load').append('<option value="0" disabled selected>-Loads-</option>');
+                        var len = data.length;
+                        for(var i = 0; i < len ; i++){
+                          var val = data[i][4];
+                          var text = '(' + data[i][0] + ') &nbsp;' + data[i][1] + ' - ' + data[i][2];
+                          $('#sched_load').append('<option value="'+val+'">'+text+'</option>');
+                        }
+                    }
+
+                   });
+      }
+
+      //SELECT2
       $(".select2").select2();
       $('.selectpicker').selectpicker();
+
+      $(document).ready(function(){
+
+        $('#sched_b').hide();
+
+        $('#sched_faculty').on('change', function(){
+            getFacultyLoads();
+        });
+
+        $('#sched_acad_year').on('change', function(){
+            getFacultyLoads();
+        });
+
+        $('#sched_sem').on('change', function(){
+            getFacultyLoads();
+        });
+
+        $('#sched_load').on('change', function(){
+            var load_id = $('#sched_load').val();
+            $.ajax({
+                    method:"POST",
+                    url:"<?php echo base_url('Transaction/get_subj_details')?>",
+                    dataType: "json",
+                    data:{load_id:load_id},
+                    success:function(data)
+                    {   
+                      $('#lbl_subj_code').empty();
+                      $('#lbl_subj_desc').empty();
+                      $('#lbl_section').empty();
+                      $('#lbl_units').empty();
+                      $('#lbl_lechrs').empty();
+                      $('#lbl_labhrs').empty();
+                      $('#lbl_subj_code').append(data[0][0]);
+                      $('#lbl_subj_desc').append(data[0][1]);
+                      $('#lbl_section').append(data[0][2]);
+                      $('#lbl_units').append(data[0][3]);
+                      $('#lbl_lechrs').append(data[0][4]);
+                      $('#lbl_labhrs').append(data[0][5]);
+                      var temp = data[0][5];
+                      if(temp == 3){
+                        $('#sched_b').show();
+                        $('#divsplit').hide();
+                      }
+                      else{
+                        $('#sched_b').hide();
+                      }
+                      $('#openMod').trigger('click');
+                    }
+
+                   });
+        });
+
+        $('#chk_split').on('change', function(){
+            if($(this).prop("checked")){
+              $('#sched_b').show();
+            }
+            else{
+              $('#sched_b').hide();
+            }
+        });
+
+
+      });
 
       
 

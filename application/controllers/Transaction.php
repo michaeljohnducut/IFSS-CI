@@ -520,6 +520,20 @@ class Transaction extends CI_Controller
 		}
 	}
 
+	public function get_prof_load(){
+
+		echo json_encode($this->getdata_model->view_facload_tbl($_POST));
+			exit();
+
+	}
+
+	public function get_subj_details(){
+
+		echo json_encode($this->getdata_model->get_subj_details($_POST));
+			exit();
+
+	}
+
 } 
 
 ?>

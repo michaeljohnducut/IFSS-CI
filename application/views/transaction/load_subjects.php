@@ -145,8 +145,8 @@
                                             <th>Subject Description</th>
                                             <th>Professor</th>
                                             <th>Units</th>
-                                            <th>Lecture Hours</th>
                                             <th>Lab Hours</th>
+                                            <th>Lecture Hours</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>

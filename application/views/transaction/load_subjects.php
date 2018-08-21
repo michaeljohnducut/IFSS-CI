@@ -45,16 +45,16 @@
                                 <br><br><br>
                             </div>
                         </div> 
-                        <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
-                        </div>
+                        </div> 
                         <div class="row">
                             <div class="col-md-5">
+                                <div class="white-box" id="div_1">
                                 <br>
                                 <label class="control-label">Select subject:</label>
                                 <select class="form-control select2" id="select_subject" style="height: 40px;">
                                     <option value="0" disabled selected>-Subjects-</option>
                                 </select>
+                                <div class="col-md-12">
                                 <div class="col-md-5" style="padding-left: 20px;">
                                     <h4>CURRICULUM on USE:</h4>
                                     <h4>SUBJECT CODE:</h4>
@@ -69,14 +69,18 @@
                                     <h4 id="label_lec_hrs"></h4>
                                     <h4 id="label_lab_hrs"></h4>
                                 </div>
-                                <div class="col-md-12">
+                                </div>
+                                <!-- <div class="col-md-12"> -->
                                     <label style="margin-top: 40px" class="control-label">Available Sections:</label>
                                     <select class="form-control select2" id="select_section" style="height: 40px;">
                                         <option value="0" disabled selected>-Sections-</option>
                                     </select>
+                                <!-- </div> -->
                                 </div>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-7" >
+                                <div class="white-box" id="div_2">
+                                    
                                 <div class="col-md-4">
                                     <br>
                                     <label  class="control-label">Filter by faculty type:</label>
@@ -103,12 +107,13 @@
                                 </table>
 
                             </div>
+                                </div>
                             </div>
                         </div>        
                
                     </div>
 
-            </div>
+            
 
             <div class="col-sm-12">
                 <div class="white-box">
@@ -165,10 +170,10 @@
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                             <h4 class="modal-title">Faculty Teaching Loads</h4>
                                         </div>
-                                        <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
-                                        </div>
                                         <div class="modal-body">
+                                            <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                                            </div>
                                             <div class="col-md-6">
                                                 <h4 id="lbl_fac_id"><b>FACULTY ID:</b>&nbsp;201504279MN0</h4>
                                             </div>
@@ -183,8 +188,13 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <h4 id="lbl_load"><b>Current Load Count:</b>&nbsp; </h4>
+                                                <br>
                                             </div>
+                                            <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                                        </div>
                                             <div class="table-responsive">
+                                                <br>
                                                 <table class="table colored-table inverse-table table-striped" style="margin-top: 10px" id="tbl_subj_assigned">
                                                     <thead>
                                                         <tr>
@@ -232,6 +242,17 @@
 
         $(".select2").select2();
         $('.selectpicker').selectpicker();
+
+        // function setDivHeight(){
+        //     var d2_height = $("#div_2").height();
+        //     var d1_height = $("#div_1").height();
+        //     if(d2_height < d1_height){
+        //         $("#div_2").height(d1_height);
+        //     }
+        //     else{
+        //         $("#div_1").height(d2_height);
+        //     }
+        // }
 
         function viewSubjectsSection(){
 
@@ -320,6 +341,8 @@
 
         $(document).ready(function()
         {
+            // setDivHeight();
+
             $("#select_section").prop("disabled", true);
             $('#select_acadyr').on('change', function()
             {
@@ -410,7 +433,9 @@
                });
 
                 viewSubjectsSection();
+                // setDivHeight();
                 loadfaculty(subject, type);
+                
             });
 
             $('#select_faculty_type').on('change', function()
@@ -501,6 +526,7 @@
                     swal("Success!", "Subject has been assigned", "success");
                     $('#select_section').val('');
                     viewSubjectsSection();
+                    loadSectionSubjects();
                    }
                    else{
                     swal("Error!", "Refresh the page and try again", "error");

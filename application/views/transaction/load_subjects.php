@@ -350,27 +350,30 @@
 
                 var subject = $('#select_subject').val();
                 var acad_yr = $('#select_acadyr').val();
+                var course_id = $('#select_course').val();
 
                 if(subject)
                 {
+                   viewSubjectsSection();
+                }
+
+                if(course_id)
+                {
                     $.ajax({
                     method:"POST",
-                    url:"<?php echo base_url('Transaction/view_subjects_sections')?>",
+                    url:"<?php echo base_url('Transaction/get_all_sections')?>",
                     dataType: "json",
-                    data:{temp_subject:subject, temp_acadyr:acad_yr},
+                    data:{course_id:course_id, acad_yr:acad_yr},
                     success:function(data)
                     {   
-                        $('#select_section').empty();
-                        $('#select_section').append('<option value="0" disabled selected>-Sections-</option>');
+                        $('#select_year_sec').empty();
+                        $('#select_year_sec').append('<option value="0" disabled selected>-Year-Section-</option>');
                         var len = data.length;
                         for (var i=0; i<len; i++)
                         {
-                          var temp_val = data[i][1];
-                          var temp_text = data[i][0];
-                          $('#select_section').append($('<option>',{
-                             value: temp_val,
-                             text: temp_text
-                         }));
+                          var temp_val = data[i][0];
+                          var temp_text = data[i][1];
+                          $('#select_year_sec').append('<option value="'+temp_val +'">'+temp_text+ '</option>');
                         }
                     }
                    });
@@ -479,10 +482,11 @@
             });
 
             //8-20 UPDATE
+            var fac_id_1;
 
             $(document).on('click', '#btn_prof_load', function(e){
                 e.preventDefault();
-                var fac_id = $(this).data("id");
+                fac_id_1 = $(this).data("id");
                 var acad_yr = $('#select_acadyr').val();
                 var sem = $('#select_sem').val();
 
@@ -490,7 +494,7 @@
                 method:"POST",
                 url:"<?php echo base_url('Transaction/get_faculty_specs')?>",
                 dataType: "json",
-                data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
+                data:{fac_id:fac_id_1, acad_yr:acad_yr, sem:sem},
                 success:function(data)
                 {    
                     $('#lbl_fac_id').empty();
@@ -503,36 +507,92 @@
                     $('#lbl_fac_type').append('<b>FACULTY TYPE:</b>&nbsp;' + data[0][2]);
                     $('#lbl_spec').append('<b>SPECIALIZATIONS:</b>&nbsp;' + data[0][3]);
                     $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data[0][4]);
-                    viewFacultyLoadTbl(fac_id);
+                    viewFacultyLoadTbl(fac_id_1);
                     $('#openMod').trigger('click');
                 }
                });
             });
 
-            $(document).on('click', '#btn_assign', function(e){
+            $(document).on('click', '#btn_assign', function(e)
+            {
                 e.preventDefault();
                 var fac_id = $(this).data("id");
                 var subj_id = $('#select_subject').val();
                 var section_id = $('#select_section').val();
                 var acad_yr = $('#select_acadyr').val();
                 var sem = $('#select_sem').val();
-                $.ajax({
-                method:"POST",
-                url:"<?php echo base_url('Transaction/add_subj_match')?>",
-                data:{fac_id:fac_id, subj_id:subj_id, section_id:section_id, acad_yr:acad_yr, sem:sem},
-                success:function(data)
-                {    
-                   if(data == 'INSERTED'){
-                    swal("Success!", "Subject has been assigned", "success");
-                    $('#select_section').val('');
-                    viewSubjectsSection();
-                    loadSectionSubjects();
-                   }
-                   else{
-                    swal("Error!", "Refresh the page and try again", "error");
-                   }
+
+                if(section_id)
+                {
+                    $.ajax({
+                    method:"POST",
+                    url:"<?php echo base_url('Transaction/add_subj_match')?>",
+                    data:{fac_id:fac_id, subj_id:subj_id, section_id:section_id, acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {    
+                       if(data == 'INSERTED'){
+                        swal("Success!", "Subject has been assigned", "success");
+                        $('#select_section').val('');
+                        viewSubjectsSection();
+                        loadSectionSubjects();
+                       }
+                       else{
+                        swal("Error!", "Refresh the page and try again", "error");
+                       }
+                    }
+                   });
                 }
-               });
+                else
+                {
+                    swal("Section is not selected!", "Select a section.", "error"); 
+                }
+
+                
+            });
+
+            $(document).on('click', '#delete_match_data', function(e)
+            {  
+               e.preventDefault();
+               var id = $(this).data("id");
+
+              swal({
+                        title: "Are you sure?",
+                        text: "You're about to unassign this faculty to this section", 
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+              })
+                .then((willApprove) => {
+                  if (willApprove) {
+                    $.ajax({   
+                      url: "<?php echo base_url('Transaction/delete_match_data')?>",
+                      method: "POST",
+                      data: 'match_id='+id,
+                      success: function(data) 
+                      {
+                        if(data == 'DELETED')
+                        {
+                            swal("Deleted!", "Faculty has been unassigned.", "success");
+                            viewFacultyLoadTbl(fac_id_1);
+                            viewSubjectsSection();
+                            loadSectionSubjects();
+                        }
+
+                        if(data == 'NOT DELETED')
+                        {
+                            swal("Not Deleted!", "Something blew up.", "error"); 
+                        }       
+                      },
+                      error: function (data) 
+                      {
+                        swal("Not Deleted!", "Something blew up.", "error");
+                        alert(JSON.stringify(data));
+                      }
+                    });
+                  } else {
+                    swal("Cancelled", "error");
+                  }
+                });
             });
 
         });

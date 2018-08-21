@@ -511,6 +511,15 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function delete_match_data()
+	{
+		if(isset($_POST['match_id']))
+		{
+			echo ($this->savedata_model->delete_match_data($_POST));
+			exit();
+		}
+	}
+
 } 
 
 ?>

@@ -81,7 +81,7 @@
                                     <h3>List of available faculty</h3>
                                 </div>
                                     
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <br>
                                     <label  class="control-label">Filter by faculty type:</label>
                                     <select class="form-control select2" id="select_faculty_type" style="height: 40px;">
@@ -117,7 +117,7 @@
 
             <div class="col-sm-12">
                 <div class="white-box">
-                        <h3>Subjects assigned to section:</h3>
+                        <h3>View subjects assigned to section:</h3>
                         <br>
                         <div class="row">
                             <div class="col-md-3">

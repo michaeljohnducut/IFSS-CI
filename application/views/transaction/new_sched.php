@@ -937,51 +937,6 @@
                         $('#TSLoad_id').append('<b>Temporary Substitution:</b> '+global_ts_load+ 'hrs');
                       }
                     }
-                    // if (data[0][1] == null){
-
-                    //     $('#units_used').empty();
-                    //     $('#RLoad_id').empty();
-                    //     $('#PTLoad_id').empty();
-                    //     $('#TSLoad_id').empty();
-                    //     $('#units_used').append('Total Units Used: ');
-                    //     $('#RLoad_id').append('Regular Load: ');
-                    //     $('#PTLoad_id').append('Part-time Load: ');
-                    //     $('#TSLoad_id').append('Temporary Substitution: ');
-                    //     $('#hid_units_used').val(data[0][1]);
-                    // }
-                    // else{
-
-                    //     $('#units_used').empty();
-                    //     $('#RLoad_id').empty();
-                    //     $('#units_used').append('Total Units Used: ' + data[0][1]);
-                    //     $('#RLoad_id').append('Regular Load: ' + data[0][2]);
-                    //     $('#hid_units_used').val(data[0][1]);
-
-                    //     if(data[0][3] == null){
-                    //         $('#PTLoad_id').empty();
-                    //         $('#TSLoad_id').empty();
-                    //         $('#PTLoad_id').append('Part-time Load: ');
-                    //         $('#TSLoad_id').append('Temporary Substitution: ');
-                    //     }
-                    //     else if(data[0][4] == null){
-                    //         $('#TSLoad_id').empty();
-                    //         $('#PTLoad_id').empty();
-                    //         $('#PTLoad_id').append('Part-time Load: ') + data[0][3];
-                    //         $('#TSLoad_id').append('Temporary Substitution: ');
-                    //     }
-
-                    //     else{
-                    //         $('#units_used').empty();
-                    //         $('#RLoad_id').empty();
-                    //         $('#PTLoad_id').empty();
-                    //         $('#TSLoad_id').empty();
-                    //         $('#units_used').append('Total Units Used: ' + data[0][1]);
-                    //         $('#RLoad_id').append('Regular Load: ' + data[0][2]);
-                    //         $('#PTLoad_id').append('Part-time Load: ' + data[0][3]);
-                    //         $('#TSLoad_id').append('Temporary Substitution: ' + data[0][4]);
-                    //         $('#hid_units_used').val(data[0][1]);
-                    //     }
-                    // }
                     
                 },
                 error: function (data) {

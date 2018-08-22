@@ -1567,54 +1567,68 @@ class getdata_model extends CI_Model{
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select("(SELECT SUM(DISTINCT s.lec_hrs +  s.lab_hrs)
-						FROM teaching_assign_sched ta
-							JOIN subject_match sm 
-						    ON sm.subj_match_id = ta.subj_match_id
-						   	JOIN subject s 
-						    ON s.subj_id = sm.subj_id
-						WHERE sm.faculty_id = ".$fac_id."
-						AND sm.acad_yr = '".$acad_year."'
-						AND sm.sem = '".$sem."') as 'total_hours', 
-
-						(SELECT SUM(DISTINCT s.lec_hrs +  s.lab_hrs)
-						FROM teaching_assign_sched ta
-							JOIN subject_match sm 
-						    ON sm.subj_match_id = ta.subj_match_id
-						   	JOIN subject s 
-						    ON s.subj_id = sm.subj_id
-						WHERE sm.faculty_id = ".$fac_id."
-						AND ta.load_type = 'R'
-						AND sm.acad_yr = '".$acad_year."' 
-						AND sm.sem = '".$sem."') as 'regular_load', 
-						(SELECT SUM(DISTINCT s.lec_hrs +  s.lab_hrs)
-						FROM teaching_assign_sched ta
-							JOIN subject_match sm 
-						    ON sm.subj_match_id = ta.subj_match_id
-						   	JOIN subject s 
-						    ON s.subj_id = sm.subj_id
-						WHERE sm.faculty_id = ".$fac_id."
-						AND ta.load_type = 'PT'
-						AND sm.acad_yr = '".$acad_year."' 
-						AND sm.sem = '".$sem."') as 'pt_load', 
-						(SELECT SUM(DISTINCT s.lec_hrs +  s.lab_hrs)
-						FROM teaching_assign_sched ta
-							JOIN subject_match sm 
-						    ON sm.subj_match_id = ta.subj_match_id
-						   	JOIN subject s 
-						    ON s.subj_id = sm.subj_id
-						WHERE sm.faculty_id = ".$fac_id."
-						AND ta.load_type = 'TS'
-						AND sm.acad_yr = '".$acad_year."' 
-						AND sm.sem = '".$sem."') as 'ts_load'")
-                ->get('teaching_assign_sched ta');
-
+		$query = $this->db->select("(SELECT SUM(s.lec_hrs + s.lab_hrs)
+FROM subject_match sm
+   	JOIN subject s 
+    ON s.subj_id = sm.subj_id
+    AND sm.subj_match_id IN (SELECT DISTINCT ta.subj_match_id
+    FROM teaching_assign_sched ta
+  	WHERE ta.subj_match_id IN(
+    SELECT sm.subj_match_id
+ 	FROM subject_match sm
+	WHERE sm.faculty_id = ".$fac_id."
+	AND sm.acad_yr = '".$acad_year."'
+	AND sm.sem = '".$sem."'))) as 'total_hours', 
+    
+    (SELECT SUM(s.lec_hrs + s.lab_hrs)
+FROM subject_match sm
+   	JOIN subject s 
+    ON s.subj_id = sm.subj_id
+    AND sm.subj_match_id IN (SELECT DISTINCT ta.subj_match_id
+    FROM teaching_assign_sched ta
+  	WHERE ta.subj_match_id IN(
+    SELECT sm.subj_match_id
+ 	FROM subject_match sm
+	WHERE sm.faculty_id = ".$fac_id."
+	AND sm.acad_yr = '".$acad_year."'
+	AND sm.sem = '".$sem."')
+    AND ta.load_type = 'R')) as 'reg_load',
+    
+    (SELECT SUM(s.lec_hrs + s.lab_hrs)
+FROM subject_match sm
+   	JOIN subject s 
+    ON s.subj_id = sm.subj_id
+    AND sm.subj_match_id IN (SELECT DISTINCT ta.subj_match_id
+    FROM teaching_assign_sched ta
+  	WHERE ta.subj_match_id IN(
+    SELECT sm.subj_match_id
+ 	FROM subject_match sm
+	WHERE sm.faculty_id = ".$fac_id."
+	AND sm.acad_yr = '".$acad_year."'
+	AND sm.sem = '".$sem."')
+    AND ta.load_type = 'PT')) as 'pt_load',
+    
+    (SELECT SUM(s.lec_hrs + s.lab_hrs)
+FROM subject_match sm
+   	JOIN subject s 
+    ON s.subj_id = sm.subj_id
+    AND sm.subj_match_id IN (SELECT DISTINCT ta.subj_match_id
+    FROM teaching_assign_sched ta
+  	WHERE ta.subj_match_id IN(
+    SELECT sm.subj_match_id
+ 	FROM subject_match sm
+	WHERE sm.faculty_id = ".$fac_id."
+	AND sm.acad_yr = '".$acad_year."' 
+	AND sm.sem = '".$sem."')
+    AND ta.load_type = 'TS')) as 'ts_load'")
+		->distinct()
+		->get('teaching_assign_sched ta');
 
         foreach ($query->result() as $r){
 
 			$result[] = array(
 					$r->total_hours, 
-					$r->regular_load,
+					$r->reg_load,
 					$r->pt_load,
 					$r->ts_load
 					);

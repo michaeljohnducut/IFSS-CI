@@ -91,13 +91,16 @@
                                                         <input class="form-control" type="number" name="lab_hrs" min="0" max="9" required>
                                                 </div>
 
-                                               <!--  <div class="form-group col-md-6">
+                                                <div class="form-group col-md-8">
                                                         <input type="radio" name="major" value="1" checked>
-                                                        <label class="control-label">Major</label>
+                                                        <label class="control-label">Professional Course</label>
+                                                        &nbsp&nbsp
+                                                        <input type="radio" name="major" value="2">
+                                                        <label class="control-label">Elective</label>
                                                         &nbsp&nbsp
                                                         <input type="radio" name="major" value="0">
-                                                        <label class="control-label">Minor</label>
-                                                </div> -->
+                                                        <label class="control-label">General Education</label>
+                                                </div>
 
                                                 <!-- <div class="form-group col-md-12">
                                                     <label class="control-label">Requisites/Prerequisites:</label>
@@ -158,14 +161,17 @@
                                                         <input class="form-control" type="text" name="edit_lab_hrs" id="edit_lab_hrs" min="0" max="9" required>
                                                 </div>
 
-                                                <!-- <div class="form-group col-md-6">
-                                                        <input type="radio" name="edit_major" value="1">
-                                                        <label class="control-label">Major</label>
+                                                <div class="form-group col-md-8">
+                                                        <input type="radio" name="edit_major" value="1" checked>
+                                                        <label class="control-label">Professional Course</label>
+                                                        &nbsp&nbsp
+                                                        <input type="radio" name="edit_major" value="2">
+                                                        <label class="control-label">Elective</label>
                                                         &nbsp&nbsp
                                                         <input type="radio" name="edit_major" value="0">
-                                                        <label class="control-label">Minor</label>
+                                                        <label class="control-label">General Education</label>
                                                 </div>
- -->
+                                                
                                                 <!-- <div class="form-group col-md-12">
                                                     <label class="control-label">Requisites/Prerequisites:</label>
 
@@ -323,7 +329,7 @@
                      $('#edit_lec_hrs').val(data[0][5]);
                      $('#edit_lab_hrs').val(data[0][4]);
                      $('#edit_spec').val(data[0][8]);
-                     // $("input[name=edit_major][value="+data[0][7]+"]").prop('checked', true);
+                     $("input[name=edit_major][value="+data[0][7]+"]").prop('checked', true);
                      $('#showMod').trigger('click');   
                 },
                 error: function (data) {

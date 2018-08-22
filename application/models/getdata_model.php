@@ -1117,6 +1117,10 @@ class getdata_model extends CI_Model{
 				->group_start()
                 	->where('c.sem', $sem)
                 	->where('cy.is_used = 1')
+                	->group_start()
+                		->where('isMajor = 1')
+                		->or_where('isMajor = 2')
+                	->group_end()
                 ->group_end()
                 ->get('subject s');
 

@@ -443,7 +443,7 @@ class Transaction extends CI_Controller
 
 	public function reflect_sched_table(){
 		
-		echo json_encode($this->getdata_model->load_sched_table($_POST));
+		echo json_encode($this->getdata_model->reflect_sched_table($_POST));
 		exit();
 	}
 

@@ -19,17 +19,23 @@
                         
                         <div class="row">
                             <div class="col-md-9">
-                                <h2>Plotting Form</h2>
+                                <h2 style="margin-top: 30px;">Plotting Form</h2>
                             </div>
                             <div class="col-md-3">
-                                <!-- <button style="margin-top: 10px; margin-left: 90px;" type="button" class="btn btn-success" id="btnOpenGenerate" data-toggle = "modal" data-target ="#modalAddTime">AUTO GENERATE SCHEDULE</button> -->
+                                <label class="control-label">View Schedules by:</label>
+                                <select class="form-control select2" id="change_view">
+                                  <option selected="" value="1">Faculty</option>
+                                  <option value="2">Sections</option>
+                                  <option value="3">Rooms/Labs</option>
+                                </select>
+                                <br><br>
                             </div>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
                             </div>
                             <br>
                         </div>
-                        <div class="row">
+                        <div class="row" id="div_by_faculty_a">
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control select2" id="sched_acad_year">
@@ -65,7 +71,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="row">
+                        <div class="row" id="div_by_faculty_b">
                             <div class="col-md-2" style="text-align: right; color: red;">
                                 <p>Load Count:</p>
                             </div>
@@ -82,6 +88,75 @@
                                 <p id="units_used">Total Hours: </p>
                             </div>
                         </div>
+
+                        <div class="row" id="div_by_section">
+                            <div class="col-md-2">
+                                <label class="control-label">Select A.Y.</label>
+                                <select class="form-control select2" id="sec_acadyr">
+                                    <option>-ACAD YEAR-</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Semester</label>
+                                <select class="form-control select2" id="sec_sem">
+                                    <option>-SEM-</option>
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option> 
+                                    <option value="summer">Summer</option> 
+                                </select>   
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label">Select Course:</label>
+                                <select class="form-control select2" id="sec_course">
+                                    <option>-COURSE-</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Select Year and Section</label>
+                                <select class="form-control select2" id="sec_yearsec">
+                                    <option>-YEAR AND SECTION-</option>
+                                </select>    
+                            </div>
+                            <div class="col-md-3">
+                                <button style="margin-top: 25px; margin-left: 10px" type="button" class="btn btn-info">Add minor subjects</button>
+                            </div>
+                        </div>
+
+                        <div class="row" id="div_by_room" >
+                            <div class="col-md-2">
+                                <label class="control-label">Select A.Y.</label>
+                                <select class="form-control select2" id="sec_acadyr">
+                                    <option>-ACAD YEAR-</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Semester</label>
+                                <select class="form-control select2" id="sec_sem">
+                                    <option>-SEM-</option>
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option> 
+                                    <option value="summer">Summer</option> 
+                                </select>   
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label">Select Room:</label>
+                                <select class="form-control select2" id="sec_course">
+                                    <option>-ROOMS/LABS-</option>
+                                </select>
+                            </div>
+                        </div>
+
+
 
                          <br><br><br>
                         <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
@@ -658,6 +733,26 @@
         $('.btn-default').text('');
       }
 
+      function loadSchedTable(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+            var dataTable = $('#tbl_sched_sum').DataTable({           
+              "processing" : true,
+              "serverSide" : true,
+              "order" : [],
+              destroy:true,
+              "ajax" : {
+               url:"<?php echo base_url('Transaction/load_sched_table')?>",
+               data:{sem: sem, acad_year:acad_year, fac_id:fac_id},
+               type:"POST"
+              }
+             });
+
+        }
+
         function reflectSchedTable(){
 
             var sem = $('#sched_sem').val();
@@ -1086,6 +1181,8 @@
         $('#sched_b').hide();
         $('#divsplit').hide();
         $('#sched_lab').hide();
+        $('#div_by_room').hide();
+        $('#div_by_section').hide();
 
         $('#starttime_a').on('blur',function(){
           if(global_factype == 3){
@@ -1342,6 +1439,7 @@
             getFacultyLoads();
             getUnitsUsed();
             getFacultyType();
+            loadSchedTable();
             reflectSchedTable();
             resetPlotForm();
         });
@@ -1349,6 +1447,7 @@
         $('#sched_acad_year').on('change', function(){
             getFacultyLoads();
             getUnitsUsed();
+            loadSchedTable();
             reflectSchedTable();
             resetPlotForm();
         });
@@ -1356,6 +1455,7 @@
         $('#sched_sem').on('change', function(){
             getFacultyLoads();
             getUnitsUsed();
+            loadSchedTable();
             reflectSchedTable();
             resetPlotForm();
         });
@@ -1393,6 +1493,30 @@
             var end = $('#endtime_c').val();
             showAvailLab(day, start, end,'rooms_c');
         });
+
+        //CHANGE VIEW DROP DOWN
+        $('#change_view').on('change',function(){
+          var temp_val = $('#change_view').val();
+          if(temp_val == 1){
+            $('#div_by_faculty_a').show();
+            $('#div_by_faculty_b').show();
+            $('#div_by_section').hide();
+            $('#div_by_room').hide();
+          }
+          else if(temp_val == 2){
+            $('#div_by_faculty_a').hide();
+            $('#div_by_faculty_b').hide();
+            $('#div_by_section').show();
+            $('#div_by_room').hide();
+          }
+          else{
+            $('#div_by_faculty_a').hide();
+            $('#div_by_faculty_b').hide();
+            $('#div_by_section').hide();
+            $('#div_by_room').show();
+          }
+        });
+
 
         $('#add_sched_form').on('submit', function(event){
           event.preventDefault();
@@ -1443,6 +1567,7 @@
                   $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
                   reflectSchedTable();
                   getFacultyLoads();
+                  loadSchedTable();
                 }
             },
              error: function (data) {

@@ -1528,7 +1528,7 @@ class getdata_model extends CI_Model{
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(LEFT(ta.time_start,5), "-", LEFT(ta.time_finish,5)) SEPARATOR "/") as "times", GROUP_CONCAT(ta.day SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code SEPARATOR "/") as "rooms", ta.subj_match_id')
 				->where('sm.faculty_id', $fac_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -1537,22 +1537,22 @@ class getdata_model extends CI_Model{
 				->join('section se','se.section_id = sm.section')
 				->join('course c','se.course = c.course_id')
 				->join('room r','r.room_id = ta.room_id')
+				->group_by('ta.subj_match_id')
                 ->get('teaching_assign_sched ta');
                 // ->order_by('ta.day', 'asc');
 
 		foreach ($query->result() as $r) 
 		{
 			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
-			$time = $r->time_start. ' - '. $r->time_finish;
-
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
 					$r->units, 
 					$section, 
-					$time,
-					$r->day,
-					$r->room_code
+					$r->times,
+					$r->days,
+					$r->rooms,
+					$r->subj_match_id
 					);
 		}
 
@@ -1917,6 +1917,44 @@ class getdata_model extends CI_Model{
 
 		return $result;	
 
+	}
+
+	public function reflect_sched_table(){	//GETS FACULTY'S SUMMARY OF SCHEDULES
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code')
+				->where('sm.faculty_id', $fac_id)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->join('subject_match sm ','ta.subj_match_id = sm.subj_match_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('section se','se.section_id = sm.section')
+				->join('course c','se.course = c.course_id')
+				->join('room r','r.room_id = ta.room_id')
+                ->get('teaching_assign_sched ta');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units, 
+					$section, 
+					$time,
+					$r->day,
+					$r->room_code
+					);
+		}
+
+		return $result;	
 	}
 
 

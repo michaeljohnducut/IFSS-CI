@@ -629,7 +629,7 @@ class savedata_model extends CI_Model
         $units = $this->security->xss_clean($this->input->post('units'));
         $lec_hrs = $this->security->xss_clean($this->input->post('lec_hrs'));
         $lab_hrs = $this->security->xss_clean($this->input->post('lab_hrs'));
-        // $major = $this->security->xss_clean($this->input->post('major'));
+        $major = $this->security->xss_clean($this->input->post('major'));
 
         if(isset($_POST['spec']))
         {
@@ -646,7 +646,7 @@ class savedata_model extends CI_Model
 								->where('units', $units)
 								->where('lab_hrs', $lab_hrs)
 								->where('lec_hrs', $lec_hrs)
-								->where('isMajor', 1)
+								->where('isMajor', $major)
 							->group_end()
 							->get('subject');
 
@@ -662,7 +662,7 @@ class savedata_model extends CI_Model
 					'lab_hrs' => $lab_hrs,
 					'lec_hrs' => $lec_hrs,
 					'specialization' => $spec,
-					'isMajor' => 1
+					'isMajor' => $major
 					);
 
 			if($this->db->insert('subject', $data))
@@ -692,7 +692,7 @@ class savedata_model extends CI_Model
         $units = $this->security->xss_clean($this->input->post('edit_units'));
         $lec_hrs = $this->security->xss_clean($this->input->post('edit_lec_hrs'));
         $lab_hrs = $this->security->xss_clean($this->input->post('edit_lab_hrs'));
-        // $major = $this->security->xss_clean($this->input->post('edit_major'));
+        $major = $this->security->xss_clean($this->input->post('edit_major'));
 
         if(isset($_POST['edit_spec']))
         {
@@ -710,7 +710,7 @@ class savedata_model extends CI_Model
 								->where('lab_hrs', $lab_hrs)
 								->where('lec_hrs', $lec_hrs)
 								->where('specialization', $spec)
-								->where('isMajor', 1)
+								->where('isMajor', $major)
 							->group_end()
 							->get('subject');
 
@@ -726,7 +726,7 @@ class savedata_model extends CI_Model
 					'lab_hrs' => $lab_hrs,
 					'lec_hrs' => $lec_hrs,
 					'specialization' => $spec,
-					'isMajor' => 1
+					'isMajor' => $major
 					);
 
 			if($this->db->where('subj_id', $main_id)

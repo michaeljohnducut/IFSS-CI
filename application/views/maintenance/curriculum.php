@@ -162,18 +162,10 @@
                                     <br>
                                     <button type="button" class="btn btn-success" id="update_curriculum">Update Curriculum</button>  
                                 </div>
-                                
                             </div>
-
-                            <br><br><br>
-                      
-
-                            
+                            <br><br><br>   
                         </div>
                     </div>
-
-
-
                 <!-- /.row -->
                 <!-- .right-sidebar -->
                
@@ -187,30 +179,29 @@
                 <div class="white-box">
                     <h2>Add subjects to curriculum</h2>
                     <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
                     </div>
                     <br>
-                    <form  id="add_curri_form" method="POST" action="curriculum/add-curriculum.php">
+                    <div>
+                    <form id="add_curri_form" method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-3">
                             <label class="control-label">Select Curriculum Year:</label>
                             <select class="form-control select2" id="add_year" name="add_year" required>
-                                <option value="0">--YEAR--</option>
+                                <option value="" disabled selected>--YEAR--</option>
                                <?php foreach($curr_year as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
                             </select>
-                            
                         </div>
                         <div class="col-md-3">
                             <label class="control-label">Select Course</label>
-                            <select class="form-control select2" id="edit_dept" name="edit_dept">
-                                <option>--COURSE--</option>
+                            <select class="form-control select2" id="edit_dept" name="edit_dept" required>
+                                <option value="" disabled selected>--COURSE--</option>
                                 <?php foreach($department as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label">Select Year Level:</label>
-                            <select class="form-control select2" id="edit_yrlvl" name="edit_yrlvl">
-                                <option>--YEAR LEVEL--</option>
+                            <select class="form-control select2" id="edit_yrlvl" name="edit_yrlvl" required>
+                                <option value="" disabled selected>--YEAR LEVEL--</option>
                                 <option value="1st">1st</option>
                                 <option value="2nd">2nd</option>
                                 <option value="3rd">3rd</option>
@@ -220,43 +211,28 @@
                         </div>
                         <div class="col-md-3">
                             <label class="control-label">Select Semester:</label>
-                            <select class="form-control select2" id="edit_sem" name="edit_sem">
-                                <option>--SEMESTER--</option>
+                            <select class="form-control select2" id="edit_sem" name="edit_sem" required>
+                                <option value="" disabled selected>--SEMESTER--</option>
                                 <option value="1st">1st</option>
                                 <option value="2nd">2nd</option>
                                 <option value="Summer">Summer</option>
                             </select>
                         </div>
                     </div>
-                    <br>
-                    <div class="row">
+                    <div class="row" style="padding-left: 10px;">
                         <h3>Subjects to add</h3>
                     </div>
-                    <div class="row" style="padding-left: 30px;">
-                        <br>
-                        
-                            <table class="table colored-table inverse-tabl table-striped" id="dynamic_field_update">
-                                        <tbody>
-                                            <tr>
-                                                <td width="600px">
-                                                    <select class="form-control select2" id="edit_subj" name="edit_subj[]">
-                                                    <option>--SUBJECT--</option>
-                                                    <?php foreach($subjects as $r) echo '<option value="'.$r[7].'">'.$r[0].' - '.$r[1].'</option>';?>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-success" id='add_field_update'><span class="fa fa-plus" aria-hidden="true"></span></button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                            </table>
-
-                            <button type="button" class="btn btn-default" onclick="resetForm3()">Clear</button>
-                            <button type="submit" class="btn btn-info waves-effect text-left">Add Subjects</button>
-                            
-                        </form>
-                        
+                    <div class="row" style="padding-left: 10px;">
+                            <select class="select2 m-b-10 select2-multiple" multiple="multiple" data-placeholder="Choose" id="edit_subj" name="edit_subj[]" required>
+                            <?php foreach($subjects as $r) echo '<option value="'.$r[0].'">'.$r[0].' - '.$r[1].'</option>';?>
+                            </select>   
                     </div>
+                        <button type="button" class="btn btn-default">Clear</button>
+                        <button type="submit" class="btn btn-info waves-effect text-left">Add Subjects</button>
+                    </form>
+                    </div>
+                    </div>
+                </div>
 
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>

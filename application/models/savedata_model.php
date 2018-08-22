@@ -1899,6 +1899,7 @@ class savedata_model extends CI_Model
 		$temp_load = $this->security->xss_clean($this->input->post('load_type'));
 		$temp_control = $this->security->xss_clean($this->input->post('control'));
 		$split_control = $this->security->xss_clean($this->input->post('s_control'));
+		$lab_day = $this->security->xss_clean($this->input->post('lab_day'));
 
 		// $query = $this->db->where('subj_match_id', $temp_load_id)
 		// 						->where('acad_yr', $temp_acadyr)
@@ -1946,7 +1947,7 @@ class savedata_model extends CI_Model
 					'room_id' => $temp_room[1], 
 					'time_start' => $temp_start[2], 
 					'time_finish' => $temp_end[2],
-					'day' => $temp_day[2], 
+					'day' => $lab_day, 
 					'acad_yr' => $temp_acadyr,
 					'sem' => $temp_sem,
 					'subj_match_id' => $temp_load_id,

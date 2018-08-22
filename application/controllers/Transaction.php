@@ -188,7 +188,8 @@ class Transaction extends CI_Controller
 	}
 
 	public function new_schedule()
-	{
+	{	
+		$data['courses'] = $this->getdata_model->course();
 
 		if(isset($_POST['subj_id'])){
 			print_r('subj_id');

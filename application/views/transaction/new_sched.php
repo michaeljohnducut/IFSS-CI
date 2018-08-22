@@ -73,7 +73,7 @@
                         <br>
                         <div class="row" id="div_by_faculty_b">
                             <div class="col-md-2" style="text-align: right; color: red;">
-                                <p>Load Count:</p>
+                                <p id="factype_id">Faculty Type:</p>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="RLoad_id">Regular Load: </p>
@@ -114,6 +114,8 @@
                                 <label class="control-label">Select Course:</label>
                                 <select class="form-control select2" id="sec_course">
                                     <option>-COURSE-</option>
+                                    <?php foreach($courses as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
+                                    </select>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -130,7 +132,7 @@
                         <div class="row" id="div_by_room" >
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control select2" id="sec_acadyr">
+                                <select class="form-control select2" id="room_acad_year">
                                     <option>-ACAD YEAR-</option>
                                     <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
@@ -141,7 +143,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Semester</label>
-                                <select class="form-control select2" id="sec_sem">
+                                <select class="form-control select2" id="room_sem">
                                     <option>-SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
@@ -150,7 +152,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Select Room:</label>
-                                <select class="form-control select2" id="sec_course">
+                                <select class="form-control select2" id="room_labs">
                                     <option>-ROOMS/LABS-</option>
                                 </select>
                             </div>
@@ -592,22 +594,18 @@
                         </div>
                       </div>
                       <form id="add_sched_form" method="POST">
-                        <!-- <input type="hidden" name="f_acadyear" id="f_acadyear">
-                        <input type="hidden" name="f_sem" id="f_sem">
-                        <input type="hidden" name="f_load_id" id="f_load_id">
-                        <input type="hidden" name="f_load_type" id="f_load_type"> -->
                       <div class="col-md-12" id="sched_a">
                         <div class="col-md-3">
                           <label class="control-label">Start time:</label>
-                          <input type="time" id="starttime_a" name="start_time[]" class="form-control">
+                          <input type="time" id="starttime_a" name="start_time[]" class="form-control" required="">
                         </div>
                         <div class="col-md-3">
                           <label class="control-label">End time:</label>
-                          <input type="time" id="endtime_a" name="end_time[]" readonly="" class="form-control">
+                          <input type="time" id="endtime_a" name="end_time[]" readonly="" class="form-control"required="">
                         </div>
                         <div class="col-md-3">
                           <label class="control-label">Day:</label>
-                          <select class="form-control" id="day_a" name="day[]">
+                          <select class="form-control" id="day_a" name="day[]" required="">
                             <option value="0">-Day-</option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
@@ -620,7 +618,7 @@
                       </div>
                       <div class="col-md-3">
                           <label class="control-label">Lecture Room:</label>
-                          <select class="form-control" id="rooms_a" name="rooms[]">
+                          <select class="form-control" id="rooms_a" name="rooms[]" required="">
                             
                           </select>
                           <br>
@@ -676,7 +674,7 @@
                         <div class="col-md-3">
                           <br>
                           <label class="control-label">Day:</label>
-                          <select class="form-control" id="day_c" name="day[]">
+                          <select class="form-control" id="day_c" name="lab_day">
                             <option value="0">-Day-</option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
@@ -723,7 +721,12 @@
     <script type="text/javascript">
 
       var global_factype;
+      var global_factypedesc;
       var global_labhour;
+      var global_total_hrs;
+      var global_reg_load;
+      var global_pt_load; 
+      var global_ts_load;
       var global_splitcontrol = 0;
 
       //FUNCTIONS
@@ -856,7 +859,8 @@
                 data:{fac_id:fac_id},
                 success:function(data)
                 {   
-                   global_factype = data;
+                   global_factype = data[0][0];
+                   global_factypedesc = data[0][1];
                 }, 
                 async:false
 
@@ -875,70 +879,122 @@
                 data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
                 dataType: "json",
                 success:function(data){
-                    
-                    if (data[0][1] == null){
 
+                    global_total_hrs = data[0][0];
+                    global_reg_load = data[0][1];
+                    global_pt_load = data[0][2];
+                    global_ts_load = data[0][3];
+
+                    $('#factype_id').empty();
+                    $('#factype_id').append(global_factypedesc);
+                    if(global_reg_load == null)
+                    {
                         $('#units_used').empty();
                         $('#RLoad_id').empty();
                         $('#PTLoad_id').empty();
                         $('#TSLoad_id').empty();
-                        $('#units_used').append('Total Units Used: ');
-                        $('#RLoad_id').append('Regular Load: ');
-                        $('#PTLoad_id').append('Part-time Load: ');
-                        $('#TSLoad_id').append('Temporary Substitution: ');
-                        $('#hid_units_used').val(data[0][1]);
+                        $('#units_used').append('<b>Total Units Used:</b> ');
+                        $('#RLoad_id').append('<b>Regular Load:</b> ');
+                        $('#PTLoad_id').append('<b>Part-time Load:</b> ');
+                        $('#TSLoad_id').append('<b>Temporary Substitution:</b> ');
                     }
-                    else{
 
+                    else
+                    {
+                      if(global_pt_load == null)
+                      {
                         $('#units_used').empty();
                         $('#RLoad_id').empty();
-                        $('#units_used').append('Total Units Used: ' + data[0][1]);
-                        $('#RLoad_id').append('Regular Load: ' + data[0][2]);
-                        $('#hid_units_used').val(data[0][1]);
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('<b>Total Units Used:</b> ' + global_total_hrs + 'hrs');
+                        $('#RLoad_id').append('<b>Regular Load:</b> '+ global_reg_load+ 'hrs');
+                        $('#PTLoad_id').append('<b>Part-time Load:</b> ');
+                        $('#TSLoad_id').append('<b>Temporary Substitution:</b> ');
+                      }
 
-                        if(data[0][3] == null){
-                            $('#PTLoad_id').empty();
-                            $('#TSLoad_id').empty();
-                            $('#PTLoad_id').append('Part-time Load: ');
-                            $('#TSLoad_id').append('Temporary Substitution: ');
-                        }
-                        else if(data[0][4] == null){
-                            $('#TSLoad_id').empty();
-                            $('#PTLoad_id').empty();
-                            $('#PTLoad_id').append('Part-time Load: ') + data[0][3];
-                            $('#TSLoad_id').append('Temporary Substitution: ');
-                        }
+                      else if(global_ts_load == null)
+                      {
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('<b>Total Units Used:</b> ' + global_total_hrs+ 'hrs');
+                        $('#RLoad_id').append('<b>Regular Load:</b> '+ global_reg_load+ 'hrs');
+                        $('#PTLoad_id').append('<b>Part-time Load:</b> ' + global_pt_load+ 'hrs');
+                        $('#TSLoad_id').append('<b>Temporary Substitution:</b> ');
+                      }
 
-                        else{
-                            $('#units_used').empty();
-                            $('#RLoad_id').empty();
-                            $('#PTLoad_id').empty();
-                            $('#TSLoad_id').empty();
-                            $('#units_used').append('Total Units Used: ' + data[0][1]);
-                            $('#RLoad_id').append('Regular Load: ' + data[0][2]);
-                            $('#PTLoad_id').append('Part-time Load: ' + data[0][3]);
-                            $('#TSLoad_id').append('Temporary Substitution: ' + data[0][4]);
-                            $('#hid_units_used').val(data[0][1]);
-                        }
+                      else
+                      {
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('<b>Total Units Used:</b> ' + global_total_hrs+ 'hrs');
+                        $('#RLoad_id').append('<b>Regular Load:</b> '+ global_reg_load+ 'hrs');
+                        $('#PTLoad_id').append('<b>Part-time Load:</b> ' + global_pt_load+ 'hrs');
+                        $('#TSLoad_id').append('<b>Temporary Substitution:</b> '+global_ts_load+ 'hrs');
+                      }
                     }
+                    // if (data[0][1] == null){
+
+                    //     $('#units_used').empty();
+                    //     $('#RLoad_id').empty();
+                    //     $('#PTLoad_id').empty();
+                    //     $('#TSLoad_id').empty();
+                    //     $('#units_used').append('Total Units Used: ');
+                    //     $('#RLoad_id').append('Regular Load: ');
+                    //     $('#PTLoad_id').append('Part-time Load: ');
+                    //     $('#TSLoad_id').append('Temporary Substitution: ');
+                    //     $('#hid_units_used').val(data[0][1]);
+                    // }
+                    // else{
+
+                    //     $('#units_used').empty();
+                    //     $('#RLoad_id').empty();
+                    //     $('#units_used').append('Total Units Used: ' + data[0][1]);
+                    //     $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+                    //     $('#hid_units_used').val(data[0][1]);
+
+                    //     if(data[0][3] == null){
+                    //         $('#PTLoad_id').empty();
+                    //         $('#TSLoad_id').empty();
+                    //         $('#PTLoad_id').append('Part-time Load: ');
+                    //         $('#TSLoad_id').append('Temporary Substitution: ');
+                    //     }
+                    //     else if(data[0][4] == null){
+                    //         $('#TSLoad_id').empty();
+                    //         $('#PTLoad_id').empty();
+                    //         $('#PTLoad_id').append('Part-time Load: ') + data[0][3];
+                    //         $('#TSLoad_id').append('Temporary Substitution: ');
+                    //     }
+
+                    //     else{
+                    //         $('#units_used').empty();
+                    //         $('#RLoad_id').empty();
+                    //         $('#PTLoad_id').empty();
+                    //         $('#TSLoad_id').empty();
+                    //         $('#units_used').append('Total Units Used: ' + data[0][1]);
+                    //         $('#RLoad_id').append('Regular Load: ' + data[0][2]);
+                    //         $('#PTLoad_id').append('Part-time Load: ' + data[0][3]);
+                    //         $('#TSLoad_id').append('Temporary Substitution: ' + data[0][4]);
+                    //         $('#hid_units_used').val(data[0][1]);
+                    //     }
+                    // }
                     
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
-                }
+                }, 
+                async:false
            });
 
         }
 
       function showTeachAssignModal(){
         var load_id = $('#sched_load').val();
-        // var temp_acadyr = $('#sched_acad_year').val();
-        // var temp_sem = $('#sched_sem').val();
-        // var temp_load_type = 'R';
-        // $('#f_load_id').val(load_id);
-        // $('#f_acadyear').val(temp_acadyr);
-        // $('#f_sem').val(temp_sem);
-        // $('#f_load_type').val(temp_load_type);
+
             $.ajax({
                     method:"POST",
                     url:"<?php echo base_url('Transaction/get_subj_details')?>",
@@ -963,11 +1019,33 @@
                       if(temp == 3){
                         $('#sched_lab').show();
                         $('#divsplit').hide();
+                        $('#starttime_b').removeAttr('required');
+                        $('#endtime_b').removeAttr('required');
+                        $('#day_b').removeAttr('required');
+                        $('#rooms_b').removeAttr('required');
+                        $('#starttime_c').prop('required', true);
+                        $('#endtime_c').prop('required', true);
+                        $('#day_c').prop('required', true);
+                        $('#rooms_c').prop('required', true);
                       }
                       else{
-                        $('#sched_b').hide();
-                        $('#sched_lab').hide();
-                        $('#divsplit').show();
+
+                          if(global_splitcontrol == 1){
+                              $('#starttime_c').removeAttr('required');
+                              $('#endtime_c').removeAttr('required');
+                              $('#day_c').removeAttr('required');
+                              $('#rooms_c').removeAttr('required');
+                              $('#starttime_b').prop('required', true);
+                              $('#endtime_b').prop('required', true);
+                              $('#day_b').prop('required', true);
+                              $('#rooms_c').prop('required', true);
+                          }
+                          else{
+                              $('#starttime_b').removeAttr('required');
+                              $('#endtime_b').removeAttr('required');
+                              $('#day_b').removeAttr('required');
+                              $('#rooms_b').removeAttr('required');
+                          }
                       }
                       $('#openMod').trigger('click');
                     },
@@ -1179,7 +1257,7 @@
       $(document).ready(function(){
 
         $('#sched_b').hide();
-        $('#divsplit').hide();
+        // $('#divsplit').hide();
         $('#sched_lab').hide();
         $('#div_by_room').hide();
         $('#div_by_section').hide();
@@ -1347,7 +1425,7 @@
               }
 
               else{
-                alert('Time is not valid since the faculty is a Designee');
+                alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
                 $('#starttime_b').val('');
                 $('#endtime_b').val('');
               }
@@ -1436,15 +1514,16 @@
         });
 
         $('#sched_faculty').on('change', function(){
+            getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
-            getFacultyType();
             loadSchedTable();
             reflectSchedTable();
             resetPlotForm();
         });
 
         $('#sched_acad_year').on('change', function(){
+            getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
@@ -1453,6 +1532,7 @@
         });
 
         $('#sched_sem').on('change', function(){
+            getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
@@ -1517,6 +1597,30 @@
           }
         });
 
+        $('#sec_course').on('change',function(){
+
+          var course_id = $('#sec_course').val();
+          var acad_yr = $('#sec_acadyr').val();
+                $.ajax({
+                method:"POST",
+                url:"<?php echo base_url('Transaction/get_all_sections')?>",
+                dataType: "json",
+                data:{course_id:course_id, acad_yr:acad_yr},
+                success:function(data)
+                {   
+                    $('#sec_yearsec').empty();
+                    $('#sec_yearsec').append('<option value="0" disabled selected>-Year-Section-</option>');
+                    var len = data.length;
+                    for (var i=0; i<len; i++)
+                    {
+                      var temp_val = data[i][0];
+                      var temp_text = data[i][1];
+                      $('#sec_yearsec').append('<option value="'+temp_val +'">'+temp_text+ '</option>');
+                    }
+                }
+               });
+        });
+
 
         $('#add_sched_form').on('submit', function(event){
           event.preventDefault();
@@ -1568,6 +1672,7 @@
                   reflectSchedTable();
                   getFacultyLoads();
                   loadSchedTable();
+                  getUnitsUsed();
                 }
             },
              error: function (data) {

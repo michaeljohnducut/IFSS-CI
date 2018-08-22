@@ -1528,7 +1528,7 @@ class getdata_model extends CI_Model{
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(LEFT(ta.time_start,5), "-", LEFT(ta.time_finish,5)) SEPARATOR "/") as "times", GROUP_CONCAT(ta.day SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code SEPARATOR "/") as "rooms", ta.subj_match_id')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(LEFT(ta.time_start,5), "-", LEFT(ta.time_finish,5)) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
 				->where('sm.faculty_id', $fac_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -1538,8 +1538,9 @@ class getdata_model extends CI_Model{
 				->join('course c','se.course = c.course_id')
 				->join('room r','r.room_id = ta.room_id')
 				->group_by('ta.subj_match_id')
+				->order_by('ta.day', 'asc')
                 ->get('teaching_assign_sched ta');
-                // ->order_by('ta.day', 'asc');
+                
 
 		foreach ($query->result() as $r) 
 		{
@@ -1566,49 +1567,56 @@ class getdata_model extends CI_Model{
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select("ta. faculty_id, (SELECT SUM(s.units)
-						FROM teaching_assign_sched ta 
-							JOIN subject s 
-						    ON s.subj_id = ta.subj_code
-						WHERE ta.faculty_id = ".$fac_id." 
-						AND ta.acad_yr = '".$acad_year."' 
-						AND ta.sem = '".$sem."' ) AS 'Total_units', 
-						(SELECT SUM(s.units)
-						 FROM teaching_assign_sched ta 
-						 JOIN subject s 
-						 ON s.subj_id = ta.subj_code
-						 WHERE ta.faculty_id = ".$fac_id." 
-						 AND ta.acad_yr = '".$acad_year."'  
-						 AND ta.sem = '".$sem."'
-						 AND ta.load_type = 'R') AS 'Regular_load',
-						  (SELECT SUM(s.units)
-						  FROM teaching_assign_sched ta 
-						  JOIN subject s 
-						  ON s.subj_id = ta.subj_code
-						  WHERE ta.faculty_id = ".$fac_id." 
-						  AND ta.acad_yr = '".$acad_year."' 
-						  AND ta.sem = '".$sem."'
-						  AND ta.load_type = 'PT') AS 'PT_load', 
-						  (SELECT SUM(s.units)
-						   FROM teaching_assign_sched ta 
-						   JOIN subject s 
-						   ON s.subj_id = ta.subj_code
-						   WHERE ta.faculty_id = ".$fac_id." 
-						   AND ta.acad_yr = '".$acad_year."' 
-						   AND ta.sem = '".$sem."'
-						   AND ta.load_type = 'TS') AS 'TS_load'")
-				->group_by('ta.faculty_id')
+		$query = $this->db->select("(SELECT SUM(DISTINCT s.lec_hrs +  s.lab_hrs)
+						FROM teaching_assign_sched ta
+							JOIN subject_match sm 
+						    ON sm.subj_match_id = ta.subj_match_id
+						   	JOIN subject s 
+						    ON s.subj_id = sm.subj_id
+						WHERE sm.faculty_id = ".$fac_id."
+						AND sm.acad_yr = '".$acad_year."'
+						AND sm.sem = '".$sem."') as 'total_hours', 
+
+						(SELECT SUM(DISTINCT s.lec_hrs +  s.lab_hrs)
+						FROM teaching_assign_sched ta
+							JOIN subject_match sm 
+						    ON sm.subj_match_id = ta.subj_match_id
+						   	JOIN subject s 
+						    ON s.subj_id = sm.subj_id
+						WHERE sm.faculty_id = ".$fac_id."
+						AND ta.load_type = 'R'
+						AND sm.acad_yr = '".$acad_year."' 
+						AND sm.sem = '".$sem."') as 'regular_load', 
+						(SELECT SUM(DISTINCT s.lec_hrs +  s.lab_hrs)
+						FROM teaching_assign_sched ta
+							JOIN subject_match sm 
+						    ON sm.subj_match_id = ta.subj_match_id
+						   	JOIN subject s 
+						    ON s.subj_id = sm.subj_id
+						WHERE sm.faculty_id = ".$fac_id."
+						AND ta.load_type = 'PT'
+						AND sm.acad_yr = '".$acad_year."' 
+						AND sm.sem = '".$sem."') as 'pt_load', 
+						(SELECT SUM(DISTINCT s.lec_hrs +  s.lab_hrs)
+						FROM teaching_assign_sched ta
+							JOIN subject_match sm 
+						    ON sm.subj_match_id = ta.subj_match_id
+						   	JOIN subject s 
+						    ON s.subj_id = sm.subj_id
+						WHERE sm.faculty_id = ".$fac_id."
+						AND ta.load_type = 'TS'
+						AND sm.acad_yr = '".$acad_year."' 
+						AND sm.sem = '".$sem."') as 'ts_load'")
                 ->get('teaching_assign_sched ta');
 
 
         foreach ($query->result() as $r){
 
 			$result[] = array(
-					$r->faculty_id,
-					$r->Total_units, 
-					$r->Regular_load,
-					$r->PT_load,
-					$r->TS_load,
+					$r->total_hours, 
+					$r->regular_load,
+					$r->pt_load,
+					$r->ts_load
 					);
 		}
 
@@ -1829,7 +1837,7 @@ class getdata_model extends CI_Model{
 	public function get_faculty_type(){
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 		$result = array();
-		$query = $this->db->select("ft.fac_type_id")
+		$query = $this->db->select("ft.fac_type_id, ft.fac_type_desc")
 				->where('f.faculty_id', $fac_id)
 				->join('faculty f ', 'f.faculty_type = ft.fac_type_id')
                 ->get('faculty_type ft');
@@ -1837,7 +1845,8 @@ class getdata_model extends CI_Model{
          foreach ($query->result() as $r) 
 		{
 			$result[] = array(
-					$r->fac_type_id
+					$r->fac_type_id,
+					$r->fac_type_desc
 					);
 		}
 

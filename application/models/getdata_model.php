@@ -1309,11 +1309,11 @@ class getdata_model extends CI_Model{
 		$temp_date = date("m");
 
 		if($temp_date == '01' || $temp_date == '02' || $temp_date == '03' || $temp_date == '04' || $temp_date == '05' || $temp_date == '06'){
-			$sem = '2nd';
+			$sem = '1st';
 		}
 
 		else if($temp_date == '07' || $temp_date == '08' || $temp_date == '09' || $temp_date == '10' || $temp_date == '11' || $temp_date == '12'){
-			$sem = '1st';
+			$sem = '2nd';
 		}
 
 		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
@@ -1525,13 +1525,14 @@ class getdata_model extends CI_Model{
 		$result = array();
 
 		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code')
-				->where('ta.faculty_id', $fac_id)
-				->where('ta.acad_yr', $acad_year)
-				->where('ta.sem', $sem)
-				->join('subject s','s.subj_id = ta.subj_code')
-				->join('section se ','ta.section = se.section_id')
-				->join('course c ','c.course_id = se.course')
-				->join('room r ','r.room_id = ta.room_id')
+				->where('sm.faculty_id', $fac_id)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->join('subject_match sm ','ta.subj_match_id = sm.subj_match_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('section se','se.section_id = sm.section')
+				->join('course c','se.course = c.course_id')
+				->join('room r','r.room_id = ta.room_id')
                 ->get('teaching_assign_sched ta');
                 // ->order_by('ta.day', 'asc');
 
@@ -1837,6 +1838,80 @@ class getdata_model extends CI_Model{
 		}
 
 		return $result;
+
+	}
+
+	public function get_avail_labs(){ //GETS AVAILABLE ROOMS FOR A SPECIFIC TIME
+
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$result = array();
+
+		$query = $this->db->select('r.room_id, r.room_code')
+				->where('r.room_id NOT IN (SELECT ta.room_id
+					FROM teaching_assign_sched ta
+					WHERE ta.time_start > "'.$start_time.'"
+					AND ta.time_start < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					OR ta.time_finish > "'.$start_time.'"
+					AND ta.time_finish < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					OR ta.time_start = "'.$start_time.'"
+					AND ta.time_finish = "'.$end.'"
+					AND ta.day = "'.$day.'")', NULL, FALSE)
+				->where('r.room_desc = "Laboratory Room"', NULL, FALSE)
+				->order_by('room_code', 'asc')
+                ->get('room r');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->room_id,
+					$r->room_code
+					);
+		}
+
+		return $result;
+	}
+
+	public function get_prof_load(){
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("CONCAT(c.course_code, ' ',  LEFT(s.year_lvl, 1), ' - ', s.section_desc) AS 'section', sb.subj_code, sb.subj_desc, sm.subj_match_id")
+				->where('sm.subj_match_id NOT IN (SELECT ta.subj_match_id
+					FROM teaching_assign_sched ta
+					WHERE ta.acad_yr = "'.$acad_yr.'"
+					AND ta.sem = "'.$sem.'")',NULL, FALSE)
+				->where('sm.faculty_id', $fac_id)
+				->where('sm.acad_yr', $acad_yr)
+				->where('sm.sem', $sem)
+				->join('section s','s.section_id = sm.section')
+				->join('subject sb  ','sb.subj_id = sm.subj_id')
+				->join('course c  ','c.course_id = s.course')
+                ->get('subject_match sm');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-danger" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
+
+			$result[] = array(
+					$r->section,
+					$r->subj_code,
+					$r->subj_desc, 
+					$btn, 
+					$r->subj_match_id
+					);
+		}
+
+		return $result;	
 
 	}
 

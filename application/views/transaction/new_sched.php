@@ -58,9 +58,9 @@
                                 </select>
                             </div>
                             <div class="col-md-5">
-                                <label class="control-label">Teaching Loads:</label>
-                                <select class="form-control select2" id="sched_load">
-                                    <option>-Loads-</option>
+                                <label class="control-label">Teaching Assignments:</label>
+                                <select class="form-control" id="sched_load">
+                                    <option>-SELECT TEACHING ASSIGNMENT-</option>
                                 </select>    
                             </div>
                         </div>
@@ -532,7 +532,7 @@
                         </div>
                         <div class="col-md-3">
                           <label class="control-label">Day:</label>
-                          <select class="form-control select2" id="day_a" name="day[]">
+                          <select class="form-control" id="day_a" name="day[]">
                             <option value="0">-Day-</option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
@@ -545,7 +545,7 @@
                       </div>
                       <div class="col-md-3">
                           <label class="control-label">Lecture Room:</label>
-                          <select class="form-control select2" id="rooms_a" name="rooms[]">
+                          <select class="form-control" id="rooms_a" name="rooms[]">
                             
                           </select>
                           <br>
@@ -566,7 +566,7 @@
                         <div class="col-md-3">
                           <br>
                           <label class="control-label">Day:</label>
-                          <select class="form-control select2" id="day_b" name="day[]">
+                          <select class="form-control" id="day_b" name="day[]">
                             <option value="0">-Day-</option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
@@ -580,7 +580,7 @@
                       <div class="col-md-3">
                         <br>
                           <label class="control-label">Lecture Room:</label>
-                          <select class="form-control select2" id="rooms_b"  name="rooms[]">
+                          <select class="form-control" id="rooms_b"  name="rooms[]">
                             
                           </select>
                           <br>
@@ -591,17 +591,17 @@
                         <div class="col-md-3">
                           <br>
                           <label class="control-label">Start time (Lab):</label>
-                          <input type="time" id="sched_lab_start" name="start_time[]" class="form-control">
+                          <input type="time" id="starttime_c" name="start_time[]" class="form-control">
                         </div>
                         <div class="col-md-3">
                           <br>
                           <label class="control-label">End time (Lab):</label>
-                          <input type="time" id="endtime_lab" name="end_time[]" readonly="" class="form-control">
+                          <input type="time" id="endtime_c" name="end_time[]" readonly="" class="form-control">
                         </div>
                         <div class="col-md-3">
                           <br>
                           <label class="control-label">Day:</label>
-                          <select class="form-control select2" id="day_lab" name="day[]">
+                          <select class="form-control" id="day_c" name="day[]">
                             <option value="0">-Day-</option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
@@ -615,15 +615,14 @@
                       <div class="col-md-3">
                         <br>
                           <label class="control-label">Lab Room:</label>
-                          <select class="form-control select2" name="rooms[]">
-                            
+                          <select class="form-control" id="rooms_c" name="rooms[]">
                           </select>
                           <br>
                         </div>
                         
                       </div>
                     <div class="modal-footer">
-                            <button type="submit" class="btn btn-success waves-effect text-left">Save</button>
+                            <button type="submit" class="btn btn-info waves-effect text-left">Save</button>
                     </div>
                   </form>
                 </div>
@@ -649,8 +648,37 @@
     <script type="text/javascript">
 
       var global_factype;
+      var global_labhour;
+      var global_splitcontrol = 0;
 
       //FUNCTIONS
+
+      function resetPlotForm(){
+        $('.btn-success').removeClass().addClass('btn btn-default')
+        $('.btn-default').text('');
+      }
+
+        function reflectSchedTable(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
       function getFacultyLoads(){
         var fac_id =  $('#sched_faculty').val();
             var acad_yr =  $('#sched_acad_year').val();
@@ -675,12 +703,37 @@
                    });
       }
 
+
       function showAvailRoom(day, start_time, end, dropdown_id){
 
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_avail_rooms')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
+
+                     var len = data.length;
+                     $('#'+ dropdown_id).empty();
+                     $('#'+ dropdown_id).append('<option value = "0">-Room-</option>');
+                     for(var i = 0 ; i < len ; i++){
+                        $('#'+ dropdown_id).append('<option value = "' + data[i][0]+ '">' + data[i][1] + '</option>');
+                     }
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+
+        function showAvailLab(day, start_time, end, dropdown_id){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_labs')?>", 
                 method:"POST", 
                 data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
                 dataType: "json",
@@ -811,6 +864,7 @@
                       $('#lbl_lechrs').append(data[0][4]);
                       $('#lbl_labhrs').append(data[0][5]);
                       var temp = data[0][5];
+                      global_labhour = temp;
                       if(temp == 3){
                         $('#sched_lab').show();
                         $('#divsplit').hide();
@@ -821,10 +875,207 @@
                         $('#divsplit').show();
                       }
                       $('#openMod').trigger('click');
-                    }
+                    },
+                    async:false
 
                    });
       }
+
+      function changeSchedColor(arr){
+            var len = arr.length;
+            var temp_subj = '';
+            var temp_sec = '';
+            var temp_day = '';
+            var temp_room = '';
+            var temp_hour_start = '';
+            var temp_min_start = '';
+            var temp_hour_end = '';
+            var temp_min_end = '';
+            var temp_mins = '';
+            var day_id = '';
+            var final_val = '';
+            var final_val2 = '';
+            var div_id_top = '';
+            var div_id_bot = '';
+            var div_id_mid1 = '';
+            var div_id_mid2 = '';
+            var last_box = '';
+            var last_text = '';
+            var put_label = 0;
+
+            for (ctr = 0 ; ctr < len ; ctr++){
+
+                temp_subj = arr[ctr][0]; //GETS SUBJECT 
+                temp_sec = arr[ctr][3]; //GETS SECTION
+                temp_room = arr[ctr][6]; //GETS ROOM
+
+                switch(arr[ctr][5]){
+                    case 'Monday': 
+                            day_id = '_mon';
+                            break;
+
+                    case 'Tuesday': 
+                            day_id = '_tue';
+                            break;
+
+                    case 'Wednesday': 
+                            day_id = '_wed';
+                            break;
+
+                    case 'Thursday': 
+                            day_id = '_thu';
+                            break;
+
+                    case 'Friday': 
+                            day_id = '_fri';
+                            break;
+
+                    case 'Saturday': 
+                            day_id = '_sat';
+                            break;
+
+                    default: 
+                            day_id = '_sun';
+                }//END SWITCH
+                
+                temp_hour_start = arr[ctr][4][0] + arr[ctr][4][1];
+                temp_min_start = arr[ctr][4][3] + arr[ctr][4][4];
+                temp_hour_end = arr[ctr][4][11] + arr[ctr][4][12];
+                temp_min_end = arr[ctr][4][14] + arr[ctr][4][15];
+                var min_temp = arr[ctr][4][3] + arr[ctr][4][4];
+
+                //CONTROLS WHERE TO PUT THE LABELS OF THE SCHEDULE
+                if (min_temp == '30'){
+                    put_label = 1;
+                }
+                else{
+                    put_label = 2;
+                }
+
+                //FIRST LOOP TO COLOR BLOCKS
+                var looper = parseInt(temp_hour_start);
+                while (looper < temp_hour_end){
+                    // put_label ++;
+                    if (looper < 10){
+                        if(min_temp == '30'){
+                            final_val = '0' + looper + ':' + min_temp + ':00' + day_id;
+                            min_temp = '00';
+                            div_id_mid1 = '0' + looper + '_' + min_temp + day_id + '_d';
+                        }
+                        else{
+                            final_val = '0' + looper + ':00:00' + day_id;
+                            final_val2 = '0' + looper + ':30:00' + day_id;
+                            div_id_mid1 = '0' + looper + '_00'  + day_id + '_d';
+                            div_id_mid2 = '0' + looper + '_30' + day_id + '_d';
+                        }
+                    }
+
+                    else{
+                        if(min_temp == '30'){
+                            final_val = looper + ':' + min_temp + ':00' + day_id;
+                            min_temp = '00';
+                            div_id_mid1 = looper + '_' + min_temp + day_id + '_d';
+                            
+                        }
+                        else{
+                            final_val = looper + ':00:00' + day_id;
+                            final_val2 = looper + ':30:00' + day_id;
+                            div_id_mid1 = looper + '_00'  + day_id + '_d';
+                            div_id_mid2 = looper + '_30' + day_id + '_d';
+                        }
+                    }
+
+                    $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-success");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-success");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-success");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                    $('button[type="button"][value="'+final_val2+'"]').text('');
+                    $('button[type="button"][value="'+final_val+'"]').text('');
+
+
+                    //UNDER DEVELOPMENT
+                    // $('#'+div_id_mid1).removeClass();
+                    // $('#'+div_id_mid2).removeClass();
+                    // $('#'+div_id_mid1).addClass('schedBorderMid');
+                    // $('#'+div_id_mid2).addClass('schedBorderMid');
+                    looper ++;
+                }
+
+                    var first_btn = '';
+                    var second_btn = '';
+                    var third_btn = '';
+                    var parsed_hour = parseInt(temp_hour_start);
+                    if(put_label == 1){
+                        if( parsed_hour < 10){
+                            if(parsed_hour == 9){
+                                first_btn = temp_hour_start + ':30:00' +day_id ; 
+                                second_btn = (parsed_hour + 1) + ':00:00' + day_id ; 
+                                third_btn = (parsed_hour + 1) + ':30:00' + day_id ;
+                            }
+                            else{
+                                first_btn = temp_hour_start + ':30:00' +day_id ; 
+                                second_btn = '0' + (parsed_hour + 1) + ':00:00' + day_id ; 
+                                third_btn = '0' + (parsed_hour + 1) + ':30:00' + day_id ;
+                            } 
+                        }
+                        else{
+                            first_btn = temp_hour_start + ':' + temp_min_start + ':00' +day_id ; 
+                            second_btn = (parsed_hour + 1) + ':00:00' + day_id ; 
+                            third_btn = (parsed_hour + 1) + ':30:00' + day_id ; 
+                        }
+                        $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
+                        $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
+                        $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
+                        // alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
+                        // put_label = 0;
+                    }
+                    else if (put_label == 2){
+                        if(parsed_hour < 10){
+                            if(parsed_hour == 9){
+                                first_btn =  temp_hour_start + ':' + temp_min_start +':00' +day_id ; 
+                                second_btn = temp_hour_start + ':30:00' + day_id ; 
+                                third_btn = (parsed_hour + 1) + ':00:00' + day_id ;
+                            }
+                            else{
+                                first_btn =  temp_hour_start + ':' + temp_min_start +':00' +day_id ; 
+                                second_btn = temp_hour_start + ':30:00' + day_id ; 
+                                third_btn = '0' + (parsed_hour + 1) + ':00:00' + day_id ;
+                            }  
+                        }
+                        else{
+                            first_btn =  temp_hour_start + ':' + temp_min_start + ':00' +day_id ; 
+                            second_btn = temp_hour_start + ':30:00' + day_id ; 
+                            third_btn = (parseInt(temp_hour_start) + 1) + ':00:00' + day_id ;
+                        }
+                        $('button[type="button"][value="'+first_btn+'"]').text(temp_subj);
+                        $('button[type="button"][value="'+second_btn+'"]').text(temp_sec);
+                        $('button[type="button"][value="'+third_btn+'"]').text(temp_room);
+                        // alert(first_btn + ' ' + second_btn + ' ' + third_btn); 
+                        // put_label = 0;
+                    }
+
+                if (temp_min_end == '30'){
+                    final_val2 = looper + ':00:00' + day_id;
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass();
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                $('button[type="button"][value="'+final_val2+'"]').text(''); 
+                }
+
+                // 
+                // if (looper < 10){
+
+                //     last_box = '0' + looper + ':' + temp_min_end + ':00' + day_id; 
+                //     last_text = looper + ':'
+                // }
+                // else{
+                //     last_box = looper + ':' + temp_min_end + ':00' + day_id; 
+                // }
+
+                // $('button[type="button"][value="'+last_box+'"]').removeClass().addClass("btn btn-default"); 
+                // $('button[type="button"][value="'+last_box+'"]').text('');
+
+            }
+        }
 
       //SELECT2
       $(".select2").select2();
@@ -837,53 +1088,181 @@
         $('#sched_lab').hide();
 
         $('#starttime_a').on('blur',function(){
-          var temp_start = $('#starttime_a').val();
-          var added_value = '';
-          var adder;
-          var end_value;
-          if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
-            var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
-            var temp_start_mins = temp_start[3] + temp_start[4];
-            if($('#chk_split').prop("checked")){
-              if(temp_start_mins == '30'){
-                adder = 2;
-                temp_start_mins = '00';
+          if(global_factype == 3){
+              if(global_labhour == 3)
+              {
+
+                var temp_start = $('#starttime_a').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+                  
+                  adder = 2;
+
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_a').val(end_value);
+                }
+
+                else{
+                  alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
+                  $('#starttime_a').val('');
+                  $('#endtime_a').val('');
+                }
+
+              }
+              else
+              {
+                var temp_start = $('#starttime_a').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+                  if($('#chk_split').prop("checked")){
+                    if(temp_start_mins == '30'){
+                      adder = 2;
+                      temp_start_mins = '00';
+                    }
+                    else{
+                      adder = 1;
+                      temp_start_mins = '30';
+                    }
+                  }
+                  else{
+                    adder = 3;
+                  }
+
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_a').val(end_value);
+                }
+
+                else{
+                  alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
+                  $('#starttime_a').val('');
+                  $('#endtime_a').val('');
+                }
+              }
+          }
+          else
+          { 
+            if(global_labhour == 3)
+            {
+              var temp_start = $('#starttime_a').val();
+              var added_value = '';
+              var adder;
+              var end_value;
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
+              adder = 2;
+              temp_start_hour += adder;
+              if (temp_start_hour < 10){
+                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
               }
               else{
-                adder = 1;
-                temp_start_mins = '30';
+                end_value = temp_start_hour + ':' + temp_start_mins;
               }
+
+              $('#endtime_a').val(end_value);
             }
-            else{
-              adder = 3;
+            else
+            {
+              var temp_start = $('#starttime_a').val();
+              var added_value = '';
+              var adder;
+              var end_value;
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
+                if($('#chk_split').prop("checked")){
+                  if(temp_start_mins == '30'){
+                    adder = 2;
+                    temp_start_mins = '00';
+                  }
+                  else{
+                    adder = 1;
+                    temp_start_mins = '30';
+                  }
+                }
+                else{
+                  adder = 3;
+                }
+
+                temp_start_hour += adder;
+                if (temp_start_hour < 10){
+                  end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                }
+                else{
+                  end_value = temp_start_hour + ':' + temp_start_mins;
+                }
+
+                $('#endtime_a').val(end_value);
+
             }
 
-            temp_start_hour += adder;
-            if (temp_start_hour < 10){
-              end_value = '0' + temp_start_hour + ':' + temp_start_mins;
-            }
-            else{
-              end_value = temp_start_hour + ':' + temp_start_mins;
-            }
-
-            $('#endtime_a').val(end_value);
-          }
-
-          else{
-            alert('Time is not valid since the faculty is a Designee');
-            $('#starttime_a').val('');
-            $('#endtime_a').val('');
           }
         });
 
         $('#starttime_b').on('blur',function(){
-          var temp_start = $('#starttime_b').val();
-          var added_value = '';
-          var adder;
-          var end_value;
-          if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
-            var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
-            var temp_start_mins = temp_start[3] + temp_start[4];
+          if(global_factype == 3){
+              var temp_start = $('#starttime_b').val();
+              var added_value = '';
+              var adder;
+              var end_value;
+              if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+                var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                var temp_start_mins = temp_start[3] + temp_start[4];
+
+                  if(temp_start_mins == '30'){
+                    adder = 2;
+                    temp_start_mins = '00';
+                  }
+                  else{
+                    adder = 1;
+                    temp_start_mins = '30';
+                  }
+
+                temp_start_hour += adder;
+                if (temp_start_hour < 10){
+                  end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                }
+                else{
+                  end_value = temp_start_hour + ':' + temp_start_mins;
+                }
+
+                $('#endtime_b').val(end_value);
+              }
+
+              else{
+                alert('Time is not valid since the faculty is a Designee');
+                $('#starttime_b').val('');
+                $('#endtime_b').val('');
+              }
+          }
+          else
+          {
+              var temp_start = $('#starttime_b').val();
+              var added_value = '';
+              var adder;
+              var end_value;
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
 
               if(temp_start_mins == '30'){
                 adder = 2;
@@ -894,45 +1273,94 @@
                 temp_start_mins = '30';
               }
 
-            temp_start_hour += adder;
-            if (temp_start_hour < 10){
-              end_value = '0' + temp_start_hour + ':' + temp_start_mins;
-            }
-            else{
-              end_value = temp_start_hour + ':' + temp_start_mins;
-            }
+              temp_start_hour += adder;
+              if (temp_start_hour < 10){
+                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+              }
+              else{
+                end_value = temp_start_hour + ':' + temp_start_mins;
+              }
 
-            $('#endtime_b').val(end_value);
+              $('#endtime_b').val(end_value);
           }
 
-          else{
-            alert('Time is not valid since the faculty is a Designee');
-            $('#starttime_b').val('');
-            $('#endtime_b').val('');
+        });
+
+        $('#starttime_c').on('blur',function(){
+          if(global_factype == 3){
+              var temp_start = $('#starttime_c').val();
+              var added_value = '';
+              var adder;
+              var end_value;
+              if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+                var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                var temp_start_mins = temp_start[3] + temp_start[4];
+
+                adder = 3;
+                temp_start_hour += adder;
+                if (temp_start_hour < 10){
+                  end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                }
+                else{
+                  end_value = temp_start_hour + ':' + temp_start_mins;
+                }
+
+                $('#endtime_c').val(end_value);
+              }
+
+              else{
+                alert('Time is not valid since the faculty is a Designee');
+                $('#starttime_c').val('');
+                $('#endtime_c').val('');
+              }
           }
+          else
+          {
+              var temp_start = $('#starttime_c').val();
+              var added_value = '';
+              var adder;
+              var end_value;
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
+
+              adder = 3;
+
+              temp_start_hour += adder;
+              if (temp_start_hour < 10){
+                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+              }
+              else{
+                end_value = temp_start_hour + ':' + temp_start_mins;
+              }
+
+              $('#endtime_c').val(end_value);
+          }
+
         });
 
         $('#sched_faculty').on('change', function(){
             getFacultyLoads();
             getUnitsUsed();
             getFacultyType();
+            reflectSchedTable();
+            resetPlotForm();
         });
 
         $('#sched_acad_year').on('change', function(){
             getFacultyLoads();
             getUnitsUsed();
+            reflectSchedTable();
+            resetPlotForm();
         });
 
         $('#sched_sem').on('change', function(){
             getFacultyLoads();
             getUnitsUsed();
+            reflectSchedTable();
+            resetPlotForm();
         });
 
         $('#sched_load').on('change', function(){
-          showTeachAssignModal();
-        });
-
-        $('#sched_load').on('click', function(){
           showTeachAssignModal();
         });
 
@@ -959,25 +1387,63 @@
             showAvailRoom(day, start, end,'rooms_b');
         });
 
+         $('#day_c').on('change', function(){
+            var day = $('#day_c').val();
+            var start = $('#starttime_c').val();
+            var end = $('#endtime_c').val();
+            showAvailLab(day, start, end,'rooms_c');
+        });
+
         $('#add_sched_form').on('submit', function(event){
           event.preventDefault();
             var acad_yr = $('#sched_acad_year').val();
             var sem = $('#sched_sem').val();
             var load_id = $('#sched_load').val();
-            var $form = $('form');
+            if($('#chk_split').prop("checked")){
+              global_splitcontrol = 1;
+            }
+            else{
+              global_splitcontrol = 0;
+            }
             var data = {
               'acad_yr': acad_yr, 
               'sem': sem, 
-              'load_id': load_id, 
+              'load_id': load_id,
+              'control':global_labhour,
+              's_control':global_splitcontrol,
               'load_type': 'R'
             };
+
            $.ajax({  
             url:"<?php echo base_url('Transaction/add_to_sched')?>",  
             type:"POST",  
             data: $('#add_sched_form').serialize() + '&' + $.param(data), 
             success:function(data)
             {  
-                alert(data);
+                if (data == 'INSERTED')
+                {
+                  $('#starttime_a').val('');
+                  $('#endtime_a').val('');
+                  $('#day_a').val('');
+                  $('#rooms_a').val('');
+                  $('#starttime_b').val('');
+                  $('#endtime_b').val('');
+                  $('#day_b').val('');
+                  $('#rooms_b').val('');
+                  $('#starttime_c').val('');
+                  $('#endtime_c').val('');
+                  $('#day_c').val('');
+                  $('#rooms_c').val('');
+                  $('#modalAddTime').modal('hide');
+                  $('#sched_b').hide();
+                  $('#divsplit').hide();
+                  $('#chk_split').prop('checked', false);
+                  $('#sched_lab').hide();
+                  $('#sched_load').empty();
+                  $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
+                  reflectSchedTable();
+                  getFacultyLoads();
+                }
             },
              error: function (data) {
                     alert(JSON.stringify(data));

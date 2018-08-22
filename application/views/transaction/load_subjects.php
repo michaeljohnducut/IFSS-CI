@@ -54,7 +54,7 @@
                             <div class="col-md-3">
                                 <br>
                                 <label class="control-label">Available Sections:</label>
-                                    <select class="form-control select2" id="select_section">
+                                    <select class="form-control" id="select_section">
                                         <option value="0" disabled selected>-Sections-</option>
                                     </select>
                             </div>

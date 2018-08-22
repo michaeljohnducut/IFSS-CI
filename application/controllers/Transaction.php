@@ -522,7 +522,7 @@ class Transaction extends CI_Controller
 
 	public function get_prof_load(){
 
-		echo json_encode($this->getdata_model->view_facload_tbl($_POST));
+		echo json_encode($this->getdata_model->get_prof_load($_POST));
 			exit();
 
 	}
@@ -539,6 +539,12 @@ class Transaction extends CI_Controller
 		echo json_encode($this->getdata_model->get_faculty_type($_POST));
 			exit();
 
+	}
+
+	public function get_avail_labs(){
+
+		echo json_encode($this->getdata_model->get_avail_labs($_POST));
+		exit();
 	}
 
 } 

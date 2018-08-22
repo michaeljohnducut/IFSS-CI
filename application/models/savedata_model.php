@@ -1897,6 +1897,8 @@ class savedata_model extends CI_Model
 		$temp_sem = $this->security->xss_clean($this->input->post('sem'));
 		$temp_load_id = $this->security->xss_clean($this->input->post('load_id'));
 		$temp_load = $this->security->xss_clean($this->input->post('load_type'));
+		$temp_control = $this->security->xss_clean($this->input->post('control'));
+		$split_control = $this->security->xss_clean($this->input->post('s_control'));
 
 		// $query = $this->db->where('subj_match_id', $temp_load_id)
 		// 						->where('acad_yr', $temp_acadyr)
@@ -1919,16 +1921,18 @@ class savedata_model extends CI_Model
 
 		// if($number_filter_row == 0)
 		// {
-			
-			$i = 0; 
-			foreach($temp_start as $r){
-			if(isset($temp_room[$i])){
+
+			// $i = 0; 
+			// foreach($temp_room as $r){
+
+		if($temp_control == 3){
+
+			if(isset($temp_start[0])){
 				$data = array(
-					'room_id' => $temp_room[$i], 
-					'time_start' => $temp_start[$i], 
-					'time_finish' => $temp_end[$i],
-					'time_start' => $temp_start[$i], 
-					'day' => $temp_day[$i], 
+					'room_id' => $temp_room[0], 
+					'time_start' => $temp_start[0], 
+					'time_finish' => $temp_end[0],
+					'day' => $temp_day[0], 
 					'acad_yr' => $temp_acadyr,
 					'sem' => $temp_sem,
 					'subj_match_id' => $temp_load_id,
@@ -1936,8 +1940,74 @@ class savedata_model extends CI_Model
 				
 					$this->db->insert('teaching_assign_sched', $data);
 				}
-				$i++;
+
+				if(isset($temp_start[2])){
+				$data = array(
+					'room_id' => $temp_room[1], 
+					'time_start' => $temp_start[2], 
+					'time_finish' => $temp_end[2],
+					'day' => $temp_day[2], 
+					'acad_yr' => $temp_acadyr,
+					'sem' => $temp_sem,
+					'subj_match_id' => $temp_load_id,
+					'load_type' => $temp_load);
+				
+					$this->db->insert('teaching_assign_sched', $data);
+				}
+		}
+		
+
+		else{
+			
+			if($split_control == 1){
+				if(isset($temp_start[0])){
+				$data = array(
+					'room_id' => $temp_room[0], 
+					'time_start' => $temp_start[0], 
+					'time_finish' => $temp_end[0],
+					'day' => $temp_day[0], 
+					'acad_yr' => $temp_acadyr,
+					'sem' => $temp_sem,
+					'subj_match_id' => $temp_load_id,
+					'load_type' => $temp_load);
+				
+					$this->db->insert('teaching_assign_sched', $data);
+				}
+
+				if(isset($temp_start[1])){
+				$data = array(
+					'room_id' => $temp_room[1], 
+					'time_start' => $temp_start[1], 
+					'time_finish' => $temp_end[1],
+					'day' => $temp_day[1], 
+					'acad_yr' => $temp_acadyr,
+					'sem' => $temp_sem,
+					'subj_match_id' => $temp_load_id,
+					'load_type' => $temp_load);
+				
+					$this->db->insert('teaching_assign_sched', $data);
+				}
 			}
+
+			else{
+				if(isset($temp_start[0])){
+				$data = array(
+					'room_id' => $temp_room[0], 
+					'time_start' => $temp_start[0], 
+					'time_finish' => $temp_end[0],
+					'day' => $temp_day[0], 
+					'acad_yr' => $temp_acadyr,
+					'sem' => $temp_sem,
+					'subj_match_id' => $temp_load_id,
+					'load_type' => $temp_load);
+				
+					$this->db->insert('teaching_assign_sched', $data);
+				}
+			}
+		}
+
+				// $i++;
+			// }
 
 		$output = 'INSERTED';
 			

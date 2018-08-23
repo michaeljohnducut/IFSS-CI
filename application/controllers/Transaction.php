@@ -190,6 +190,7 @@ class Transaction extends CI_Controller
 	public function new_schedule()
 	{	
 		$data['courses'] = $this->getdata_model->course();
+		$data['rooms'] = $this->getdata_model->room_sorted();
 
 		if(isset($_POST['subj_id'])){
 			print_r('subj_id');
@@ -551,6 +552,18 @@ class Transaction extends CI_Controller
 	public function remove_sched()
 	{
 		echo ($this->savedata_model->remove_sched($_POST));
+		exit();
+	}
+
+	public function reflect_section_table(){
+
+		echo json_encode($this->getdata_model->reflect_section_table($_POST));
+		exit();
+	}
+
+	public function reflect_room_table(){
+
+		echo json_encode($this->getdata_model->reflect_room_table($_POST));
 		exit();
 	}
 

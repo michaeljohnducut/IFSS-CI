@@ -760,6 +760,33 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
+	public function room_sorted()
+	{
+		$result = array();
+
+		$query = $this->db->select('room_id, room_code, room_desc, building')
+                ->where('status', 1)
+                ->order_by('room_code','asc')
+                ->get('room');
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
+
+			$result[] = array(
+					$r->room_code,
+					$r->room_desc,
+					$r->building,
+					$btn,
+					$r->room_id
+					);
+		}
+
+		//<button class="btn btn-sm  btn-info id="view_data" onclick="view_data()" data-id="'.$r->room_id.'"><span class="fa fa-eye"></span></button>
+
+		return $result;
+	}
+
 	public function view_room()
 	{
 		$result = array();
@@ -1976,6 +2003,82 @@ FROM subject_match sm
 					$time,
 					$r->day,
 					$r->room_code
+					);
+		}
+
+		return $result;	
+	}
+
+	public function reflect_section_table(){	//GETS SECTION'S SUMMARY OF SCHEDULES
+
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("s.subj_code, s.subj_desc, s.units, CONCAT('Prof.', f.fname, ' ', f.lname) as 'facname', ta.time_start, ta.time_finish, ta.day, r.room_code")
+				->where('sm.section', $section_id)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->join('subject_match sm','ta.subj_match_id = sm.subj_match_id')
+				->join('faculty f','f.faculty_id = sm.faculty_id ')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('room r','r.room_id = ta.room_id')
+                ->get('teaching_assign_sched ta');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units, 
+					$r->facname, 
+					$time,
+					$r->day,
+					$r->room_code
+					);
+		}
+
+		return $result;	
+	}
+
+	public function reflect_room_table(){	//GETS SECTION'S SUMMARY OF SCHEDULES
+
+		$room_id = $this->security->xss_clean($this->input->post('room_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("s.subj_code, s.subj_desc, s.units,c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, CONCAT('Prof.', f.fname, ' ', f.lname) as 'facname'")
+				->where('ta.room_id', $room_id)
+				->where('ta.acad_yr', $acad_year)
+				->where('ta.sem', $sem)
+				->join('subject_match sm','ta.subj_match_id = sm.subj_match_id')
+				->join('section se','se.section_id = sm.section')
+				->join('course c','c.course_id = se.course')
+				->join('faculty f','f.faculty_id = sm.faculty_id ')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('room r','r.room_id = ta.room_id')
+                ->get('teaching_assign_sched ta');
+
+		foreach ($query->result() as $r) 
+		{	
+
+			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units, 
+					$section, 
+					$time,
+					$r->day,
+					$r->facname
 					);
 		}
 

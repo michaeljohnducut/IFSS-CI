@@ -23,7 +23,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">View Schedules by:</label>
-                                <select class="form-control select2" id="change_view">
+                                <select class="form-control " id="change_view">
                                   <option selected="" value="1">Faculty</option>
                                   <option value="2">Sections</option>
                                   <option value="3">Rooms/Labs</option>
@@ -38,8 +38,8 @@
                         <div class="row" id="div_by_faculty_a">
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control select2" id="sched_acad_year">
-                                    <option>-ACAD YEAR-</option>
+                                <select class="form-control " id="sched_acad_year">
+                                    <option value="0">-ACAD YEAR-</option>
                                     <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
                                             echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -49,8 +49,8 @@
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Semester</label>
-                                <select class="form-control select2" id="sched_sem">
-                                    <option>-SELECT SEM-</option>
+                                <select class="form-control" id="sched_sem">
+                                    <option value="0">-SELECT SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
                                     <option value="summer">Summer</option> 
@@ -58,8 +58,8 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Select Faculty:</label>
-                                <select class="form-control select2" id="sched_faculty">
-                                    <option>-SELECT FACULTY-</option>
+                                <select class="form-control " id="sched_faculty">
+                                    <option value="0">-SELECT FACULTY-</option>
                                     <?php foreach($faculty as $r) echo '<option value="'.$r[7].'">'.$r[1].', '.$r[2].' '.$r[3].'</option>';?>
                                 </select>
                             </div>
@@ -92,8 +92,8 @@
                         <div class="row" id="div_by_section">
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control select2" id="sec_acadyr">
-                                    <option>-ACAD YEAR-</option>
+                                <select class="form-control" id="sec_acadyr">
+                                    <option value="0">-ACAD YEAR-</option>
                                     <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
                                             echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -103,8 +103,8 @@
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Semester</label>
-                                <select class="form-control select2" id="sec_sem">
-                                    <option>-SEM-</option>
+                                <select class="form-control" id="sec_sem">
+                                    <option value="0">-SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
                                     <option value="summer">Summer</option> 
@@ -112,16 +112,16 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Select Course:</label>
-                                <select class="form-control select2" id="sec_course">
-                                    <option>-COURSE-</option>
+                                <select class="form-control" id="sec_course">
+                                    <option value="0">-COURSE-</option>
                                     <?php foreach($courses as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
                                     </select>
                                 </select>
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Select Year and Section</label>
-                                <select class="form-control select2" id="sec_yearsec">
-                                    <option>-YEAR AND SECTION-</option>
+                                <select class="form-control" id="sec_yearsec">
+                                    <option value="0">-YEAR AND SECTION-</option>
                                 </select>    
                             </div>
                             <div class="col-md-3">
@@ -132,8 +132,8 @@
                         <div class="row" id="div_by_room" >
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control select2" id="room_acad_year">
-                                    <option>-ACAD YEAR-</option>
+                                <select class="form-control" id="room_acad_year">
+                                    <option value="0">-ACAD YEAR-</option>
                                     <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
                                             echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -143,8 +143,8 @@
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Semester</label>
-                                <select class="form-control select2" id="room_sem">
-                                    <option>-SEM-</option>
+                                <select class="form-control" id="room_sem">
+                                    <option value="0">-SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
                                     <option value="summer">Summer</option> 
@@ -152,8 +152,9 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Select Room:</label>
-                                <select class="form-control select2" id="room_labs">
-                                    <option>-ROOMS/LABS-</option>
+                                <select class="form-control" id="room_labs">
+                                    <option value="0">-ROOMS/LABS-</option>
+                                    <?php foreach($rooms as $r) echo '<option value="'.$r[4].'">'.$r[0].'</option>';?>
                                 </select>
                             </div>
                         </div>
@@ -766,6 +767,48 @@
                 url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
                 method:"POST", 
                 data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        function reflectSectionTable(){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var section_id = $('#sec_yearsec').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_section_table')?>", 
+                method:"POST", 
+                data:{section_id:section_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        function reflectRoomTable(){
+
+            var sem = $('#room_sem').val();
+            var acad_year = $('#room_acad_year').val();
+            var room_id = $('#room_labs').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_room_table')?>", 
+                method:"POST", 
+                data:{room_id:room_id, acad_year:acad_year, sem:sem}, 
                 dataType: "json",
                 success:function(data){
                     changeSchedColor(data);
@@ -2017,6 +2060,50 @@
             resetPlotForm();
         });
 
+        //=========================================================
+        //SECTION VIEW
+
+        $('#sec_sem').on('change', function(){
+          resetPlotForm();
+          reflectSectionTable();
+        });
+
+        $('#sec_acadyr').on('change', function(){
+          resetPlotForm();
+          reflectSectionTable();
+        });
+
+        $('#sec_yearsec').on('change', function(){
+          resetPlotForm();
+          reflectSectionTable();
+        });
+
+
+        //=========================================================
+        // ENDSECTION VIEW
+
+        //=========================================================
+        //ROOM VIEW
+
+        $('#room_sem').on('change', function(){
+          resetPlotForm();
+          reflectRoomTable();
+        });
+
+        $('#room_acad_year').on('change', function(){
+          resetPlotForm();
+          reflectRoomTable();
+        });
+
+        $('#room_labs').on('change', function(){
+          resetPlotForm();
+          reflectRoomTable();
+        });
+
+
+        //=========================================================
+        // END ROOM VIEW
+
         $('#sched_load').on('change', function(){
           showTeachAssignModal();
         });
@@ -2055,22 +2142,49 @@
         $('#change_view').on('change',function(){
           var temp_val = $('#change_view').val();
           if(temp_val == 1){
+            resetPlotForm();
             $('#div_by_faculty_a').show();
             $('#div_by_faculty_b').show();
             $('#div_by_section').hide();
             $('#div_by_room').hide();
+            $('#sec_acadyr').val('0');
+            $('#sec_sem').val('0');
+            $('#sec_course').val('0');
+            $('#sec_yearsec').val('0');
+            $('#room_acad_year').val('0');
+            $('#room_sem').val('0');
+            $('#room_labs').val('0');
           }
+
           else if(temp_val == 2){
+            resetPlotForm();
             $('#div_by_faculty_a').hide();
             $('#div_by_faculty_b').hide();
             $('#div_by_section').show();
             $('#div_by_room').hide();
+            $('#sched_acad_year').val('0');
+            $('#sched_sem').val('0');
+            $('#sched_faculty').val('0');
+            $('#sched_load').val('0');
+            $('#room_acad_year').val('0');
+            $('#room_sem').val('0');
+            $('#room_labs').val('0');
           }
+
           else{
+            resetPlotForm();
             $('#div_by_faculty_a').hide();
             $('#div_by_faculty_b').hide();
             $('#div_by_section').hide();
             $('#div_by_room').show();
+            $('#sched_acad_year').val('0');
+            $('#sched_sem').val('0');
+            $('#sched_faculty').val('0');
+            $('#sched_load').val('0');
+            $('#sec_acadyr').val('0');
+            $('#sec_sem').val('0');
+            $('#sec_course').val('0');
+            $('#sec_yearsec').val('0');
           }
         });
 

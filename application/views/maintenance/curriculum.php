@@ -518,7 +518,7 @@
                         
                         if (data == 'CHANGED')
                         {
-                            swal("Success!", "You're using a different curriculum", "success");
+                            swal("Loaded!", "Curriculum on use has been loaded.", "success");
                         }  
                     },
                     error: function (data) {

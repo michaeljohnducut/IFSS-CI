@@ -83,9 +83,11 @@
                             </div>
                             <div class="col-md-3" style="text-align: right;">
                                 <p id="TSLoad_id">Temporary Substitution: </p>
+                                <h5><b>EVALUATION:</b></h5>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="units_used">Total Hours: </p>
+                                <h5 id="lbl_eval"></h5>
                             </div>
                         </div>
 
@@ -731,6 +733,32 @@
       var global_splitcontrol = 0;
 
       //FUNCTIONS
+      //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
+      function showSpec(id)
+        {
+            event.preventDefault();  
+                $.ajax({  
+                url:"<?php echo base_url('Transaction/get_consec')?>",  
+                method:"POST",  
+                data:{faculty_id:id},
+                success:function(data)
+                {  
+                    if(data == 'CONSECUTIVE')
+                    {
+                        $('#lbl_eval').empty();
+                        $('#lbl_eval').append('WITH CONSECUTIVE "S" GRADE');
+                    }
+                    if(data == 'NONE')
+                    {
+                        $('#lbl_eval').empty();
+                        $('#lbl_eval').append('NO CONSECUTIVE "S" GRADE');
+                    }
+                },
+                error: function (data) {
+                        alert(JSON.stringify(data));
+                }
+                });  
+        }
 
       function resetPlotForm(){
         $('.btn-success').removeClass().addClass('btn btn-default')
@@ -2032,11 +2060,13 @@
 
         $('#sched_faculty').on('change', function(){
           global_total_hrs = 0;
+          var temp_fac = $('#sched_faculty').val();
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
             reflectSchedTable();
+            showSpec(temp_fac);
             resetPlotForm();
         });
 

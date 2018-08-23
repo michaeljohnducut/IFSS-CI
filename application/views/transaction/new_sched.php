@@ -127,7 +127,7 @@
                                 </select>    
                             </div>
                             <div class="col-md-3">
-                                <button style="margin-top: 25px; margin-left: 10px" type="button" class="btn btn-info">Add minor subjects</button>
+                                <button style="margin-top: 25px; margin-left: 10px"  type="button" class="btn btn-info" id="btn_add_minor" data-toggle = "modal" data-target ="#modalAddMinor">Add minor subjects</button>
                             </div>
                         </div>
 
@@ -541,8 +541,114 @@
             
                     </div>
                 </div>
+
+<!-- MINOR SUBJECTS MODAL -->
+<div class="modal fade bs-example-modal-lg" id="modalAddMinor" tabindex="-1" role="dialog" aria-labelledby="modalAddMinor" aria-hidden="true" style=" display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Add minor subjects</h4>
+                    </div>
+                    <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                    </div>
+                    <div class="modal-body">
+                      <div class="col-md-12">
+                        <div class="col-md-8">
+                          <label class="control-label">Select Minor Subject:</label>
+                          <select id="minor_subj" class="form-control">
+                            <option value="0">-Minor Subjects-</option>
+                          </select>
+                          <br><br>
+                        </div>
+                        <div class="col-md-4" style="text-align:right;">
+                          <input style="margin-top: 35px;" type="checkbox" id="chk_split_minor">
+                          <label style="margin-top: 35px;" for="chk_split_minor">Split hours</label>
+                        </div>
+                      </div>
+                      <form id="add_minor_form" method="POST">
+                      <div class="col-md-12" id="sched_a">
+                        <div class="col-md-3">
+                          <label class="control-label">Start time:</label>
+                          <input type="time" id="minor_start_a" name="minor_start[]" class="form-control" required="">
+                        </div>
+                        <div class="col-md-3">
+                          <label class="control-label">End time:</label>
+                          <input type="time" id="minor_end_a" name="minor_end[]" readonly="" class="form-control" required="">
+                        </div>
+                        <div class="col-md-3">
+                          <label class="control-label">Day:</label>
+                          <select class="form-control" id="day_minor_a" name="day_minor[]" required="">
+                            <option value="0">-Day-</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                          </select>
+                      </div>
+                      <div class="col-md-3">
+                          <label class="control-label">Lecture Room:</label>
+                          <select class="form-control" id="rooms_minor_a" name="rooms_minor[]" required="">
+                            
+                          </select>
+                          <br>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12" id="sched_b_minor">
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">Start time:</label>
+                          <input type="time" id="minor_start_b" name="minor_start[]" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">End time:</label>
+                          <input type="time" id="minor_end_b" name="minor_end[]" readonly="" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">Day:</label>
+                          <select class="form-control" id="day_minor_b" name="day_minor[]">
+                            <option value="0">-Day-</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                          </select>
+                      </div>
+                      <div class="col-md-3">
+                        <br>
+                          <label class="control-label">Lecture Room:</label>
+                          <select class="form-control" id="rooms_minor_b"  name="rooms_minor[]">
+                            
+                          </select>
+                          <br>
+                        </div>
+                        
+                      </div>                        
+                      </div>
+                    <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect text-left">Save</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+</div>
+
+
 <a data-toggle="modal" href="#modalAddTime" id="openMod"></a>
 
+<!-- MODAL ADD SUBJET -->
 <div class="modal fade bs-example-modal-lg" id="modalAddTime" tabindex="-1" role="dialog" aria-labelledby="modalAddTime" aria-hidden="true" style=" display: none;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -706,6 +812,7 @@
             </div>
             <!-- /.modal-dialog -->
 </div>
+
 
 
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
@@ -1287,6 +1394,7 @@
         $('#sched_lab').hide();
         $('#div_by_room').hide();
         $('#div_by_section').hide();
+        $('#sched_b_minor').hide();
 
         $('#starttime_a').on('blur',function(){
 
@@ -2242,6 +2350,150 @@
                });
         });
 
+  //=============================================================================== 
+  //MINOR ELEMENTS
+
+        $('#chk_split_minor').on('change', function(){
+            if($(this).prop("checked")){
+              $('#sched_b_minor').show();
+            }
+            else{
+              $('#sched_b_minor').hide();
+            }
+        });
+
+        $('#minor_start_a').on('blur', function(){
+
+            var temp_start = $('#minor_start_a').val();
+            var added_value = '';
+            var adder;
+            var end_value;
+            if (temp_start > '07:29' &&  temp_start < '18:01' ){
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
+              if($('#chk_split_minor').prop("checked")){
+                if(temp_start_mins == '30'){
+                  adder = 2;
+                  temp_start_mins = '00';
+                }
+                else{
+                  adder = 1;
+                  temp_start_mins = '30';
+                }
+              }
+              else{
+                adder = 3;
+              }
+
+              temp_start_hour += adder;
+              if (temp_start_hour < 10){
+                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+              }
+              else{
+                end_value = temp_start_hour + ':' + temp_start_mins;
+              }
+
+              $('#minor_end_a').val(end_value);
+            }
+
+            else{
+              alert('PLEASE INPUT A VALID TIME');
+              $('#minor_start_a').val('');
+              $('#minor_end_a').val('');
+            }
+
+        });
+
+
+        $('#minor_start_b').on('blur',function(){
+
+            var temp_start = $('#minor_start_b').val();
+            var added_value = '';
+            var adder;
+            var end_value;
+            if (temp_start > '07:29' &&  temp_start < '19:31' ){
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
+
+                if(temp_start_mins == '30'){
+                  adder = 2;
+                  temp_start_mins = '00';
+                }
+                else{
+                  adder = 1;
+                  temp_start_mins = '30';
+                }
+
+              temp_start_hour += adder;
+              if (temp_start_hour < 10){
+                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+              }
+              else{
+                end_value = temp_start_hour + ':' + temp_start_mins;
+              }
+
+              $('#minor_end_b').val(end_value);
+            }
+
+            else{
+              alert('PLEASE ENTER A VALID TIME');
+              $('#minor_start_b').val('');
+              $('#minor_end_b').val('');
+            }
+
+        });
+
+
+        $('#btn_add_minor').on('click', function(){
+
+          var sem = $('#sec_sem').val();
+          var section_id = $('#sec_yearsec').val();
+
+          $.ajax({   
+              url:"<?php echo base_url('Transaction/get_minor_subj')?>",  
+              method: "POST",
+              data: {sem:sem,section_id:section_id},
+              dataType:'JSON',
+              success: function (data) 
+              {   
+                  $('#minor_subj').empty();
+                  $('#minor_subj').append('<option value="0">-Minor Subjects-</option>');
+                  // $('#modalAddMinor').modal('show');
+
+                  var len = data.length;
+                  for(var i = 0; i < len ; i++)
+                  {
+                    var val = data[i][0];
+                    var code = data[i][1];
+                    var desc = data[i][2];
+                    $('#minor_subj').append('<option value="'+val+'">'+code+'-'+desc+'</option>');
+                  }
+
+                  
+              },
+              error: function (data) {
+                swal("Error!", "Failed to reschedule.", "error");
+                alert(JSON.stringify(data));
+              }
+            });
+
+        });
+
+        $('#day_minor_a').on('change',function(){
+            var start = $('#minor_start_a').val();
+            var end = $('#minor_end_a').val();
+            var day = $('#day_minor_a').val();
+            showAvailRoom(day, start, end, 'rooms_minor_a');
+        });
+
+        $('#day_minor_b').on('change',function(){
+            var start = $('#minor_start_b').val();
+            var end = $('#minor_end_b').val();
+            var day = $('#day_minor_b').val();
+            showAvailRoom(day, start, end, 'rooms_minor_b');
+        });
+//==========================================================================================
+//END NG MINOR ELEMENTS
 
         $('#add_sched_form').on('submit', function(event){
           event.preventDefault();
@@ -2341,6 +2593,7 @@
             });  
         });
       });
+
 
 $(document).on('click', '#btn_reschedule', function(e){  
 

@@ -567,6 +567,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function get_minor_subj(){
+
+		echo json_encode($this->getdata_model->get_minor_subj($_POST));
+		exit();
+	}
+
 } 
 
 ?>

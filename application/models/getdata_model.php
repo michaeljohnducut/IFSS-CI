@@ -2122,6 +2122,36 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function get_minor_subj(){	//GETS MINOR SUBJECTS FOR A SECTION
+
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
+				->where('c.year_lvl = (SELECT se.year_lvl
+                    FROM section se
+                    WHERE se.section_id = '.$section_id.')', NULL, FALSE)
+				->where('s.specialization is null', NULL, FALSE)
+				->where('c.sem ', $sem)
+				->join('subject s','s.subj_id = c.subj_code')
+                ->get('curriculum c ');
+
+		foreach ($query->result() as $r) 
+		{	
+
+			$result[] = array(
+					$r->subj_id,
+					$r->subj_code,
+					$r->subj_desc
+					);
+		}
+
+		return $result;	
+	}
+
+
+
 
 }
 ?>

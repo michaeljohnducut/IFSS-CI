@@ -582,6 +582,43 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
+	public function validate_subject_curr()
+	{
+		$result = '';
+
+		$subject = $this->security->xss_clean($this->input->post('subject'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$year_level = $this->security->xss_clean($this->input->post('year_level'));
+		$dept = $this->security->xss_clean($this->input->post('dept'));
+
+		// $size = sizeof($subject) - 1;
+		// echo $subject[$size];
+
+			$query = $this->db->group_start()
+								->where('curriculum_yr', $acad_year)
+								->where('sem', $sem)
+								->where('year_lvl', $year_level)
+								->where('course', $dept)
+								->where('subj_code', $subject)
+							->group_end()
+							->get('curriculum');
+
+			$number_filter_row = $query->num_rows();
+
+			if($number_filter_row == 0)
+			{
+				$result = '0';
+			}
+			else
+			{
+				$result = $subject;
+			}
+		
+
+		return $result;
+	}
+
 	public function curriculum_year()
 	{
 		$result = array();

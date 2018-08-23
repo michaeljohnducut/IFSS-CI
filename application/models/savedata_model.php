@@ -2083,5 +2083,25 @@ class savedata_model extends CI_Model
 		return $output;
 
 	}
+
+	public function assign_prof(){
+
+		$output = "";
+		$id = $this->security->xss_clean($this->input->post('id'));
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+
+		if($this->db->query("UPDATE `services_assign` SET `faculty_id`= $fac_id  WHERE services_id = $id"))
+			{
+				$output = 'UPDATED';
+			}
+			else
+			{
+				$output = 'NOT UPDATED';
+			}
+
+
+		return $output;
+
+	}
 }
 ?>

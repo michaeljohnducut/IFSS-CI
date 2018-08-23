@@ -573,6 +573,26 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function view_spec_service()
+	{
+		echo json_encode($this->getdata_model->view_service_sched($_POST));
+			exit();
+
+	}
+
+	public function get_avail_prof()
+	{
+		echo json_encode($this->getdata_model->get_avail_prof($_POST));
+			exit();
+
+	}
+
+	public function assign_prof()
+	{
+		echo ($this->savedata_model->assign_prof($_POST));
+		exit();
+	}
+
 } 
 
 ?>

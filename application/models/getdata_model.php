@@ -1021,7 +1021,7 @@ class getdata_model extends CI_Model{
 
 		foreach($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success">A</button>
+			$btn = '<button class="btn btn-info btn-sm" data-id = "'.$r->services_id.'" id = "assign_prof" btn-success">A</button>
 					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
@@ -1107,7 +1107,7 @@ class getdata_model extends CI_Model{
 	{
 		$result = array();
 
-		$id = $this->security->xss_clean($this->input->post('service_sched_id'));
+		$id = $this->security->xss_clean($this->input->post('service_id'));
 
 		$query = $this->db->select('day, time_start, time_end, room, services_id')
                 ->where('services_id', $id)
@@ -2148,6 +2148,42 @@ FROM subject_match sm
 		}
 
 		return $result;	
+	}
+
+	public function get_avail_prof(){
+
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$result = array();
+
+		$query = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+				->where('f.faculty_id NOT IN(SELECT sm.faculty_id
+				FROM teaching_assign_sched ta
+					JOIN subject_match sm ON sm.subj_match_id = ta.subj_match_id
+				    JOIN faculty f on f.faculty_id = sm.faculty_id
+				WHERE ta.time_start > "'.$start_time.'"
+				AND ta.time_start < "'.$end.'"
+				AND ta.day = "'.$day.'"
+				OR ta.time_finish > "'.$start_time.'"
+				AND ta.time_finish < "'.$end.'"
+				AND ta.day = "'.$day.'"
+				OR ta.time_start = "'.$start_time.'"
+				AND ta.time_finish = "'.$end.'"
+				AND ta.day = "'.$day.'")')
+                ->get('faculty f');
+
+		foreach ($query->result() as $r) 
+		{	
+
+			$result[] = array(
+					$r->faculty_id,
+					$r->facname
+					);
+		}
+
+		return $result;	
+
 	}
 
 

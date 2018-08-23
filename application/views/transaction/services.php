@@ -264,7 +264,42 @@
                                     <!-- /.modal-content -->
                                 </div>
                                 <!-- /.modal-dialog -->
-                            </div>
+                         </div>
+
+<a data-toggle="modal" href="#modalAssignProf" id="openModAssign"></a>
+<div class="modal fade bs-example-modal-lg" id="modalAssignProf" tabindex="-1" role="dialog" aria-labelledby="modalAssignProf" aria-hidden="true" style=" display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Assign Available Faculty</h4>
+                    </div>
+                    <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                    </div>
+                    <div class="modal-body">
+                        <form id="add_fac_form" method="POST">
+                        <div class="col-md-6">
+                            <label class="control-label">Select available professor:</label>
+                            <select id="avail_prof" class="form-control"> 
+                                <option value="0">-Faculty-</option>
+                            </select>
+                            <input type="hidden" id="hid_start">
+                            <input type="hidden" id="hid_end">
+                            <input type="hidden" id="hid_day">
+                            <input type="hidden" id="hid_id">
+                        </div>
+                       
+                    </div>
+                    <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect text-left">Save</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+</div>
 
             <a data-toggle="modal" href="#modalEditServiceSched" id="openMod"></a>
 
@@ -371,6 +406,31 @@
                         
               }
           });
+        }
+
+        function showAvailProf(day, start, end)
+        {
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_prof')?>", 
+                method:"POST",  
+                data:{day:day, start_time:start,end:end},  
+                dataType: "json",
+                success:function(data){  
+
+                    var len = data.length;
+                    $('#avail_prof').empty();
+                    $('#avail_prof').append('<option value="0">-Faculty-</option>');
+                    for(var i = 0; i < len; i++)
+                    {
+                        var val = data[i][0];
+                        var text = data[i][1];
+                        $('#avail_prof').append('<option value="'+val+'">'+text+'</option>');
+                    }
+                },
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            }); 
         }
 
         function fetch_data(ay_temp, sem_temp)
@@ -694,4 +754,50 @@
             }); 
 
         });
+
+    $('#add_fac_form').on('submit', function(e){
+        var id = $('#hid_id').val();
+        var fac_id =$('#avail_prof').val();
+        e.preventDefault();
+        $.ajax({  
+            url:"<?php echo base_url('Transaction/assign_prof')?>", 
+            method:"POST",  
+            data:{id:id, fac_id:fac_id},
+            success:function(data){  
+                if(data == 'UPDATED'){
+                    swal("Success!", "Faculty member has been assigned.", "success");
+                    $('#modalAssignProf').modal('hide');
+                    loadtable();
+                }
+            },
+            error: function (data) {
+                alert(JSON.stringify(data));
+            }
+       }); 
+
+    });
+
+    $(document).on('click', '#assign_prof', function(){
+        var id = $(this).data("id");
+        $.ajax({  
+            url:"<?php echo base_url('Transaction/view_spec_service')?>", 
+            method:"POST",  
+            data:'service_id='+id,  
+            dataType: "json",
+            success:function(data){  
+                var day = data[0][0];
+                var start = data[0][1];
+                var end = data[0][2];
+                var s_id = data[0][4];
+                $('#hid_id').val(s_id);
+
+                showAvailProf(day, start, end);
+                $('#openModAssign').trigger('click');
+            },
+            error: function (data) {
+                alert(JSON.stringify(data));
+            }
+       }); 
+    });
+
     </script>

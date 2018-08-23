@@ -620,6 +620,12 @@ class Maintenance extends CI_Controller {
 		exit();
 	}
 
+	public function validate_subject_curri()
+	{
+		echo ($this->getdata_model->validate_subject_curr($_POST));
+		exit();
+	}
+
 	public function section()
 	{
 		// $data['acad_yr'] = $this->getdata_model->acad_yr();

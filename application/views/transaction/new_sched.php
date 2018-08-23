@@ -1617,6 +1617,7 @@
             }
 
           }
+        
         });
 
 //====================================================================================
@@ -1819,7 +1820,6 @@
                 $('#endtime_b').val('');
               }
           }
-
 
         });
 
@@ -2197,5 +2197,54 @@
             });  
         });
       });
+
+$(document).on('click', '#btn_reschedule', function(e){  
+
+            e.preventDefault();
+            var id = $(this).data("id");
+
+              swal({
+                        title: "Are you sure?",
+                        text: "Reschedule this teaching assignment?", 
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+              })
+                .then((willApprove) => {
+                  if (willApprove) {
+                    // alert(id);
+                    $.ajax({   
+                      url:"<?php echo base_url('Transaction/remove_sched')?>",  
+                      method: "POST",
+                      data: {id:id},
+                      success: function (data) 
+                      {
+                         if(data == 'DELETED'){
+                            swal("Success!", "Teaching load available for rescheduling.", "success");  
+                            getFacultyLoads();
+                            resetPlotForm();
+                            reflectSchedTable();
+                            loadSchedTable();
+
+                         }
+
+                         else{
+
+                            swal("Error!", "Failed to reschedule.", "error");
+                            alert(JSON.stringify(data));
+                         }
+                      },
+                      error: function (data) {
+                        swal("Error!", "Failed to reschedule.", "error");
+                        alert(JSON.stringify(data));
+                      }
+                    });
+                  } 
+
+                  else {
+                    swal("Cancelled", "");
+                  }
+                });
+            });
 
     </script>

@@ -548,6 +548,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function remove_sched()
+	{
+		echo ($this->savedata_model->remove_sched($_POST));
+		exit();
+	}
+
 } 
 
 ?>

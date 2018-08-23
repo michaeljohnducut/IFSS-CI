@@ -2062,5 +2062,26 @@ class savedata_model extends CI_Model
 
 		return $output;
 	}
+
+	public function remove_sched(){
+
+		$output = "";
+		$id = $this->security->xss_clean($this->input->post('id'));
+
+		if($this->db->query("DELETE 
+						FROM teaching_assign_sched 
+						WHERE subj_match_id = $id"))
+			{
+				$output = 'DELETED';
+			}
+			else
+			{
+				$output = 'NOT DELETED';
+			}
+
+
+		return $output;
+
+	}
 }
 ?>

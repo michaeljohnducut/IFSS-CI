@@ -1581,6 +1581,8 @@ class getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+
 			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
 			$result[] = array(
 					$r->subj_code,
@@ -1590,7 +1592,7 @@ class getdata_model extends CI_Model{
 					$r->times,
 					$r->days,
 					$r->rooms,
-					$r->subj_match_id
+					$btn
 					);
 		}
 

@@ -1218,47 +1218,370 @@
         $('#div_by_section').hide();
 
         $('#starttime_a').on('blur',function(){
+
+          //DESIGNEES
           if(global_factype == 3){
+
               if(global_labhour == 3)
               {
+                //DESIGNEE PART TIME LOAD (5HRS)
+                if(global_total_hrs > 6)
+                {
+                  var temp_start = $('#starttime_a').val();
+                  var added_value = '';
+                  var adder;
+                  var end_value;
+                  if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+                    var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                    var temp_start_mins = temp_start[3] + temp_start[4];
+                    
+                    adder = 2;
 
-                var temp_start = $('#starttime_a').val();
-                var added_value = '';
-                var adder;
-                var end_value;
-                if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
-                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
-                  var temp_start_mins = temp_start[3] + temp_start[4];
-                  
-                  adder = 2;
+                    temp_start_hour += adder;
+                    if (temp_start_hour < 10){
+                      end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                    }
+                    else{
+                      end_value = temp_start_hour + ':' + temp_start_mins;
+                    }
 
-                  temp_start_hour += adder;
-                  if (temp_start_hour < 10){
-                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                    $('#endtime_a').val(end_value);
                   }
+
                   else{
-                    end_value = temp_start_hour + ':' + temp_start_mins;
+                    alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
+                    $('#starttime_a').val('');
+                    $('#endtime_a').val('');
                   }
-
-                  $('#endtime_a').val(end_value);
                 }
 
-                else{
-                  alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
-                  $('#starttime_a').val('');
-                  $('#endtime_a').val('');
+                //DESIGNEE FULL TIME LOAD (5hrs)
+                else
+                {
+                  var temp_start = $('#starttime_a').val();
+                  var added_value = '';
+                  var adder;
+                  var end_value;
+                  if (temp_start > '07:29' && temp_start < '16:01' ){
+                    var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                    var temp_start_mins = temp_start[3] + temp_start[4];
+                    
+                    adder = 2;
+
+                    temp_start_hour += adder;
+                    if (temp_start_hour < 10){
+                      end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                    }
+                    else{
+                      end_value = temp_start_hour + ':' + temp_start_mins;
+                    }
+
+                    $('#endtime_a').val(end_value);
+                  }
+
+                  else{
+                    alert('Regular loads allowed for Designees are only:\n-Weekdays\n-7:30am - 6:00pm');
+                    $('#starttime_a').val('');
+                    $('#endtime_a').val('');
+                  }
                 }
 
               }
+
+              
               else
+              {
+                //DESIGNEES PART-TIME LOAD(3hrs)
+                if(global_total_hrs > 6)
+                {
+
+                  var temp_start = $('#starttime_a').val();
+                  var added_value = '';
+                  var adder;
+                  var end_value;
+                  if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+                    var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                    var temp_start_mins = temp_start[3] + temp_start[4];
+                    if($('#chk_split').prop("checked")){
+                      if(temp_start_mins == '30'){
+                        adder = 2;
+                        temp_start_mins = '00';
+                      }
+                      else{
+                        adder = 1;
+                        temp_start_mins = '30';
+                      }
+                    }
+                    else{
+                      adder = 3;
+                    }
+
+                    temp_start_hour += adder;
+                    if (temp_start_hour < 10){
+                      end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                    }
+                    else{
+                      end_value = temp_start_hour + ':' + temp_start_mins;
+                    }
+
+                    $('#endtime_a').val(end_value);
+                  }
+
+                  else{
+                    alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
+                    $('#starttime_a').val('');
+                    $('#endtime_a').val('');
+                  }
+                }
+
+                //DESIGNEE FULL TIME (3hrs)
+                else
+                {
+                  var temp_start = $('#starttime_a').val();
+                  var added_value = '';
+                  var adder;
+                  var end_value;
+                  if (temp_start > '07:29' && temp_start < '16:01' ){
+                    var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                    var temp_start_mins = temp_start[3] + temp_start[4];
+                    if($('#chk_split').prop("checked")){
+                      if(temp_start_mins == '30'){
+                        adder = 2;
+                        temp_start_mins = '00';
+                      }
+                      else{
+                        adder = 1;
+                        temp_start_mins = '30';
+                      }
+                    }
+                    else{
+                      adder = 3;
+                    }
+                    temp_start_hour += adder;
+                    if (temp_start_hour < 10){
+                      end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                    }
+                    else{
+                      end_value = temp_start_hour + ':' + temp_start_mins;
+                    }
+
+                    $('#endtime_a').val(end_value);
+                  }
+
+                  else{
+                    alert('Regular loads allowed for Designees are only:\n-Weekdays\n-7:30am - 6:00pm');
+                    $('#starttime_a').val('');
+                    $('#endtime_a').val('');
+                  }
+                }
+              }
+          }
+
+          //FULL-TIME FACULTY
+          else if(global_factype == 1){
+              if(global_labhour == 3)
+              {
+                //FULL-TIME (FULL-TIME LOAD VALIDATION)
+                if(global_total_hrs < 15 || global_total_hrs == null)
+                {
+                  var temp_start = $('#starttime_a').val();
+                  var added_value = '';
+                  var adder;
+                  var end_value;
+                  //CHECKING OF TIME
+                  if (temp_start > '07:29' && temp_start < '16:01'){
+                    var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                    var temp_start_mins = temp_start[3] + temp_start[4];
+                    
+                    adder = 2;
+
+                    temp_start_hour += adder;
+                    if (temp_start_hour < 10){
+                      end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                    }
+                    else{
+                      end_value = temp_start_hour + ':' + temp_start_mins;
+                    }
+
+                    $('#endtime_a').val(end_value);
+                  }
+
+                  else{
+                    alert('Regular Loads for full time faculty member must meet the following criteria: \n-Weekdays\n-from 7:30am - 6:00pm');
+                    $('#starttime_a').val('');
+                    $('#endtime_a').val('');
+                  }
+                }
+
+                //FULL-TIME (PART-TIME LOAD VALIDATION)
+                else
+                {
+                  var temp_start = $('#starttime_a').val();
+                  var added_value = '';
+                  var adder;
+                  var end_value;
+                  //CHECKING OF TIME
+                  if (temp_start > '07:29' && temp_start < '19:01'){
+                    var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                    var temp_start_mins = temp_start[3] + temp_start[4];
+                    
+                    adder = 2;
+
+                    temp_start_hour += adder;
+                    if (temp_start_hour < 10){
+                      end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                    }
+                    else{
+                      end_value = temp_start_hour + ':' + temp_start_mins;
+                    }
+
+                    $('#endtime_a').val(end_value);
+                  }
+
+                  else{
+                    alert('Part time loads for full time faculty member must meet the following criteria:\n-Weekdays or Weekends \n-from 7:30am - 9:00pm');
+                    $('#starttime_a').val('');
+                    $('#endtime_a').val('');
+                  }
+                }
+
+              }
+
+              else
+              { 
+                //FULL TIME- REG LOAD VALIDATION (3HRS)
+                if(global_total_hrs < 15 || global_total_hrs == null)
+                {
+                  var temp_start = $('#starttime_a').val();
+                  var added_value = '';
+                  var adder;
+                  var end_value;
+                  if (temp_start > '07:29' && temp_start < '16:01'){
+                    var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                    var temp_start_mins = temp_start[3] + temp_start[4];
+                    if($('#chk_split').prop("checked")){
+                      if(temp_start_mins == '30'){
+                        adder = 2;
+                        temp_start_mins = '00';
+                      }
+                      else{
+                        adder = 1;
+                        temp_start_mins = '30';
+                      }
+                    }
+                    else{
+                      adder = 3;
+                    }
+
+                    temp_start_hour += adder;
+                    if (temp_start_hour < 10){
+                      end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                    }
+                    else{
+                      end_value = temp_start_hour + ':' + temp_start_mins;
+                    }
+
+                    $('#endtime_a').val(end_value);
+                  }
+
+                  else{
+                     alert('Regular Loads for full time faculty member must meet the following criteria: \n-Weekdays\n-from 7:30am - 6:00pm');
+                    $('#starttime_a').val('');
+                    $('#endtime_a').val('');
+                  }
+                }
+
+                //FULL TIME- PT LOAD VALIDATION (3HRS)
+                else
+                { 
+                    var temp_start = $('#starttime_a').val();
+                    var added_value = '';
+                    var adder;
+                    var end_value;
+                    if (temp_start > '07:29' && temp_start < '19:31'){
+                      var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                      var temp_start_mins = temp_start[3] + temp_start[4];
+                      if($('#chk_split').prop("checked")){
+                        if(temp_start_mins == '30'){
+                          adder = 2;
+                          temp_start_mins = '00';
+                        }
+                        else{
+                          adder = 1;
+                          temp_start_mins = '30';
+                        }
+                      }
+                      else{
+                        adder = 3;
+                      }
+
+                      temp_start_hour += adder;
+                      if (temp_start_hour < 10){
+                        end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                      }
+                      else{
+                        end_value = temp_start_hour + ':' + temp_start_mins;
+                      }
+
+                      $('#endtime_a').val(end_value);
+                    }
+
+                    else{
+                       alert('Part time Loads for full time faculty member must meet the following criteria: \n-Weekdays or Weekends\n-from 7:30am - 9:00pm');
+                      $('#starttime_a').val('');
+                      $('#endtime_a').val('');
+                    }
+                }
+              }
+          }
+          
+          //PART-TIME CONTROl
+          else
+          { 
+            //PART TIME WITH LAB CONTROLLER
+            if(global_labhour == 3)
+            {
+              var temp_start = $('#starttime_a').val();
+              var added_value = '';
+              var adder;
+              var end_value;
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
+
+              if (temp_start > '07:29' && temp_start < '19:31')
+              {
+                adder = 2;
+                temp_start_hour += adder;
+                if (temp_start_hour < 10){
+                  end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                }
+                else{
+                  end_value = temp_start_hour + ':' + temp_start_mins;
+                }
+
+                $('#endtime_a').val(end_value);
+              }
+
+              else{
+                    alert('Loads for part time faculty member must meet the following criteria: \n-Weekdays or Weekends\n-from 7:30am - 9:00pm');
+                    $('#starttime_a').val('');
+                    $('#endtime_a').val('');
+                    }
+
+            }
+
+            //PART TIME WITHOUT LAB CONTROLLER
+            else
+            { 
+
+             if (temp_start > '07:29' && temp_start < '19:31')
               {
                 var temp_start = $('#starttime_a').val();
                 var added_value = '';
                 var adder;
                 var end_value;
-                if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
-                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
-                  var temp_start_mins = temp_start[3] + temp_start[4];
+                var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                var temp_start_mins = temp_start[3] + temp_start[4];
                   if($('#chk_split').prop("checked")){
                     if(temp_start_mins == '30'){
                       adder = 2;
@@ -1282,75 +1605,187 @@
                   }
 
                   $('#endtime_a').val(end_value);
-                }
-
-                else{
-                  alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
-                  $('#starttime_a').val('');
-                  $('#endtime_a').val('');
-                }
-              }
-          }
-          else
-          { 
-            if(global_labhour == 3)
-            {
-              var temp_start = $('#starttime_a').val();
-              var added_value = '';
-              var adder;
-              var end_value;
-              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
-              var temp_start_mins = temp_start[3] + temp_start[4];
-              adder = 2;
-              temp_start_hour += adder;
-              if (temp_start_hour < 10){
-                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
-              }
-              else{
-                end_value = temp_start_hour + ':' + temp_start_mins;
               }
 
-              $('#endtime_a').val(end_value);
-            }
-            else
-            {
-              var temp_start = $('#starttime_a').val();
-              var added_value = '';
-              var adder;
-              var end_value;
-              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
-              var temp_start_mins = temp_start[3] + temp_start[4];
-                if($('#chk_split').prop("checked")){
-                  if(temp_start_mins == '30'){
-                    adder = 2;
-                    temp_start_mins = '00';
-                  }
-                  else{
-                    adder = 1;
-                    temp_start_mins = '30';
-                  }
-                }
-                else{
-                  adder = 3;
-                }
-
-                temp_start_hour += adder;
-                if (temp_start_hour < 10){
-                  end_value = '0' + temp_start_hour + ':' + temp_start_mins;
-                }
-                else{
-                  end_value = temp_start_hour + ':' + temp_start_mins;
-                }
-
-                $('#endtime_a').val(end_value);
+              else
+              {
+                alert('Loads for part time faculty member must meet the following criteria: \n-Weekdays or Weekends\n-from 7:30am - 9:00pm');
+                $('#starttime_a').val('');
+                $('#endtime_a').val('');
+              }
 
             }
 
           }
+        
         });
+
+//====================================================================================
+
 
         $('#starttime_b').on('blur',function(){
           if(global_factype == 3){
+
+              //DESIGNEES PART TIME LOAD
+              if(global_total_hrs > 6)
+              {
+                var temp_start = $('#starttime_b').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+
+                    if(temp_start_mins == '30'){
+                      adder = 2;
+                      temp_start_mins = '00';
+                    }
+                    else{
+                      adder = 1;
+                      temp_start_mins = '30';
+                    }
+
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_b').val(end_value);
+                }
+
+                else{
+                  alert('Part time Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
+                  $('#starttime_b').val('');
+                  $('#endtime_b').val('');
+                }
+              }
+
+              //DESIGNEES FULL TIME LOAD
+              else
+              {
+                var temp_start = $('#starttime_b').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' &&  temp_start < '16:31' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+
+                    if(temp_start_mins == '30'){
+                      adder = 2;
+                      temp_start_mins = '00';
+                    }
+                    else{
+                      adder = 1;
+                      temp_start_mins = '30';
+                    }
+
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_b').val(end_value);
+                }
+
+                else{
+                  alert('Full time Loads allowed for Designees are only:\n-Weekdays \n-7:30am - 6:00pm');
+                  $('#starttime_b').val('');
+                  $('#endtime_b').val('');
+                }
+              }
+          }
+
+          //FULL TIME FACULTY CONTROLLER
+          if(global_factype == 1){
+              
+              //REGULAR FULL TIME LOAD
+              if (global_total_hrs < 15)
+              {
+                var temp_start = $('#starttime_b').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' && temp_start < '16:31' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+
+                    if(temp_start_mins == '30'){
+                      adder = 2;
+                      temp_start_mins = '00';
+                    }
+                    else{
+                      adder = 1;
+                      temp_start_mins = '30';
+                    }
+
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_b').val(end_value);
+                }
+
+                else{
+                  alert('Regular Loads allowed for Full time are only:\n-Weekdays\n-7:30am - 6:00pm');
+                  $('#starttime_b').val('');
+                  $('#endtime_b').val('');
+                }
+              }
+
+              //REGULAR PART TIME
+              else
+              {
+
+                var temp_start = $('#starttime_b').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' && temp_start < '19:31' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+
+                    if(temp_start_mins == '30'){
+                      adder = 2;
+                      temp_start_mins = '00';
+                    }
+                    else{
+                      adder = 1;
+                      temp_start_mins = '30';
+                    }
+
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_b').val(end_value);
+                }
+
+                else{
+                  alert('Regular Loads allowed for Full time are only:\n-Weekdays or Weekends\n-7:30am - 9:00pm');
+                  $('#starttime_b').val('');
+                  $('#endtime_b').val('');
+                }
+              }
+          }
+
+          //PART TIME FACULTY CONTROLLER
+          else{
               var temp_start = $('#starttime_b').val();
               var added_value = '';
               var adder;
@@ -1380,49 +1815,152 @@
               }
 
               else{
-                alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
+                alert('Loads allowed for Part time faculty are only:\n-7:30am - 9:00pm');
                 $('#starttime_b').val('');
                 $('#endtime_b').val('');
               }
           }
-          else
-          {
-              var temp_start = $('#starttime_b').val();
-              var added_value = '';
-              var adder;
-              var end_value;
-              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
-              var temp_start_mins = temp_start[3] + temp_start[4];
-
-              if(temp_start_mins == '30'){
-                adder = 2;
-                temp_start_mins = '00';
-              }
-              else{
-                adder = 1;
-                temp_start_mins = '30';
-              }
-
-              temp_start_hour += adder;
-              if (temp_start_hour < 10){
-                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
-              }
-              else{
-                end_value = temp_start_hour + ':' + temp_start_mins;
-              }
-
-              $('#endtime_b').val(end_value);
-          }
 
         });
 
+//====================================================================================
+
         $('#starttime_c').on('blur',function(){
+          //DESIGNEE CONTROL
           if(global_factype == 3){
+              //DESIGNEE PART TIME
+              if(global_total_hrs > 6)
+              {
+                var temp_start = $('#starttime_c').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+
+                  adder = 3;
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_c').val(end_value);
+                }
+
+                else{
+                  alert('Time is not valid for a Designee Faculty');
+                  $('#starttime_c').val('');
+                  $('#endtime_c').val('');
+                }
+              }
+
+              //DESIGNEE FULL TIME
+              else
+              {
+                var temp_start = $('#starttime_c').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' && temp_start < '15:01' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+
+                  adder = 3;
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_c').val(end_value);
+                }
+
+                else{
+                  alert('Time is not valid for a Designee Faculty');
+                  $('#starttime_c').val('');
+                  $('#endtime_c').val('');
+                }
+              }
+          }
+
+          //FULL TIME CONTROLLER
+          if(global_factype == 1){
+              //FULL TIME REGULAR LOAD 
+              if(global_total_hrs < 15 || global_total_hrs == null)
+              {
+                var temp_start = $('#starttime_c').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' &&  temp_start < '15:01' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+
+                  adder = 3;
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_c').val(end_value);
+                }
+
+                else{
+                  alert('Time is not valid for the Regular Faculty');
+                  $('#starttime_c').val('');
+                  $('#endtime_c').val('');
+                }
+              }
+
+              //FULL TIME PART TIME LOAD
+              else
+              {
+
+                var temp_start = $('#starttime_c').val();
+                var added_value = '';
+                var adder;
+                var end_value;
+                if (temp_start > '07:29' &&  temp_start < '18:01' ){
+                  var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+                  var temp_start_mins = temp_start[3] + temp_start[4];
+
+                  adder = 3;
+                  temp_start_hour += adder;
+                  if (temp_start_hour < 10){
+                    end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+                  }
+                  else{
+                    end_value = temp_start_hour + ':' + temp_start_mins;
+                  }
+
+                  $('#endtime_c').val(end_value);
+                }
+
+                else{
+                  alert('Time is not valid for the Regular Faculty');
+                  $('#starttime_c').val('');
+                  $('#endtime_c').val('');
+                }
+              }
+          }
+
+
+          //PART TIME CONTOLLER
+          else{
               var temp_start = $('#starttime_c').val();
               var added_value = '';
               var adder;
               var end_value;
-              if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' ){
+              if (temp_start > '07:29' && temp_start < '18:01' ){
                 var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
                 var temp_start_mins = temp_start[3] + temp_start[4];
 
@@ -1439,36 +1977,18 @@
               }
 
               else{
-                alert('Time is not valid since the faculty is a Designee');
+                alert('Time is not valid for the Part time Faculty');
                 $('#starttime_c').val('');
                 $('#endtime_c').val('');
               }
           }
-          else
-          {
-              var temp_start = $('#starttime_c').val();
-              var added_value = '';
-              var adder;
-              var end_value;
-              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
-              var temp_start_mins = temp_start[3] + temp_start[4];
-
-              adder = 3;
-
-              temp_start_hour += adder;
-              if (temp_start_hour < 10){
-                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
-              }
-              else{
-                end_value = temp_start_hour + ':' + temp_start_mins;
-              }
-
-              $('#endtime_c').val(end_value);
-          }
-
+          
         });
 
+//====================================================================================
+
         $('#sched_faculty').on('change', function(){
+          global_total_hrs = 0;
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -1478,6 +1998,7 @@
         });
 
         $('#sched_acad_year').on('change', function(){
+          global_total_hrs = 0;
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -1487,6 +2008,7 @@
         });
 
         $('#sched_sem').on('change', function(){
+          global_total_hrs = 0;
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -1582,6 +2104,45 @@
             var acad_yr = $('#sched_acad_year').val();
             var sem = $('#sched_sem').val();
             var load_id = $('#sched_load').val();
+            var load_control; 
+            alert(global_total_hrs);
+
+            if(global_factype == 1)
+            {
+              if(global_total_hrs < 15 || global_total_hrs == null)
+              {
+                load_control = 'R';
+              }
+              else
+              {
+                load_control = 'PT';
+              }
+            }
+
+            if(global_factype == 3)
+            {
+              if(global_total_hrs < 6 || global_total_hrs == null)
+              {
+                load_control = 'R';
+              }
+              else
+              {
+                load_control = 'PT';
+              }
+            }
+
+            if(global_factype == 4)
+            {
+              if(global_total_hrs < 12 || global_total_hrs == null)
+              {
+                load_control = 'PT';
+              }
+              else
+              {
+                load_control = 'TS';
+              }
+            }
+
             if($('#chk_split').prop("checked")){
               global_splitcontrol = 1;
             }
@@ -1594,7 +2155,7 @@
               'load_id': load_id,
               'control':global_labhour,
               's_control':global_splitcontrol,
-              'load_type': 'R'
+              'load_type': load_control
             };
 
            $.ajax({  
@@ -1636,5 +2197,54 @@
             });  
         });
       });
+
+$(document).on('click', '#btn_reschedule', function(e){  
+
+            e.preventDefault();
+            var id = $(this).data("id");
+
+              swal({
+                        title: "Are you sure?",
+                        text: "Reschedule this teaching assignment?", 
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+              })
+                .then((willApprove) => {
+                  if (willApprove) {
+                    // alert(id);
+                    $.ajax({   
+                      url:"<?php echo base_url('Transaction/remove_sched')?>",  
+                      method: "POST",
+                      data: {id:id},
+                      success: function (data) 
+                      {
+                         if(data == 'DELETED'){
+                            swal("Success!", "Teaching load available for rescheduling.", "success");  
+                            getFacultyLoads();
+                            resetPlotForm();
+                            reflectSchedTable();
+                            loadSchedTable();
+
+                         }
+
+                         else{
+
+                            swal("Error!", "Failed to reschedule.", "error");
+                            alert(JSON.stringify(data));
+                         }
+                      },
+                      error: function (data) {
+                        swal("Error!", "Failed to reschedule.", "error");
+                        alert(JSON.stringify(data));
+                      }
+                    });
+                  } 
+
+                  else {
+                    swal("Cancelled", "");
+                  }
+                });
+            });
 
     </script>

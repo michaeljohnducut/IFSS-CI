@@ -89,6 +89,22 @@
                                     <?php foreach($faculty_type as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
                                 </select>
                                 </div>
+                                <div class="col-md-9">
+                                    <h3 style="margin-top: 10px; margin-left: 30px" class="box-title m-b-0">Legend:</h3>
+                                    <div class="row" style="margin-left: 50px; margin-top: 10px;">
+                                        <div class="col-md-4">
+                                            <button class="btn btn-info"><span class="ti-user"></span></button>&nbsp;
+                                            <label style="margin-top: 5px;">View Subject Assignment</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-success"><span class="ti-arrow-right"></span></button>&nbsp;
+                                            <label style="margin-top: 5px;">Assign Subject</label>
+                                        </div>
+                                     </div> 
+                                </div>
+                                
+
+
                                 <div class="table-responsive">
                                     <br>
                                 <table class="table colored-table inverse-table table-striped" style="margin-top: 20px" id="select_faculty">
@@ -135,7 +151,17 @@
                                     </select>
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                            <h5 style="margin-left: 80px;" class="box-title m-b-0">Legend:</h5>
+                            <div class="row" style="margin-left: 80px; margin-top: 10px;">
+                                <div class="col-md-6">
+                                    <button class="btn-sm btn btn-danger"><span class="ti-minus"></span></button>&nbsp;
+                                    <label style="margin-top: 5px;">Unassign Subject</label>
+                                </div>
+                             </div> 
                         </div>
+                        </div>
+
                         <div class="table-responsive">
                             <br>
                                 <table class="table colored-table inverse-table table-striped" style="margin-top: 10px" id="tbl_section_loads">
@@ -192,6 +218,16 @@
                                             </div>
                                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
+                                        </div>
+
+                                        <div class="col-md-9">
+                                            <h5 class="box-title m-b-0">Legend:</h5>
+                                            <div class="row" style="margin-left: 50px; margin-top: 10px;">
+                                                <div class="col-md-6">
+                                                    <button class="btn-sm btn btn-danger"><span class="ti-minus"></span></button>&nbsp;
+                                                    <label style="margin-top: 5px;">Unassign Subject</label>
+                                                </div>
+                                             </div> 
                                         </div>
                                             <div class="table-responsive">
                                                 <br>

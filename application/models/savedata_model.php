@@ -1901,30 +1901,6 @@ class savedata_model extends CI_Model
 		$split_control = $this->security->xss_clean($this->input->post('s_control'));
 		$lab_day = $this->security->xss_clean($this->input->post('lab_day'));
 
-		// $query = $this->db->where('subj_match_id', $temp_load_id)
-		// 						->where('acad_yr', $temp_acadyr)
-		// 						->where('sem', $temp_sem)
-		// 						->where('time_start > "'.$temp_start.'" AND time_start < "'.$temp_end.'"',NULL, FALSE)
-		// 						->where('day', $temp_day)
-		// 						->or_where('faculty_id', $temp_faculty)
-		// 						->where('acad_yr', $temp_acadyr)
-		// 						->where('sem', $temp_sem)
-		// 						->where('time_finish < "'.$temp_start.'" AND time_finish > "'.$temp_end.'"',NULL, FALSE)
-		// 						->where('day', $temp_day)
-		// 						->or_where('faculty_id', $temp_faculty)
-		// 						->where('acad_yr', $temp_acadyr)
-		// 						->where('sem', $temp_sem)
-		// 						->where('time_start = "'.$temp_start.'" AND time_finish > "'.$temp_end.'"',NULL, FALSE)
-		// 						->where('day', $temp_day)
-		// 					->get('teaching_assign_sched');
-
-		// $number_filter_row = $query->num_rows();
-
-		// if($number_filter_row == 0)
-		// {
-
-			// $i = 0; 
-			// foreach($temp_room as $r){
 
 		if($temp_control == 3){
 
@@ -2007,17 +1983,10 @@ class savedata_model extends CI_Model
 			}
 		}
 
-				// $i++;
-			// }
+
 
 		$output = 'INSERTED';
 			
-
-		// }
-		// else
-		// {
-		// 	$output = 'EXISTING';
-		// }
 
 	return $output;
 
@@ -2100,6 +2069,101 @@ class savedata_model extends CI_Model
 			}
 
 
+		return $output;
+
+	}
+
+	public function minor_first_save(){
+
+		$output = "";
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$subj_id = $this->security->xss_clean($this->input->post('subj_id'));
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+
+		if($this->db->query("INSERT INTO subject_match(acad_yr, sem, subj_id, section) 
+			VALUES('$acad_year', '$sem', $subj_id, $section_id )"))
+
+			{
+				$query = $this->db->select('subj_match_id')
+				->where('acad_yr', $acad_year)
+				->where('sem', $sem)
+				->where('section', $section_id)
+				->where('subj_id', $subj_id)
+                ->get('subject_match');
+
+					foreach($query->result() as $r) 
+					{
+						$result = $r->subj_match_id;	
+					}
+			}
+
+		return $result;
+
+	}
+
+	public function minor_second_save(){
+
+		$output = "";
+		$temp_room = $this->security->xss_clean($this->input->post('rooms_minor'));
+		$temp_start = $this->security->xss_clean($this->input->post('minor_start'));
+		$temp_end = $this->security->xss_clean($this->input->post('minor_end'));
+		$temp_day = $this->security->xss_clean($this->input->post('day_minor'));
+		$temp_acadyr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$temp_sem = $this->security->xss_clean($this->input->post('sem'));
+		$match_id = $this->security->xss_clean($this->input->post('match_id'));
+		$temp_load = $this->security->xss_clean($this->input->post('load_type'));
+		$split_control = $this->security->xss_clean($this->input->post('split_control'));
+		$spec_room = $this->security->xss_clean($this->input->post('spec_room'));
+
+			if($split_control == 0)
+			{
+				if(isset($temp_start[0])){
+				$data = array(
+					'room_id' => $temp_room[0], 
+					'time_start' => $temp_start[0], 
+					'time_finish' => $temp_end[0],
+					'day' => $temp_day[0], 
+					'acad_yr' => $temp_acadyr,
+					'sem' => $temp_sem,
+					'subj_match_id' => $match_id,
+					'load_type' => $temp_load);
+				
+					$this->db->insert('teaching_assign_sched', $data);
+				}
+			}
+			else
+			{
+				if(isset($temp_start[0])){
+				$data = array(
+					'room_id' => $temp_room[0], 
+					'time_start' => $temp_start[0], 
+					'time_finish' => $temp_end[0],
+					'day' => $temp_day[0], 
+					'acad_yr' => $temp_acadyr,
+					'sem' => $temp_sem,
+					'subj_match_id' => $match_id,
+					'load_type' => $temp_load);
+				
+					$this->db->insert('teaching_assign_sched', $data);
+				}
+
+				if(isset($temp_start[1])){
+				$data = array(
+					'room_id' => $spec_room, 
+					'time_start' => $temp_start[1], 
+					'time_finish' => $temp_end[1],
+					'day' => $temp_day[1], 
+					'acad_yr' => $temp_acadyr,
+					'sem' => $temp_sem,
+					'subj_match_id' => $match_id,
+					'load_type' => $temp_load);
+				
+					$this->db->insert('teaching_assign_sched', $data);
+				}
+			}
+
+		$output = 'SUCCESS';
 		return $output;
 
 	}

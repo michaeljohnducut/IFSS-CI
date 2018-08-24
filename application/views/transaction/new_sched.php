@@ -514,6 +514,13 @@
 <div>
     <h2>Summary</h2>
 </div>
+<h3 class="box-title m-b-0">Legend:</h3>
+                        <div class="row" style="margin-left: 50px; margin-top: 5px;">
+                            <div class="col-md-3">
+                                <button class="btn btn-info"><span class="fa  fa-rotate-left"></span></button>&nbsp;
+                                <label style="margin-top: 5px;">Reschedule</label>
+                            </div>
+                        </div>
 
 <div class="table-responsive">
     <table id="tbl_sched_sum" class="table colored-table table-bordered inverse-tabl table-striped" style="margin-top: 50px;">
@@ -627,7 +634,7 @@
                       <div class="col-md-3">
                         <br>
                           <label class="control-label">Lecture Room:</label>
-                          <select class="form-control" id="rooms_minor_b"  name="rooms_minor[]">
+                          <select class="form-control" id="rooms_minor_b"  name="spec_room">
                             
                           </select>
                           <br>
@@ -837,6 +844,9 @@
       var global_reg_load;
       var global_pt_load; 
       var global_ts_load;
+      var global_eval;
+      var global_minor_id;
+      var global_minor_split = 0;
       var global_splitcontrol = 0;
 
       //FUNCTIONS
@@ -860,10 +870,13 @@
                         $('#lbl_eval').empty();
                         $('#lbl_eval').append('NO CONSECUTIVE "S" GRADE');
                     }
+
+                    global_eval = data;
                 },
                 error: function (data) {
                         alert(JSON.stringify(data));
-                }
+                },
+                async:false
                 });  
         }
 
@@ -913,6 +926,27 @@
 
         }
 
+        function reflectServices(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_services')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
         function reflectSectionTable(){
 
             var sem = $('#sec_sem').val();
@@ -921,6 +955,27 @@
 
              $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_section_table')?>", 
+                method:"POST", 
+                data:{section_id:section_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        function reflectSectionMinor(){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var section_id = $('#sec_yearsec').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_section_minor')?>", 
                 method:"POST", 
                 data:{section_id:section_id, acad_year:acad_year, sem:sem}, 
                 dataType: "json",
@@ -1002,6 +1057,53 @@
                 alert(JSON.stringify(data));
                 }
            });
+        }
+
+        function minorFirstSave(){
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var subj_id = $('#minor_subj').val();
+            var section_id = $('#sec_yearsec').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/minor_first_save')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, subj_id:subj_id, section_id:section_id}, 
+                dataType: "json",
+                success:function(data){
+                    var match_id = data;
+                    minorSecondSave(match_id);
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+
+        function minorSecondSave(match_id){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var data = {
+              'acad_yr': acad_year, 
+              'sem': sem,
+              'match_id':match_id,
+              'split_control':global_minor_split,
+              'load_type': 'M'
+            };
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/minor_second_save')?>",  
+                type:"POST",  
+                data: $('#add_minor_form').serialize() + '&' + $.param(data), 
+                success:function(data)
+                {  
+                    $('#modalAddMinor').modal('hide');
+                    reflectSectionMinor();
+                },
+                 error: function (data) {
+                        alert(JSON.stringify(data));
+                }
+            });  
+
         }
 
         function showAvailLab(day, start_time, end, dropdown_id){
@@ -2174,6 +2276,7 @@
             getUnitsUsed();
             loadSchedTable();
             reflectSchedTable();
+            reflectServices();
             showSpec(temp_fac);
             resetPlotForm();
         });
@@ -2185,6 +2288,7 @@
             getUnitsUsed();
             loadSchedTable();
             reflectSchedTable();
+            reflectServices();
             resetPlotForm();
         });
 
@@ -2195,6 +2299,7 @@
             getUnitsUsed();
             loadSchedTable();
             reflectSchedTable();
+            reflectServices();
             resetPlotForm();
         });
 
@@ -2204,16 +2309,19 @@
         $('#sec_sem').on('change', function(){
           resetPlotForm();
           reflectSectionTable();
+          reflectSectionMinor();
         });
 
         $('#sec_acadyr').on('change', function(){
           resetPlotForm();
           reflectSectionTable();
+          reflectSectionMinor();
         });
 
         $('#sec_yearsec').on('change', function(){
           resetPlotForm();
           reflectSectionTable();
+          reflectSectionMinor();
         });
 
 
@@ -2356,9 +2464,11 @@
         $('#chk_split_minor').on('change', function(){
             if($(this).prop("checked")){
               $('#sched_b_minor').show();
+              global_minor_split = 1;
             }
             else{
               $('#sched_b_minor').hide();
+              global_minor_split = 0;
             }
         });
 
@@ -2501,7 +2611,6 @@
             var sem = $('#sched_sem').val();
             var load_id = $('#sched_load').val();
             var load_control; 
-            alert(global_total_hrs);
 
             if(global_factype == 1)
             {
@@ -2554,45 +2663,204 @@
               'load_type': load_control
             };
 
-           $.ajax({  
-            url:"<?php echo base_url('Transaction/add_to_sched')?>",  
-            type:"POST",  
-            data: $('#add_sched_form').serialize() + '&' + $.param(data), 
-            success:function(data)
-            {  
-                if (data == 'INSERTED')
+            if(global_factype == 1 || global_factype == 3)
+            {
+                if (global_eval == 'CONSECUTIVE')
                 {
-                  $('#starttime_a').val('');
-                  $('#endtime_a').val('');
-                  $('#day_a').val('');
-                  $('#rooms_a').val('');
-                  $('#starttime_b').val('');
-                  $('#endtime_b').val('');
-                  $('#day_b').val('');
-                  $('#rooms_b').val('');
-                  $('#starttime_c').val('');
-                  $('#endtime_c').val('');
-                  $('#day_c').val('');
-                  $('#rooms_c').val('');
-                  $('#modalAddTime').modal('hide');
-                  $('#sched_b').hide();
-                  $('#divsplit').hide();
-                  $('#chk_split').prop('checked', false);
-                  $('#sched_lab').hide();
-                  $('#sched_load').empty();
-                  $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                  reflectSchedTable();
-                  getFacultyLoads();
-                  loadSchedTable();
-                  getUnitsUsed();
+                    if(global_total_hrs > 21)
+                    {
+                        alert('This faculty has consecutive satisfactory grade and is only entitled with:\n - 15 regular load \n - 6 part time load')
+                    }
+
+                    else
+                    {
+                        $.ajax({  
+                        url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+                        type:"POST",  
+                        data: $('#add_sched_form').serialize() + '&' + $.param(data), 
+                        success:function(data)
+                        {  
+                            if (data == 'INSERTED')
+                            {
+                              $('#starttime_a').val('');
+                              $('#endtime_a').val('');
+                              $('#day_a').val('');
+                              $('#rooms_a').val('');
+                              $('#starttime_b').val('');
+                              $('#endtime_b').val('');
+                              $('#day_b').val('');
+                              $('#rooms_b').val('');
+                              $('#starttime_c').val('');
+                              $('#endtime_c').val('');
+                              $('#day_c').val('');
+                              $('#rooms_c').val('');
+                              $('#modalAddTime').modal('hide');
+                              $('#sched_b').hide();
+                              $('#divsplit').hide();
+                              $('#chk_split').prop('checked', false);
+                              $('#sched_lab').hide();
+                              $('#sched_load').empty();
+                              $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
+                              reflectSchedTable();
+                              reflectServices();
+                              getFacultyLoads();
+                              loadSchedTable();
+                              getUnitsUsed();
+                            }
+                        },
+                         error: function (data) {
+                                alert(JSON.stringify(data));
+                        }
+                        });  
+                    }
                 }
-            },
-             error: function (data) {
-                    alert(JSON.stringify(data));
+
+                else
+                {
+                    $.ajax({  
+                    url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+                    type:"POST",  
+                    data: $('#add_sched_form').serialize() + '&' + $.param(data), 
+                    success:function(data)
+                    {  
+                        if (data == 'INSERTED')
+                        {
+                          $('#starttime_a').val('');
+                          $('#endtime_a').val('');
+                          $('#day_a').val('');
+                          $('#rooms_a').val('');
+                          $('#starttime_b').val('');
+                          $('#endtime_b').val('');
+                          $('#day_b').val('');
+                          $('#rooms_b').val('');
+                          $('#starttime_c').val('');
+                          $('#endtime_c').val('');
+                          $('#day_c').val('');
+                          $('#rooms_c').val('');
+                          $('#modalAddTime').modal('hide');
+                          $('#sched_b').hide();
+                          $('#divsplit').hide();
+                          $('#chk_split').prop('checked', false);
+                          $('#sched_lab').hide();
+                          $('#sched_load').empty();
+                          $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
+                          reflectSchedTable();
+                          reflectServices();
+                          getFacultyLoads();
+                          loadSchedTable();
+                          getUnitsUsed();
+                        }
+                    },
+                     error: function (data) {
+                            alert(JSON.stringify(data));
+                    }
+                    });  
+                }
             }
-            });  
+
+            else
+            {
+                if (global_eval == 'CONSECUTIVE')
+                {
+                    if(global_total_hrs > 6)
+                    {
+                        alert('This faculty has consecutive satisfactory grade and is limited with: \n - 6 part time load\n - No temporary substitution')
+                    }
+
+                    else
+                    {
+                        $.ajax({  
+                        url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+                        type:"POST",  
+                        data: $('#add_sched_form').serialize() + '&' + $.param(data), 
+                        success:function(data)
+                        {  
+                            if (data == 'INSERTED')
+                            {
+                              $('#starttime_a').val('');
+                              $('#endtime_a').val('');
+                              $('#day_a').val('');
+                              $('#rooms_a').val('');
+                              $('#starttime_b').val('');
+                              $('#endtime_b').val('');
+                              $('#day_b').val('');
+                              $('#rooms_b').val('');
+                              $('#starttime_c').val('');
+                              $('#endtime_c').val('');
+                              $('#day_c').val('');
+                              $('#rooms_c').val('');
+                              $('#modalAddTime').modal('hide');
+                              $('#sched_b').hide();
+                              $('#divsplit').hide();
+                              $('#chk_split').prop('checked', false);
+                              $('#sched_lab').hide();
+                              $('#sched_load').empty();
+                              $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
+                              reflectSchedTable();
+                              reflectServices();
+                              getFacultyLoads();
+                              loadSchedTable();
+                              getUnitsUsed();
+                            }
+                        },
+                         error: function (data) {
+                                alert(JSON.stringify(data));
+                        }
+                        });  
+                    }
+                }
+
+                else
+                {
+                    $.ajax({  
+                    url:"<?php echo base_url('Transaction/add_to_sched')?>",  
+                    type:"POST",  
+                    data: $('#add_sched_form').serialize() + '&' + $.param(data), 
+                    success:function(data)
+                    {  
+                        if (data == 'INSERTED')
+                        {
+                          $('#starttime_a').val('');
+                          $('#endtime_a').val('');
+                          $('#day_a').val('');
+                          $('#rooms_a').val('');
+                          $('#starttime_b').val('');
+                          $('#endtime_b').val('');
+                          $('#day_b').val('');
+                          $('#rooms_b').val('');
+                          $('#starttime_c').val('');
+                          $('#endtime_c').val('');
+                          $('#day_c').val('');
+                          $('#rooms_c').val('');
+                          $('#modalAddTime').modal('hide');
+                          $('#sched_b').hide();
+                          $('#divsplit').hide();
+                          $('#chk_split').prop('checked', false);
+                          $('#sched_lab').hide();
+                          $('#sched_load').empty();
+                          $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
+                          reflectSchedTable();
+                          reflectServices();
+                          getFacultyLoads();
+                          loadSchedTable();
+                          getUnitsUsed();
+                        }
+                    },
+                     error: function (data) {
+                            alert(JSON.stringify(data));
+                    }
+                    });  
+                }
+            }
+
+           
         });
       });
+
+$('#add_minor_form').on('submit', function(e){
+    e.preventDefault();
+    minorFirstSave();
+});
 
 
 $(document).on('click', '#btn_reschedule', function(e){  
@@ -2621,6 +2889,7 @@ $(document).on('click', '#btn_reschedule', function(e){
                             getFacultyLoads();
                             resetPlotForm();
                             reflectSchedTable();
+                            reflectServices();
                             loadSchedTable();
 
                          }

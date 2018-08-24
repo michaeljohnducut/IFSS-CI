@@ -1109,7 +1109,7 @@ class getdata_model extends CI_Model{
 
 		$id = $this->security->xss_clean($this->input->post('service_id'));
 
-		$query = $this->db->select('day, time_start, time_end, room, services_id')
+		$query = $this->db->select('day, time_start, time_end, room, services_id, acad_yr, sem')
                 ->where('services_id', $id)
                 ->get('services_assign');
 
@@ -1120,7 +1120,9 @@ class getdata_model extends CI_Model{
 					$r->time_start,
 					$r->time_end,
 					$r->room,
-					$r->services_id
+					$r->services_id, 
+					$r->acad_yr, 
+					$r->sem
 					);
 		}
 
@@ -2155,6 +2157,8 @@ FROM subject_match sm
 		$start_time = $this->security->xss_clean($this->input->post('start_time'));
 		$end = $this->security->xss_clean($this->input->post('end'));
 		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
 		$query = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
@@ -2162,15 +2166,21 @@ FROM subject_match sm
 				FROM teaching_assign_sched ta
 					JOIN subject_match sm ON sm.subj_match_id = ta.subj_match_id
 				    JOIN faculty f on f.faculty_id = sm.faculty_id
-				WHERE ta.time_start > "'.$start_time.'"
+				WHERE ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'"
+				AND ta.time_start > "'.$start_time.'"
 				AND ta.time_start < "'.$end.'"
 				AND ta.day = "'.$day.'"
 				OR ta.time_finish > "'.$start_time.'"
 				AND ta.time_finish < "'.$end.'"
 				AND ta.day = "'.$day.'"
+				AND ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'"
 				OR ta.time_start = "'.$start_time.'"
 				AND ta.time_finish = "'.$end.'"
-				AND ta.day = "'.$day.'")')
+				AND ta.day = "'.$day.'"
+				AND ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'")')
                 ->get('faculty f');
 
 		foreach ($query->result() as $r) 
@@ -2184,6 +2194,76 @@ FROM subject_match sm
 
 		return $result;	
 
+	}
+
+	public function reflect_services(){	//GETS FACULTY'S SUMMARY OF SERVICES
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('sa.subj_code, sa.subj_desc, sa.sem, sa.section, sa.time_start, sa.time_end, sa.day, sa.room')
+				->where('sa.faculty_id', $fac_id)
+				->where('sa.acad_yr', $acad_year)
+				->where('sa.sem', $sem)
+                ->get('services_assign sa');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+
+			$time = $r->time_start. ' - '. $r->time_end;
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->sem, 
+					$r->section,
+					$time,
+					$r->day,
+					$r->room
+					);
+		}
+
+		return $result;	
+	}
+
+	public function reflect_section_minor(){	//GETS SECTION'S SUMMARY OF SCHEDULES
+
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("s.subj_code, s.subj_desc, s.units,'MINOR' as 'facname', ta.time_start, ta.time_finish, ta.day, r.room_code")
+				->where('sm.section', $section_id)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->where('sm.faculty_id IS NULL', NULL, FALSE)
+				->join('subject_match sm','ta.subj_match_id = sm.subj_match_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('room r','r.room_id = ta.room_id')
+                ->get('teaching_assign_sched ta');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units, 
+					$r->facname, 
+					$time,
+					$r->day,
+					$r->room_code
+					);
+		}
+
+		return $result;	
 	}
 
 

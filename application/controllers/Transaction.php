@@ -593,6 +593,30 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function reflect_services(){
+
+		echo json_encode($this->getdata_model->reflect_services($_POST));
+		exit();
+	}
+
+	public function minor_first_save()
+	{
+		echo ($this->savedata_model->minor_first_save($_POST));
+		exit();
+	}
+
+	public function minor_second_save()
+	{
+		echo ($this->savedata_model->minor_second_save($_POST));
+		exit();
+	}
+
+	public function reflect_section_minor(){
+
+		echo json_encode($this->getdata_model->reflect_section_minor($_POST));
+		exit();
+	}
+
 } 
 
 ?>

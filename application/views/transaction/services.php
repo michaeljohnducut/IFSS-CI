@@ -54,12 +54,12 @@
                         <h3 class="box-title m-b-0">Legend:</h3>
                         <div class="row" style="margin-left: 20px; margin-top: 5px;">
                             <div class="col-md-2">
-                                <button class="btn btn-success">R</button>&nbsp;
-                                <label style="margin-top: 5px;">Re-assign Professor</label>
-                            </div>
-                            <div class="col-md-3">
                                 <button class="btn btn-info">A</button>&nbsp;
                                 <label style="margin-top: 5px;">Assign Professor</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-success"><span class="fa fa-pencil"></span></button>&nbsp;
+                                <label style="margin-top: 5px;">Edit Services</label>
                             </div>
                          </div>
 
@@ -408,12 +408,13 @@
           });
         }
 
-        function showAvailProf(day, start, end)
-        {
+        function showAvailProf(day, start, end, acad_year, sem)
+        {   
+
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_avail_prof')?>", 
                 method:"POST",  
-                data:{day:day, start_time:start,end:end},  
+                data:{day:day, start_time:start,end:end, acad_year:acad_year, sem:sem},  
                 dataType: "json",
                 success:function(data){  
 
@@ -789,9 +790,11 @@
                 var start = data[0][1];
                 var end = data[0][2];
                 var s_id = data[0][4];
+                var acadyr = data[0][5];
+                var sem = data[0][6];
                 $('#hid_id').val(s_id);
 
-                showAvailProf(day, start, end);
+                showAvailProf(day, start, end, acadyr, sem);
                 $('#openModAssign').trigger('click');
             },
             error: function (data) {

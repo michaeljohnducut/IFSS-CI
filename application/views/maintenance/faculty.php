@@ -177,7 +177,7 @@
                         <div class="col-md-2 form-group">
                             <br>
                             <label class="control-label">Zip Code:</label>
-                            <input class="form-control" id="fact_zip_res" name="fact_zip_res" maxlength="4" pattern="[0-9]" title="Numbers only." type="text">
+                            <input class="form-control" id="fact_zip_res" name="fact_zip_res" maxlength="4" pattern="[0-9]" title="Numbers only." type="number">
                         </div>
                         <div class="col-md-10 form-group">
                             <br>
@@ -187,7 +187,7 @@
                         <div class="col-md-2 form-group">
                             <br>
                             <label class="control-label">Zip Code:</label>
-                            <input class="form-control" id="fact_zip_address" name="fact_zip_address" maxlength="4" pattern="[0-9]" title="Numbers only." type="text">
+                            <input class="form-control" id="fact_zip_address" name="fact_zip_address" maxlength="4" pattern="[0-9]" title="Numbers only." type="number">
                         </div>
 
                        <!--  <div class="col-md-3">

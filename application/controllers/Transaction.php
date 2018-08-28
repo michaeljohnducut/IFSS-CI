@@ -617,6 +617,40 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function validate_section_sched(){
+
+		echo json_encode($this->getdata_model->validate_section_sched($_POST));
+		exit();
+	}
+
+	public function load_section_table(){
+		
+		$output = $this->getdata_model->load_section_table();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
+	public function load_room_table(){
+		
+		$output = $this->getdata_model->load_room_table();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
 } 
 
 ?>

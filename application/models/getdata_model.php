@@ -1563,15 +1563,23 @@ class getdata_model extends CI_Model{
 		$query = $this->db->select('r.room_id, r.room_code')
 				->where('r.room_id NOT IN (SELECT ta.room_id
 					FROM teaching_assign_sched ta
-					WHERE ta.time_start > "'.$start_time.'"
+					WHERE ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					AND ta.time_start > "'.$start_time.'"
 					AND ta.time_start < "'.$end.'"
 					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
 					OR ta.time_finish > "'.$start_time.'"
 					AND ta.time_finish < "'.$end.'"
 					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
 					OR ta.time_start = "'.$start_time.'"
 					AND ta.time_finish = "'.$end.'"
-					AND ta.day = "'.$day.'")', NULL, FALSE)
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'")', NULL, FALSE)
 				->where('r.room_desc = "Lecture Room"', NULL, FALSE)
 				->order_by('room_code', 'asc')
                 ->get('room r');
@@ -2266,7 +2274,126 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function validate_section_sched(){
 
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$match_id = $this->security->xss_clean($this->input->post('match_id')); 
+		$output; 
+
+
+		$query2 = $this->db->where('ta.time_start > "'.$start_time.'"
+									AND ta.time_start < "'.$end.'"
+									AND ta.day = "'.$day.'"
+									AND ta.acad_yr = "'.$acad_year.'"
+									AND ta.sem = "'.$sem.'"
+									AND ta.subj_match_id = '.$match_id.'
+									OR ta.time_finish > "'.$start_time.'"
+									AND ta.time_finish < "'.$end.'"
+									AND ta.day = "'.$day.'"
+									AND ta.acad_yr = "'.$acad_year.'"
+									AND ta.sem = "'.$sem.'"
+									AND ta.subj_match_id = '.$match_id.'
+									OR ta.time_start = "'.$start_time.'"
+									AND ta.time_finish = "'.$end.'"
+									AND ta.day = "'.$day.'"
+									AND ta.acad_yr = "'.$acad_year.'"
+									AND ta.sem = "'.$sem.'"
+									AND ta.subj_match_id = '.$match_id.'')
+                			->get('teaching_assign_sched ta');
+
+        $number_filter_row = $query2->num_rows(); 
+        if ($number_filter_row != 0) {
+        	
+        	$output = 'EXISTING';	
+        }
+        else{
+        	$output = 'AVAILABLE';
+        }
+
+        return $output;
+	}
+
+	public function load_section_table(){	//GETS FACULTY'S SUMMARY OF SCHEDULES
+
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(LEFT(ta.time_start,5), "-", LEFT(ta.time_finish,5)) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
+				->where('sm.section', $section_id)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->join('subject_match sm ','ta.subj_match_id = sm.subj_match_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('faculty f','f.faculty_id = sm.faculty_id', 'LEFT')
+				->join('room r','r.room_id = ta.room_id')
+				->group_by('ta.subj_match_id')
+				->order_by('ta.day', 'asc')
+                ->get('teaching_assign_sched ta');
+                
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units, 
+					$r->facname, 
+					$r->times,
+					$r->days,
+					$r->rooms,
+					$btn
+					);
+		}
+
+		return $result;	
+	}
+
+	public function load_room_table(){	//GETS SECTION'S SUMMARY OF SCHEDULES
+
+		$room_id = $this->security->xss_clean($this->input->post('room_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(LEFT(ta.time_start,5), "-", LEFT(ta.time_finish,5)) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", ta.subj_match_id')
+				->where('ta.room_id', $room_id)
+				->where('ta.acad_yr', $acad_year)
+				->where('ta.sem', $sem)
+				->join('subject_match sm','ta.subj_match_id = sm.subj_match_id')
+				->join('section se','se.section_id = sm.section')
+				->join('course c','c.course_id = se.course')
+				->join('faculty f','f.faculty_id = sm.faculty_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('room r','r.room_id = ta.room_id')
+                ->get('teaching_assign_sched ta');
+
+		foreach ($query->result() as $r) 
+		{	
+
+			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units,
+					$r->facname, 
+					$section, 
+					$r->times,
+					$r->days,
+					$btn
+					);
+		}
+
+		return $result;	
+	}
 
 
 }

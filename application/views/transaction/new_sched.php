@@ -522,7 +522,7 @@
                             </div>
                         </div>
 
-<div class="table-responsive">
+<div class="table-responsive" id="faculty_table">
     <table id="tbl_sched_sum" class="table colored-table table-bordered inverse-tabl table-striped" style="margin-top: 50px;">
         <thead>
             <tr>
@@ -533,6 +533,50 @@
                 <th width="200px">Time</th>
                 <th>Day/s</th>
                 <th>Room</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+         <tbody>
+
+        </tbody>
+    </table>
+
+</div>
+
+<div class="table-responsive" id="section_table">
+    <table id="tbl_section" class="table colored-table table-bordered inverse-tabl table-striped" style="margin-top: 50px;">
+        <thead>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject Description</th>
+                <th>Units</th>
+                <th width="150px">Professor</th>
+                <th width="200px">Time</th>
+                <th>Day/s</th>
+                <th>Room</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+         <tbody>
+
+        </tbody>
+    </table>
+
+</div>
+
+<div class="table-responsive" id="room_table">
+    <table id="table_room" class="table colored-table table-bordered inverse-tabl table-striped" style="margin-top: 50px;">
+        <thead>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject Description</th>
+                <th>Units</th>
+                <th width="150px">Course, Year and Section</th>
+                <th width="200px">Professor</th>
+                <th>Time/s</th>
+                <th>Day/s</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -905,6 +949,46 @@
 
         }
 
+        function loadSectionTable(){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var section_id = $('#sec_yearsec').val();
+
+            var dataTable = $('#tbl_section').DataTable({           
+              "processing" : true,
+              "serverSide" : true,
+              "order" : [],
+              destroy:true,
+              "ajax" : {
+               url:"<?php echo base_url('Transaction/load_section_table')?>",
+               data:{sem: sem, acad_year:acad_year, section_id:section_id},
+               type:"POST"
+              }
+             });
+
+        }
+
+        function loadRoomTable(){
+
+            var sem = $('#room_sem').val();
+            var acad_year = $('#room_acad_year').val();
+            var room_id = $('#room_labs').val();
+
+            var dataTable = $('#table_room').DataTable({           
+              "processing" : true,
+              "serverSide" : true,
+              "order" : [],
+              destroy:true,
+              "ajax" : {
+               url:"<?php echo base_url('Transaction/load_room_table')?>",
+               data:{sem: sem, acad_year:acad_year, room_id:room_id},
+               type:"POST"
+              }
+             });
+
+        }
+
         function reflectSchedTable(){
 
             var sem = $('#sched_sem').val();
@@ -1072,6 +1156,31 @@
                 success:function(data){
                     var match_id = data;
                     minorSecondSave(match_id);
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+
+        function validateSectionSched(start, end, day, start_id, end_id, day_id){
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var match_id = $('#sched_load').val();
+
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/validate_section_sched')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, match_id:match_id, start_time:start, end:end, day:day}, 
+                dataType: "json",
+                success:function(data){
+                    if(data == 'EXISTING')
+                    {
+                        alert('This section is not available for this schedule. Input a time and day where the section is available.')
+                        $('#'+ start_id).val('');
+                        $('#'+ end_id).val('');
+                        $('#'+ day_id).val('0');
+                    }
                 },  
                 error: function (data) {
                 alert(JSON.stringify(data));
@@ -1497,6 +1606,9 @@
         $('#div_by_room').hide();
         $('#div_by_section').hide();
         $('#sched_b_minor').hide();
+        $('#section_table').hide();
+        $('#room_table').hide();
+
 
         $('#starttime_a').on('blur',function(){
 
@@ -2310,18 +2422,21 @@
           resetPlotForm();
           reflectSectionTable();
           reflectSectionMinor();
+          loadSectionTable();
         });
 
         $('#sec_acadyr').on('change', function(){
           resetPlotForm();
           reflectSectionTable();
           reflectSectionMinor();
+          loadSectionTable();
         });
 
         $('#sec_yearsec').on('change', function(){
           resetPlotForm();
           reflectSectionTable();
           reflectSectionMinor();
+          loadSectionTable();
         });
 
 
@@ -2334,16 +2449,19 @@
         $('#room_sem').on('change', function(){
           resetPlotForm();
           reflectRoomTable();
+          loadRoomTable();
         });
 
         $('#room_acad_year').on('change', function(){
           resetPlotForm();
           reflectRoomTable();
+          loadRoomTable();
         });
 
         $('#room_labs').on('change', function(){
           resetPlotForm();
           reflectRoomTable();
+          loadRoomTable();
         });
 
 
@@ -2368,6 +2486,7 @@
             var start = $('#starttime_a').val();
             var end = $('#endtime_a').val();
             showAvailRoom(day, start, end,'rooms_a');
+            validateSectionSched(start, end, day, 'starttime_a', 'endtime_a', 'day_a');
         });
 
         $('#day_b').on('change', function(){
@@ -2375,6 +2494,7 @@
             var start = $('#starttime_b').val();
             var end = $('#endtime_b').val();
             showAvailRoom(day, start, end,'rooms_b');
+            validateSectionSched(start, end, day, 'starttime_b', 'endtime_b', 'day_b');
         });
 
          $('#day_c').on('change', function(){
@@ -2382,6 +2502,7 @@
             var start = $('#starttime_c').val();
             var end = $('#endtime_c').val();
             showAvailLab(day, start, end,'rooms_c');
+            validateSectionSched(start, end, day, 'starttime_c', 'endtime_c', 'day_c')
         });
 
         //CHANGE VIEW DROP DOWN
@@ -2400,6 +2521,9 @@
             $('#room_acad_year').val('0');
             $('#room_sem').val('0');
             $('#room_labs').val('0');
+            $('#faculty_table').show();
+            $('#section_table').hide();
+            $('#room_table').hide();
           }
 
           else if(temp_val == 2){
@@ -2415,6 +2539,9 @@
             $('#room_acad_year').val('0');
             $('#room_sem').val('0');
             $('#room_labs').val('0');
+            $('#faculty_table').hide();
+            $('#section_table').show();
+            $('#room_table').hide();
           }
 
           else{
@@ -2431,6 +2558,9 @@
             $('#sec_sem').val('0');
             $('#sec_course').val('0');
             $('#sec_yearsec').val('0');
+            $('#faculty_table').hide();
+            $('#section_table').hide();
+            $('#room_table').show();
           }
         });
 
@@ -2594,6 +2724,7 @@
             var end = $('#minor_end_a').val();
             var day = $('#day_minor_a').val();
             showAvailRoom(day, start, end, 'rooms_minor_a');
+            validateSectionSched(start, end, day, 'minor_start_a', 'minor_end_a', 'day_minor_a');
         });
 
         $('#day_minor_b').on('change',function(){
@@ -2601,6 +2732,7 @@
             var end = $('#minor_end_b').val();
             var day = $('#day_minor_b').val();
             showAvailRoom(day, start, end, 'rooms_minor_b');
+            validateSectionSched(start, end, day, 'minor_start_b', 'minor_end_b', 'day_minor_br');
         });
 //==========================================================================================
 //END NG MINOR ELEMENTS
@@ -2654,6 +2786,7 @@
             else{
               global_splitcontrol = 0;
             }
+
             var data = {
               'acad_yr': acad_yr, 
               'sem': sem, 
@@ -2680,6 +2813,7 @@
                         data: $('#add_sched_form').serialize() + '&' + $.param(data), 
                         success:function(data)
                         {  
+                            // alert(data);
                             if (data == 'INSERTED')
                             {
                               $('#starttime_a').val('');

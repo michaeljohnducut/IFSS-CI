@@ -1642,7 +1642,7 @@
                   }
 
                   else{
-                    alert('Loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
+                    alert('Part time loads allowed for Designees are only:\n-7:30am - 9:00am\n-12:00nn - 1:30pm\n-4:30pm - 6:00pm');
                     $('#starttime_a').val('');
                     $('#endtime_a').val('');
                   }
@@ -2348,7 +2348,7 @@
 
 
           //PART TIME CONTOLLER
-          else{
+          else if (global_factype == 4 || global_factype == 5){
               var temp_start = $('#starttime_c').val();
               var added_value = '';
               var adder;

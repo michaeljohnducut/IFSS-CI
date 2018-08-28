@@ -1394,6 +1394,7 @@ class getdata_model extends CI_Model{
 	                    WHERE is_used = 1)', NULL, FALSE)
 				->where('s.isMajor', 1)
 				->where('c.sem', $sem)
+				->order_by('s.subj_code', 'asc')
                 ->get('curriculum c');
 
 

@@ -49,7 +49,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h4 class="modal-title">Add a new curriculum</h4>
+                                            <h4 class="modal-title">Add a new curriculum year</h4>
                                         </div>
                                         <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 

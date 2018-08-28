@@ -1572,11 +1572,19 @@
                     }
 
                 if (temp_min_end == '30'){
-                    final_val2 = looper + ':00:00' + day_id;
+                    if(looper < 10)
+                    {
+                        final_val2 = '0' + looper + ':00:00' + day_id;
+                    }
+                    else
+                    {
+                        final_val2 = looper + ':00:00' + day_id;
+                    }
                     $('button[type="button"][value="'+final_val2+'"]').removeClass();
                     $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
                 $('button[type="button"][value="'+final_val2+'"]').text(''); 
                 }
+                alert(final_val2);
 
                 // 
                 // if (looper < 10){

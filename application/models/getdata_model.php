@@ -2367,6 +2367,7 @@ FROM subject_match sm
 				->where('ta.room_id', $room_id)
 				->where('ta.acad_yr', $acad_year)
 				->where('ta.sem', $sem)
+				->group_by('sm.subj_match_id')
 				->join('subject_match sm','ta.subj_match_id = sm.subj_match_id')
 				->join('section se','se.section_id = sm.section')
 				->join('course c','c.course_id = se.course')

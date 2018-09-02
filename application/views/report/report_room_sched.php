@@ -15,8 +15,6 @@
             <div class="row">      
                 <div class="col-sm-12">
                     <div class="white-box">
-                        <br>
-                        <br>
                         
                         <div class="row">
                             <h2>Reports on Room Schedules</h2>
@@ -32,23 +30,32 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control">
-                                    <option>2013</option>
-                                    <option>2014</option>
-                                    <option>2015</option>
-                                    <option selected>2016</option>
-                                    <option>2017</option>
-                                    <option>2018</option>
+                                <select class="form-control" id="select_acadyr">
+                                    <option value="">-SELECT ACAD YEAR-</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
                                 </select>
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Select Semester</label>
-                                <select class="form-control">
-                                    <option>1st</option>
-                                    <option>2nd</option>
-                                </select>  
+                                <select class="form-control" id="select_sem">
+                                    <option value="">-SELECT SEM-</option>
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option>
+                                    <option value="Summer">Summer</option>
+                                </select>
                             </div>
-                            <div class="col-md-8" style="text-align: right;">
+                            <div class="col-md-2">
+                                <label class="control-label">Select Room</label>
+                                <select class="form-control" id="select_room">
+                                    <option value="">-SELECT ROOM-</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
                                 <br>
                                 <button type="button" class="btn btn-info" style="margin-top: 10px;">Print Room Schedule</button>
                                 

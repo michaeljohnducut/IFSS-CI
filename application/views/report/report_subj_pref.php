@@ -30,22 +30,18 @@
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control" name="acad_year" id="acad_year">
-                                    <option value="0">-SELECT A.Y.-</option>
-                                    <option value="2010-2011">2010-2011</option>
-                                    <option value="2011-2012">2011-2012</option>
-                                    <option value="2012-2013">2012-2013</option>
-                                    <option value="2013-2014">2013-2014</option>
-                                    <option value="2014-2015">2014-2015</option>
-                                    <option value="2015-2016">2015-2016</option>
-                                    <option value="2016-2017">2016-2017</option>
-                                    <option value="2017-2018">2017-2018</option>
-                                    <option value="2018-2019">2018-2019</option>                 
+                                   <option value="">-SELECT ACAD YEAR-</option>
+                                   <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>                 
                                 </select>
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Select Semester</label>
                                 <select class="form-control" name="selected_sem" id="selected_sem">
-                                    <option value="0">-SELECT SEM-</option>
+                                    <option value="">-SELECT SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
                                     <option value="summer">Summer</option>        

@@ -592,6 +592,10 @@
 
             load_details();
 
+            $('#fact_id').prop("disabled",true);
+            $('#fact_type').prop("disabled",true);
+            $('#fact_dept').prop("disabled",true);
+            
             $('#fact-profile').show();
 
             function hide_educ_table()

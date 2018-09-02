@@ -14,52 +14,43 @@
 
             <div class="row">      
                 <div class="col-sm-12">
-                    <div class="white-box">
-                        <br>
-                        <br>
-                        
+                    <div class="white-box">                        
                         <div class="row">
                             <h2>Reports on Teaching Assignments</h2>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
                             </div>
                             <br>
                             <br>
-
-
                         </div>
 
                         <div class="row">
                             <div class="col-md-3">
                                 <label class="control-label">Select Faculty:</label>
                                 <select class="form-control">
-                                    <option>--Faculty Member-</option>
-                                    <option>Aldrin, Lily</option>
-                                    <option>Eriksen, Marshall</option>
-                                    <option>McConell, Tracy</option>
-                                    <option>Mosby, Theodore</option>
-                                    <option selected="">Scherbatsky, Robin</option>
-                                    <option>Stinson, Barney</option>
+                                    <option value="">-SELECT FACULTY-</option>
+                                    <?php foreach($faculty as $r) echo '<option value="'.$r[7].'">'.$r[1].', '.$r[2].' '.$r[3].'</option>';?>
                                 </select>
                                 
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control">
-                                    <option>2013</option>
-                                    <option>2014</option>
-                                    <option>2015</option>
-                                    <option>2016</option>
-                                    <option selected="">2017</option>
-                                    <option>2018</option>
+                                <select class="form-control" id="select_acadyr">
+                                    <option value="">-SELECT ACAD YEAR-</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
                                 </select>
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Select Semester</label>
-                                <select class="form-control">
-                                    <option>1st</option>
-                                    <option>2nd</option>
-                                </select>  
+                                <select class="form-control" id="select_sem">
+                                    <option value="">-SELECT SEM-</option>
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option>
+                                    <option value="Summer">Summer</option>
+                                </select>    
                             </div>
                             <div class="col-md-5" style="text-align: right;">
                                 <br>
@@ -115,57 +106,6 @@
                                         <td>FR</td>
                                         <td>E408</td>
                                     </tr>
-
-                                    <tr>
-                                        <td>COMP2023</td>
-                                        <td>Sample Subject</td>
-                                        <td>3</td>
-                                        <td>BSIT 2-4</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>FR</td>
-                                        <td>E408</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>COMP2023</td>
-                                        <td>Sample Subject</td>
-                                        <td>3</td>
-                                        <td>BSIT 2-4</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>FR</td>
-                                        <td>E408</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>COMP2023</td>
-                                        <td>Sample Subject</td>
-                                        <td>3</td>
-                                        <td>BSIT 2-4</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>FR</td>
-                                        <td>E408</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>COMP2023</td>
-                                        <td>Sample Subject</td>
-                                        <td>3</td>
-                                        <td>BSIT 2-4</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>FR</td>
-                                        <td>E408</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>COMP2023</td>
-                                        <td>Sample Subject</td>
-                                        <td>3</td>
-                                        <td>BSIT 2-4</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>FR</td>
-                                        <td>E408</td>
-                                    </tr>
-
                                 </tbody>
                                      
                                 </table>

@@ -35,8 +35,11 @@ class Report extends CI_Controller
 
 	public function faculty_schedule()
 	{
-		$title['title'] = "IFSS | Faculty Schedule";
-		$this->load->view('templates/header', $title);
+		$data['faculty'] = $this->getdata_model->faculty();
+
+
+		$data['title'] = "IFSS | Faculty Schedule";
+		$this->load->view('templates/header', $data);
 		$this->load->view('report/report_faculty_sched');
 		$this->load->view('templates/footer');
 	}

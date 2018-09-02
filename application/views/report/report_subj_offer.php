@@ -14,10 +14,7 @@
 
             <div class="row">      
                 <div class="col-sm-12">
-                    <div class="white-box">
-                        <br>
-                        <br>
-                        
+                    <div class="white-box">                        
                         <div class="row">
                             <h2>Reports on Subject Offerings</h2>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
@@ -25,33 +22,31 @@
                             </div>
                             <br>
                             <br>
-
-
-
                         </div>
                         <div class="row">
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control">
-                                    <option>2013</option>
-                                    <option>2014</option>
-                                    <option>2015</option>
-                                    <option selected>2016</option>
-                                    <option>2017</option>
-                                    <option>2018</option>
+                                <select class="form-control" id="select_acadyr">
+                                    <option value="">-SELECT ACAD YEAR-</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
                                 </select>
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Select Semester</label>
-                                <select class="form-control">
-                                    <option>1st</option>
-                                    <option>2nd</option>
+                                <select class="form-control" id="select_sem">
+                                    <option value="">-SELECT SEM-</option>
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option>
+                                    <option value="Summer">Summer</option>
                                 </select>  
                             </div>
                             <div class="col-md-8" style="text-align: right;">
                                 <br>
-                                <button type="button" class="btn btn-info" style="margin-top: 10px;">Print Subject Offering</button>
-                                
+                                <button type="button" class="btn btn-info" style="margin-top: 10px;">Print Subject Offering</button>  
                             </div>
                         </div>
                         <br><br>
@@ -97,50 +92,6 @@
                                         <td>E408</td>
                                         <td></td>
                                     </tr>
-
-                                     <tr>
-                                        <td>INTE1023</td>
-                                        <td>Sample Subj</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>TH/TH</td>
-                                        <td>7:30-10:30 / 10:30 - 12:30</td>
-                                        <td>S511/E410</td>
-                                        <td>w/ Lab</td>
-                                    </tr>
-
-                                     <tr>
-                                        <td>ENG1023</td>
-                                        <td>Writing in Discipline</td>
-                                        <td>3</td>
-                                        <td>3</td>
-                                        <td>FR</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>E408</td>
-                                        <td></td>
-                                    </tr>
-
-                                     <tr>
-                                        <td>ENG1023</td>
-                                        <td>Writing in Discipline</td>
-                                        <td>3</td>
-                                        <td>3</td>
-                                        <td>FR</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>E408</td>
-                                        <td></td>
-                                    </tr>
-
-                                     <tr>
-                                        <td>ENG1023</td>
-                                        <td>Writing in Discipline</td>
-                                        <td>3</td>
-                                        <td>3</td>
-                                        <td>FR</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>E408</td>
-                                        <td></td>
-                                    </tr>
                                 </tbody>
                                      
                                 </table>
@@ -176,50 +127,6 @@
 
                                 <tbody>
                                     <tr>
-                                        <td>ENG1023</td>
-                                        <td>Writing in Discipline</td>
-                                        <td>3</td>
-                                        <td>3</td>
-                                        <td>FR</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>E408</td>
-                                        <td></td>
-                                    </tr>
-
-                                     <tr>
-                                        <td>INTE1023</td>
-                                        <td>Sample Subj</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>TH/TH</td>
-                                        <td>7:30-10:30 / 10:30 - 12:30</td>
-                                        <td>S511/E410</td>
-                                        <td>w/ Lab</td>
-                                    </tr>
-
-                                     <tr>
-                                        <td>ENG1023</td>
-                                        <td>Writing in Discipline</td>
-                                        <td>3</td>
-                                        <td>3</td>
-                                        <td>FR</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>E408</td>
-                                        <td></td>
-                                    </tr>
-
-                                     <tr>
-                                        <td>ENG1023</td>
-                                        <td>Writing in Discipline</td>
-                                        <td>3</td>
-                                        <td>3</td>
-                                        <td>FR</td>
-                                        <td>1:30PM - 4:30PM</td>
-                                        <td>E408</td>
-                                        <td></td>
-                                    </tr>
-
-                                     <tr>
                                         <td>ENG1023</td>
                                         <td>Writing in Discipline</td>
                                         <td>3</td>

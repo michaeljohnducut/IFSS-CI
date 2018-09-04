@@ -68,7 +68,7 @@ class getdata_model extends CI_Model{
 
 		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
 
-		$query = $this->db->select('a.account_id, f.lname, f.fname, f.mname, f.email, f.contact_no, f.date_of_birth, f.gender, f.civil_status, f.citizenship, f.residential_address, f.rzip_code, f.permanent_address, f.pzip_code, f.faculty_type, f.dept, f.faculty_id')
+		$query = $this->db->select('a.account_id, f.lname, f.fname, f.mname, f.email, f.contact_no, f.date_of_birth, f.gender, f.civil_status, f.citizenship, f.residential_address, f.rzip_code, f.permanent_address, f.pzip_code, f.faculty_type, f.dept, f.faculty_id, a.image_path')
 				->join('faculty f', 'a.faculty_id = f.faculty_id')
                 ->where('f.status', 1)
                 ->where('a.status', 1)
@@ -77,6 +77,8 @@ class getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
+			($r->image_path == 'undefined')?$image = "assets/images/profile.png":$image = "assets/images/".$r->image_path."";
+
 			$result[] = array(
 					$r->account_id,
 					$r->lname,
@@ -95,6 +97,7 @@ class getdata_model extends CI_Model{
 					$r->faculty_type,
 					$r->dept,
 					$r->faculty_id,
+					$image
 					);
 		}
 

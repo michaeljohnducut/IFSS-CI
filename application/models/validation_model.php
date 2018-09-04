@@ -8,7 +8,7 @@ class validation_model extends CI_Model
 		$password = $this->security->xss_clean($input['password']);
 		$sess_array = array();
 
-		$qr = $this->db->query("SELECT f.faculty_id, CONCAT(lname, ', ', fname, ' ', mname) AS faculty_name, a.account_id, a.account_type
+		$qr = $this->db->query("SELECT f.faculty_id, CONCAT(lname, ', ', fname, ' ', mname) AS faculty_name, a.account_id, a.account_type, a.image_path
 								FROM account a JOIN faculty f
 								ON a.faculty_id = f.faculty_id
 								WHERE a.account_id = '$username' AND a.password = '$password'"); 
@@ -21,6 +21,7 @@ class validation_model extends CI_Model
                         'FACULTYID'  => $qr->result()[0]->account_id,
                         'USERTYPE'   => $qr->result()[0]->account_type,
                         'NAME'       => $qr->result()[0]->faculty_name,
+                        'IMAGE' 	 => $qr->result()[0]->image_path,
                 ));
 			$sess_array['IsError']=0;	
 			$sess_array['url'] = base_url('Maintenance');	

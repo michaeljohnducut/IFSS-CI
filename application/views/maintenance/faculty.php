@@ -82,7 +82,9 @@
                     <div class="row">
                         <br><br>
                         <div class="col-md-2" style="padding-top: 30px;">
-                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <img id="imagepreview" style="height: 180px; width: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <br><br>
+                            <input type="file" id="profilepic" name="profilepic" accept="image/*">
                         </div>
                         <div class="col-md-8 form-group">
                             <br><br>
@@ -229,7 +231,7 @@
                     <div class="row">
                         <br><br>
                         <div class="col-md-2" style="padding-top: 30px;">
-                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <img id="imagepreview2" style="height: 180px; width: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
                         </div>
                         
                         <div class="col-md-12">
@@ -312,7 +314,7 @@
                     <div class="row">
                         <br><br>
                         <div class="col-md-2" style="padding-top: 30px;">
-                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <img id="imagepreview3" style="height: 180px; width: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
                         </div>
                         <div class="col-md-12">
                             <h3>Select Specialized Courses</h3>
@@ -359,7 +361,7 @@
                     <div class="row">
                         <br><br>
                         <div class="col-md-2" style="padding-top: 30px;">
-                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <img id="imagepreview4" style="height: 180px; width: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
                         </div>
                         <div class="col-md-12">
                             <h3>Student Evaluation Ratings</h3>
@@ -453,6 +455,7 @@
         function resetForm2()
         {
             $('#add_fac_prof_form')[0].reset();
+            $('#imagepreview').attr('src', "<?php echo base_url('assets/images/profile.png');?>");
         }
 
         function loadtable()
@@ -473,6 +476,17 @@
           });
         }
 
+        function readURL(input) 
+        {
+          if (input.files && input.files[0]) 
+          {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagepreview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+          }
+        }
 
         // function change_spouse()
         // {
@@ -496,6 +510,10 @@
             loadtable();
 
             $('#fact-profile').hide();
+
+            $("#profilepic").change(function(){
+                readURL(this);
+            });
 
             function hide_educ_table()
             {
@@ -588,6 +606,23 @@
                $('#row'+button_id+'').remove();  
             });
 
+            function save_other(id)
+            {
+                $.ajax({  
+                        url:"<?php echo base_url('Maintenance/add_other_data')?>",  
+                        method:"POST",  
+                        data: $("#add_fac_educ_form").serialize() + "&" + $("#add_spec_fac_form").serialize() + "&main_id=" + id,
+                        success:function(data)
+                        {  
+                           
+                        },
+                        error:function(data)
+                        {
+                            swal("Not Updated!", "Something blew up.", "error");
+                        }
+                    }); 
+            }
+
             //ADD FACULTY PROFILE DISPLAY
             $(document).on('click', '#create_faculty', function(e)
             {
@@ -640,6 +675,12 @@
                 $('#fac_course_spec_div').hide();
                 $("#fac_course_spec").empty();
                 $('#edit_spec_fac_form').hide();
+                $('#profilepic').show();
+
+                $('#imagepreview').attr('src', '<?php echo base_url('assets/images/profile.png');?>');
+                $('#imagepreview2').attr('src', '<?php echo base_url('assets/images/profile.png');?>');
+                $('#imagepreview3').attr('src', '<?php echo base_url('assets/images/profile.png');?>');
+                $('#imagepreview4').attr('src', '<?php echo base_url('assets/images/profile.png');?>');
             });
 
             //VIEW FACULTY DETAILS
@@ -675,11 +716,14 @@
                 $('#fac_course_spec_div').show();
                 $("#fac_course_spec").empty();
                 $("#edit_spec_fac_form").hide();
+                $('#profilepic').hide();
 
                 e.preventDefault();
                 var id = $(this).data("id");
 
                 show_educ_table2(id);
+
+                var base_url = '<?php echo base_url(); ?>'
 
                 $.ajax({  
                     url:"<?php echo base_url('Maintenance/view_faculty')?>", 
@@ -703,6 +747,10 @@
                          $('#fact_zip_res').val(data[0][11]);
                          $('#fact_address').val(data[0][12]);
                          $('#fact_zip_address').val(data[0][13]);
+                         $('#imagepreview').attr('src', base_url + data[0][17]);
+                         $('#imagepreview2').attr('src', base_url + data[0][17]);
+                         $('#imagepreview3').attr('src', base_url + data[0][17]);
+                         $('#imagepreview4').attr('src', base_url + data[0][17]);
                          loadsummary(id);
                     },
                          error: function (data) {
@@ -737,26 +785,32 @@
                 //ADD FACULTY PROFILE
                 $("#add_fac_prof_form").on("submit", function(event)
                 {
+                    var main_id; 
                     openCity(event, 'Personal_Info');
                     event.preventDefault();
                     $.ajax({
                         type: "POST",
                         url: "<?php echo base_url('Maintenance/add_faculty')?>",
-                        data: $("#add_fac_prof_form").serialize() + "&" + $("#add_fac_educ_form").serialize() + "&" + $("#add_spec_fac_form").serialize(),
+                        data: new FormData(this),
+                        dataType: 'json',
+                        contentType:false,
+                        cache:false,
+                        processData:false,
                         success: function(data)
                         {       
-                            if(data == 'INSERTED')
+                            if(data['mes'] == 'INSERTED')
                             {
                                 swal("Added!", "The account is added.", "success");
                                 $('#fact-profile').hide();
                                 $('#faculty_btn_add').hide();
                                 $('#faculty_btn_update').hide();
                                 $('.dynamic-added').remove();
+                                save_other(data['id']);
                                 $('#account-table').DataTable().destroy();
                                 loadtable();
                             }
 
-                            if(data == 'NOT INSERTED')
+                            if(data['mes'] == 'NOT INSERTED')
                             {
                                 swal("Not Added!", "Something blew up.", "error");
                                 $('#fact-profile').hide();
@@ -766,7 +820,7 @@
 
                             }
 
-                            if(data == 'THE DATA IS ALREADY INSERTED')
+                            if(data['mes'] == 'THE DATA IS ALREADY INSERTED')
                             {
                                 swal("Not Added!", "The faculty ID is already inserted.", "error");
                                 $('#fact-profile').hide();
@@ -776,11 +830,16 @@
                                 $('#account-table').DataTable().destroy();
                                 loadtable();
                             }
+
+                            if(data['mes'] == 'INVALID')
+                            {
+                                swal("Invalid file!", "You uploaded an invalid file. Make sure that the file format of the image you are uploading is JPG/JPEG/PNG.", "error");
+                            }
                         },
                         error: function (data) {
-                            alert(JSON.stringify(data));
+                            swal("Not Added!", "Something blew up.", "error");
                         }
-                    });
+                    });  
                 });
 
                 //UPDATE FACULTY SPECIALIZATION (TOGGLE)
@@ -802,7 +861,7 @@
                             }, 
                             error: function(data)
                             {
-                               alerts('An error occured. Please reload the page and try again.');
+                               swal("Error!", "Something blew up.", "error");
                             }
                         }); 
                     }
@@ -820,7 +879,7 @@
                             }, 
                             error: function(data)
                             {
-                               alerts('An error occured. Please reload the page and try again.');
+                               swal("Error!", "Something blew up.", "error");
                             }
                         }); 
                     }
@@ -872,6 +931,10 @@
                    $('#fac_course_spec_div').hide();
                    $("#fac_course_spec").empty();
                    $('#edit_spec_fac_form').show();
+                   $('#profilepic').show();
+                   $('#profilepic').prop("disabled", false);
+
+                   var base_url = '<?php echo base_url(); ?>'
 
                    $('html, body').animate({
                 scrollTop: $("#fact-profile").offset().top
@@ -900,6 +963,10 @@
                              $('#fact_address').val(data[0][12]);
                              $('#fact_zip_address').val(data[0][13]);
                              $('#faculty_id_hid').val(data[0][16]);
+                             $('#imagepreview').attr('src', base_url + data[0][17]);
+                             $('#imagepreview2').attr('src', base_url + data[0][17]);
+                             $('#imagepreview3').attr('src', base_url + data[0][17]);
+                             $('#imagepreview4').attr('src', base_url + data[0][17]);
                         },
                         error: function (data) {
                             alert(JSON.stringify(data));
@@ -996,15 +1063,20 @@
                 //EDIT FACULTY DETAILS PROCESS
                 $("#update_account").on("click", function(event)
                 {  
+                    var formdata = $('#add_fac_prof_form')[0];
                     openCity(event, 'Personal_Info');
                     event.preventDefault();  
                     $.ajax({  
                     url:"<?php echo base_url('Maintenance/edit_faculty')?>",  
                     method:"POST",  
-                    data:$("#add_fac_prof_form").serialize() + "&" + $("#add_fac_educ_form").serialize(),
+                    data:new FormData(formdata),
+                    dataType: 'json',
+                    contentType:false,
+                    cache:false,
+                    processData:false,
                     success:function(data)
                     {  
-                        if(data == 'UPDATED')
+                        if(data['mes'] == 'UPDATED')
                         {
                             swal("Updated!", "The faculty details is updated.", "success");
                             $('#fact-profile').hide();
@@ -1015,12 +1087,12 @@
                             loadtable(); 
                         }
 
-                        if(data == 'NOT UPDATED')
+                        if(data['mes'] == 'NOT UPDATED')
                         {
                             swal("Not Updated!", "Something blew up.", "error");
                         }
 
-                        if(data == 'THE DATA IS ALREADY INSERTED')
+                        if(data['mes'] == 'THE DATA IS ALREADY INSERTED')
                         {
                             swal("Not Updated!", "The faculty ID is already inserted.", "error");
                             $('#fact-profile').hide();
@@ -1030,7 +1102,27 @@
                             $('#account-table').DataTable().destroy();
                             loadtable();
                         }
+                    },
+                    error:function(data)
+                    {
+                        swal("Not Updated!", "Something blew up.", "error");
                     }
+                    });
+
+                    var id = $('#faculty_id_hid').val();
+
+                    $.ajax({  
+                        url:"<?php echo base_url('Maintenance/edit_profile_educbg')?>",  
+                        method:"POST",  
+                        data:$("#add_fac_educ_form").serialize() + "&main_id=" + id,
+                        success:function(data)
+                        {  
+                           
+                        },
+                        error:function(data)
+                        {
+                            swal("Not Updated!", "Something blew up.", "error");
+                        }
                     });  
                 });
 

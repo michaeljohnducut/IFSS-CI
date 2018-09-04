@@ -2,9 +2,10 @@
 
 class savedata_model extends CI_Model
 {
-	public function add_faculty()
+	public function add_faculty($input = array(), $file)
 	{
-		$output = '';
+		$output = array();
+		$img = '';
 
 		//required
 		$faculty_id = $this->security->xss_clean($this->input->post('fact_id')); //account id
@@ -80,6 +81,15 @@ class savedata_model extends CI_Model
             $faculty_permaZip = '';
         }
 
+        if($file != '')
+        {
+        	$img = $file;
+        }
+        else
+        {
+        	$img = 'undefined';
+        }
+
 		$query = $this->db->where('account_id', $faculty_id)
 							->get('account');
 
@@ -108,9 +118,9 @@ class savedata_model extends CI_Model
 
 			if($this->db->insert('faculty', $data))
 			{
-				$output = 'INSERTED';
-
 				$last_id = $this->db->insert_id();
+
+				$output = array('mes' => 'INSERTED', 'id' => $last_id);
 
 				$result = $this->db->query("SELECT SUBSTRING(MD5(RAND()) FROM 1 FOR 6) AS password");
 				$password = $result->row()->password;
@@ -119,29 +129,35 @@ class savedata_model extends CI_Model
 					'account_id' => $faculty_id, 
 					'password' => $password,
 					'faculty_id'=> $last_id,
-					'image_path' => 'undefined',
+					'image_path' => $img,
 					'status' => 1
 					);
 
 				if($this->db->insert('account', $data))
 				{
-					$output = 'INSERTED';
+					$output = array('mes' => 'INSERTED', 'id' => $last_id);
 				}
 				else
 				{
-					$output = 'NOT INSERTED';
+					$output = array('mes' => 'NOT INSERTED');
 				}
 			}
 			else
 			{
-				$output = 'NOT INSERTED';
+				$output = array('mes' => 'NOT INSERTED');
 			}
 		}
 		else
 		{
-			$output = 'THE DATA IS ALREADY INSERTED';
+			$output = array('mes' => 'THE DATA IS ALREADY INSERTED');
 		} // end condition of faculty and account inserted
 
+		return $output;
+	}
+
+	public function add_other_data()
+	{
+		$last_id = $this->security->xss_clean($this->input->post('main_id'));
 
 		if(isset($_POST['fac_spec']))
         {
@@ -156,7 +172,6 @@ class savedata_model extends CI_Model
                 else
                 {
                     $output = "NOT INSERTED";
-                    // echo "Error: " . $query4 . "<br>" . $conn->error;
                 }
             }
         }// end of faculty_spec insert
@@ -186,13 +201,11 @@ class savedata_model extends CI_Model
 				$i++;
 			}
         } //end of educ insert
-
-		return $output;
 	}
 
-	public function edit_faculty()
+	public function edit_faculty($input = array(), $file)
 	{
-		$output = '';
+		$output = array();
 
 		//required
 		$main_id = $this->security->xss_clean($this->input->post('faculty_id_hid'));
@@ -223,15 +236,6 @@ class savedata_model extends CI_Model
         {
             $faculty_civilstatus = '';
         }
-
-        // if(isset($_POST['fact_place_birth']))
-        // {
-        //     $faculty_placebirth = $this->input->post('fact_place_birth');
-        // }
-        // else
-        // {
-        //     $faculty_placebirth = '';
-        // }
 
         if(isset($_POST['fact_citizen']))
         {
@@ -300,24 +304,180 @@ class savedata_model extends CI_Model
 			if($this->db->where('faculty_id', $main_id)
 						->update('faculty', $data))
 			{
-				$output = 'UPDATED';
+				$output = array('mes' => 'UPDATED');
 
-				if($this->db->where('faculty_id', $main_id)
-						->update('account', array('account_id' => $faculty_id)))
+				if($file != '')
 				{
-					$output = 'UPDATED';
+					if($this->db->where('faculty_id', $main_id)
+						->update('account', array('account_id' => $faculty_id, 'image_path' => $file)))
+					{
+						$output = array('mes' => 'UPDATED');
+					}
+					else
+					{
+						$output = array('mes' => 'NOT UPDATED');
+					}
 				}
 				else
 				{
-					$output = 'NOT UPDATED';
+					if($this->db->where('faculty_id', $main_id)
+						->update('account', array('account_id' => $faculty_id)))
+					{
+						$output = array('mes' => 'UPDATED');
+					}
+					else
+					{
+						$output = array('mes' => 'NOT UPDATED');
+					}
 				}
-
 			}
 			else
 			{
-				$output = 'NOT UPDATED';
+				$output = array('mes' => 'NOT UPDATED');
 			}
-		
+
+		return $output;
+	}
+
+	public function edit_faculty_profile($input = array(), $file)
+	{
+		$output = array();
+		$img = '';
+
+		//required
+		$main_id = $this->security->xss_clean($this->input->post('faculty_id_hid'));
+        $faculty_sname = $this->security->xss_clean($this->input->post('fact_sname'));
+        $faculty_fname = $this->security->xss_clean($this->input->post('fact_fname'));
+        $faculty_email = $this->security->xss_clean($this->input->post('fact_email'));
+        $faculty_contact = $this->security->xss_clean($this->input->post('fact_contact_no'));
+        $faculty_birthdate = $this->security->xss_clean($this->input->post('fact_date_birth'));
+        $faculty_gender = $this->security->xss_clean($this->input->post('rad_gender'));
+
+        if(isset($_POST['fact_mname']))
+        {
+            $faculty_mname = $this->input->post('fact_mname');
+        }
+        else
+        {
+            $faculty_mname = '';
+        }
+
+        if(isset($_POST['fact_civil_status']))
+        {
+            $faculty_civilstatus = $this->input->post('fact_civil_status');
+        }
+        else
+        {
+            $faculty_civilstatus = '';
+        }
+
+        if(isset($_POST['fact_citizen']))
+        {
+            $faculty_citizen = $this->input->post('fact_citizen');
+        }
+        else
+        {
+            $faculty_citizen = '';
+        }
+
+        if(isset($_POST['fact_res_address']))
+        {
+            $faculty_resiAddress = $this->input->post('fact_res_address');
+        }
+        else
+        {
+            $faculty_resiAddress = '';
+        }
+
+        if(isset($_POST['fact_zip_res']))
+        {
+            $faculty_resZip = $this->input->post('fact_zip_res');
+        }
+        else
+        {
+            $faculty_resZip = '';
+        }
+
+        if(isset($_POST['fact_address']))
+        {
+            $faculty_permaAddress = $this->input->post('fact_address');
+        }
+        else
+        {
+            $faculty_permaAddress = '';
+        }
+
+        if(isset($_POST['fact_zip_address']))
+        {
+            $faculty_permaZip = $this->input->post('fact_zip_address');
+        }
+        else
+        {
+            $faculty_permaZip = '';
+        }
+
+			$data = array(
+					'lname' => $faculty_sname,
+					'fname' => $faculty_fname,
+					'mname' => $faculty_mname,
+					'email' => $faculty_email,
+					'contact_no' => $faculty_contact,
+					'date_of_birth' => $faculty_birthdate,
+					'gender' => $faculty_gender,
+					'civil_status' => $faculty_civilstatus,
+					'citizenship' => $faculty_citizen,
+					'residential_address' => $faculty_resiAddress,
+					'rzip_code' => $faculty_resZip,
+					'permanent_address' => $faculty_permaAddress,
+					'pzip_code' => $faculty_permaZip,
+					'status' => 1,
+					);
+
+			if($this->db->where('faculty_id', $main_id)
+						->update('faculty', $data))
+			{
+				if($file != '')
+				{
+					if($this->db->where('faculty_id', $main_id)
+						->update('account', array('image_path' => $file)))
+					{
+						$output = array('mes' => 'UPDATED', 'image' => $file);
+						$img = $file;
+					}
+					else
+					{
+						$output = array('mes' => 'NOT UPDATED');
+					}
+				}
+				else
+				{
+					$query =  $this->db->select("image_path")
+								->where('faculty_id', $main_id)
+								->get('account');
+
+					foreach ($query->result() as $r) 
+					{
+						$output = array('mes' => 'UPDATED', 'image' => $r->image_path);
+						$img = $r->image_path;
+					}	
+				}
+			}
+			else
+			{
+				$output = array('mes' => 'NOT UPDATED');
+			}
+
+		$this->load->library('session');
+		$this->session->unset_userdata('IMAGE');
+		$this->session->set_userdata('IMAGE', $img);
+
+		return $output;
+	}
+
+	public function edit_profile_educbg()
+	{
+		$main_id = $this->security->xss_clean($this->input->post('main_id'));
+
 		if(isset($_POST['educ_lvl']))
         {       
             $educ_lvl = $this->input->post('educ_lvl');
@@ -343,8 +503,6 @@ class savedata_model extends CI_Model
 				$i++;
 			}
         } //end of educ insert
-
-		return $output;
 	}
 
 	public function edit_educbg()

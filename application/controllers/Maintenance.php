@@ -76,7 +76,61 @@ class Maintenance extends CI_Controller {
 
 	public function add_faculty()
 	{
-		echo ($this->savedata_model->add_faculty($_POST));
+		$file = '';
+
+		if(!empty($_FILES['profilepic']['type']) && file_exists("assets/images/" . $_FILES['profilepic']['name'])) 
+		{
+			$filesize = $_FILES['profilepic']['size'];
+			$suffix = 0;
+			$name = pathinfo($_FILES['profilepic']['name'], PATHINFO_FILENAME);
+			$extension = pathinfo($_FILES['profilepic']['name'], PATHINFO_EXTENSION);
+			if(strcasecmp($extension, 'JPEG') == 0 || strcasecmp($extension, 'JPG') == 0 || strcasecmp($extension, 'PNG') == 0 ||  $filesize < 1000000)
+				{
+					while(file_exists("assets/images/".$name.".".$extension))
+					{
+						$name = pathinfo($_FILES['profilepic']['name'], PATHINFO_FILENAME);
+						$name .=$suffix;
+						$suffix++;
+					}
+					$basename = $name.".".$extension;
+
+					$sourcePath = $_FILES['profilepic']['tmp_name'];
+					$targetPath = "assets/images/".$basename;
+					move_uploaded_file($sourcePath,$targetPath) ; 
+					$file = $basename;
+				}
+			else
+				{
+					echo json_encode(array('mes' => 'INVALID'));
+					exit();
+				}
+		}
+
+		if(!empty($_FILES['profilepic']['type']))
+		{
+			$filesize = $_FILES['profilepic']['size'];
+			$extension = pathinfo($_FILES['profilepic']['name'], PATHINFO_EXTENSION);
+			if(strcasecmp($extension, 'JPEG') == 0 || strcasecmp($extension, 'JPG') == 0 || strcasecmp($extension, 'PNG') == 0 || $filesize < 1000000)
+				{
+					$sourcePath = $_FILES['profilepic']['tmp_name'];
+					$targetPath = "assets/images/".$_FILES["profilepic"]["name"]; 
+					move_uploaded_file($sourcePath,$targetPath) ; 
+					$file = $_FILES["profilepic"]["name"];
+				}
+			else
+				{
+				 	echo json_encode(array('mes' => 'INVALID'));
+					exit();
+				}
+		}
+
+		echo json_encode($this->savedata_model->add_faculty($_POST, $file));
+		exit();
+	}
+
+	public function add_other_data()
+	{
+		echo ($this->savedata_model->add_other_data($_POST));
 		exit();
 	}
 
@@ -138,7 +192,115 @@ class Maintenance extends CI_Controller {
 
 	public function edit_faculty()
 	{
-		echo ($this->savedata_model->edit_faculty($_POST));
+		$file = '';
+
+		if(!empty($_FILES['profilepic']['type']) && file_exists("assets/images/" . $_FILES['profilepic']['name'])) 
+		{
+			$filesize = $_FILES['profilepic']['size'];
+			$suffix = 0;
+			$name = pathinfo($_FILES['profilepic']['name'], PATHINFO_FILENAME);
+			$extension = pathinfo($_FILES['profilepic']['name'], PATHINFO_EXTENSION);
+			if(strcasecmp($extension, 'JPEG') == 0 || strcasecmp($extension, 'JPG') == 0 || strcasecmp($extension, 'PNG') == 0 ||  $filesize < 1000000)
+				{
+					while(file_exists("assets/images/".$name.".".$extension))
+					{
+						$name = pathinfo($_FILES['profilepic']['name'], PATHINFO_FILENAME);
+						$name .=$suffix;
+						$suffix++;
+					}
+					$basename = $name.".".$extension;
+
+					$sourcePath = $_FILES['profilepic']['tmp_name'];
+					$targetPath = "assets/images/".$basename;
+					move_uploaded_file($sourcePath,$targetPath) ; 
+					$file = $basename;
+				}
+			else
+				{
+					echo json_encode(array('mes' => 'INVALID'));
+					exit();
+				}
+		}
+
+		if(!empty($_FILES['profilepic']['type']))
+		{
+			$filesize = $_FILES['profilepic']['size'];
+			$extension = pathinfo($_FILES['profilepic']['name'], PATHINFO_EXTENSION);
+			if(strcasecmp($extension, 'JPEG') == 0 || strcasecmp($extension, 'JPG') == 0 || strcasecmp($extension, 'PNG') == 0 || $filesize < 1000000)
+				{
+					$sourcePath = $_FILES['profilepic']['tmp_name'];
+					$targetPath = "assets/images/".$_FILES["profilepic"]["name"]; 
+					move_uploaded_file($sourcePath,$targetPath) ; 
+					$file = $_FILES["profilepic"]["name"];
+				}
+			else
+				{
+				 	echo json_encode(array('mes' => 'INVALID'));
+					exit();
+				}
+		}
+
+		echo json_encode($this->savedata_model->edit_faculty($_POST, $file));
+		exit();
+	}
+
+	public function edit_faculty_profile()
+	{
+		$file = '';
+
+		if(!empty($_FILES['profilepic']['type']) && file_exists("assets/images/" . $_FILES['profilepic']['name'])) 
+		{
+			$filesize = $_FILES['profilepic']['size'];
+			$suffix = 0;
+			$name = pathinfo($_FILES['profilepic']['name'], PATHINFO_FILENAME);
+			$extension = pathinfo($_FILES['profilepic']['name'], PATHINFO_EXTENSION);
+			if(strcasecmp($extension, 'JPEG') == 0 || strcasecmp($extension, 'JPG') == 0 || strcasecmp($extension, 'PNG') == 0 ||  $filesize < 1000000)
+				{
+					while(file_exists("assets/images/".$name.".".$extension))
+					{
+						$name = pathinfo($_FILES['profilepic']['name'], PATHINFO_FILENAME);
+						$name .=$suffix;
+						$suffix++;
+					}
+					$basename = $name.".".$extension;
+
+					$sourcePath = $_FILES['profilepic']['tmp_name'];
+					$targetPath = "assets/images/".$basename;
+					move_uploaded_file($sourcePath,$targetPath) ; 
+					$file = $basename;
+				}
+			else
+				{
+					echo json_encode(array('mes' => 'INVALID'));
+					exit();
+				}
+		}
+
+		if(!empty($_FILES['profilepic']['type']))
+		{
+			$filesize = $_FILES['profilepic']['size'];
+			$extension = pathinfo($_FILES['profilepic']['name'], PATHINFO_EXTENSION);
+			if(strcasecmp($extension, 'JPEG') == 0 || strcasecmp($extension, 'JPG') == 0 || strcasecmp($extension, 'PNG') == 0 || $filesize < 1000000)
+				{
+					$sourcePath = $_FILES['profilepic']['tmp_name'];
+					$targetPath = "assets/images/".$_FILES["profilepic"]["name"]; 
+					move_uploaded_file($sourcePath,$targetPath) ; 
+					$file = $_FILES["profilepic"]["name"];
+				}
+			else
+				{
+				 	echo json_encode(array('mes' => 'INVALID'));
+					exit();
+				}
+		}
+
+		echo json_encode($this->savedata_model->edit_faculty_profile($_POST, $file));
+		exit();
+	}
+
+	public function edit_profile_educbg()
+	{
+		echo ($this->savedata_model->edit_profile_educbg($_POST));
 		exit();
 	}
 

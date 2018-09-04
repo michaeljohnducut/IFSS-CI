@@ -95,7 +95,8 @@
                 </ul>
                 <ul class="nav navbar-top-links navbar-right pull-right">
                     <li class="dropdown">
-                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="<?php echo base_url(); ?>assets/plugins/images/users/john.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><?php echo $this->session->userdata('NAME');?></b></a>
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> 
+                            <img id="imageicon" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><?php echo $this->session->userdata('NAME');?></b></a>
                         <ul class="dropdown-menu dropdown-user animated flipInY">
                             <li><a href="javascript:changePass();"><i class="ti-user"></i> Change Password</a></li>
                             <li><a href="<?php echo base_url('Access/logout');?>" id="logout"><i class="fa fa-power-off"></i> Logout</a></li>

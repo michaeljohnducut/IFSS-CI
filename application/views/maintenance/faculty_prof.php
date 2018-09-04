@@ -81,21 +81,23 @@
                     <div class="row">
                         <br><br>
                         <div class="col-md-2" style="padding-top: 30px;">
-                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <img id="imagepreview" style="height: 180px; width: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <br><br>
+                             <input type="file" id="profilepic" name="profilepic" accept="image/*">
                         </div>
                         <div class="col-md-8 form-group">
                             <br><br>
                             <label class="control-label">Faculty ID:<span style="color:red;"> *</span></label>
-                            <input class="form-control" maxlength="15" type="text" name="fact_id" id="fact_id" required style="width: 50%;" readonly>
+                            <input class="form-control" maxlength="15" type="text" name="fact_id" id="fact_id" required style="width: 50%;">
                             <br>
                             <label class="control-label">Faculty Type:<span style="color:red;"> *</span></label>
-                                <select class="form-control" name="fact_type" id="fact_type" required style="width: 50%;" readonly>
+                                <select class="form-control" name="fact_type" id="fact_type" required style="width: 50%;">
                                     <option value="" disabled selected>--SELECT FACULTY TYPE--</option>
                                     <?php foreach($fac_type as $r) echo '<option value="'.$r[2].'">'.$r[0].'</option>';?>
                                 </select>
                             <br>
                             <label class="control-label">Department:<span style="color:red;"> *</span></label>
-                                <select class="form-control" name="fact_dept" id="fact_dept" required style="width: 50%;" readonly>
+                                <select class="form-control" name="fact_dept" id="fact_dept" required style="width: 50%;">
                                     <option value="" disabled selected>--SELECT DEPARTMENT--</option>
                                     <?php foreach($dept as $r) echo '<option value="'.$r[3].'">'.$r[1].'</option>';?>
                                 </select>
@@ -151,7 +153,7 @@
                         <div class="col-md-4 form-group">
                             <br>
                              <label class="control-label">Civil Status:</label>
-                                    <select class="form-control" id="fact_civil_status" name="fact_civil_status" onchange="change_spouse()">
+                                    <select class="form-control" id="fact_civil_status" name="fact_civil_status">
                                         <option value=""  disabled selected>--OPTIONS--</option>
                                         <option value="Single">Single</option>
                                         <option value="Married">Married</option>
@@ -220,7 +222,7 @@
                     <div class="row">
                         <br><br>
                         <div class="col-md-2" style="padding-top: 30px;">
-                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <img id="imagepreview2" style="height: 180px; width: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
                         </div>
                         
                         <div class="col-md-12">
@@ -302,7 +304,7 @@
                     <div class="row">
                         <br>
                         <div class="col-md-2" style="padding-top: 30px;">
-                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <img id="imagepreview3" style="height: 180px; width: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
                         </div>
                         <div class="col-md-12">
                             <h3>Select Specialized Courses</h3>
@@ -349,7 +351,7 @@
                     <div class="row">
                         <br><br>
                         <div class="col-md-2" style="padding-top: 30px;">
-                            <img src="<?php echo base_url(); ?>assets\images\profile.png" style="height: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
+                            <img id="imagepreview4" style="height: 180px; width: 180px; border-style: solid; border-width: 1px; border-color: lightgray">
                         </div>
                         <div class="col-md-12">
                             <h3>Student Evaluation Ratings</h3>
@@ -438,6 +440,8 @@
     <!-- CUSTOM SELECT -->
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
 
+    <script src="<?php echo base_url(); ?>assets/js/jasny-bootstrap.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         function resetForm()
         {
@@ -447,6 +451,7 @@
         function resetForm2()
         {
             $('#add_fac_prof_form')[0].reset();
+            $('#imagepreview').attr('src', "<?php echo base_url('assets/images/profile.png');?>");
         }
 
 
@@ -587,10 +592,46 @@
                    });
         }
 
+        function setImage()
+        {
+            if("<?php echo $this->session->userdata('IMAGE');?>" == 'undefined')
+            {
+                $('#imagepreview').attr('src', '<?php echo base_url('assets/images/profile.png');?>');
+                $('#imagepreview2').attr('src', '<?php echo base_url('assets/images/profile.png');?>');
+                $('#imagepreview3').attr('src', '<?php echo base_url('assets/images/profile.png');?>');
+                $('#imagepreview4').attr('src', '<?php echo base_url('assets/images/profile.png');?>');
+            }
+            else
+            {
+                $('#imagepreview').attr('src', '<?php echo base_url('assets/images').'/'.$this->session->userdata('IMAGE');?>');
+                $('#imagepreview2').attr('src', '<?php echo base_url('assets/images').'/'.$this->session->userdata('IMAGE');?>');
+                $('#imagepreview3').attr('src', '<?php echo base_url('assets/images').'/'.$this->session->userdata('IMAGE');?>');
+                $('#imagepreview4').attr('src', '<?php echo base_url('assets/images').'/'.$this->session->userdata('IMAGE');?>');
+            }
+        }
+
+        function readURL(input) 
+        {
+          if (input.files && input.files[0]) 
+          {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagepreview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+          }
+        }
+
         $(document).ready(function(){
             loadtable();
 
             load_details();
+
+            setImage();
+
+            $("#profilepic").change(function(){
+                readURL(this);
+            });
 
             $('#fact_id').prop("disabled",true);
             $('#fact_type').prop("disabled",true);
@@ -761,15 +802,20 @@
                 $("#add_fac_prof_form").on("submit", function(event)
                 {  
                     var id = "<?php echo $id?>";
+                    
                     openCity(event, 'Personal_Info');
                     event.preventDefault();  
                     $.ajax({  
-                    url:"<?php echo base_url('Maintenance/edit_faculty')?>",  
+                    url:"<?php echo base_url('Maintenance/edit_faculty_profile')?>",  
                     method:"POST",  
-                    data:$("#add_fac_prof_form").serialize() + "&" + $("#add_fac_educ_form").serialize(),
+                    data:new FormData(this),
+                    dataType: 'json',
+                    contentType:false,
+                    cache:false,
+                    processData:false,
                     success:function(data)
                     {  
-                        if(data == 'UPDATED')
+                        if(data['mes'] == 'UPDATED')
                         {
                             swal("Updated!", "The faculty details is updated.", "success");
                             $('#fact-profile').show();
@@ -779,16 +825,41 @@
                             $('#educ_school').val('');
                             $('#educ_degree').val('');
                             $('#educ_yr').val('');
+                            $('#profilepic').val("");
+
+                            window.location.reload();
                         }
 
-                        if(data == 'NOT UPDATED')
+                        if(data['mes'] == 'NOT UPDATED')
                         {
                             swal("Not Updated!", "Something blew up.", "error");
                         }
-                    }
-                    });  
-                });
 
+                        if(data['mes'] == 'INVALID')
+                        {
+                            swal("Invalid file!", "You uploaded an invalid file. Make sure that the file format of the image you are uploading is JPG/JPEG/PNG.", "error");
+                        }
+                    },
+                    error:function(data)
+                    {
+                        swal("Not Updated!", "Something blew up.", "error");
+                    }
+                    });
+
+                    $.ajax({  
+                        url:"<?php echo base_url('Maintenance/edit_profile_educbg')?>",  
+                        method:"POST",  
+                        data:$("#add_fac_educ_form").serialize() + "&main_id=" + id,
+                        success:function(data)
+                        {  
+                           
+                        },
+                        error:function(data)
+                        {
+                            swal("Not Updated!", "Something blew up.", "error");
+                        }
+                    });   
+                });
         });
 
         function openCity(evt, cityName) 

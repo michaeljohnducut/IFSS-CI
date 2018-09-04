@@ -51,7 +51,7 @@
                                             <h5 class="text-muted vb">CREATED SCHEDULE</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <h3 class="counter text-right m-t-15 text-primary">33</h3>
+                                            <h3 class="counter text-right m-t-15 text-primary">43</h3>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
@@ -80,5 +80,15 @@
                     </div>
                 </div>
 
- <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+
+    <!-- Ito ung inidagdag ko para sa may alert animation at ung nasa ajax part kasama nito ung mga title chuchu -->
+    <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script>
+
+    <!-- BOOTSTRAP SELECT -->
+    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
+
+    <!-- CUSTOM SELECT -->
+    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
  

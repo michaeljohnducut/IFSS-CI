@@ -51,7 +51,7 @@
                                             <h5 class="text-muted vb">CREATED SCHEDULE</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <h3 class="counter text-right m-t-15 text-primary">33</h3>
+                                            <h3 class="counter text-right m-t-15 text-primary">43</h3>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">

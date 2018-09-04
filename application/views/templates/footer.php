@@ -48,8 +48,22 @@
             $('#openMod1').trigger('click');
         }
 
+        function setImageIcon()
+        {
+            if("<?php echo $this->session->userdata('IMAGE');?>" == 'undefined')
+            {
+                $('#imageicon').attr('src', '<?php echo base_url('assets/images/profile.png');?>');    
+            }
+            else
+            {
+                $('#imageicon').attr('src', '<?php echo base_url('assets/images').'/'.$this->session->userdata('IMAGE');?>');
+            }
+        }
+
     $(document).ready(function()
     {
+        setImageIcon();
+
         $('#change_pass').on("submit", function(e)
         {
             e.preventDefault();

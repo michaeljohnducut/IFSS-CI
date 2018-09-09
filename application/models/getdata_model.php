@@ -1931,12 +1931,13 @@ FROM subject_match sm
 	public function get_faculty_type(){
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 		$result = array();
+
 		$query = $this->db->select("ft.fac_type_id, ft.fac_type_desc")
 				->where('f.faculty_id', $fac_id)
 				->join('faculty f ', 'f.faculty_type = ft.fac_type_id')
                 ->get('faculty_type ft');
 
-         foreach ($query->result() as $r) 
+        foreach ($query->result() as $r) 
 		{
 			$result[] = array(
 					$r->fac_type_id,
@@ -2396,6 +2397,116 @@ FROM subject_match sm
 					$btn
 					);
 		}
+
+		return $result;	
+	}
+
+	public function get_subj_offering()
+	{
+		$result = array();
+
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$course = $this->security->xss_clean($this->input->post('course'));
+
+		$query1 = $this->db->select('year_lvl')
+							->distinct('year_lvl')
+                			->get('section');
+
+        foreach ($query1->result() as $r) 
+		{
+			$query2 = $this->db->select('section_id, CONCAT(c.course_code, " ",  LEFT(s.year_lvl, 1), "-", s.section_desc) AS section')
+								->join('course c', 's.course = c.course_id')
+								->where('acad_yr', $acadyr)
+								->where('course', $course)
+								->where('year_lvl', $r->year_lvl)
+                				->get('section s');
+
+            foreach($query2->result() as $s) 
+            {
+            	$result[] = array(
+		            		$s->section_id,
+							$s->section,
+							$r->year_lvl,
+					);
+            }
+		}
+
+		return $result;	
+	}
+
+	public function get_section_schedule()
+	{
+		$result = array();
+
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+
+		$query3 = $this->db->query('SELECT sub.subj_code, sub.subj_desc, units, lab_hrs + lec_hrs AS hours, GROUP_CONCAT(tas.day SEPARATOR "<br>") AS day, GROUP_CONCAT(DISTINCT CONCAT(TIME_FORMAT(tas.time_start, "%h:%i %p"), " - ", TIME_FORMAT(tas.time_finish, "%h:%i %p")) SEPARATOR "<br>") AS time_used, GROUP_CONCAT(DISTINCT room.room_code SEPARATOR "<br>") AS room
+											FROM curriculum curri
+											LEFT JOIN subject sub
+											ON curri.subj_code = sub.subj_id
+											LEFT JOIN subject_match sm
+											ON sub.subj_id = sm.subj_id
+											LEFT JOIN section sec
+											ON sm.section = sec.section_id
+											LEFT JOIN teaching_assign_sched tas
+											ON sm.subj_match_id = tas.subj_match_id
+											LEFT JOIN room room
+											ON room.room_id = tas.room_id
+											WHERE sm.acad_yr = "'.$acadyr.'" AND sm.sem = "'.$sem.'" AND sec.section_id ="'.$section_id.'"
+											GROUP BY sub.subj_desc
+											ORDER BY sub.subj_code');
+
+               	foreach($query3->result() as $t)
+               	{
+               		($t->hours == 5)?$remarks = 'with lab':$remarks = '';
+               		($t->day != null)?$day = $t->day:$day = '';
+               		($t->time_used != null)?$time = $t->time_used:$time = '';
+               		($t->room != null)?$room = $t->room:$room = '';
+               		
+               		$result[] = array(
+               				$t->subj_code,
+               				$t->subj_desc,
+               				$t->units,
+               				$t->hours,
+               				$day,
+               				$time,
+               				$room,
+               				$remarks,
+					);
+               	}
+
+		return $result;	
+	}
+
+	public function get_section_total()
+	{
+		$result = array();
+
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+
+		$query3 = $this->db->query('SELECT SUM(units) AS total_units, SUM(lec_hrs + lab_hrs) AS total_hours
+											FROM subject sub
+											LEFT JOIN subject_match sm
+											ON sub.subj_id = sm.subj_id
+											LEFT JOIN section sec
+											ON sm.section = sec.section_id
+											WHERE sm.acad_yr = "'.$acadyr.'" AND sm.sem = "'.$sem.'" AND sec.section_id ="'.$section_id.'"');
+
+               	foreach($query3->result() as $t)
+               	{      
+               		($t->total_units != null)?$units = $t->total_units:$units = '';
+               		($t->total_hours != null)?$hours = $t->total_hours:$hours = '';
+
+               		$result[] = array(
+               				$units,
+               				$hours,
+					);
+               	}
 
 		return $result;	
 	}

@@ -68,10 +68,7 @@
                                 </thead>
                                 
                                 <tbody>
-                                    <tr>
-                                        
-
-                                    </tr>
+                                   
                                 </tbody>
                             </table>
 
@@ -93,3 +90,29 @@
 
     <!-- CUSTOM SELECT -->
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        function loadtable()
+        {
+          $('#faculty_table').dataTable().fnClearTable();
+          $('#faculty_table').dataTable().fnDraw();
+          $('#faculty_table').dataTable().fnDestroy();
+          $('#faculty_table').dataTable({
+              "processing": true,
+              "serverSide": false,
+              "sAjaxSource": "<?php echo base_url('Report/get_faculty_list')?>",
+              "deferLoading": 10,
+              "bPaginate": true,
+              "aaSorting": [[0,'asc']],
+              "fnInitComplete": function(){
+                        
+              }
+          });
+        }
+
+         $(document).ready(function()
+         {
+            loadtable();
+         });
+    </script>

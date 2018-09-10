@@ -92,6 +92,20 @@ class Report extends CI_Controller
 		$this->load->view('templates/footer');
 	}
 
+	public function get_faculty_list()
+	{
+		$output = $this->getdata_model->get_faculty_list();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
 	
 } 
 

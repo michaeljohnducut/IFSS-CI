@@ -2511,6 +2511,28 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function get_faculty_list()
+	{
+		$result = array();
+
+		$q = $this->db->select('A.account_id, CONCAT(lname,", ",fname," ",mname) AS faculty_name, F.faculty_id')
+				->join('account A', 'A.faculty_id = F.faculty_id')
+                ->get('faculty F');
+
+		foreach($q->result() as $r)
+		{
+			$btn = '<button class="btn btn-sm  btn-success" id="view_excel" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp;Excel</span></button>
+					<button class="btn btn-sm  btn-info" id="view_pdf" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp;PDF</span></button>';
+					
+			$result[] = array(
+					$r->account_id,
+					$r->faculty_name,
+					$btn
+					);
+		}
+
+		return $result;
+	}
 
 }
 ?>

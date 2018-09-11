@@ -68,7 +68,7 @@ class getdata_model extends CI_Model{
 
 		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
 
-		$query = $this->db->select('a.account_id, f.lname, f.fname, f.mname, f.email, f.contact_no, f.date_of_birth, f.gender, f.civil_status, f.citizenship, f.residential_address, f.rzip_code, f.permanent_address, f.pzip_code, f.faculty_type, f.dept, f.faculty_id')
+		$query = $this->db->select('a.account_id, f.lname, f.fname, f.mname, f.email, f.contact_no, f.date_of_birth, f.gender, f.civil_status, f.citizenship, f.residential_address, f.rzip_code, f.permanent_address, f.pzip_code, f.faculty_type, f.dept, f.faculty_id, a.image_path')
 				->join('faculty f', 'a.faculty_id = f.faculty_id')
                 ->where('f.status', 1)
                 ->where('a.status', 1)
@@ -77,6 +77,8 @@ class getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
+			($r->image_path == 'undefined')?$image = "assets/images/profile.png":$image = "assets/images/".$r->image_path."";
+
 			$result[] = array(
 					$r->account_id,
 					$r->lname,
@@ -95,6 +97,7 @@ class getdata_model extends CI_Model{
 					$r->faculty_type,
 					$r->dept,
 					$r->faculty_id,
+					$image
 					);
 		}
 
@@ -1928,12 +1931,13 @@ FROM subject_match sm
 	public function get_faculty_type(){
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 		$result = array();
+
 		$query = $this->db->select("ft.fac_type_id, ft.fac_type_desc")
 				->where('f.faculty_id', $fac_id)
 				->join('faculty f ', 'f.faculty_type = ft.fac_type_id')
                 ->get('faculty_type ft');
 
-         foreach ($query->result() as $r) 
+        foreach ($query->result() as $r) 
 		{
 			$result[] = array(
 					$r->fac_type_id,
@@ -2397,6 +2401,138 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function get_subj_offering()
+	{
+		$result = array();
+
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$course = $this->security->xss_clean($this->input->post('course'));
+
+		$query1 = $this->db->select('year_lvl')
+							->distinct('year_lvl')
+                			->get('section');
+
+        foreach ($query1->result() as $r) 
+		{
+			$query2 = $this->db->select('section_id, CONCAT(c.course_code, " ",  LEFT(s.year_lvl, 1), "-", s.section_desc) AS section')
+								->join('course c', 's.course = c.course_id')
+								->where('acad_yr', $acadyr)
+								->where('course', $course)
+								->where('year_lvl', $r->year_lvl)
+                				->get('section s');
+
+            foreach($query2->result() as $s) 
+            {
+            	$result[] = array(
+		            		$s->section_id,
+							$s->section,
+							$r->year_lvl,
+					);
+            }
+		}
+
+		return $result;	
+	}
+
+	public function get_section_schedule()
+	{
+		$result = array();
+
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+
+		$query3 = $this->db->query('SELECT sub.subj_code, sub.subj_desc, units, lab_hrs + lec_hrs AS hours, GROUP_CONCAT(tas.day SEPARATOR "<br>") AS day, GROUP_CONCAT(DISTINCT CONCAT(TIME_FORMAT(tas.time_start, "%h:%i %p"), " - ", TIME_FORMAT(tas.time_finish, "%h:%i %p")) SEPARATOR "<br>") AS time_used, GROUP_CONCAT(DISTINCT room.room_code SEPARATOR "<br>") AS room
+											FROM curriculum curri
+											LEFT JOIN subject sub
+											ON curri.subj_code = sub.subj_id
+											LEFT JOIN subject_match sm
+											ON sub.subj_id = sm.subj_id
+											LEFT JOIN section sec
+											ON sm.section = sec.section_id
+											LEFT JOIN teaching_assign_sched tas
+											ON sm.subj_match_id = tas.subj_match_id
+											LEFT JOIN room room
+											ON room.room_id = tas.room_id
+											WHERE sm.acad_yr = "'.$acadyr.'" AND sm.sem = "'.$sem.'" AND sec.section_id ="'.$section_id.'"
+											GROUP BY sub.subj_desc
+											ORDER BY sub.subj_code');
+
+               	foreach($query3->result() as $t)
+               	{
+               		($t->hours == 5)?$remarks = 'with lab':$remarks = '';
+               		($t->day != null)?$day = $t->day:$day = '';
+               		($t->time_used != null)?$time = $t->time_used:$time = '';
+               		($t->room != null)?$room = $t->room:$room = '';
+               		
+               		$result[] = array(
+               				$t->subj_code,
+               				$t->subj_desc,
+               				$t->units,
+               				$t->hours,
+               				$day,
+               				$time,
+               				$room,
+               				$remarks,
+					);
+               	}
+
+		return $result;	
+	}
+
+	public function get_section_total()
+	{
+		$result = array();
+
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+
+		$query3 = $this->db->query('SELECT SUM(units) AS total_units, SUM(lec_hrs + lab_hrs) AS total_hours
+											FROM subject sub
+											LEFT JOIN subject_match sm
+											ON sub.subj_id = sm.subj_id
+											LEFT JOIN section sec
+											ON sm.section = sec.section_id
+											WHERE sm.acad_yr = "'.$acadyr.'" AND sm.sem = "'.$sem.'" AND sec.section_id ="'.$section_id.'"');
+
+               	foreach($query3->result() as $t)
+               	{      
+               		($t->total_units != null)?$units = $t->total_units:$units = '';
+               		($t->total_hours != null)?$hours = $t->total_hours:$hours = '';
+
+               		$result[] = array(
+               				$units,
+               				$hours,
+					);
+               	}
+
+		return $result;	
+	}
+
+	public function get_faculty_list()
+	{
+		$result = array();
+
+		$q = $this->db->select('A.account_id, CONCAT(lname,", ",fname," ",mname) AS faculty_name, F.faculty_id')
+				->join('account A', 'A.faculty_id = F.faculty_id')
+                ->get('faculty F');
+
+		foreach($q->result() as $r)
+		{
+			$btn = '<button class="btn btn-sm  btn-success" id="view_excel" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp;Excel</span></button>
+					<button class="btn btn-sm  btn-info" id="view_pdf" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp;PDF</span></button>';
+					
+			$result[] = array(
+					$r->account_id,
+					$r->faculty_name,
+					$btn
+					);
+		}
+
+		return $result;
+	}
 
 }
 ?>

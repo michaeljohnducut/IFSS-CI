@@ -651,6 +651,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function view_facloads(){
+		
+		echo json_encode($this->getdata_model->view_facload_tbl($_POST));
+		exit();
+	}
+
 } 
 
 ?>

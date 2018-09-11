@@ -74,6 +74,8 @@
                         <div class="row" id="div_by_faculty_b">
                             <div class="col-md-2" style="text-align: right; color: red;">
                                 <p id="factype_id">Faculty Type:</p>
+                            
+                                <button type="button" id="btnGenerate" class="btn btn-info" data-toggle = "modal" data-target ="#modalGenerate">AUTO GENERATE SCHEDULE</button>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="RLoad_id">Regular Load: </p>
@@ -88,6 +90,7 @@
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="units_used">Total Hours: </p>
                                 <h5 id="lbl_eval"></h5>
+
                             </div>
                         </div>
 
@@ -696,6 +699,55 @@
             <!-- /.modal-dialog -->
 </div>
 
+<!-- MODAL AUTO GENERATION -->
+<div class="modal fade bs-example-modal-lg" id="modalGenerate" tabindex="-1" role="dialog" aria-labelledby="modalGenerate" aria-hidden="true" style=" display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Auto Generate Schedule</h4>
+                    </div>
+                    <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <h3>TEACHING ASSIGNMENTS</h3>
+                        </div>
+                        <div class="col-md-12" id="teach_assign_div">
+                        </div> 
+                        <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: 15px;">
+
+                        </div>
+                        <div class="col-md-12">
+                            <h3>GENERATE SCHEDULES FOR:</h3>
+                            <div class="col-md-4" id="officehours_div">
+                                <input style="margin-top: 15px;" type="checkbox" id="chk_loads">
+                                <label style="margin-top: 15px;" for="chk_loads">Teaching Assignments</label>
+                            </div> 
+                            <div class="col-md-4" id="officehours_div">
+                                <input style="margin-top: 15px;" type="checkbox" id="chk_officehrs">
+                                <label style="margin-top: 15px;" for="chk_officehrs">Office Hours</label>
+                            </div>  
+                            <div  class="col-md-4" id="advisetime_div">
+                                <input style="margin-top: 15px;" type="checkbox" id="chk_advisetime">
+                                <label style="margin-top: 15px;" for="chk_advisetime">Advising Time</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <br><br>
+                            <h4><b>Note:</b>&nbsp;&nbsp;<span style="color: red">Generating a schedule for this faculty member will remove his existing schedule for this academic year and sem. Do you wish to continue? Click 'Start' to proceed.</span></h4>
+                        </div>             
+                    </div>
+                    <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect text-left">Start</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+</div>
 
 <a data-toggle="modal" href="#modalAddTime" id="openMod"></a>
 
@@ -1096,26 +1148,26 @@
 
       function getFacultyLoads(){
         var fac_id =  $('#sched_faculty').val();
-            var acad_yr =  $('#sched_acad_year').val();
-            var sem =  $('#sched_sem').val();
-            $.ajax({
-                    method:"POST",
-                    url:"<?php echo base_url('Transaction/get_prof_load')?>",
-                    dataType: "json",
-                    data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
-                    success:function(data)
-                    {   
-                        $('#sched_load').empty();
-                        $('#sched_load').append('<option value="0" disabled selected>-Loads-</option>');
-                        var len = data.length;
-                        for(var i = 0; i < len ; i++){
-                          var val = data[i][4];
-                          var text = '(' + data[i][0] + ') &nbsp;' + data[i][1] + ' - ' + data[i][2];
-                          $('#sched_load').append('<option value="'+val+'">'+text+'</option>');
-                        }
+        var acad_yr =  $('#sched_acad_year').val();
+        var sem =  $('#sched_sem').val();
+        $.ajax({
+                method:"POST",
+                url:"<?php echo base_url('Transaction/get_prof_load')?>",
+                dataType: "json",
+                data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
+                success:function(data)
+                {   
+                    $('#sched_load').empty();
+                    $('#sched_load').append('<option value="0" disabled selected>-Loads-</option>');
+                    var len = data.length;
+                    for(var i = 0; i < len ; i++){
+                      var val = data[i][4];
+                      var text = '(' + data[i][0] + ') &nbsp;' + data[i][1] + ' - ' + data[i][2];
+                      $('#sched_load').append('<option value="'+val+'">'+text+'</option>');
                     }
+                }
 
-                   });
+               });
       }
 
 
@@ -1584,7 +1636,7 @@
                     $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
                 $('button[type="button"][value="'+final_val2+'"]').text(''); 
                 }
-                alert(final_val2);
+                // alert(final_val2);
 
                 // 
                 // if (looper < 10){
@@ -1601,6 +1653,39 @@
 
             }
         }
+
+//========================================================================
+//AUTO GENERATION FUNCTIONS
+//========================================================================
+    
+    function getFacultyLoads_gen(){
+        var fac_id =  $('#sched_faculty').val();
+        var acad_yr =  $('#sched_acad_year').val();
+        var sem =  $('#sched_sem').val();
+        $.ajax({
+                method:"POST",
+                url:"<?php echo base_url('Transaction/view_facloads')?>",
+                dataType: "json",
+                data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
+                success:function(data)
+                {   
+                    $('#teach_assign_div').empty();
+                    $('#teach_assign_div').append('<div class = "col-md-4"><h4><b>Section</b></h4></div> <div class = "col-md-8"><h4><b>Subject</b></h4></div>');
+                    var len = data.length;
+                    for(var i = 0; i < len ; i++){
+                      var section = data[i][0];
+                      var subj = data[i][1] + ' - ' + data[i][2];
+                      $('#teach_assign_div').append('<div class = "col-md-4"><h5>'+section +'</h5></div><div class = "col-md-8"><h5>'+subj +'</h5></div>');
+                    }
+                }
+
+               });
+      }
+
+
+//========================================================================
+//END OF AUTO GENERATION FUNCTIONS 
+//========================================================================
 
       //SELECT2
       $(".select2").select2();
@@ -2744,6 +2829,18 @@
         });
 //==========================================================================================
 //END NG MINOR ELEMENTS
+
+//========================================================================
+//AUTO GENERATION PROCESs
+//========================================================================
+    $('#btnGenerate').on('click', function(){
+        getFacultyLoads_gen();
+    });
+
+
+//========================================================================
+//END OF AUTO GENERATION PROCESS 
+//========================================================================
 
         $('#add_sched_form').on('submit', function(event){
           event.preventDefault();

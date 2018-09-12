@@ -304,6 +304,36 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
+	public function view_subject_gen($id)
+	{
+		$result = array();
+
+		$subj_code = $this->security->xss_clean($this->input->post('subj_code'));
+
+		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, GROUP_CONCAT(pr.pre_req_desc) AS pre_requisite, s.isMajor, s.specialization')
+				->join('pre_requisite pr','s.subj_id = pr.subj_code', 'left')
+                ->group_by('s.subj_code')
+                ->having('s.subj_code', $subj_code)
+                ->get('subject s');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->subj_id,
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units,
+					$r->lab_hrs,
+					$r->lec_hrs,
+					$r->pre_requisite,
+					$r->isMajor,
+					$r->specialization
+					);
+		}
+
+		return $result;
+	}
+
 	public function prerequisite()
 	{
 		$result = array();

@@ -100,6 +100,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function view_subject()
+	{
+		echo json_encode($this->getdata_model->view_subject_gen($_POST));
+		exit();
+	}
+
 	public function view_subjects_faculty()
 	{
 		$output = $this->getdata_model->view_subject_faculty($_POST);

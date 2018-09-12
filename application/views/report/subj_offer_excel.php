@@ -2,81 +2,40 @@
 <html>
 <head>
 	<title>Subject Offering</title>
+	<link href="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
 	<style type="text/css">
-		table, th, td 
-		{
-		    border: 1px solid black;
-		    border-collapse: collapse;
+		body{
+			
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 13.2px;
 		}
-
-		th, td 
-		{
-		    padding: 5px;
-		}
-
-        @page 
-        {
-            margin: 100px 25px;
-        }
-
-        header 
-        {
-            position: fixed;
-            top: -80px;
-            left: 0px;
-            right: 0px;
-            height: 250px;
-        }
-
-       footer 
-       {
-            position: fixed; 
-            bottom: -10px; 
-            left: 0px; 
-            right: 0px;
-            height: 50px;  
-        }
 
 	</style>
 </head>
 <body style="font-family: 'Arial Narrow',Arial,sans-serif;">
-		<!-- <header>
-			<img src = "<?php echo base_url(); ?>assets/images/PUPLogo.png" style= "width:7%;float: left; margin-right:1%; margin-left: 5%;">
-				<label >Republic of the Philippines <br> 
-				<label style="font-size: 100%">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES<br>
-				<label style="font-size: 100%">Office of the Vice President for Academic Affairs<br>
-				<label style="font-size: 150%">COLLEGE OF COMPUTER AND INFORMATION SCIENCES<br>
-			 <hr style="border: 1px solid">    
-        </header> -->
-
-        <!-- <footer>
-            <hr style="border: 1px solid">
-			<center>
-				CCIS Office N207 2F North Wing PUP A. Mabini Campus Anonas Street, Sta. Mesa, 1016 Manila  Phone: (Direct Line) 335-1768<br>
-		 		(Trunk Line) 335-1PUP or 3351777 (Local)272 / 264 ; website: www.pup.edu.ph &emsp;e ccis@pup.edu.ph 
-			<br>
-			<br>
-
-			<label style="font-size:130%">“<span style="font-size:135%">T</span>HE <span style="font-size:135%">C</span>OUNTRY’S <span style="font-size:135%">1</span><sup>st</sup> <span style="font-size:135%">P</span>OLYTECHNIC<span style="font-size:135%">U”</span>
-			</label>
-			</center>
-        </footer> -->
-
-        <!-- <br><br><br><br> -->
-
-        <main>
+	 	<table id="tblExport">
             <div>
-                <p><center>COURSE OFFERINGS</center></p>
-                <p><center><strong><?php echo $course; ?></strong></center></p>
-                <p><center><strong><?php echo $sem; ?>&nbsp;Semester, AY&nbsp;<?php echo $acadyr; ?></strong></center></p>
+            	
+            		<tr>
+            			<td><center>COURSE OFFERINGS</center></td>
+            		</tr>
+            		<tr>
+            			<td><center><strong><?php echo $course; ?></strong></center></td>
+            		</tr>
+            		<tr>
+            			<td><center><strong><?php echo $sem; ?>&nbsp;Semester, AY&nbsp;<?php echo $acadyr; ?></strong></center></td>
+            		</tr>
             </div>
-
-            <br>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
             <div>
-                <div style="margin-left: 10%;">
-                    <h5><u><b>FIRST YEAR</b></u></h5>
-                </div>
-                <div style="margin-left: 10%;">
+            	<tr>
+            		<td>
+            			<u><b>FIRST YEAR</b></u>
+            		</td>
+            	</tr>
                 <?php 
                 	$result2 = array();
                 	$result3 = array();
@@ -87,10 +46,8 @@
                 			$section_id = $s[0];
                 			$result2 = $this->getdata_model->get_section_schedule($acadyr, $sem, $section_id);
                 			$result3 = $this->getdata_model->get_section_total($acadyr, $sem, $section_id);
-                			echo '<label><b>'.$s[1].'</b></label>';
-                			echo '<div style="font-size:11px; page-break-inside: avoid;">
-                					<table>
-			                			<thead>
+                			echo '<tr><td><b>'.$s[1].'</b></td></tr>';
+                			echo '
 					                       <tr>
 					                        	<th>Course Code</th>
 					                            <th>Course Title</th>
@@ -101,8 +58,7 @@
 					                            <th>Room</th>
 					                            <th>Remarks</th>
 					                        </tr>
-					                    </thead>
-					                    <tbody>';
+					                   ';
 						                foreach($result2 as $ss)
 						                {
 					                        echo '<tr>
@@ -126,26 +82,20 @@
 					                                <td></td>
 					                                <td></td>
 					                                <td></td>
-                								  </tr>';
+                								  </tr>
+                								  <tr><td></td></tr>';
                 						}
-
-							echo 		'</tbody>
-					                </table>
-					            </div><br><br>';
                 		}
                 	}
                 ?>
-                </div>
            	</div>
-
-           	<br>
-
            	<div>
-                <div style="margin-left: 10%;">
-                    <h5><u><b>SECOND YEAR</b></u></h5>
-                </div>
-                <div style="margin-left: 10%;">
-                <?php 
+                <tr>
+            		<td>
+            			<u><b>SECOND YEAR</b></u>
+            		</td>
+            	</tr>
+                <?php
                 	$result2 = array();
                 	$result3 = array();
                 	foreach($section as $s)
@@ -155,11 +105,8 @@
                 			$section_id = $s[0];
                 			$result2 = $this->getdata_model->get_section_schedule($acadyr, $sem, $section_id);
                 			$result3 = $this->getdata_model->get_section_total($acadyr, $sem, $section_id);
-                			echo '<label><b>'.$s[1].'</b></label>';
-                			echo '<div style="font-size:11px; page-break-inside: avoid;">
-                					<table>
-			                			<thead>
-					                       <tr>
+                			echo '<tr><td><b>'.$s[1].'</b></td></tr>';
+                			echo ' <tr>
 					                        	<th>Course Code</th>
 					                            <th>Course Title</th>
 					                            <th>Units</th>
@@ -168,9 +115,7 @@
 					                            <th>Time</th>
 					                            <th>Room</th>
 					                            <th>Remarks</th>
-					                        </tr>
-					                    </thead>
-					                    <tbody>';
+					                        </tr>';
 						                foreach($result2 as $ss)
 						                {
 					                        echo '<tr>
@@ -194,25 +139,19 @@
 					                                <td></td>
 					                                <td></td>
 					                                <td></td>
-                								  </tr>';
+                								  </tr>
+                								  <tr><td></td></tr>';
                 						}
-
-							echo 		'</tbody>
-					                </table>
-					            </div><br><br>';
                 		}
                 	}
                 ?>
-                </div>
            	</div>
-
-           	<br>
-
            	<div>
-                <div style="margin-left: 10%;">
-                    <h5><u><b>THIRD YEAR</b></u></h5>
-                </div>
-                <div style="margin-left: 10%;">
+               	<tr>
+            		<td>
+            			<u><b>THIRD YEAR</b></u>
+            		</td>
+            	</tr>
                 <?php 
                 	$result2 = array();
                 	$result3 = array();
@@ -223,11 +162,8 @@
                 			$section_id = $s[0];
                 			$result2 = $this->getdata_model->get_section_schedule($acadyr, $sem, $section_id);
                 			$result3 = $this->getdata_model->get_section_total($acadyr, $sem, $section_id);
-                			echo '<label><b>'.$s[1].'</b></label>';
-                			echo '<div style="font-size:11px; page-break-inside: avoid;">
-                					<table>
-			                			<thead>
-					                       <tr>
+                			echo '<tr><td><b>'.$s[1].'</b></td></tr>';
+                			echo '<tr>
 					                        	<th>Course Code</th>
 					                            <th>Course Title</th>
 					                            <th>Units</th>
@@ -236,9 +172,7 @@
 					                            <th>Time</th>
 					                            <th>Room</th>
 					                            <th>Remarks</th>
-					                        </tr>
-					                    </thead>
-					                    <tbody>';
+					                        </tr>';
 						                foreach($result2 as $ss)
 						                {
 					                        echo '<tr>
@@ -262,25 +196,19 @@
 					                                <td></td>
 					                                <td></td>
 					                                <td></td>
-                								  </tr>';
+                								  </tr>
+                								  <tr><td></td></tr>';
                 						}
-
-							echo 		'</tbody>
-					                </table>
-					            </div><br><br>';
                 		}
                 	}
                 ?>
-                </div>
            	</div>
-
-           	<br>
-
            	<div>
-                <div style="margin-left: 10%;">
-                    <h5><u><b>FOURTH YEAR</b></u></h5>
-                </div>
-                <div style="margin-left: 10%;">
+                <tr>
+            		<td>
+            			<u><b>FOURTH YEAR</b></u>
+            		</td>
+            	</tr>
                 <?php 
                 	$result2 = array();
                 	$result3 = array();
@@ -290,11 +218,8 @@
                 		{
                 			$section_id = $s[0];
                 			$result2 = $this->getdata_model->get_section_schedule($acadyr, $sem, $section_id);
-                			echo '<label><b>'.$s[1].'</b></label>';
-                			echo '<div style="font-size:11px; page-break-inside: avoid;">
-                					<table>
-			                			<thead>
-					                       <tr>
+                			echo '<tr><td><b>'.$s[1].'</b></td></tr>';
+                			echo '<tr>
 					                        	<th>Course Code</th>
 					                            <th>Course Title</th>
 					                            <th>Units</th>
@@ -303,9 +228,7 @@
 					                            <th>Time</th>
 					                            <th>Room</th>
 					                            <th>Remarks</th>
-					                        </tr>
-					                    </thead>
-					                    <tbody>';
+					                        </tr>';
 						                foreach($result2 as $ss)
 						                {
 					                        echo '<tr>
@@ -329,45 +252,67 @@
 					                                <td></td>
 					                                <td></td>
 					                                <td></td>
-                								  </tr>';
+                								  </tr>
+                								  <tr><td></td></tr>';
                 						}
-
-							echo 		'</tbody>
-					                </table>
-					            </div><br><br>';
                 		}
                 	}
                 ?>
-                </div>
            	</div>
+           	</table>
            	<br><br>
-           	<div style="margin-left: 10%;">
-           		<label>Prepared by:</label>
-	           	<br><br><br>
-	           	<div style="page-break-inside: avoid;">
-	           		<p>
-	           			<b>Melvin C. Roxas</b><br>
-	           			Chairperson, Department of Computer Science
-	           		</p>
-	           	</div>
-	           	<br><br><br>
-	           	<div style="page-break-inside: avoid;">
-	           		<p>
-	           			<b>Rachel A. Nayre</b><br>
-	           			Chairperson, Department of Information Technology
-	           		</p>
-	           	</div>
-	           	<br><br><br><br>
-	           	<label>Noted by:</label>
-	           	<br><br><br>
-	           	<div style="page-break-inside: avoid;">
-	           		<p>
-	           			<b>Dr. Gisela May A. Albano</b><br>
-	           			Dean, CCIS
-	           		</p>
-	           	</div>
-           	</div>
-           	
-        </main>
+           	<table>
+           		<tr>
+           			<td>
+           				Prepared by:
+           			</td>
+           		</tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr>
+           			<td><b>Melvin C. Roxas</b></td>
+           		</tr>
+           		<tr>
+           			<td>Chairperson, Department of Computer Science</td>
+           		</tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr>
+           			<td><b>Rachel A. Nayre</b></td>
+           		</tr>
+           		<tr>
+           			<td>Chairperson, Department of Information Technology</td>
+           		</tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr>
+           			<td>Noted by:</td>
+           		</tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr></tr>
+           		<tr>
+           			<td><b>Dr. Gisela May A. Albano</b></td>
+           		</tr>
+           		<tr>
+           			<td><b>Dean, CCIS</b></td>
+           		</tr>
+           	</table>
+    <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js'></script> 
+    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.battatech.excelexport.js"></script>
+    <script type="text/javascript">
+    	$("#tblExport").battatech_excelexport({
+           containerid: "tblExport"
+          , datatype: 'table'
+          , worksheetName: "Subject Offering"
+       });
+    window.close();
+    </script>
+
 </body>
 </html>

@@ -24,6 +24,7 @@
                             <br>
                         </div>
                         <div class="row">
+                            <form action="" method="POST" id="select_form">
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control" id="select_acadyr">
@@ -44,21 +45,23 @@
                                     <option value="Summer">Summer</option>
                                 </select>  
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <label class="control-label">Select Semester</label>
                                 <select class="form-control" id="select_course">
                                     <option value="" disabled selected>-SELECT COURSE-</option>
-                                    <?php foreach($department as $r) echo '<option value="'.$r[4].'">'.$r[1].'</option>';?>
+                                    <?php foreach($department as $r) echo '<option value="'.$r[4].'">'.$r[2].'</option>';?>
                                 </select>  
                             </div>
-                            <div class="col-md-6" style="text-align: right;">
+                            <div class="col-md-4" style="text-align: right;">
                                 <br>
-                                <button type="button" class="btn btn-info" style="margin-top: 10px;" onclick="pdf_()">Print Subject Offering(PDF)</button>
-                                <button type="button" class="btn btn-success" style="margin-top: 10px; margin-left: 10px;" onclick="excel_()">Print Subject Offering(EXCEL)</button>  
+                                <button type="button" class="btn btn-info" id="btn_pdf" style="margin-top: 10px;" onclick="pdf_()">Print Subject Offering(PDF)</button>
+                                <button type="button" class="btn btn-success" id="btn_excel" style="margin-top: 10px; margin-left: 10px;" onclick="excel_()">Print Subject Offering(EXCEL)</button>  
                             </div>
+                        </form>
                         </div>
+
                         <br><br>
-                        <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+                        <div class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
                         </div>
                         <br>
                         <div class="row">
@@ -177,7 +180,7 @@
                   </div>
 
                 <div class="ajax-loader">
-                    <img src="<?php echo base_url(); ?>assets/images/giphy.gif" class="img-responsive" />
+                    <img src="<?php echo base_url(); ?>assets/images/loader.gif" class="img-responsive" />
                 </div>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
@@ -195,19 +198,40 @@
 
         function pdf_()
         {
-          // var data = $('#spmsForm').serialize();
-          window.open('<?php echo base_url("Report/subj_offering_pdf")?>');
+            var acadyr = $('#select_acadyr').val();
+            var sem = $('#select_sem').val();
+            var course = $('#select_course option:selected').text();
+            var course_val = $('#select_course').val();
+            window.open('<?php echo base_url("Report/subj_offering_pdf")?>'+'?acadyr='+acadyr+'&sem='+sem+'&course='+course+'&cval='+course_val);
+        }
+
+        function excel_()
+        {
+            var acadyr = $('#select_acadyr').val();
+            var sem = $('#select_sem').val();
+            var course = $('#select_course option:selected').text();
+            var course_val = $('#select_course').val();
+            window.open('<?php echo base_url("Report/subj_offering_excel")?>'+'?acadyr='+acadyr+'&sem='+sem+'&course='+course+'&cval='+course_val);
+        }
+
+        function enabled_button(acadyr, sem, course)
+        {
+            if(acadyr && sem && course)
+            {
+                $('#btn_pdf').prop("disabled", false);
+                $('#btn_excel').prop("disabled", false);
+            }
         }
         
         function fetch_schedule(acadyr, sem, course)
         {
             if(acadyr && sem && course)
             {
+                $('.ajax-loader').css("visibility", "visible");
                 $.ajax({  
                     url:"<?php echo base_url('Report/get_subject_offering')?>", 
                     method:"POST",
-                    async: false,
-                    dataType: 'json',  
+                    dataType: 'json',
                     data:{acadyr:acadyr, sem:sem, course:course},
                     success:function(data){  
                         var html1 = '';
@@ -232,8 +256,7 @@
                             }
 
                             if(data[i][2] == '2nd')
-                            {
-                                
+                            {  
                                 html2 +='<tr>'+ 
                                             '<th colspan="8">'+data[i][1]+
                                             '</th>'+
@@ -244,8 +267,7 @@
                             }
 
                             if(data[i][2] == '3rd')
-                            {
-                                
+                            { 
                                 html3 +='<tr>'+ 
                                             '<th colspan="8">'+data[i][1]+
                                             '</th>'+
@@ -256,8 +278,7 @@
                             }
 
                             if(data[i][2] == '4th')
-                            {
-                                
+                            {  
                                 html4 +='<tr>'+ 
                                             '<th colspan="8">'+data[i][1]+
                                             '</th>'+
@@ -272,6 +293,9 @@
                     },
                     error: function (data) {
                         alert(JSON.stringify(data));
+                    },
+                    complete: function(){
+                        $('.ajax-loader').css("visibility", "hidden");
                     }
                }); 
             }
@@ -344,15 +368,10 @@
 
         $(document).ready(function()
         {
-            $('.ajax-loader').hide();
+            //$('.ajax-loader').hide();
 
-            $(document).ajaxStart(function(){
-                $(".ajax-loader").css("display", "block");
-            });
-
-            $(document).ajaxComplete(function(){
-                $(".ajax-loader").css("display", "none");
-            });
+            $('#btn_pdf').prop("disabled", true);
+            $('#btn_excel').prop("disabled", true);
 
             $('#select_acadyr').on('change', function(){
                 var acadyr = $('#select_acadyr').val();
@@ -363,6 +382,7 @@
                 $('#third_year').empty();
                 $('#fourth_year').empty();
                 fetch_schedule(acadyr, sem, course);
+                enabled_button(acadyr, sem, course);
             });
 
             $('#select_sem').on('change', function(){
@@ -374,6 +394,7 @@
                 $('#third_year').empty();
                 $('#fourth_year').empty();
                 fetch_schedule(acadyr, sem, course);
+                enabled_button(acadyr, sem, course);
             });
 
             $('#select_course').on('change', function(){
@@ -385,6 +406,7 @@
                 $('#third_year').empty();
                 $('#fourth_year').empty();
                 fetch_schedule(acadyr, sem, course);
+                enabled_button(acadyr, sem, course);
             });
 
         });

@@ -2401,13 +2401,9 @@ FROM subject_match sm
 		return $result;	
 	}
 
-	public function get_subj_offering()
+	public function get_subj_offering($acadyr, $sem, $course)
 	{
 		$result = array();
-
-		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
-		$sem = $this->security->xss_clean($this->input->post('sem'));
-		$course = $this->security->xss_clean($this->input->post('course'));
 
 		$query1 = $this->db->select('year_lvl')
 							->distinct('year_lvl')
@@ -2435,13 +2431,9 @@ FROM subject_match sm
 		return $result;	
 	}
 
-	public function get_section_schedule()
+	public function get_section_schedule($acadyr, $sem, $section_id)
 	{
 		$result = array();
-
-		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
-		$sem = $this->security->xss_clean($this->input->post('sem'));
-		$section_id = $this->security->xss_clean($this->input->post('section_id'));
 
 		$query3 = $this->db->query('SELECT sub.subj_code, sub.subj_desc, units, lab_hrs + lec_hrs AS hours, GROUP_CONCAT(tas.day SEPARATOR "<br>") AS day, GROUP_CONCAT(DISTINCT CONCAT(TIME_FORMAT(tas.time_start, "%h:%i %p"), " - ", TIME_FORMAT(tas.time_finish, "%h:%i %p")) SEPARATOR "<br>") AS time_used, GROUP_CONCAT(DISTINCT room.room_code SEPARATOR "<br>") AS room
 											FROM curriculum curri
@@ -2481,14 +2473,10 @@ FROM subject_match sm
 		return $result;	
 	}
 
-	public function get_section_total()
+	public function get_section_total($acadyr, $sem, $section_id)
 	{
 		$result = array();
-
-		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
-		$sem = $this->security->xss_clean($this->input->post('sem'));
-		$section_id = $this->security->xss_clean($this->input->post('section_id'));
-
+		
 		$query3 = $this->db->query('SELECT SUM(units) AS total_units, SUM(lec_hrs + lab_hrs) AS total_hours
 											FROM subject sub
 											LEFT JOIN subject_match sm
@@ -2521,8 +2509,8 @@ FROM subject_match sm
 
 		foreach($q->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="view_excel" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp;Excel</span></button>
-					<button class="btn btn-sm  btn-info" id="view_pdf" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp;PDF</span></button>';
+			$btn = '<button class="btn btn-success" id="view_excel" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp; Excel</span></button>
+					<button class="btn btn-info" id="view_pdf" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp; PDF</span></button>';
 					
 			$result[] = array(
 					$r->account_id,

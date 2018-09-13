@@ -2431,13 +2431,9 @@ FROM subject_match sm
 		return $result;	
 	}
 
-	public function get_subj_offering()
+	public function get_subj_offering($acadyr, $sem, $course)
 	{
 		$result = array();
-
-		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
-		$sem = $this->security->xss_clean($this->input->post('sem'));
-		$course = $this->security->xss_clean($this->input->post('course'));
 
 		$query1 = $this->db->select('year_lvl')
 							->distinct('year_lvl')
@@ -2465,13 +2461,9 @@ FROM subject_match sm
 		return $result;	
 	}
 
-	public function get_section_schedule()
+	public function get_section_schedule($acadyr, $sem, $section_id)
 	{
 		$result = array();
-
-		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
-		$sem = $this->security->xss_clean($this->input->post('sem'));
-		$section_id = $this->security->xss_clean($this->input->post('section_id'));
 
 		$query3 = $this->db->query('SELECT sub.subj_code, sub.subj_desc, units, lab_hrs + lec_hrs AS hours, GROUP_CONCAT(tas.day SEPARATOR "<br>") AS day, GROUP_CONCAT(DISTINCT CONCAT(TIME_FORMAT(tas.time_start, "%h:%i %p"), " - ", TIME_FORMAT(tas.time_finish, "%h:%i %p")) SEPARATOR "<br>") AS time_used, GROUP_CONCAT(DISTINCT room.room_code SEPARATOR "<br>") AS room
 											FROM curriculum curri
@@ -2511,14 +2503,10 @@ FROM subject_match sm
 		return $result;	
 	}
 
-	public function get_section_total()
+	public function get_section_total($acadyr, $sem, $section_id)
 	{
 		$result = array();
-
-		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
-		$sem = $this->security->xss_clean($this->input->post('sem'));
-		$section_id = $this->security->xss_clean($this->input->post('section_id'));
-
+		
 		$query3 = $this->db->query('SELECT SUM(units) AS total_units, SUM(lec_hrs + lab_hrs) AS total_hours
 											FROM subject sub
 											LEFT JOIN subject_match sm
@@ -2541,6 +2529,34 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function get_faculty_details()
+	{
+		$result = array();
+
+		$faculty = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		$query = $this->db->select('a.account_id, CONCAT(f.lname, ", ", f.fname, " ", f.mname) AS fac_name, ft.fac_type_desc, "Computer and Information Sciences" AS college, d.dept_code, d.dept_desc')
+				->join('account a', 'f.faculty_id = a.faculty_id')
+				->join('faculty_type ft', 'f.faculty_type = ft.fac_type_id')
+				->join('department d', 'f.dept = d.dept_id')
+				->where('f.faculty_id', $faculty)
+                ->get('faculty f');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->account_id,
+					$r->fac_name,
+					$r->fac_type_desc,
+					$r->college,
+					$r->dept_code,
+					$r->dept_desc,
+					);
+		}
+
+		return $result;
+	}
+
 	public function get_faculty_list()
 	{
 		$result = array();
@@ -2551,8 +2567,8 @@ FROM subject_match sm
 
 		foreach($q->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="view_excel" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp;Excel</span></button>
-					<button class="btn btn-sm  btn-info" id="view_pdf" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp;PDF</span></button>';
+			$btn = '<button class="btn btn-success" id="view_excel" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp; Excel</span></button>
+					<button class="btn btn-info" id="view_pdf" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp; PDF</span></button>';
 					
 			$result[] = array(
 					$r->account_id,

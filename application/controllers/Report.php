@@ -37,33 +37,79 @@ class Report extends CI_Controller
 
 	public function get_subject_offering()
 	{
-		echo json_encode($this->getdata_model->get_subj_offering($_POST));
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$course = $this->security->xss_clean($this->input->post('course'));
+
+		echo json_encode($this->getdata_model->get_subj_offering($acadyr, $sem, $course));
 		exit();
 	}
 
 	public function get_section_schedule()
 	{
-		echo json_encode($this->getdata_model->get_section_schedule($_POST));
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+
+		echo json_encode($this->getdata_model->get_section_schedule($acadyr, $sem, $section_id));
 		exit();
 	}
 
 	public function get_section_total()
 	{
-		echo json_encode($this->getdata_model->get_section_total($_POST));
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+
+		echo json_encode($this->getdata_model->get_section_total($acadyr, $sem, $section_id));
 		exit();
 	}
 
 	public function subj_offering_pdf()
 	{
-			$this->load->library('pdf');
-			$data['product'] = 'HELLO';
+		$result1 = array();
 
-            $this->pdf->load_view('report/subj_offer_pdf',$data);
-            $this->pdf->set_paper('legal', 'portrait');
-            $this->pdf->render();
-            $this->pdf->output();
+		$this->load->library('pdf');
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+		$data['course'] = $this->security->xss_clean($this->input->get('course'));
+		$cval = $this->security->xss_clean($this->input->get('cval'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		$data['cval'] = $cval;
+		
+		$result1 = $this->getdata_model->get_subj_offering($acadyr, $sem, $cval);
+
+		$data['section'] = $result1;
+
+        $this->pdf->load_view('report/subj_offer_pdf',$data);
+        $this->pdf->set_paper('legal', 'portrait');
+        $this->pdf->render();
+        $this->pdf->output();
           
-            $this->pdf->stream("subject_offering", array('Attachment' => 0));
+        $this->pdf->stream("subject_offering", array('Attachment' => 0));
+	}
+
+	public function subj_offering_excel()
+	{
+		$result1 = array();
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+		$data['course'] = $this->security->xss_clean($this->input->get('course'));
+		$cval = $this->security->xss_clean($this->input->get('cval'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		$data['cval'] = $cval;
+		
+		$result1 = $this->getdata_model->get_subj_offering($acadyr, $sem, $cval);
+
+		$data['section'] = $result1;
+
+        $this->load->view('report/subj_offer_excel', $data);
 	}
 
 	public function faculty_schedule()
@@ -74,6 +120,12 @@ class Report extends CI_Controller
 		$this->load->view('templates/header', $data);
 		$this->load->view('report/report_faculty_sched');
 		$this->load->view('templates/footer');
+	}
+
+	public function get_faculty_details()
+	{
+		echo json_encode($this->getdata_model->get_faculty_details($_POST));
+		exit();
 	}
 
 	public function room_schedule()

@@ -1756,6 +1756,31 @@
            });
         }
 
+        function addSchedule_gen(room, day, start, end, subj_match, load_type){
+
+            var acad_year = $('#sched_acad_year').val();
+            var sem = $('#sched_sem').val();
+            var room_id = room;
+            var temp_start = start;
+            var temp_end = end; 
+            var temp_day = day; 
+            var match_id = subj_match;
+            var temp_load = load_type;
+
+             $.ajax({  
+                        url:"<?php echo base_url('Transaction/add_generated_sched')?>",  
+                        type:"POST",  
+                        data: {room_id:room_id, temp_start:temp_start, temp_end:temp_end, temp_day:temp_day, temp_acadyr:acad_year, temp_sem:sem, match_id:match_id, temp_load:temp_load },
+                        success:function(data)
+                        {  
+                           
+                        },
+                         error: function (data) {
+                                alert(JSON.stringify(data));
+                        }
+                        });  
+        }
+
 
 //========================================================================
 //END OF AUTO GENERATION FUNCTIONS 
@@ -2983,6 +3008,7 @@
             var day_temp_b;
             var hour = 7;
             var bool_time_check = false;
+            getFacultyLoads();
             // while(global_match_id != null)
             // {
                 //GET SUBJECT HOURS FIRST
@@ -2993,7 +3019,7 @@
                 //REGULAR CONTROLLER
                 if(global_factype == 1)
                 {
-                    if(global_labhour == 3)
+                    if(global_labhour == 0)
                     {
                         if(global_total_hrs < 15 || global_total_hrs == null)
                         {

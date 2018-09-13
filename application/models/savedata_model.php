@@ -2325,5 +2325,60 @@ class savedata_model extends CI_Model
 		return $output;
 
 	}
+
+	public function add_generated_sched(){
+
+		$output = "";
+		$temp_room = $this->security->xss_clean($this->input->post('room_id'));
+		$temp_start = $this->security->xss_clean($this->input->post('temp_start'));
+		$temp_end = $this->security->xss_clean($this->input->post('temp_end'));
+		$temp_day = $this->security->xss_clean($this->input->post('temp_day'));
+		$temp_acadyr = $this->security->xss_clean($this->input->post('temp_acadyr'));
+		$temp_sem = $this->security->xss_clean($this->input->post('temp_sem'));
+		$temp_match_id = $this->security->xss_clean($this->input->post('match_id'));
+		$temp_load = $this->security->xss_clean($this->input->post('temp_load'));
+
+		$query2 = $this->db->where('ta.time_start > "'.$temp_start.'"
+									AND ta.time_start < "'.$temp_end.'"
+									AND ta.day = "'.$temp_day.'"
+									AND ta.acad_yr = "'.$temp_acadyr.'"
+									AND ta.sem = "'.$temp_sem.'"
+									AND ta.room_id = '.$temp_room.'
+									OR ta.time_finish > "'.$temp_start.'"
+									AND ta.time_finish < "'.$temp_end.'"
+									AND ta.day = "'.$temp_day.'"
+									AND ta.acad_yr = "'.$temp_acadyr.'"
+									AND ta.sem = "'.$temp_sem.'"
+									AND ta.room_id = '.$temp_room.'
+									OR ta.time_start = "'.$temp_start.'"
+									AND ta.time_finish = "'.$temp_end.'"
+									AND ta.day = "'.$temp_day.'"
+									AND ta.acad_yr = "'.$temp_acadyr.'"
+									AND ta.sem = "'.$temp_sem.'"
+									AND ta.room_id = '.$temp_room.'')
+                			->get('teaching_assign_sched ta');
+
+        $number_filter_row = $query2->num_rows(); 
+        if ($number_filter_row != 0) {
+        	
+        	$output = 'NOT INSERTED';	
+        }
+        else{
+        	
+        	if($this->db->query("INSERT INTO `subject_match`(`acad_yr`, `sem`, `subj_id`, `section`, `faculty_id`) VALUES ('$acad_yr','$sem', $subj_id, $section_id, $fac_id)"))
+			{
+				$output = 'INSERTED';
+			}
+			else
+			{
+				$output = 'NOT INSERTED';
+			}
+
+        }
+
+		
+			
+		return $output;
+	}
 }
 ?>

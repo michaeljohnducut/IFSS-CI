@@ -2499,6 +2499,34 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function get_faculty_details()
+	{
+		$result = array();
+
+		$faculty = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		$query = $this->db->select('a.account_id, CONCAT(f.lname, ", ", f.fname, " ", f.mname) AS fac_name, ft.fac_type_desc, "Computer and Information Sciences" AS college, d.dept_code, d.dept_desc')
+				->join('account a', 'f.faculty_id = a.faculty_id')
+				->join('faculty_type ft', 'f.faculty_type = ft.fac_type_id')
+				->join('department d', 'f.dept = d.dept_id')
+				->where('f.faculty_id', $faculty)
+                ->get('faculty f');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->account_id,
+					$r->fac_name,
+					$r->fac_type_desc,
+					$r->college,
+					$r->dept_code,
+					$r->dept_desc,
+					);
+		}
+
+		return $result;
+	}
+
 	public function get_faculty_list()
 	{
 		$result = array();

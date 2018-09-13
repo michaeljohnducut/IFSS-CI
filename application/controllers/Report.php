@@ -122,6 +122,12 @@ class Report extends CI_Controller
 		$this->load->view('templates/footer');
 	}
 
+	public function get_faculty_details()
+	{
+		echo json_encode($this->getdata_model->get_faculty_details($_POST));
+		exit();
+	}
+
 	public function room_schedule()
 	{
 		$data['title'] = "IFSS | Room and Laboratory Schedule";

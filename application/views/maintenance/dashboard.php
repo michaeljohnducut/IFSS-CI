@@ -325,7 +325,8 @@
                 <div class="col-md-3">
                     <div class="white-box">
                     <h3 class="box-title">total number of faculty members </h3>
-                         <label class="control-label">Select Academic Year</label>
+                    
+                      <!--    <label class="control-label">Select Academic Year</label>
                                      <select class="form-control" id="selectAcadYr">
                                         <option value="">--ACADEMIC YEAR--</option>
                                         <?php 
@@ -334,11 +335,11 @@
                                             }
                                         ?>
                                       </select>
-                                      <hr>
+                                      <hr> -->
                     <div>
-                         <canvas id="chart3" height="160"></canvas>
+                         <canvas id="chart3" height="270"></canvas>
                     </div>
-                    <hr>
+                    <hr style="border: 1px solid; color: #EEF0F0;">
                     <label class="control-label">Total: </label>
                 </div>
                 </div>

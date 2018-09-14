@@ -74,6 +74,8 @@
                         <div class="row" id="div_by_faculty_b">
                             <div class="col-md-2" style="text-align: right; color: red;">
                                 <p id="factype_id">Faculty Type:</p>
+                            
+                                <button type="button" id="btnGenerate" class="btn btn-info" data-toggle = "modal" data-target ="#modalGenerate">AUTO GENERATE SCHEDULE</button>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="RLoad_id">Regular Load: </p>
@@ -88,6 +90,7 @@
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="units_used">Total Hours: </p>
                                 <h5 id="lbl_eval"></h5>
+
                             </div>
                         </div>
 
@@ -696,6 +699,63 @@
             <!-- /.modal-dialog -->
 </div>
 
+<div class="ajax-loader">
+    <img src="<?php echo base_url(); ?>assets/images/loader.gif" class="img-responsive" />
+</div>
+
+<!-- MODAL AUTO GENERATION -->
+<div class="modal fade bs-example-modal-lg" id="modalGenerate" tabindex="-1" role="dialog" aria-labelledby="modalGenerate" aria-hidden="true" style=" display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Auto Generate Schedule</h4>
+                    </div>
+                    <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <h3>TEACHING ASSIGNMENTS</h3>
+                        </div>
+                        <div class="col-md-12" id="teach_assign_div">
+                        </div> 
+                        <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: 15px;">
+
+                        </div>
+                        <div class="col-md-12">
+                            <h3>GENERATE SCHEDULE FOR:</h3>
+                            <div class="col-md-4 checkbox checkbox-circle" id="teach_assign_div">
+                                <input  type="checkbox" id="chk_loads">
+                                <label  for="chk_loads">Teaching Assignments</label>
+                            </div> 
+                            <div class="col-md-4 checkbox checkbox-circle" id="officehours_div">
+                                <input style="margin-top: 15px;" type="checkbox" id="chk_officehrs">
+                                <label style="margin-top: 15px;" for="chk_officehrs">Office Hours</label>
+                            </div>  
+                            <div  class="col-md-4 checkbox checkbox-circle" id="advisetime_div">
+                                <input style="margin-top: 15px;" type="checkbox" id="chk_advisetime">
+                                <label style="margin-top: 15px;" for="chk_advisetime">Advising Time</label>
+                            </div>
+                            <div  class="col-md-4 checkbox checkbox-circle" id="nightofc_div">
+                                <input style="margin-top: 15px;" type="checkbox" id="chk_nightofc">
+                                <label style="margin-top: 15px;" for="chk_nightofc">Night Office</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <br><br>
+                            <h4><b>Note:</b>&nbsp;&nbsp;<span style="color: red">Generating a schedule for this faculty member will remove his existing schedule for this academic year and sem. Do you wish to continue? Click 'Start' to proceed.</span></h4>
+                        </div>             
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" id="btnStartGenerate" class="btn btn-info waves-effect text-left">Start</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+</div>
 
 <a data-toggle="modal" href="#modalAddTime" id="openMod"></a>
 
@@ -881,15 +941,26 @@
     <script src="<?php echo base_url(); ?>assets/pso-js/src/pso.js"></script>
     <script type="text/javascript">
 
+
+    //DECLARE GLOBAL VARIABLES
       var global_factype;
       var global_factypedesc;
       var global_labhour;
+      var global_lechour;
       var global_total_hrs;
       var global_reg_load;
       var global_pt_load; 
       var global_ts_load;
       var global_eval;
       var global_minor_id;
+      var global_start_time; 
+      var global_end_time; 
+      var global_subject_code;
+      var global_match_id;
+      var global_bool_sec_valid; 
+      var global_room;
+      var global_lab;
+      var global_num_loads;
       var global_minor_split = 0;
       var global_splitcontrol = 0;
 
@@ -1096,26 +1167,28 @@
 
       function getFacultyLoads(){
         var fac_id =  $('#sched_faculty').val();
-            var acad_yr =  $('#sched_acad_year').val();
-            var sem =  $('#sched_sem').val();
-            $.ajax({
-                    method:"POST",
-                    url:"<?php echo base_url('Transaction/get_prof_load')?>",
-                    dataType: "json",
-                    data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
-                    success:function(data)
-                    {   
-                        $('#sched_load').empty();
-                        $('#sched_load').append('<option value="0" disabled selected>-Loads-</option>');
-                        var len = data.length;
-                        for(var i = 0; i < len ; i++){
-                          var val = data[i][4];
-                          var text = '(' + data[i][0] + ') &nbsp;' + data[i][1] + ' - ' + data[i][2];
-                          $('#sched_load').append('<option value="'+val+'">'+text+'</option>');
-                        }
+        var acad_yr =  $('#sched_acad_year').val();
+        var sem =  $('#sched_sem').val();
+        $.ajax({
+                method:"POST",
+                url:"<?php echo base_url('Transaction/get_prof_load')?>",
+                dataType: "json",
+                data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
+                success:function(data)
+                {   
+                    $('#sched_load').empty();
+                    $('#sched_load').append('<option value="0" disabled selected>-Loads-</option>');
+                    var len = data.length;
+                    for(var i = 0; i < len ; i++){
+                      var val = data[i][4];
+                      var text = '(' + data[i][0] + ') &nbsp;' + data[i][1] + ' - ' + data[i][2];
+                      $('#sched_load').append('<option value="'+val+'">'+text+'</option>');
+                      global_subject_code = data[0][1];
+                      global_match_id = data[0][4];
                     }
-
-                   });
+                }, 
+                async:false
+               });
       }
 
 
@@ -1584,7 +1657,7 @@
                     $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
                 $('button[type="button"][value="'+final_val2+'"]').text(''); 
                 }
-                alert(final_val2);
+                // alert(final_val2);
 
                 // 
                 // if (looper < 10){
@@ -1602,6 +1675,191 @@
             }
         }
 
+//========================================================================
+//AUTO GENERATION FUNCTIONS
+//========================================================================
+    
+    function getFacultyLoads_gen(){
+        var fac_id =  $('#sched_faculty').val();
+        var acad_yr =  $('#sched_acad_year').val();
+        var sem =  $('#sched_sem').val();
+        $.ajax({
+                method:"POST",
+                url:"<?php echo base_url('Transaction/view_facloads')?>",
+                dataType: "json",
+                data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
+                success:function(data)
+                {   
+                    $('#teach_assign_div').empty();
+                    $('#teach_assign_div').append('<div class = "col-md-4"><h4><b>Section</b></h4></div> <div class = "col-md-8"><h4><b>Subject</b></h4></div>');
+                    var len = data.length;
+                    for(var i = 0; i < len ; i++){
+                      var section = data[i][0];
+                      var subj = data[i][1] + ' - ' + data[i][2];
+                      $('#teach_assign_div').append('<div class = "col-md-4"><h5>'+section +'</h5></div><div class = "col-md-8"><h5>'+subj +'</h5></div>');
+                      global_num_loads = len;
+                    }
+                }, 
+                async:false
+               });
+      }
+
+      function viewSubjDetails(subj_code){
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/view_subject')?>", 
+                method:"POST", 
+                data:{subj_code:subj_code}, 
+                dataType: "json",
+                success:function(data){
+                    global_labhour = data[0][4];
+                    global_lechour = data[0][5];
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+        }
+
+
+        function checkSecAvail(day, start, end){
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            match_id = global_match_id;
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/validate_section_sched')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, match_id:match_id, start_time:start, end:end, day:day}, 
+                dataType: "json",
+                success:function(data){
+                    if(data == 'EXISTING')
+                    {
+                        global_bool_sec_valid = false;
+                    }
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+        }
+
+        function showAvailRoom_gen(day, start_time, end){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_rooms')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
+                    global_room = data[0][0];
+                    // alert(global_room);
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+        }
+
+        function showAvailLab_gen(day, start_time, end){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_labs')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
+                    global_lab = data[0][0];
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+        }
+
+        function generateLabSched(day_temp, load_type, hour, adder){
+            var day;
+            var start_time;
+            var end_time;
+            var load = load_type;
+
+            if(day_temp == 1)
+                day = 'Thursday';
+            if(day_temp == 2)
+                day = 'Friday';
+            if(day_temp == 3)
+                day = 'Saturday';
+            if(day_temp == 4)
+                day = 'Monday';
+            if(day_temp == 5)
+                day = 'Tuesday';
+
+            start_time = '0' + hour + ':30'; 
+
+                end_time = '0' + (hour + 3) + ':30'; 
+                if(hour > 9)
+                    start_time = hour + ':30';
+                    end_time = (hour + 3) + ':30'; 
+
+                //GET AVAIL ROOM
+                showAvailLab_gen(day, start_time, end_time);
+                if(global_lab == null)
+                {
+                    hour+=1;
+                }
+                else
+                {
+                    if (start_time > '07:29' && start_time < '16:01')
+                    {   
+                        addScheduleGen(global_lab, day, start_time, end_time, global_match_id, load);
+                            if(hour >= adder)
+                            {
+                                hour = 7;
+                            }
+                    }
+                }
+        }
+
+        function addScheduleGen(room, day, start, end, subj_match, load_type){
+
+            var acad_year = $('#sched_acad_year').val();
+            var sem = $('#sched_sem').val();
+            var room_id = room;
+            var temp_start = start;
+            var temp_end = end; 
+            var temp_day = day; 
+            var match_id = subj_match;
+            var temp_load = load_type;
+            $('.ajax-loader').css("visibility", "visible");
+             $.ajax({  
+                        url:"<?php echo base_url('Transaction/add_generated_sched')?>",  
+                        type:"POST",  
+                        data: {room_id:room_id, temp_start:temp_start, temp_end:temp_end, temp_day:temp_day, temp_acadyr:acad_year, temp_sem:sem, match_id:match_id, temp_load:temp_load },
+                        success:function(data)
+                        {  
+                           reflectSchedTable();
+                           loadSchedTable();
+                           getFacultyLoads();
+                           getUnitsUsed();
+
+                        },
+                         error: function (data) {
+                                alert(JSON.stringify(data));
+                        },
+                        });  
+        }
+
+
+//========================================================================
+//END OF AUTO GENERATION FUNCTIONS 
+//========================================================================
+
       //SELECT2
       $(".select2").select2();
       $('.selectpicker').selectpicker();
@@ -1616,6 +1874,7 @@
         $('#sched_b_minor').hide();
         $('#section_table').hide();
         $('#room_table').hide();
+        $('#btnGenerate').hide();
 
 
         $('#starttime_a').on('blur',function(){
@@ -2391,6 +2650,17 @@
         $('#sched_faculty').on('change', function(){
           global_total_hrs = 0;
           var temp_fac = $('#sched_faculty').val();
+          var temp_sem = $('#sched_sem').val();
+          var temp_acadyr = $('#sched_acad_year').val();
+          if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
+          {
+            $('#btnGenerate').hide();
+          }
+          else
+          {
+            $('#btnGenerate').show();
+          }
+
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -2403,6 +2673,17 @@
 
         $('#sched_acad_year').on('change', function(){
           global_total_hrs = 0;
+          var temp_fac = $('#sched_faculty').val();
+          var temp_sem = $('#sched_sem').val();
+          var temp_acadyr = $('#sched_acad_year').val();
+          if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
+          {
+            $('#btnGenerate').hide();
+          }
+          else
+          {
+            $('#btnGenerate').show();
+          }
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -2414,6 +2695,17 @@
 
         $('#sched_sem').on('change', function(){
           global_total_hrs = 0;
+          var temp_fac = $('#sched_faculty').val();
+          var temp_sem = $('#sched_sem').val();
+          var temp_acadyr = $('#sched_acad_year').val();
+          if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
+          {
+            $('#btnGenerate').hide();
+          }
+          else
+          {
+            $('#btnGenerate').show();
+          }
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -2744,6 +3036,334 @@
         });
 //==========================================================================================
 //END NG MINOR ELEMENTS
+
+//========================================================================
+//AUTO GENERATION PROCESs
+//========================================================================
+    $('#btnGenerate').on('click', function(){
+        getFacultyLoads_gen();
+        if (global_factype == 1)
+        {   
+            $('#advisetime_div').show();
+            $('#teach_assign_div').show();
+            $('#officehours_div').hide();
+            $('#nightofc_div').hide();
+        }
+
+        else if (global_factype == 3)
+        {   
+            $('#teach_assign_div').show();
+            $('#advisetime_div').hide();
+            $('#officehours_div').show();
+            $('#nightofc_div').show();
+        }
+        else if (global_factype == 4 || global_factype == 5)
+        {   
+            $('#teach_assign_div').show();
+            $('#advisetime_div').hide();
+            $('#officehours_div').hide();
+            $('#nightofc_div').hide();
+        } 
+    });
+
+    $('#btnStartGenerate').on('click', function(){
+
+        $('#modalGenerate').modal('hide');
+        
+        var bool_stop = false;
+
+        //IF TEACHING LOADS IS CHECKED
+        if($('#chk_loads').prop('checked'))
+        {
+            var start_time; 
+            var start_time_b;
+            var end_time; 
+            var end_time_b; 
+            var load_type;
+            var day_temp = 1;
+            var day_temp_b;
+            var day;
+            var hour = 7;
+            var last_hour;
+            var bool_time_check = false;
+            var x = 0;
+            getFacultyLoads();
+
+            while(x < global_num_loads)
+            {
+                //GET SUBJECT HOURS FIRST
+                getFacultyLoads();
+                viewSubjDetails(global_subject_code);
+                getUnitsUsed();
+
+
+                //REGULAR CONTROLLER
+                if(global_factype == 1)
+                {
+                    if(global_labhour == 0)
+                    {
+                        if(global_total_hrs < 15 || global_total_hrs == null)
+                        {
+                            load_type = 'R';
+
+                        }
+
+                        if(global_total_hrs > 15 && global_total_hrs <= 27)
+                        {
+                            load_type = 'PT';
+                        }
+
+                        if(global_total_hrs > 27)
+                        {
+                            load_type = 'TS';
+                        }
+                    }
+
+                    //FULL TIME WITH LAB
+                    if(global_labhour == 3)
+                    {   
+                        // alert(global_total_hrs);
+                        if(global_total_hrs < 15 || global_total_hrs == null)
+                        {
+                            load_type = 'R';
+
+                            if(day_temp == 1)
+                                day = 'Monday';
+                            if(day_temp == 2)
+                                day = 'Tuesday';
+                            if(day_temp == 3)
+                                day = 'Wednesday';
+                            if(day_temp == 4)
+                                day = 'Thursday';
+                            if(day_temp == 5)
+                                day = 'Friday';
+
+                            start_time = '0' + hour + ':30'; 
+
+                                end_time = '0' + (hour + 2) + ':30'; 
+                                if(hour > 9)
+                                    start_time = hour + ':30';
+                                    end_time = (hour + 2) + ':30'; 
+
+                                //GET AVAIL ROOM
+                                showAvailRoom_gen(day, start_time, end_time);
+                                if(global_room == null)
+                                {
+                                    hour+=1;
+                                }
+                                else
+                                {
+                                    if (start_time > '07:29' && start_time < '16:01')
+                                    {   
+                                        addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                        
+                                        if(x == 0)
+                                        {
+                                            generateLabSched(day_temp, load_type, hour, 16);
+                                        }
+                                        else
+                                        {
+                                            generateLabSched(day_temp, load_type, hour+x, 16);
+                                        }
+
+                                            hour += 3;
+                                            if(hour >= 16)
+                                            {
+                                                day_temp += 1;
+                                                hour = 7;
+                                            }
+                                            x += 1;
+                                    }
+                                }
+                        }
+
+                        if(global_total_hrs >= 15 && global_total_hrs <= 27)
+                        {
+                            load_type = 'PT';
+                            if(day_temp == 1)
+                                day = 'Monday';
+                            if(day_temp == 2)
+                                day = 'Tuesday';
+                            if(day_temp == 3)
+                                day = 'Wednesday';
+                            if(day_temp == 4)
+                                day = 'Thursday';
+                            if(day_temp == 5)
+                                day = 'Friday';
+                            if(day_temp == 6)
+                                day = 'Saturday';
+
+                            start_time = '0' + hour + ':30'; 
+
+                                end_time = '0' + (hour + 2) + ':30'; 
+                                if(hour > 9)
+                                    start_time = hour + ':30';
+                                    end_time = (hour + 2) + ':30'; 
+
+                                //GET AVAIL ROOM
+                                showAvailRoom_gen(day, start_time, end_time);
+                                if(global_room == null)
+                                {
+                                    hour+=1;
+                                }
+                                else
+                                {
+                                    if (start_time > '07:29' && start_time < '20:01')
+                                    {   
+                                        // alert(global_total_hrs);
+                                        addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                            hour += 3;
+                                            if(hour >= 20)
+                                            {
+                                                day_temp += 1;
+                                                hour = 7;
+                                            }
+
+                                            if(x == 0)
+                                        {
+                                            generateLabSched(day_temp, load_type, hour, 20);
+                                        }
+                                        else
+                                        {
+                                            generateLabSched(day_temp, load_type, hour+x, 20);
+                                        }
+                                            x += 1;
+                                    }
+                                }
+
+                        }
+
+                        if(global_total_hrs > 27)
+                        {
+                            load_type = 'TS';
+                            load_type = 'PT';
+                            if(day_temp == 1)
+                                day = 'Monday';
+                            if(day_temp == 2)
+                                day = 'Tuesday';
+                            if(day_temp == 3)
+                                day = 'Wednesday';
+                            if(day_temp == 4)
+                                day = 'Thursday';
+                            if(day_temp == 5)
+                                day = 'Friday';
+                            if(day_temp == 6)
+                                day = 'Saturday';
+
+                            start_time = '0' + hour + ':30'; 
+
+                                end_time = '0' + (hour + 2) + ':30'; 
+                                if(hour > 9)
+                                    start_time = hour + ':30';
+                                    end_time = (hour + 2) + ':30'; 
+
+                                //GET AVAIL ROOM
+                                showAvailRoom_gen(day, start_time, end_time);
+                                if(global_room == null)
+                                {
+                                    hour+=1;
+                                }
+                                else
+                                {
+                                    if (start_time > '07:29' && start_time < '20:01')
+                                    {   
+                                        // alert(global_total_hrs);
+                                        addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                            hour += 3;
+                                            if(hour >= 20)
+                                            {
+                                                day_temp += 1;
+                                                hour = 7;
+                                            }
+
+                                            if(x == 0)
+                                        {
+                                            generateLabSched(day_temp, load_type, hour, 20);
+                                        }
+                                        else
+                                        {
+                                            generateLabSched(day_temp, load_type, hour+x, 20);
+                                        }
+                                            x += 1;
+                                    }
+                                }
+                        }
+
+                    }
+                }
+
+                //DESIGNEE CONTROLLER
+                if(global_factype == 3)
+                {
+                    if(global_labhour == 0)
+                    {
+                        if(global_total_hrs < 6 || global_total_hrs == null)
+                        {
+                            load_type = 'R';
+                        }
+
+                        if(global_total_hrs > 15 && global_total_hrs <= 27)
+                        {
+                            load_type = 'PT';
+                        }
+
+                    }
+
+                    if(global_labhour == 3)
+                    {
+                        if(global_total_hrs < 6 || global_total_hrs == null)
+                        {
+                            load_type = 'R';
+                        }
+
+                        if(global_total_hrs > 15 && global_total_hrs <= 27)
+                        {
+                            load_type = 'PT';
+                        }
+                        
+                    }
+
+                }
+
+                //PART-TIME CONTROLLER
+                if(global_factype == 4 || global_factype == 5)
+                {
+                    if(global_labhour == 0)
+                    {
+                        if(global_total_hrs < 12 || global_total_hrs == null)
+                        {
+                            load_type = 'PT';
+                        }
+
+                        if(global_total_hrs >= 12)
+                        {
+                            load_type = 'TS';
+                        }
+                    }
+
+                    if(global_labhour == 3)
+                    {
+                        if(global_total_hrs < 12 || global_total_hrs == null)
+                        {
+                            load_type = 'PT';
+                        }
+
+                        if(global_total_hrs >= 12)
+                        {
+                            load_type = 'TS';
+                        }
+                    }
+
+                }
+            }
+        }
+
+    });
+
+
+//========================================================================
+//END OF AUTO GENERATION PROCESS 
+//========================================================================
 
         $('#add_sched_form').on('submit', function(event){
           event.preventDefault();

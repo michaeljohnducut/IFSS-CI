@@ -100,6 +100,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function view_subject()
+	{
+		echo json_encode($this->getdata_model->view_subject_gen($_POST));
+		exit();
+	}
+
 	public function view_subjects_faculty()
 	{
 		$output = $this->getdata_model->view_subject_faculty($_POST);
@@ -648,6 +654,18 @@ class Transaction extends CI_Controller
 			'iDisplayStart' => 0
 		);
 		echo json_encode($response);
+		exit();
+	}
+
+	public function view_facloads(){
+		
+		echo json_encode($this->getdata_model->view_facload_tbl($_POST));
+		exit();
+	}
+
+	public function add_generated_sched()
+	{
+		echo ($this->savedata_model->add_generated_sched($_POST));
 		exit();
 	}
 

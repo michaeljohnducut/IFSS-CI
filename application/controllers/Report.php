@@ -124,9 +124,111 @@ class Report extends CI_Controller
 
 	public function get_faculty_details()
 	{
-		echo json_encode($this->getdata_model->get_faculty_details($_POST));
+		$faculty = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		echo json_encode($this->getdata_model->get_faculty_details($faculty));
 		exit();
 	}
+
+	public function get_teaching_load()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty'));
+		$load = $this->security->xss_clean($this->input->post('load'));
+
+		echo json_encode($this->getdata_model->get_teaching_load($acadyr, $sem, $faculty, $load));
+		exit();
+	}
+
+	public function get_teaching_load_total()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty'));
+		$load = $this->security->xss_clean($this->input->post('load'));
+
+		echo json_encode($this->getdata_model->get_teaching_load_total($acadyr, $sem, $faculty, $load));
+		exit();
+	}
+
+	public function get_teaching_load_perday()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty'));
+
+		echo json_encode($this->getdata_model->get_teaching_load_perday($acadyr, $sem, $faculty));
+		exit();
+	}
+
+	public function get_teaching_load_perday_total()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty'));
+
+		echo json_encode($this->getdata_model->get_teaching_load_perday_total($acadyr, $sem, $faculty));
+		exit();
+	}
+
+	public function get_other_time_perday()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty'));
+
+		echo json_encode($this->getdata_model->get_other_time_perday($acadyr, $sem, $faculty));
+		exit();
+	}
+
+	public function faculty_sched_pdf()
+	{
+		$result1 = array();
+		$result2 = array();
+		$result3 = array();
+		$result4 = array();
+		$result5 = array();
+		$result6 = array();
+		$result7 = array();
+		$result8 = array();
+
+		$this->load->library('pdf');
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+		$faculty = $this->security->xss_clean($this->input->get('faculty'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		$data['faculty'] = $faculty;
+		
+		$result1 = $this->getdata_model->get_faculty_details($faculty);
+		$result2 = $this->getdata_model->get_teaching_load($acadyr, $sem, $faculty, 'R');
+		$result3 = $this->getdata_model->get_teaching_load_total($acadyr, $sem, $faculty, 'R');
+		$result4 = $this->getdata_model->get_teaching_load($acadyr, $sem, $faculty, 'PT');
+		$result5 = $this->getdata_model->get_teaching_load_total($acadyr, $sem, $faculty, 'PT');
+		$result6 = $this->getdata_model->get_teaching_load_perday($acadyr, $sem, $faculty);
+		$result7 = $this->getdata_model->get_teaching_load_perday_total($acadyr, $sem, $faculty);
+		$result8 = $this->getdata_model->get_other_time_perday($acadyr, $sem, $faculty);
+
+		$data['details'] = $result1;
+		$data['teach_r'] = $result2;
+		$data['teach_r_total'] = $result3;
+		$data['teach_pt'] = $result4;
+		$data['teach_pt_total'] = $result5;
+		$data['load_day'] = $result6;
+		$data['load_day_tot'] = $result7;
+		$data['other_time'] = $result8;
+
+        $this->pdf->load_view('report/faculty_sched_pdf',$data);
+        $this->pdf->set_paper('legal', 'portrait');
+        $this->pdf->render();
+        $this->pdf->output();
+          
+        $this->pdf->stream("faculty_assignment", array('Attachment' => 0));
+	}
+
 
 	public function room_schedule()
 	{

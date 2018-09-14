@@ -2499,13 +2499,11 @@ FROM subject_match sm
 		return $result;	
 	}
 
-	public function get_faculty_details()
+	public function get_faculty_details($faculty)
 	{
 		$result = array();
 
-		$faculty = $this->security->xss_clean($this->input->post('faculty_id'));
-
-		$query = $this->db->select('a.account_id, CONCAT(f.lname, ", ", f.fname, " ", f.mname) AS fac_name, ft.fac_type_desc, "Computer and Information Sciences" AS college, d.dept_code, d.dept_desc')
+		$query = $this->db->select('a.account_id, CONCAT(f.lname, ", ", f.fname, " ", f.mname) AS fac_name, ft.fac_type_desc, "Computer and Information Sciences" AS college, d.dept_code, SUBSTR(d.dept_desc,15) AS dept_desc')
 				->join('account a', 'f.faculty_id = a.faculty_id')
 				->join('faculty_type ft', 'f.faculty_type = ft.fac_type_id')
 				->join('department d', 'f.dept = d.dept_id')
@@ -2523,6 +2521,141 @@ FROM subject_match sm
 					$r->dept_desc,
 					);
 		}
+
+		return $result;
+	}
+
+	public function get_teaching_load($acadyr, $sem, $faculty, $load)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT s.subj_code, s.subj_desc, s.units, CONCAT(c.course_code, " ",  LEFT(sec.year_lvl, 1), "-", sec.section_desc) AS section, 
+									GROUP_CONCAT(DISTINCT CONCAT(TIME_FORMAT(tas.time_start, "%h:%i %p"), " - ", TIME_FORMAT(tas.time_finish, "%h:%i %p")) SEPARATOR "<br>") AS time_used, 
+									GROUP_CONCAT(tas.day SEPARATOR "<br>") AS day,
+									GROUP_CONCAT(DISTINCT r.room_code SEPARATOR "<br>") AS room
+								FROM faculty f JOIN subject_match sm
+								ON f.faculty_id = sm.faculty_id
+								JOIN SUBJECT s
+								ON sm.subj_id = s.subj_id
+								JOIN section sec
+								ON sm.section = sec.section_id
+								JOIN course c
+								ON sec.course = c.course_id
+								JOIN teaching_assign_sched tas
+								ON sm.subj_match_id = tas.subj_match_id
+								JOIN room r
+								ON tas.room_id = r.room_id
+								WHERE f.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'" AND tas.load_type = "'.$load.'"
+								GROUP BY s.subj_id');
+
+        foreach($query->result() as $t)
+        {      
+        	($t->subj_code != null)?$subj_code = $t->subj_code:$subj_code = '';
+            ($t->subj_desc != null)?$subj_desc = $t->subj_desc:$subj_desc = '';
+            ($t->units != null)?$units = $t->units:$units = '';
+            ($t->section != null)?$section = $t->section:$section = '';
+            ($t->time_used != null)?$time_used = $t->time_used:$time_used = '';
+            ($t->day != null)?$day = $t->day:$day = '';
+            ($t->room != null)?$room = $t->room:$room = '';
+
+            $result[] = array(
+               				$subj_code,
+               				$subj_desc,
+               				$units,
+               				$section,
+               				$time_used,
+               				$day,
+               				$room,
+						);
+        }
+
+		return $result;
+	}
+
+	public function get_teaching_load_total($acadyr, $sem, $faculty, $load)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours 
+								FROM teaching_assign_sched tas JOIN subject_match sm
+								ON tas.subj_match_id = sm.subj_match_id
+								WHERE sm.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'" AND tas.load_type = "'.$load.'"');
+
+        foreach($query->result() as $t)
+        {      
+        	($t->hours != null)?$hours = $t->hours:$hours = '';
+     
+            $result[] = array(
+               				$hours,
+						);
+        }
+
+		return $result;
+	}
+
+	public function get_teaching_load_perday($acadyr, $sem, $faculty)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT tas.day AS day, SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours, tas.load_type AS load_type
+								FROM teaching_assign_sched tas JOIN subject_match sm
+								ON tas.subj_match_id = sm.subj_match_id
+								WHERE sm.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'"
+								GROUP BY tas.load_type, tas.day
+								ORDER BY FIELD(tas.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->day,
+               				$t->hours,
+               				$t->load_type,
+						);
+        }
+
+		return $result;
+	}
+
+	public function get_teaching_load_perday_total($acadyr, $sem, $faculty)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT tas.day AS day, SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS total_hours
+								FROM teaching_assign_sched tas JOIN subject_match sm
+								ON tas.subj_match_id = sm.subj_match_id
+								WHERE sm.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'"
+								GROUP BY tas.day
+								ORDER BY FIELD(tas.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->day,
+               				$t->total_hours,
+						);
+        }
+
+		return $result;
+	}
+
+	public function get_other_time_perday($acadyr, $sem, $faculty)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT day, TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0 AS hours, load_type AS load_type
+									FROM other_time_sched
+									WHERE faculty_id = "'.$faculty.'" AND acad_yr = "'.$acadyr.'" AND sem = "'.$sem.'"
+									GROUP BY load_type, day
+									ORDER BY FIELD(day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->day,
+               				$t->hours,
+               				$t->load_type,
+						);
+        }
 
 		return $result;
 	}

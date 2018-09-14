@@ -699,6 +699,10 @@
             <!-- /.modal-dialog -->
 </div>
 
+<div class="ajax-loader">
+    <img src="<?php echo base_url(); ?>assets/images/loader.gif" class="img-responsive" />
+</div>
+
 <!-- MODAL AUTO GENERATION -->
 <div class="modal fade bs-example-modal-lg" id="modalGenerate" tabindex="-1" role="dialog" aria-labelledby="modalGenerate" aria-hidden="true" style=" display: none;">
             <div class="modal-dialog modal-lg">
@@ -956,6 +960,7 @@
       var global_bool_sec_valid; 
       var global_room;
       var global_lab;
+      var global_num_loads;
       var global_minor_split = 0;
       var global_splitcontrol = 0;
 
@@ -1692,8 +1697,10 @@
                       var section = data[i][0];
                       var subj = data[i][1] + ' - ' + data[i][2];
                       $('#teach_assign_div').append('<div class = "col-md-4"><h5>'+section +'</h5></div><div class = "col-md-8"><h5>'+subj +'</h5></div>');
+                      global_num_loads = len;
                     }
-                }
+                }, 
+                async:false
                });
       }
 
@@ -1748,6 +1755,7 @@
                 dataType: "json",
                 success:function(data){
                     global_room = data[0][0];
+                    // alert(global_room);
                 },  
                 error: function (data) {
                 alert(JSON.stringify(data));
@@ -1756,7 +1764,69 @@
            });
         }
 
-        function addSchedule_gen(room, day, start, end, subj_match, load_type){
+        function showAvailLab_gen(day, start_time, end){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_labs')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
+                    global_lab = data[0][0];
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+        }
+
+        function generateLabSched(day_temp, load_type, hour, adder){
+            var day;
+            var start_time;
+            var end_time;
+            var load = load_type;
+
+            if(day_temp == 1)
+                day = 'Thursday';
+            if(day_temp == 2)
+                day = 'Friday';
+            if(day_temp == 3)
+                day = 'Saturday';
+            if(day_temp == 4)
+                day = 'Monday';
+            if(day_temp == 5)
+                day = 'Tuesday';
+
+            start_time = '0' + hour + ':30'; 
+
+                end_time = '0' + (hour + 3) + ':30'; 
+                if(hour > 9)
+                    start_time = hour + ':30';
+                    end_time = (hour + 3) + ':30'; 
+
+                //GET AVAIL ROOM
+                showAvailLab_gen(day, start_time, end_time);
+                if(global_lab == null)
+                {
+                    hour+=1;
+                }
+                else
+                {
+                    if (start_time > '07:29' && start_time < '16:01')
+                    {   
+                        addScheduleGen(global_lab, day, start_time, end_time, global_match_id, load);
+                            if(hour >= adder)
+                            {
+                                hour = 7;
+                            }
+                    }
+                }
+        }
+
+        function addScheduleGen(room, day, start, end, subj_match, load_type){
 
             var acad_year = $('#sched_acad_year').val();
             var sem = $('#sched_sem').val();
@@ -1766,18 +1836,22 @@
             var temp_day = day; 
             var match_id = subj_match;
             var temp_load = load_type;
-
+            $('.ajax-loader').css("visibility", "visible");
              $.ajax({  
                         url:"<?php echo base_url('Transaction/add_generated_sched')?>",  
                         type:"POST",  
                         data: {room_id:room_id, temp_start:temp_start, temp_end:temp_end, temp_day:temp_day, temp_acadyr:acad_year, temp_sem:sem, match_id:match_id, temp_load:temp_load },
                         success:function(data)
                         {  
-                           
+                           reflectSchedTable();
+                           loadSchedTable();
+                           getFacultyLoads();
+                           getUnitsUsed();
+
                         },
                          error: function (data) {
                                 alert(JSON.stringify(data));
-                        }
+                        },
                         });  
         }
 
@@ -2994,6 +3068,8 @@
 
     $('#btnStartGenerate').on('click', function(){
 
+        $('#modalGenerate').modal('hide');
+        
         var bool_stop = false;
 
         //IF TEACHING LOADS IS CHECKED
@@ -3004,16 +3080,21 @@
             var end_time; 
             var end_time_b; 
             var load_type;
-            var day_temp;
+            var day_temp = 1;
             var day_temp_b;
+            var day;
             var hour = 7;
+            var last_hour;
             var bool_time_check = false;
+            var x = 0;
             getFacultyLoads();
-            // while(global_match_id != null)
-            // {
+
+            while(x < global_num_loads)
+            {
                 //GET SUBJECT HOURS FIRST
                 getFacultyLoads();
                 viewSubjDetails(global_subject_code);
+                getUnitsUsed();
 
 
                 //REGULAR CONTROLLER
@@ -3040,29 +3121,172 @@
 
                     //FULL TIME WITH LAB
                     if(global_labhour == 3)
-                    {
+                    {   
+                        // alert(global_total_hrs);
                         if(global_total_hrs < 15 || global_total_hrs == null)
                         {
                             load_type = 'R';
-                            day_temp = 'Monday'; 
-                            start_time = '0' + hour + ':00'; 
 
-                                end_time = '0' + (hour + 1) + ':00'; 
-                                if(hour < 9)
-                                    end_time = (hour + 1) + ':00'; 
+                            if(day_temp == 1)
+                                day = 'Monday';
+                            if(day_temp == 2)
+                                day = 'Tuesday';
+                            if(day_temp == 3)
+                                day = 'Wednesday';
+                            if(day_temp == 4)
+                                day = 'Thursday';
+                            if(day_temp == 5)
+                                day = 'Friday';
+
+                            start_time = '0' + hour + ':30'; 
+
+                                end_time = '0' + (hour + 2) + ':30'; 
+                                if(hour > 9)
+                                    start_time = hour + ':30';
+                                    end_time = (hour + 2) + ':30'; 
 
                                 //GET AVAIL ROOM
-                                showAvailRoom_gen(day_temp, start_time, end_time);
+                                showAvailRoom_gen(day, start_time, end_time);
+                                if(global_room == null)
+                                {
+                                    hour+=1;
+                                }
+                                else
+                                {
+                                    if (start_time > '07:29' && start_time < '16:01')
+                                    {   
+                                        addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                        
+                                        if(x == 0)
+                                        {
+                                            generateLabSched(day_temp, load_type, hour, 16);
+                                        }
+                                        else
+                                        {
+                                            generateLabSched(day_temp, load_type, hour+x, 16);
+                                        }
+
+                                            hour += 3;
+                                            if(hour >= 16)
+                                            {
+                                                day_temp += 1;
+                                                hour = 7;
+                                            }
+                                            x += 1;
+                                    }
+                                }
                         }
 
-                        if(global_total_hrs > 15 && global_total_hrs <= 27)
+                        if(global_total_hrs >= 15 && global_total_hrs <= 27)
                         {
                             load_type = 'PT';
+                            if(day_temp == 1)
+                                day = 'Monday';
+                            if(day_temp == 2)
+                                day = 'Tuesday';
+                            if(day_temp == 3)
+                                day = 'Wednesday';
+                            if(day_temp == 4)
+                                day = 'Thursday';
+                            if(day_temp == 5)
+                                day = 'Friday';
+                            if(day_temp == 6)
+                                day = 'Saturday';
+
+                            start_time = '0' + hour + ':30'; 
+
+                                end_time = '0' + (hour + 2) + ':30'; 
+                                if(hour > 9)
+                                    start_time = hour + ':30';
+                                    end_time = (hour + 2) + ':30'; 
+
+                                //GET AVAIL ROOM
+                                showAvailRoom_gen(day, start_time, end_time);
+                                if(global_room == null)
+                                {
+                                    hour+=1;
+                                }
+                                else
+                                {
+                                    if (start_time > '07:29' && start_time < '20:01')
+                                    {   
+                                        // alert(global_total_hrs);
+                                        addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                            hour += 3;
+                                            if(hour >= 20)
+                                            {
+                                                day_temp += 1;
+                                                hour = 7;
+                                            }
+
+                                            if(x == 0)
+                                        {
+                                            generateLabSched(day_temp, load_type, hour, 20);
+                                        }
+                                        else
+                                        {
+                                            generateLabSched(day_temp, load_type, hour+x, 20);
+                                        }
+                                            x += 1;
+                                    }
+                                }
+
                         }
 
                         if(global_total_hrs > 27)
                         {
                             load_type = 'TS';
+                            load_type = 'PT';
+                            if(day_temp == 1)
+                                day = 'Monday';
+                            if(day_temp == 2)
+                                day = 'Tuesday';
+                            if(day_temp == 3)
+                                day = 'Wednesday';
+                            if(day_temp == 4)
+                                day = 'Thursday';
+                            if(day_temp == 5)
+                                day = 'Friday';
+                            if(day_temp == 6)
+                                day = 'Saturday';
+
+                            start_time = '0' + hour + ':30'; 
+
+                                end_time = '0' + (hour + 2) + ':30'; 
+                                if(hour > 9)
+                                    start_time = hour + ':30';
+                                    end_time = (hour + 2) + ':30'; 
+
+                                //GET AVAIL ROOM
+                                showAvailRoom_gen(day, start_time, end_time);
+                                if(global_room == null)
+                                {
+                                    hour+=1;
+                                }
+                                else
+                                {
+                                    if (start_time > '07:29' && start_time < '20:01')
+                                    {   
+                                        // alert(global_total_hrs);
+                                        addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                            hour += 3;
+                                            if(hour >= 20)
+                                            {
+                                                day_temp += 1;
+                                                hour = 7;
+                                            }
+
+                                            if(x == 0)
+                                        {
+                                            generateLabSched(day_temp, load_type, hour, 20);
+                                        }
+                                        else
+                                        {
+                                            generateLabSched(day_temp, load_type, hour+x, 20);
+                                        }
+                                            x += 1;
+                                    }
+                                }
                         }
 
                     }
@@ -3131,7 +3355,7 @@
                     }
 
                 }
-            // }
+            }
         }
 
     });

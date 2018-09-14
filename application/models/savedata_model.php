@@ -2365,7 +2365,7 @@ class savedata_model extends CI_Model
         }
         else{
         	
-        	if($this->db->query("INSERT INTO `subject_match`(`acad_yr`, `sem`, `subj_id`, `section`, `faculty_id`) VALUES ('$acad_yr','$sem', $subj_id, $section_id, $fac_id)"))
+        	if($this->db->query("INSERT INTO `teaching_assign_sched`(`room_id`, `time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `subj_match_id`, `load_type`) VALUES ($temp_room, '$temp_start', '$temp_end', '$temp_day', '$temp_acadyr', '$temp_sem', $temp_match_id, '$temp_load')"))
 			{
 				$output = 'INSERTED';
 			}
@@ -2373,7 +2373,6 @@ class savedata_model extends CI_Model
 			{
 				$output = 'NOT INSERTED';
 			}
-
         }
 
 		

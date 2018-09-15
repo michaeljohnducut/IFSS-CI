@@ -62,17 +62,15 @@ class getdata_model extends CI_Model{
 	}
 
 
-	public function view_faculty()
+	public function view_faculty($id)
 	{
 		$result = array();
-
-		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
 
 		$query = $this->db->select('a.account_id, f.lname, f.fname, f.mname, f.email, f.contact_no, f.date_of_birth, f.gender, f.civil_status, f.citizenship, f.residential_address, f.rzip_code, f.permanent_address, f.pzip_code, f.faculty_type, f.dept, f.faculty_id, a.image_path')
 				->join('faculty f', 'a.faculty_id = f.faculty_id')
                 ->where('f.status', 1)
                 ->where('a.status', 1)
-                ->where('f.faculty_id', $faculty_id)
+                ->where('f.faculty_id', $id)
                 ->get('account a');
 
 		foreach ($query->result() as $r) 
@@ -409,10 +407,8 @@ class getdata_model extends CI_Model{
 	{
 		$result = array();
 
-		$type_code = $this->security->xss_clean($this->input->post('type_code'));
-
 		$query = $this->db->select('fac_type_id, fac_type_desc')
-				->where('fac_type_id', $type_code)
+				->where('fac_type_id', $id)
                 ->get('faculty_type');
 
 		foreach ($query->result() as $r) 
@@ -2712,6 +2708,94 @@ FROM subject_match sm
 
 		return $result;
 	}
+
+	public function get_faculty_preftime($acadyr, $sem, $faculty)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT pt.day, GROUP_CONCAT(CONCAT(TIME_FORMAT(pt.start_time, "%h:%i %p"), " - ", TIME_FORMAT(pt.end_time, "%h:%i %p")) SEPARATOR "<br>") AS time_pref
+									FROM preferred_time PT
+									JOIN faculty F ON f.faculty_id = pt.faculty_id
+									JOIN account A ON A.faculty_id = F.faculty_id
+									WHERE F.faculty_id = "'.$faculty.'" AND pt.acad_yr = "'.$acadyr.'" AND pt.sem = "'.$sem.'"
+									GROUP BY pt.day
+									ORDER BY FIELD(day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->day,
+               				$t->time_pref,
+						);
+        }
+
+		return $result;
+	}
+
+	public function get_faculty_prefsub($acadyr, $sem, $faculty)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT s.subj_desc
+									FROM preferred_subj ps JOIN faculty f 
+									ON ps.faculty_id = f.faculty_id
+									JOIN SUBJECT s
+									ON ps.subj_code = s.subj_id
+									WHERE f.faculty_id = "'.$faculty.'" AND ps.acad_yr = "'.$acadyr.'" AND ps.sem = "'.$sem.'"');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->subj_desc,
+						);
+        }
+
+		return $result;
+	}
+
+	public function get_preftime($acadyr, $sem, $faculty)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT GROUP_CONCAT(pt.day SEPARATOR "<hr>") AS day, GROUP_CONCAT(CONCAT(TIME_FORMAT(pt.start_time, "%h:%i %p"), " - ", TIME_FORMAT(pt.end_time, "%h:%i %p")) SEPARATOR "<hr>") AS time_pref
+									FROM preferred_time PT
+									JOIN faculty F ON f.faculty_id = pt.faculty_id
+									JOIN account A ON A.faculty_id = F.faculty_id
+									WHERE F.faculty_id = "'.$faculty.'" AND pt.acad_yr = "'.$acadyr.'" AND pt.sem = "'.$sem.'"
+									ORDER BY FIELD(day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->day,
+               				$t->time_pref,
+						);
+        }
+
+		return $result;
+	}
+
+	public function get_prefsub($acadyr, $sem, $faculty)
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT GROUP_CONCAT(s.subj_desc SEPARATOR "<hr>") AS subj_desc
+									FROM preferred_subj ps JOIN faculty f 
+									ON ps.faculty_id = f.faculty_id
+									JOIN SUBJECT s
+									ON ps.subj_code = s.subj_id
+									WHERE f.faculty_id = "'.$faculty.'" AND ps.acad_yr = "'.$acadyr.'" AND ps.sem = "'.$sem.'"');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->subj_desc,
+						);
+        }
+
+		return $result;
+	}
+
 
 }
 ?>

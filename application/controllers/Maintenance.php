@@ -167,7 +167,9 @@ class Maintenance extends CI_Controller {
 	{
 		if(isset($_POST['faculty_id']))
 		{
-			echo json_encode($this->getdata_model->view_faculty($_POST));
+			$id = $faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
+
+			echo json_encode($this->getdata_model->view_faculty($id));
 			exit();
 		}
 	}
@@ -546,7 +548,9 @@ class Maintenance extends CI_Controller {
 	{
 		if(isset($_POST['type_code']))
 		{
-			echo json_encode($this->getdata_model->view_faculty_type($_POST));
+			$type_code = $this->security->xss_clean($this->input->post('type_code'));
+
+			echo json_encode($this->getdata_model->view_faculty_type($type_code));
 			exit();
 		}
 	}

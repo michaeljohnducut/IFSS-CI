@@ -89,7 +89,7 @@ class Report extends CI_Controller
         $this->pdf->render();
         $this->pdf->output();
           
-        $this->pdf->stream("subject_offering", array('Attachment' => 0));
+        $this->pdf->stream("subject_offering.pdf", array('Attachment' => 0));
 	}
 
 	public function subj_offering_excel()
@@ -226,7 +226,7 @@ class Report extends CI_Controller
         $this->pdf->render();
         $this->pdf->output();
           
-        $this->pdf->stream("faculty_assignment", array('Attachment' => 0));
+        $this->pdf->stream("faculty_assignment.pdf", array('Attachment' => 0));
 	}
 
 
@@ -260,6 +260,101 @@ class Report extends CI_Controller
 		exit();
 	}
 
+	public function subj_pref_indiv_pdf()
+	{
+		$result1 = array();
+		$result2 = array();
+		$result3 = array();
+
+		$this->load->library('pdf');
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+		$faculty = $this->security->xss_clean($this->input->get('faculty'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		
+		$result1 = $this->getdata_model->view_faculty($faculty);
+		$result2 = $this->getdata_model->get_faculty_preftime($acadyr, $sem, $faculty);
+		$result3 = $this->getdata_model->get_faculty_prefsub($acadyr, $sem, $faculty);
+
+		$data['faculty'] = $result1;
+		$data['time'] = $result2;
+		$data['subj'] = $result3;
+
+        $this->pdf->load_view('report/subj_pref_indiv_pdf',$data);
+        $this->pdf->set_paper('legal', 'portrait');
+        $this->pdf->render();
+        $this->pdf->output();
+          
+        $this->pdf->stream("subject_preference_indiv.pdf", array('Attachment' => 0));
+	}
+
+	public function subj_pref_indiv_excel()
+	{
+		$result1 = array();
+		$result2 = array();
+		$result3 = array();
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+		$faculty = $this->security->xss_clean($this->input->get('faculty'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		
+		$result1 = $this->getdata_model->view_faculty($faculty);
+		$result2 = $this->getdata_model->get_faculty_preftime($acadyr, $sem, $faculty);
+		$result3 = $this->getdata_model->get_faculty_prefsub($acadyr, $sem, $faculty);
+
+		$data['faculty'] = $result1;
+		$data['time'] = $result2;
+		$data['subj'] = $result3;
+
+		$this->load->view('report/subj_pref_indiv_excel', $data);
+	}
+
+	public function subj_pref_pdf()
+	{
+		$result1 = array();
+		
+		$this->load->library('pdf');
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		
+		$result1 = $this->getdata_model->faculty();
+
+		$data['faculty'] = $result1;
+
+        $this->pdf->load_view('report/subj_pref_pdf',$data);
+        $this->pdf->set_paper('legal', 'portrait');
+        $this->pdf->render();
+        $this->pdf->output();
+          
+        $this->pdf->stream("subject_preference.pdf", array('Attachment' => 0));
+	}
+
+	public function subj_pref_excel()
+	{
+		$result1 = array();
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		
+		$result1 = $this->getdata_model->faculty();
+
+		$data['faculty'] = $result1;
+
+		$this->load->view('report/subj_pref_excel', $data);
+	}
 	
 } 
 

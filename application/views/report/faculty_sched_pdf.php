@@ -63,7 +63,7 @@
            	<div style="text-align: left;">
                 <h5>REGULAR LOAD</h5>
                 <div style="font-size:11px; page-break-inside: avoid;">
-                	<table >
+                	<table>
                         <thead>
                             <tr>
                                <th>Subject Code</th>

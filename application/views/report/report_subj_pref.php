@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
-                                <select class="form-control" name="acad_year" id="acad_year">
+                                <select class="form-control" name="select_acadyr" id="select_acadyr">
                                    <option value="">-SELECT ACAD YEAR-</option>
                                    <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
@@ -40,7 +40,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label">Select Semester</label>
-                                <select class="form-control" name="selected_sem" id="selected_sem">
+                                <select class="form-control" name="select_sem" id="select_sem">
                                     <option value="">-SELECT SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
@@ -49,15 +49,14 @@
                             </div>
                             <div class="col-md-6" style="margin-left: 30px">
                                 <br>
-                                <button type="button" class="btn btn-success" style="margin-top: 5px;"> <span class="fa fa-file"></span>&nbsp; Generate Summary (Excel)</button>&nbsp;
-                                <button type="button" class="btn btn-info" style="margin-top: 5px;"> <span class="fa fa-file"></span>&nbsp; Generate Summary (PDF)</button>
+                                <button type="button" onclick="excel_()" class="btn btn-success" style="margin-top: 5px;"> <span class="fa fa-file"></span>&nbsp; Generate Summary (Excel)</button>&nbsp;
+                                <button type="button" onclick="pdf_()" class="btn btn-info" style="margin-top: 5px;"> <span class="fa fa-file"></span>&nbsp; Generate Summary (PDF)</button>
                                 
                             </div>
                         </div>
                         <br><br>
 
                         <div class="table-responsive">
-                                
                             <table class="table table-striped" id="faculty_table">
                                 <thead>
                                     <tr>
@@ -71,7 +70,6 @@
                                    
                                 </tbody>
                             </table>
-
                         </div>
                                 
 
@@ -92,6 +90,20 @@
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
+
+        function pdf_()
+        {
+            var acadyr = $('#select_acadyr').val();
+            var sem = $('#select_sem').val();
+            window.open('<?php echo base_url("Report/subj_pref_pdf")?>'+'?acadyr='+acadyr+'&sem='+sem);
+        }
+
+        function excel_()
+        {
+            var acadyr = $('#select_acadyr').val();
+            var sem = $('#select_sem').val();
+            window.open('<?php echo base_url("Report/subj_pref_excel")?>'+'?acadyr='+acadyr+'&sem='+sem);
+        }
 
         function loadtable()
         {
@@ -114,5 +126,25 @@
          $(document).ready(function()
          {
             loadtable();
+
+            $(document).on('click', '#view_pdf', function(e)
+            {  
+               var id = $(this).data("id");
+               var acadyr = $('#select_acadyr').val();
+               var sem = $('#select_sem').val();
+               
+               window.open('<?php echo base_url("Report/subj_pref_indiv_pdf")?>'+'?acadyr='+acadyr+'&sem='+sem+'&faculty='+id);
+            });
+
+            $(document).on('click', '#view_excel', function(e)
+            {  
+               var id = $(this).data("id");
+               var acadyr = $('#select_acadyr').val();
+               var sem = $('#select_sem').val();
+               
+               window.open('<?php echo base_url("Report/subj_pref_indiv_excel")?>'+'?acadyr='+acadyr+'&sem='+sem+'&faculty='+id);
+            });
+
+
          });
     </script>

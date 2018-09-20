@@ -46,6 +46,21 @@
             background-color: #f1f1f1;
         }
 
+        .plot-blue{
+            background-color: #3498db; 
+            color: white;
+        }
+
+        .plot-green{
+            background-color: #2ecc71; 
+            color: white;
+        }
+
+        .plot-darkBlue{
+            background-color: #34495e; 
+            color: white;
+        }
+
         /* Style the buttons that are used to open the tab content */
         .tab button {
             background-color: inherit;

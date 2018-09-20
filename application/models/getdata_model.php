@@ -2797,6 +2797,31 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function get_pref_day(){
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('pt.day ')
+				->distinct()
+				->where('pt.faculty_id', $fac_id)
+				->where('pt.sem', $sem)
+				->where('pt.acad_yr', $acad_yr)
+                ->get('preferred_time pt');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->day
+					);
+		}
+
+		return $result;	
+
+	}
+
 
 }
 ?>

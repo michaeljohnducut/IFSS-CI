@@ -960,6 +960,7 @@
       var global_bool_sec_valid; 
       var global_room;
       var global_lab;
+      var global_pref_day = [];
       var global_num_loads;
       var global_minor_split = 0;
       var global_splitcontrol = 0;
@@ -996,9 +997,9 @@
         }
 
       function resetPlotForm(){
-        $('.btn-success').removeClass().addClass('btn btn-default');
-        $('.btn-info').removeClass().addClass('btn btn-default');
-        $('.btn-primary').removeClass().addClass('btn btn-default')
+        $('.plot-green').removeClass().addClass('btn btn-default');
+        $('.plot-blue').removeClass().addClass('btn btn-default');
+        $('.plot-darkBlue').removeClass().addClass('btn btn-default')
         $('.btn-default').text('');
       }
 
@@ -1581,25 +1582,25 @@
 
                    if(temp_load == null || temp_load == 'R')
                    {
-                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-success");                 
-                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-success");
-                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-success");                 
-                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-green");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn plot-green");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn plot-green");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-green");
                    }
                    else if (temp_load == 'PT')
                    {
-                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-info");                 
-                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-info");
-                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-info");                 
-                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-info");
+                    $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-blue");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn plot-blue");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn plot-blue");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-blue");
                    }
 
                    else if (temp_load == 'TS')
                    {
-                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-primary");                 
-                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-primary");
-                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-primary");                 
-                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-primary");
+                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-darkBlue");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn plot-darkBlue");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn plot-darkBlue");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-darkBlue");
                    }
 
                     $('button[type="button"][value="'+final_val2+'"]').text('');
@@ -1679,21 +1680,22 @@
                    if(temp_load == null || temp_load == 'R')
                    {
                         $('button[type="button"][value="'+final_val2+'"]').removeClass();
-                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-green");
                    }
                    else if(temp_load == 'PT')
                    {
                         $('button[type="button"][value="'+final_val2+'"]').removeClass();
-                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-info");
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-blue");
                    }
                    else if(temp_load == 'TS')
                    {
                         $('button[type="button"][value="'+final_val2+'"]').removeClass();
-                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-primary");
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-darkBlue");
                    }
 
                     $('button[type="button"][value="'+final_val2+'"]').text(''); 
                 }
+                alert(final_val + ' ' + final_val2);
                 // alert(final_val2);
 
                 // 
@@ -1736,6 +1738,23 @@
                       $('#teach_assign_div').append('<div class = "col-md-4"><h5>'+section +'</h5></div><div class = "col-md-8"><h5>'+subj +'</h5></div>');
                       global_num_loads = len;
                     }
+                }, 
+                async:false
+               });
+      }
+
+      function getPrefDay_gen(){
+        var fac_id =  $('#sched_faculty').val();
+        var acad_yr =  $('#sched_acad_year').val();
+        var sem =  $('#sched_sem').val();
+        $.ajax({
+                method:"POST",
+                url:"<?php echo base_url('Transaction/get_pref_day')?>",
+                dataType: "json",
+                data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem},
+                success:function(data)
+                {   
+                    global_pref_day = data;
                 }, 
                 async:false
                });
@@ -1827,15 +1846,13 @@
             var load = load_type;
 
             if(day_temp == 1)
-                day = 'Thursday';
+                day = global_pref_day[3][0];
             if(day_temp == 2)
-                day = 'Friday';
+                day = global_pref_day[4][0];
             if(day_temp == 3)
-                day = 'Saturday';
+                day = global_pref_day[1][0];
             if(day_temp == 4)
-                day = 'Monday';
-            if(day_temp == 5)
-                day = 'Tuesday';
+                day = global_pref_day[2][0];
 
             start_time = '0' + hour + ':30'; 
 
@@ -2698,6 +2715,7 @@
             $('#btnGenerate').show();
           }
 
+            getPrefDay_gen();
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -2721,6 +2739,7 @@
           {
             $('#btnGenerate').show();
           }
+            getPrefDay_gen();
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -2743,6 +2762,7 @@
           {
             $('#btnGenerate').show();
           }
+            getPrefDay_gen();
             getFacultyType();
             getFacultyLoads();
             getUnitsUsed();
@@ -2861,6 +2881,8 @@
             $('#faculty_table').show();
             $('#section_table').hide();
             $('#room_table').hide();
+            $('#btnGenerate').hide();
+
           }
 
           else if(temp_val == 2){
@@ -2879,6 +2901,7 @@
             $('#faculty_table').hide();
             $('#section_table').show();
             $('#room_table').hide();
+            $('#btnGenerate').hide();
           }
 
           else{
@@ -2898,6 +2921,7 @@
             $('#faculty_table').hide();
             $('#section_table').hide();
             $('#room_table').show();
+            $('#btnGenerate').hide();
           }
         });
 
@@ -3168,15 +3192,7 @@
                                     {
                                         if (start_time > '07:29' && start_time < '16:01')
                                         {   
-                                            addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);  
-                                            // if(x == 0)
-                                            // {
-                                            //     generateLabSched(day_temp, load_type, hour, 16);
-                                            // }
-                                            // else
-                                            // {
-                                            //     generateLabSched(day_temp, load_type, hour+x, 16);
-                                            // }
+                                            addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type); 
                                             hour += 4;
                                             if(hour >= 16)
                                             {
@@ -3208,16 +3224,7 @@
                             {
                                 load_type = 'R';
 
-                                if(day_temp == 1)
-                                    day = 'Monday';
-                                if(day_temp == 2)
-                                    day = 'Tuesday';
-                                if(day_temp == 3)
-                                    day = 'Wednesday';
-                                if(day_temp == 4)
-                                    day = 'Thursday';
-                                if(day_temp == 5)
-                                    day = 'Friday';
+                                day = global_pref_day[day_temp][0];
 
                                 start_time = '0' + hour + ':30'; 
 
@@ -3261,18 +3268,7 @@
                             if(global_total_hrs >= 15 && global_total_hrs <= 27)
                             {
                                 load_type = 'PT';
-                                if(day_temp == 1)
-                                    day = 'Monday';
-                                if(day_temp == 2)
-                                    day = 'Tuesday';
-                                if(day_temp == 3)
-                                    day = 'Wednesday';
-                                if(day_temp == 4)
-                                    day = 'Thursday';
-                                if(day_temp == 5)
-                                    day = 'Friday';
-                                if(day_temp == 6)
-                                    day = 'Saturday';
+                                day = global_pref_day[day_temp][0];
 
                                 start_time = '0' + hour + ':30'; 
 
@@ -3317,19 +3313,7 @@
                             if(global_total_hrs > 27)
                             {
                                 load_type = 'TS';
-                                load_type = 'PT';
-                                if(day_temp == 1)
-                                    day = 'Monday';
-                                if(day_temp == 2)
-                                    day = 'Tuesday';
-                                if(day_temp == 3)
-                                    day = 'Wednesday';
-                                if(day_temp == 4)
-                                    day = 'Thursday';
-                                if(day_temp == 5)
-                                    day = 'Friday';
-                                if(day_temp == 6)
-                                    day = 'Saturday';
+                                day = global_pref_day[day_temp][0];
 
                                 start_time = '0' + hour + ':30'; 
 

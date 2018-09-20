@@ -996,7 +996,9 @@
         }
 
       function resetPlotForm(){
-        $('.btn-success').removeClass().addClass('btn btn-default')
+        $('.btn-success').removeClass().addClass('btn btn-default');
+        $('.btn-info').removeClass().addClass('btn btn-default');
+        $('.btn-primary').removeClass().addClass('btn btn-default')
         $('.btn-default').text('');
       }
 
@@ -1493,11 +1495,13 @@
             var last_text = '';
             var put_label = 0;
 
+
             for (ctr = 0 ; ctr < len ; ctr++){
 
                 temp_subj = arr[ctr][0]; //GETS SUBJECT 
                 temp_sec = arr[ctr][3]; //GETS SECTION
                 temp_room = arr[ctr][6]; //GETS ROOM
+                temp_load = arr[ctr][7];
 
                 switch(arr[ctr][5]){
                     case 'Monday': 
@@ -1575,10 +1579,29 @@
                         }
                     }
 
-                    $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-success");                 
+                   if(temp_load == null || temp_load == 'R')
+                   {
+                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-success");                 
                     $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-success");
                     $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-success");                 
                     $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                   }
+                   else if (temp_load == 'PT')
+                   {
+                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-info");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-info");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-info");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-info");
+                   }
+
+                   else if (temp_load == 'TS')
+                   {
+                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn btn-primary");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn btn-primary");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn btn-primary");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-primary");
+                   }
+
                     $('button[type="button"][value="'+final_val2+'"]').text('');
                     $('button[type="button"][value="'+final_val+'"]').text('');
 
@@ -1653,9 +1676,23 @@
                     {
                         final_val2 = looper + ':00:00' + day_id;
                     }
-                    $('button[type="button"][value="'+final_val2+'"]').removeClass();
-                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
-                $('button[type="button"][value="'+final_val2+'"]').text(''); 
+                   if(temp_load == null || temp_load == 'R')
+                   {
+                        $('button[type="button"][value="'+final_val2+'"]').removeClass();
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-success");
+                   }
+                   else if(temp_load == 'PT')
+                   {
+                        $('button[type="button"][value="'+final_val2+'"]').removeClass();
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-info");
+                   }
+                   else if(temp_load == 'TS')
+                   {
+                        $('button[type="button"][value="'+final_val2+'"]').removeClass();
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn btn-primary");
+                   }
+
+                    $('button[type="button"][value="'+final_val2+'"]').text(''); 
                 }
                 // alert(final_val2);
 

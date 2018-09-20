@@ -2056,7 +2056,7 @@ FROM subject_match sm
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code, ta.load_type')
 				->where('sm.faculty_id', $fac_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2080,7 +2080,8 @@ FROM subject_match sm
 					$section, 
 					$time,
 					$r->day,
-					$r->room_code
+					$r->room_code,
+					$r->load_type
 					);
 		}
 

@@ -2843,6 +2843,7 @@ FROM subject_match sm
         }
 
 		return $result;
+	}
 
 	public function get_pref_day(){
 

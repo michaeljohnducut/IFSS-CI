@@ -46,6 +46,26 @@
             background-color: #f1f1f1;
         }
 
+        .plot-blue{
+            background-color: #3498db; 
+            color: white;
+        }
+
+        .plot-green{
+            background-color: #2ecc71; 
+            color: white;
+        }
+
+        .plot-darkBlue{
+            background-color: #34495e; 
+            color: white;
+        }
+
+        .plot-regular{
+            background-color: #b2bec3
+            color: white;
+        }
+
         /* Style the buttons that are used to open the tab content */
         .tab button {
             background-color: inherit;
@@ -76,7 +96,7 @@
         }
 
         .schedBorder{
-            border:1px #000000 solid;
+            border:1px white solid;
             height:30px;
             text-align:center;
             font-family:tahoma;

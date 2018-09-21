@@ -2084,7 +2084,7 @@ FROM subject_match sm
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code, ta.load_type')
 				->where('sm.faculty_id', $fac_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2108,7 +2108,8 @@ FROM subject_match sm
 					$section, 
 					$time,
 					$r->day,
-					$r->room_code
+					$r->room_code,
+					$r->load_type
 					);
 		}
 
@@ -2842,6 +2843,30 @@ FROM subject_match sm
         }
 
 		return $result;
+
+	public function get_pref_day(){
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('pt.day ')
+				->distinct()
+				->where('pt.faculty_id', $fac_id)
+				->where('pt.sem', $sem)
+				->where('pt.acad_yr', $acad_yr)
+                ->get('preferred_time pt');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->day
+					);
+		}
+
+		return $result;	
+
 	}
 
 

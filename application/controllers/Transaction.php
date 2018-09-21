@@ -674,6 +674,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function get_pref_day(){
+		
+		echo json_encode($this->getdata_model->get_pref_day($_POST));
+		exit();
+	}
+
 	public function add_generated_sched()
 	{
 		echo ($this->savedata_model->add_generated_sched($_POST));

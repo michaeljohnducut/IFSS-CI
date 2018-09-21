@@ -653,6 +653,7 @@ class getdata_model extends CI_Model{
 		$result = array();
 
 		$query = $this->db->select('curr_year_id,curr_year_desc')
+				->order_by('curr_year_desc', 'desc')
                 ->get('curriculum_year');
 
 		foreach ($query->result() as $r) 
@@ -1970,9 +1971,36 @@ FROM subject_match sm
 					$r->fac_type_desc
 					);
 		}
-
 		return $result;
+	}
 
+	public function get_subjmatch_details($id)
+	{
+		$result = array();
+
+		$query3 = $this->db->query('SELECT CONCAT(s.subj_code, " - ", subj_desc) AS subj_desc, CONCAT(f.lname, ", ", f.fname, " ", f.mname) AS fac_name, 
+									CONCAT(c.course_code, " ",  LEFT(sec.year_lvl, 1), "-", sec.section_desc) AS section
+									FROM subject_match sm JOIN SUBJECT s
+									ON sm.subj_id = s.subj_id
+									JOIN section sec 
+									ON sm.section = sec.section_id
+									JOIN course c 
+									ON sec.course = c.course_id
+									JOIN faculty f 
+									ON sm.faculty_id = f.faculty_id
+									WHERE sm.subj_match_id = "'.$id.'"');
+
+               	foreach($query3->result() as $t)
+               	{
+               		
+               		$result[] = array(
+               				$t->subj_desc,
+               				$t->fac_name,
+               				$t->section,
+					);
+               	}
+
+		return $result;	
 	}
 
 	public function get_avail_labs(){ //GETS AVAILABLE ROOMS FOR A SPECIFIC TIME
@@ -2790,6 +2818,26 @@ FROM subject_match sm
         {      
             $result[] = array(
                				$t->subj_desc,
+						);
+        }
+
+		return $result;
+	}
+
+	public function get_total_section()
+	{
+		$result = array();
+		
+		$query = $this->db->query('SELECT COUNT(section_id) AS section, acad_yr
+									FROM section s
+									GROUP BY acad_yr
+									ORDER BY acad_yr DESC');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->section,
+               				$t->acad_yr,
 						);
         }
 

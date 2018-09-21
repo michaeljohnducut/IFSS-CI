@@ -481,8 +481,9 @@ function getPrefTime(faculty_id, acad_year, sem){
                         alert('Select a faculty member first.');
                     }
 
-                    else{
-                        // alert(data);
+                    else
+                    {
+                        swal("Success!", day + " " + start + " - " + end + " is added.");
                     }
                 }, 
 
@@ -745,8 +746,17 @@ $('#btnCloseDisclaimer').on('click', function(){
 
 $(document).ready(function(){
     // TRANSFERRING PREFERRED TIME. NOTE: Experimental
-
-    $('#btnOtherMon').on('click',function(){
+    $('#btnOtherMon').on('click',function()
+    {
+        var data = "<?php echo $acc_type?>";
+        if(data == 'admin')
+        {
+            var fac_id = $('#fac_list').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         var start = $('#strtMon').val();
         var end = $('#endMon').val();
@@ -768,7 +778,17 @@ $(document).ready(function(){
         
     });
 
-    $('#btnOtherTue').on('click',function(){
+    $('#btnOtherTue').on('click',function()
+    {
+        var data = "<?php echo $acc_type?>";
+        if(data == 'admin')
+        {
+            var fac_id = $('#fac_list').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         var start = $('#strTue').val();
         var end = $('#endTue').val();
@@ -790,7 +810,17 @@ $(document).ready(function(){
         
     });
 
-    $('#btnOtherWed').on('click',function(){
+    $('#btnOtherWed').on('click',function()
+    {
+        var data = "<?php echo $acc_type?>";
+        if(data == 'admin')
+        {
+            var fac_id = $('#fac_list').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         var start = $('#strWed').val();
         var end = $('#endWed').val();
@@ -813,7 +843,17 @@ $(document).ready(function(){
         
     });
 
-    $('#btnOtherThr').on('click',function(){
+    $('#btnOtherThr').on('click',function()
+    {
+        var data = "<?php echo $acc_type?>";
+        if(data == 'admin')
+        {
+            var fac_id = $('#fac_list').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         var start = $('#strThr').val();
         var end = $('#endThr').val();
@@ -836,7 +876,17 @@ $(document).ready(function(){
         
     });
 
-    $('#btnOtherFri').on('click',function(){
+    $('#btnOtherFri').on('click',function()
+    {
+        var data = "<?php echo $acc_type?>";
+        if(data == 'admin')
+        {
+            var fac_id = $('#fac_list').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         var start = $('#strFri').val();
         var end = $('#endFri').val();
@@ -857,7 +907,17 @@ $(document).ready(function(){
         
     });
 
-    $('#btnOtherSat').on('click',function(){
+    $('#btnOtherSat').on('click',function()
+    {
+        var data = "<?php echo $acc_type?>";
+        if(data == 'admin')
+        {
+            var fac_id = $('#fac_list').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         var start = $('#strSat').val();
         var end = $('#endSat').val();
@@ -1030,7 +1090,7 @@ $(document).ready(function(){
                     }
 
                     else{
-                        // alert(data);
+                        swal("Success!", day + " " + start + " - " + end + " is added.");
                         loadtable(fac_id, acad_year, sem);
                     }
                 }, 
@@ -1162,7 +1222,7 @@ $(document).ready(function(){
 
                 success:function(data)
                 {  
-                    // alert('DELETED');
+                    swal("Success!", day + " " + start + " - " + end + " is removed.");
                     loadtable(fac_id, acad_year, sem);
                 }, 
 
@@ -1187,6 +1247,7 @@ $(document).ready(function(){
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
 
+
          if($(this).prop("checked")){
 
             event.preventDefault();  
@@ -1197,8 +1258,7 @@ $(document).ready(function(){
 
                 success:function(data)
                 {  
-                    // alert(data);
-
+                    swal("Success!", "Subject is added.");
                 }, 
 
                 error: function(data)
@@ -1219,7 +1279,7 @@ $(document).ready(function(){
 
                 success:function(data)
                 {  
-                    // alert('DELETED ' + subj_code);
+                    swal("Success!", "Subject is removed.");
                 }, 
 
                 error: function(data)

@@ -233,6 +233,10 @@
                                                 <h4 id="lbl_spec"><b>SPECIALIZATIONS:</b>&nbsp; </h4>
                                             </div>
                                             <div class="col-md-6">
+                                                <h4 id="lbl_load_limit"><b>TOTAL LOAD LIMIT:</b>&nbsp; </h4>
+                                                <br>
+                                            </div>
+                                            <div class="col-md-6">
                                                 <h4 id="lbl_load"><b>Current Load Count:</b>&nbsp; </h4>
                                                 <br>
                                             </div>
@@ -584,10 +588,12 @@
                     $('#lbl_fac_type').empty();
                     $('#lbl_spec').empty();
                     $('#lbl_load').empty();
+                    $('#lbl_load_limit').empty();
                     $('#lbl_fac_id').append('<b>FACULTY ID:</b>&nbsp;' + data[0][0]);
                     $('#lbl_fac_name').append('<b>FACULTY NAME:</b>&nbsp;' + data[0][1]);
                     $('#lbl_fac_type').append('<b>FACULTY TYPE:</b>&nbsp;' + data[0][2]);
                     $('#lbl_spec').append('<b>SPECIALIZATIONS:</b>&nbsp;' + data[0][3]);
+                    $('#lbl_load_limit').append('<b>TOTAL LOAD LIMIT:</b>&nbsp;' + data[0][5]);
                     $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data[0][4]);
                     viewFacultyLoadTbl(fac_id_1);
                     $('#openMod').trigger('click');

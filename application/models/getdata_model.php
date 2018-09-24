@@ -1799,10 +1799,14 @@ FROM subject_match sm
 		$account_id = '';
 		$fac_name = '';
 		$fac_type = '';
+		$fac_type_id = '';
 		$spec = '';
-		$unit = '';
+		$total_load_hrs = '';
+		$total_limit = '';
+		$statement = '';
+		$total_limit_final = '';
 
-		$query = $this->db->select("a.account_id, CONCAT(f.lname, ', ', f.fname, ' ',  f.mname) AS 'fac_name', ft.fac_type_desc, GROUP_CONCAT(DISTINCT(s.spec_desc) SEPARATOR '<br>') AS 'spec'")
+		$query = $this->db->select("a.account_id, CONCAT(f.lname, ', ', f.fname, ' ',  f.mname) AS 'fac_name', ft.fac_type_desc, ft.fac_type_id, GROUP_CONCAT(DISTINCT(s.spec_desc) SEPARATOR '<br>') AS 'spec'")
 				->where('f.faculty_id', $fac_id)
 				->join('account a', 'f.faculty_id = a.faculty_id')
 				->join('faculty_type ft', 'f.faculty_type = ft.fac_type_id')
@@ -1816,27 +1820,83 @@ FROM subject_match sm
 			$fac_name = $r->fac_name;
 			$fac_type = $r->fac_type_desc;
 			$spec = $r->spec;
+			$fac_type_id = $r->fac_type_id;
 		}
 
-		$query2 = $this->db->select("SUM(sb.units) as 'units'")
-							->join('subject_match sm', 'f.faculty_id = sm.faculty_id')
-							->join('subject sb ', 'sb.subj_id = sm.subj_id')
-							->where('f.faculty_id', $fac_id)
-							->where('sm.acad_yr', $acad_yr)
-							->where('sm.sem', $sem)
-							->get('faculty f');
+		$query3 = $this->db->query('SELECT SUM(IF (fac_load_desc LIKE "%Regular%", num_hrs, 0)) AS regular_load,
+									       SUM(IF (fac_load_desc LIKE "%Part%", num_hrs, 0)) AS parttime_load,
+									       SUM(IF (fac_load_desc LIKE "%Regular%", num_hrs, 0)) + 
+									       SUM(IF (fac_load_desc LIKE "%Part%", num_hrs, 0)) AS total_load
+									FROM faculty_load_type
+									WHERE fac_type_desc = "'.$fac_type_id.'"');
+
+		foreach ($query3->result() as $t) 
+		{
+			$total_limit = $t->total_load;			
+		}
+
+		$query2 = $this->db->select("SUM(lec_hrs + lab_hrs) AS total_load_hrs")
+							->join('subject s ', 'sm.subj_id = s.subj_id')
+							->where('faculty_id', $fac_id)
+							->get('subject_match sm');
 
 		foreach ($query2->result() as $s) 
 		{
-			($s->units == '')?$unit = 0:$unit = $s->units;
+			($s->total_load_hrs == '')?$total_load_hrs = 0:$total_load_hrs = $s->total_load_hrs;
 		}
+
+		$trackRating = "SATISFACTORY";
+		$ctr = 0;
+
+		$query4 = $this->db->select('acad_yr, sem, faculty_id, rating, rating_desc')
+				->where('faculty_id', $fac_id)
+				->order_by('acad_yr DESC, sem DESC')
+                ->get('evaluation');
+
+		foreach($query4->result() as $r)
+		{
+			if($r->rating_desc == $trackRating)
+			{
+			  $ctr++;
+			}
+			else
+			{
+			  $ctr = 0;
+			}
+
+			if($ctr >= 3)
+			{
+				$statement = 'CONSECUTIVE';
+			}
+			else
+			{
+				$statement = 'NONE';
+			}	
+		}
+
+		//NOT FINAL AAYUSIN KO PA TO MAYA PAGUWI 
+		if($statement == 'CONSECUTIVE' && ($fac_type_id == 1 || $fac_type_id == 5))
+		{
+			$total_limit_final == $total_limit - 6;
+		}
+		else
+		{
+			$total_limit_final == $total_limit;
+		}
+
+		//3 Consecutive
+		//Regular Faculty -  6 PT NA LANG
+		// Part time - Full Time Faculty - 6 PT NA LANG
+		// Part time - Full Time Faculty - No TS na
+
 
 		$result[] = array(
 					$account_id,
 					$fac_name,
 					$fac_type,
 					$spec,
-					$unit	
+					$total_load_hrs,
+					$total_limit_final	
 					);
 
 		return $result;	

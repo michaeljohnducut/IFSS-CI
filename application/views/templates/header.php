@@ -56,6 +56,41 @@
             color: white;
         }
 
+        .legend-green{
+            background-color: #2ecc71; 
+            color: white;
+        }
+
+        .legend-blue{
+            background-color: #3498db; 
+            color: white;
+        }
+
+        .legend-darkBlue{
+            background-color: #34495e; 
+            color: white;
+        }
+
+        .legend-purple{
+            background-color: #9b59b6; 
+            color: white;
+        }
+
+        .legend-orange{
+            background-color: #e67e22; 
+            color: white;
+        }
+
+        .legend-red{
+            background-color: #e74c3c; 
+            color: white;
+        }
+
+        .legend-darkBlue{
+            background-color: #34495e; 
+            color: white;
+        }
+
         .plot-darkBlue{
             background-color: #34495e; 
             color: white;

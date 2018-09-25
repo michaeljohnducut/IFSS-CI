@@ -164,7 +164,7 @@
               "sAjaxSource": "<?php echo base_url('Maintenance/get_curriculum_years')?>",
               "deferLoading": 10,
               "bPaginate": true,
-              "aaSorting": [[0,'asc']],
+              "aaSorting": [[0,'desc']],
               "fnInitComplete": function(){
                         
               }

@@ -137,6 +137,26 @@
                         <br>
                         <div class="row">
                             <div class="col-md-3">
+                                <label class="control-label">Academic Year:</label>
+                                <select class="form-control select2" id="select_acadyr2">
+                                    <option value="" disabled selected>-Academic Year-</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label">Semester:</label>
+                                <select class="form-control select2" id="select_sem2">
+                                    <option value="" disabled selected>-Semester-</option>
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option>
+                                    <option value="Summer">Summer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <label class="control-label">Select Course</label>
                                 <select class="form-control select2" id="select_course">
                                     <option value="0" disabled selected>-Course-</option>
@@ -146,12 +166,12 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Select Year and Section</label>
-                                <select class="form-control select2" id="select_year_sec">
-                                    <option value="0" disabled selected>-Year - Section-</option>
+                                <select class="form-control" id="select_year_sec">
+                                    <option value="0" disabled selected>-Year-Section-</option>
                                     </select>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" style="margin-top: 10px;">
                             <h5 style="margin-left: 80px;" class="box-title m-b-0">Legend:</h5>
                             <div class="row" style="margin-left: 80px; margin-top: 10px;">
                                 <div class="col-md-6">
@@ -211,6 +231,10 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <h4 id="lbl_spec"><b>SPECIALIZATIONS:</b>&nbsp; </h4>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h4 id="lbl_load_limit"><b>TOTAL LOAD LIMIT:</b>&nbsp; </h4>
+                                                <br>
                                             </div>
                                             <div class="col-md-6">
                                                 <h4 id="lbl_load"><b>Current Load Count:</b>&nbsp; </h4>
@@ -358,8 +382,8 @@
 
         function loadSectionSubjects(){
             var section_id = $('#select_year_sec').val();
-            var acad_yr = $('#select_acadyr').val();
-            var sem = $('#select_sem').val();
+            var acad_yr = $('#select_acadyr2').val();
+            var sem = $('#select_sem2').val();
             $('#tbl_section_loads').dataTable().fnClearTable();
             $('#tbl_section_loads').dataTable().fnDraw();
             $('#tbl_section_loads').dataTable().fnDestroy();
@@ -380,6 +404,7 @@
             // setDivHeight();
 
             $("#select_section").prop("disabled", true);
+
             $('#select_acadyr').on('change', function()
             {
                 $("#select_section").prop("disabled", false);
@@ -392,29 +417,6 @@
                 {
                    viewSubjectsSection();
                 }
-
-                if(course_id)
-                {
-                    $.ajax({
-                    method:"POST",
-                    url:"<?php echo base_url('Transaction/get_all_sections')?>",
-                    dataType: "json",
-                    data:{course_id:course_id, acad_yr:acad_yr},
-                    success:function(data)
-                    {   
-                        $('#select_year_sec').empty();
-                        $('#select_year_sec').append('<option value="0" disabled selected>-Year-Section-</option>');
-                        var len = data.length;
-                        for (var i=0; i<len; i++)
-                        {
-                          var temp_val = data[i][0];
-                          var temp_text = data[i][1];
-                          $('#select_year_sec').append('<option value="'+temp_val +'">'+temp_text+ '</option>');
-                        }
-                    }
-                   });
-                }
-
             });
 
             $('#select_sem').on('change', function()
@@ -488,10 +490,50 @@
                 }
             });
 
-
-            $('#select_course').on('change', function(){
+            $('#select_acadyr2').on('change', function()
+            {
+                var acad_yr = $('#select_acadyr2').val();
                 var course_id = $('#select_course').val();
-                var acad_yr = $('#select_acadyr').val();
+                var section = $('#select_year_sec').val();
+
+                if(course_id && acad_yr)
+                {
+                    $.ajax({
+                    method:"POST",
+                    url:"<?php echo base_url('Transaction/get_all_sections')?>",
+                    dataType: "json",
+                    data:{course_id:course_id, acad_yr:acad_yr},
+                    success:function(data)
+                    {   
+                        $('#select_year_sec').empty();
+                        $('#select_year_sec').append('<option value="0" disabled selected>-Year-Section-</option>');
+                        var len = data.length;
+                        for (var i=0; i<len; i++)
+                        {
+                          var temp_val = data[i][0];
+                          var temp_text = data[i][1];
+                          $('#select_year_sec').append('<option value="'+temp_val +'">'+temp_text+ '</option>');
+                        }
+                    }
+                   });
+
+                    $('#tbl_section_loads').dataTable().fnClearTable();
+                    $('#tbl_section_loads').dataTable().fnDraw();
+                    $('#tbl_section_loads').dataTable().fnDestroy();
+                }
+
+                // if(course_id && acad_yr && section)
+                // {
+                //     loadSectionSubjects();
+                // }
+            });
+
+            $('#select_course').on('change', function()
+            {
+                var course_id = $('#select_course').val();
+                var acad_yr = $('#select_acadyr2').val();
+                var section = $('#select_year_sec').val();
+
                 $.ajax({
                 method:"POST",
                 url:"<?php echo base_url('Transaction/get_all_sections')?>",
@@ -509,7 +551,15 @@
                       $('#select_year_sec').append('<option value="'+temp_val +'">'+temp_text+ '</option>');
                     }
                 }
-               });
+                });
+
+                $('#tbl_section_loads').dataTable().fnClearTable();
+                $('#tbl_section_loads').dataTable().fnDraw();
+                $('#tbl_section_loads').dataTable().fnDestroy();
+                // if(course_id && acad_yr && section)
+                // {
+                //     loadSectionSubjects();
+                // }
 
             });
 
@@ -538,10 +588,12 @@
                     $('#lbl_fac_type').empty();
                     $('#lbl_spec').empty();
                     $('#lbl_load').empty();
+                    $('#lbl_load_limit').empty();
                     $('#lbl_fac_id').append('<b>FACULTY ID:</b>&nbsp;' + data[0][0]);
                     $('#lbl_fac_name').append('<b>FACULTY NAME:</b>&nbsp;' + data[0][1]);
                     $('#lbl_fac_type').append('<b>FACULTY TYPE:</b>&nbsp;' + data[0][2]);
                     $('#lbl_spec').append('<b>SPECIALIZATIONS:</b>&nbsp;' + data[0][3]);
+                    $('#lbl_load_limit').append('<b>TOTAL LOAD LIMIT:</b>&nbsp;' + data[0][5]);
                     $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data[0][4]);
                     viewFacultyLoadTbl(fac_id_1);
                     $('#openMod').trigger('click');
@@ -554,9 +606,23 @@
                 e.preventDefault();
                 var fac_id = $(this).data("id");
                 var subj_id = $('#select_subject').val();
+                var subj_desc = $('#select_subject option:selected').text();
                 var section_id = $('#select_section').val();
+                var section_desc = $('#select_section option:selected').text();
                 var acad_yr = $('#select_acadyr').val();
                 var sem = $('#select_sem').val();
+                var fac_name = "";
+
+                $.ajax({
+                    method:"POST",
+                    url:"<?php echo base_url('Maintenance/view_faculty')?>",
+                    data:{faculty_id:fac_id},
+                    dataType: 'json',
+                    success:function(data)
+                    {    
+                       fac_name = data[0][1] + ', ' + data[0][2] + ' ' + data[0][3];
+                    }
+                });
 
                 if(section_id)
                 {
@@ -566,21 +632,23 @@
                     data:{fac_id:fac_id, subj_id:subj_id, section_id:section_id, acad_yr:acad_yr, sem:sem},
                     success:function(data)
                     {    
-                       if(data == 'INSERTED'){
-                        swal("Success!", "Subject has been assigned", "success");
-                        $('#select_section').val('');
-                        viewSubjectsSection();
-                        loadSectionSubjects();
+                       if(data == 'INSERTED')
+                       {
+                            swal("Success!", subj_desc + " has been assigned to faculty " + fac_name + " and section " + section_desc + "\n" + section_desc + " is now removed from Available Sections.", "success");
+                            $('#select_section').val('');
+                            viewSubjectsSection();
+                            loadSectionSubjects();
                        }
-                       else{
-                        swal("Error!", "Refresh the page and try again", "error");
+                       else
+                       {
+                            swal("Error!", "Refresh the page and try again", "error");
                        }
                     }
                    });
                 }
                 else
                 {
-                    swal("Section is not selected!", "Select a section.", "error"); 
+                    swal("There is no section!", "Please select a section from Available Sections.", "error"); 
                 }
 
                 
@@ -591,9 +659,28 @@
                e.preventDefault();
                var id = $(this).data("id");
 
+               var fac_name = "";
+               var section_desc = "";
+               var subj_desc = "";
+
+               $.ajax({
+                    method:"POST",
+                    url:"<?php echo base_url('Transaction/get_subjmatch_details')?>",
+                    data:{subj_match:id},
+                    dataType: 'json',
+                    async: false,
+                    success:function(data)
+                    {    
+                        subj_desc = data[0][0];
+                        fac_name = data[0][1];
+                        section_desc = data[0][2];
+                        
+                    }
+                });
+
               swal({
                         title: "Are you sure?",
-                        text: "You're about to unassign this faculty to this section", 
+                        text: "You're about to unassign this " + fac_name + " from "+ section_desc + " and subject " + subj_desc, 
                         icon: "warning",
                         buttons: true,
                         dangerMode: true,
@@ -608,7 +695,7 @@
                       {
                         if(data == 'DELETED')
                         {
-                            swal("Deleted!", "Faculty has been unassigned.", "success");
+                            swal("Success!", fac_name + " has been unassigned from " + section_desc + " and subject " + subj_desc + ".\n" + section_desc + " is now added to Available Sections.", "success");
                             viewFacultyLoadTbl(fac_id_1);
                             viewSubjectsSection();
                             loadSectionSubjects();
@@ -616,17 +703,17 @@
 
                         if(data == 'NOT DELETED')
                         {
-                            swal("Not Deleted!", "Something blew up.", "error"); 
+                            swal("Error!", "Refresh the page and try again", "error");
                         }       
                       },
                       error: function (data) 
                       {
-                        swal("Not Deleted!", "Something blew up.", "error");
+                        swal("Error!", "Refresh the page and try again", "error");
                         alert(JSON.stringify(data));
                       }
                     });
                   } else {
-                    swal("Cancelled", "error");
+                    swal("Cancelled");
                   }
                 });
             });

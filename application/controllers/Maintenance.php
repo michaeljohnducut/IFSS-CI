@@ -167,7 +167,7 @@ class Maintenance extends CI_Controller {
 	{
 		if(isset($_POST['faculty_id']))
 		{
-			$id = $faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
+			$id = $this->security->xss_clean($this->input->post('faculty_id'));
 
 			echo json_encode($this->getdata_model->view_faculty($id));
 			exit();
@@ -911,6 +911,20 @@ class Maintenance extends CI_Controller {
 	public function edit_rooms()
 	{
 		echo ($this->savedata_model->edit_room($_POST));
+		exit();
+	}
+
+	public function show_total_section()
+	{
+		$q = $this->getdata_model->get_total_section();
+
+		foreach($q as $r)
+		{
+			$section[] = $r[0];
+			$acad_yr[] = $r[1];
+		}
+
+		echo json_encode(array($section, $acad_yr));
 		exit();
 	}	
 

@@ -698,39 +698,69 @@
                 {
                     var spec = $(this).attr('value');
                     var fac_id = $('#faculty_id_hid').val();
+                    var spec_desc_add = "";
+                    var spec_desc_removed = "";
 
                     if($(this).prop("checked"))
                     {
-                        event.preventDefault();  
+                        event.preventDefault();
+
+                        $.ajax({  
+                            url:"<?php echo base_url('Maintenance/view_specializations')?>", 
+                            method:"POST",  
+                            data:'spec_id='+spec,  
+                            dataType: "json",
+                            success:function(data){  
+                                 spec_desc_add = data[0][1];
+                            },
+                            error: function (data) {
+                                alert(JSON.stringify(data));
+                            }
+                       }); 
+
                         $.ajax({  
                             url:"<?php echo base_url('Maintenance/toggle_specs')?>",  
                             method:"POST",  
                             data:{fac_id:fac_id, spec:spec, act:"add"},
                             success:function(data)
                             {  
-                                // alert('INSERTED ' + subj_code);
+                                swal("Success!", spec_desc_add + " specialization is added", "success");
                             }, 
                             error: function(data)
                             {
-                               alerts('An error occured. Please reload the page and try again.');
+                               swal("Error!", "Refresh the page and try again", "error");
                             }
                         }); 
                     }
 
                     else
                     {
-                        event.preventDefault();  
+                        event.preventDefault(); 
+
+                        $.ajax({  
+                            url:"<?php echo base_url('Maintenance/view_specializations')?>", 
+                            method:"POST",  
+                            data:'spec_id='+spec,  
+                            dataType: "json",
+                            success:function(data){  
+                                 spec_desc_removed = data[0][1];
+                            },
+                            error: function (data) {
+                                alert(JSON.stringify(data));
+                            }
+                       }); 
+
                         $.ajax({  
                             url:"<?php echo base_url('Maintenance/toggle_specs')?>",  
                             method:"POST",  
                             data:{fac_id:fac_id, spec:spec, act:"delete"},
                             success:function(data)
                             {  
-                                // alert('DELETED ' + subj_code);
+                                swal("Success!", spec_desc_removed + " specialization is removed.", "success");
                             }, 
                             error: function(data)
                             {
-                               alerts('An error occured. Please reload the page and try again.');
+                               swal("Error!", "Refresh the page and try again", "error");
                             }
                         }); 
                     }

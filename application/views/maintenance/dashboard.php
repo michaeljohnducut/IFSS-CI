@@ -384,92 +384,126 @@
     <script src="<?php echo base_url(); ?>assets/js/morris-data.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function(){
-             
-            var ctx2 = document.getElementById("chart2").getContext("2d");
-    var data2 = {
-        labels: ["2018-2019", "2017-2018", "2016-2017", "April", "May", "June", "July"],
-        datasets: [
-            {
-                label: "My First dataset",
-                label: "My Second dataset",
-                fillColor: "rgba(180,193,215,0.8)",
-                strokeColor: "rgba(180,193,215,0.8)",
-                highlightFill: "rgba(180,193,215,1)",
-                highlightStroke: "rgba(180,193,215,1)",
-                data: [10, 30, 80, 61, 26, 75, 40]
-            },
-            // {
-            //     label: "My Second dataset",
-            //     fillColor: "rgba(180,193,215,0.8)",
-            //     strokeColor: "rgba(180,193,215,0.8)",
-            //     highlightFill: "rgba(180,193,215,1)",
-            //     highlightStroke: "rgba(180,193,215,1)",
-            //     data: [28, 48, 40, 19, 86, 27, 90]
-            // }
-        ]
-    };
-    
-    var chart2 = new Chart(ctx2).Bar(data2, {
-        scaleBeginAtZero : true,
-        scaleShowGridLines : true,
-        scaleGridLineColor : "rgba(0,0,0,.005)",
-        scaleGridLineWidth : 0,
-        scaleShowHorizontalLines: true,
-        scaleShowVerticalLines: true,
-        barShowStroke : true,
-        barStrokeWidth : 0,
-        tooltipCornerRadius: 2,
-        barDatasetSpacing : 3,
-        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-        responsive: true
-    });
-    var ctx3 = document.getElementById("chart3").getContext("2d");
-    var data3 = [
+
+        function show_total_sec()
         {
-            value: 300,
-            color:"#25a6f7",
-            highlight: "#25a6f7",
-            label: "Blue"
-        },
-        {
-            value: 50,
-            color: "#edf1f5",
-            highlight: "#edf1f5",
-            label: "Light"
-        },
-         {
-            value: 50,
-            color: "#b4c1d7",
-            highlight: "#b4c1d7",
-            label: "Dark"
-        },
-         {
-            value: 50,
-            color: "#b8edf0",
-            highlight: "#b8edf0",
-            label: "Megna"
-        },
-        {
-            value: 100,
-            color: "#fcc9ba",
-            highlight: "#fcc9ba",
-            label: "Orange"
+            $.ajax({
+               type:"POST",
+               url:"<?php echo base_url('Maintenance/show_total_section')?>",
+               dataType: 'json',
+               cache: false,
+               success: function(data)
+                {
+                    var ctx2 = document.getElementById("chart2").getContext("2d");
+                    var data2 = {
+                        labels: data[1],
+                        datasets: [
+                            {
+                                label: "My First dataset",
+                                fillColor: "rgba(180,193,215,0.8)",
+                                strokeColor: "rgba(180,193,215,0.8)",
+                                highlightFill: "rgba(180,193,215,1)",
+                                highlightStroke: "rgba(180,193,215,1)",
+                                data: data[0]
+                            }
+                        ]
+                    };
+
+                    var chart2 = new Chart(ctx2).Bar(data2, {
+                    scaleBeginAtZero : true,
+                    scaleShowGridLines : true,
+                    scaleGridLineColor : "rgba(0,0,0,.005)",
+                    scaleGridLineWidth : 0,
+                    scaleShowHorizontalLines: true,
+                    scaleShowVerticalLines: true,
+                    barShowStroke : true,
+                    barStrokeWidth : 0,
+                    tooltipCornerRadius: 2,
+                    barDatasetSpacing : 3,
+                    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+                    responsive: true
+                });
+                  
+                },
+                error: function(data)
+                {
+                    alerts('An error occured. Please reload the page and try again.','e');
+                }
+            });
         }
-    ];
-    
-    var myPieChart = new Chart(ctx3).Pie(data3,{
-        segmentShowStroke : true,
-        segmentStrokeColor : "#fff",
-        segmentStrokeWidth : 0,
-        animationSteps : 100,
-        tooltipCornerRadius: 0,
-        animationEasing : "easeOutBounce",
-        animateRotate : true,
-        animateScale : false,
-        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
-        responsive: true
-    });
+
+        function show_total_faculty_pertype()
+        {
+            $.ajax({
+               type:"POST",
+               url:"<?php echo base_url('Maintenance/show_total_section')?>",
+               dataType: 'json',
+               cache: false,
+               success: function(data)
+                {
+                    var ctx3 = document.getElementById("chart3").getContext("2d");
+                    var data3 = [
+                        {
+                            value: 300,
+                            color:"#25a6f7",
+                            highlight: "#25a6f7",
+                            label: "Blue"
+                        },
+                        {
+                            value: 50,
+                            color: "#edf1f5",
+                            highlight: "#edf1f5",
+                            label: "Light"
+                        },
+                         {
+                            value: 50,
+                            color: "#b4c1d7",
+                            highlight: "#b4c1d7",
+                            label: "Dark"
+                        },
+                         {
+                            value: 50,
+                            color: "#b8edf0",
+                            highlight: "#b8edf0",
+                            label: "Megna"
+                        },
+                        {
+                            value: 100,
+                            color: "#fcc9ba",
+                            highlight: "#fcc9ba",
+                            label: "Orange"
+                        }
+                    ];
+                    
+                    var myPieChart = new Chart(ctx3).Pie(data3,{
+                        segmentShowStroke : true,
+                        segmentStrokeColor : "#fff",
+                        segmentStrokeWidth : 0,
+                        animationSteps : 100,
+                        tooltipCornerRadius: 0,
+                        animationEasing : "easeOutBounce",
+                        animateRotate : true,
+                        animateScale : false,
+                        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                        responsive: true
+                    });
+                  
+                },
+                error: function(data)
+                {
+                    alerts('An error occured. Please reload the page and try again.','e');
+                }
+
+            });
+        }
+
+        $(document).ready(function()
+        {
+            show_total_sec();
+
+            show_total_faculty_pertype();
+
+
      var ctx4 = document.getElementById("chart4").getContext("2d");
     var data4 = [
         {

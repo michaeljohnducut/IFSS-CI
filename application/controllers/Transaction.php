@@ -393,7 +393,7 @@ class Transaction extends CI_Controller
 	}
 
 	public function time_pref_table(){
-		$output = $this->getdata_model->get_pref_time();
+		$output = $this->getdata_model->get_pref_time($_POST);
 
 		$response = array(
 			'aaData' => $output,
@@ -517,6 +517,17 @@ class Transaction extends CI_Controller
 		);
 		echo json_encode($response);
 		exit();
+	}
+
+	public function get_subjmatch_details()
+	{
+		if(isset($_POST['subj_match']))
+		{
+			$id = $this->security->xss_clean($this->input->post('subj_match'));
+
+			echo json_encode($this->getdata_model->get_subjmatch_details($id));
+			exit();
+		}
 	}
 
 	public function delete_match_data()

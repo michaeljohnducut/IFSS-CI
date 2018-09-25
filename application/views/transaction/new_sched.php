@@ -3502,7 +3502,7 @@
 
                             if(global_total_hrs > 6 && global_total_hrs <= 18)
                             { 
-                                alert(yes);
+                                alert(x);
                                 load_type = 'PT';
                                 day = global_pref_day[day_temp][0];
 
@@ -3572,29 +3572,32 @@
                 //PART-TIME CONTROLLER
                 if(global_factype == 4 || global_factype == 5)
                 {
-                    if(global_labhour == 0)
+                    while(x < global_num_loads)
                     {
-                        if(global_total_hrs < 12 || global_total_hrs == null)
+                        if(global_labhour == 0)
                         {
-                            load_type = 'PT';
+                            if(global_total_hrs < 12 || global_total_hrs == null)
+                            {
+                                load_type = 'PT';
+                            }
+
+                            if(global_total_hrs >= 12)
+                            {
+                                load_type = 'TS';
+                            }
                         }
 
-                        if(global_total_hrs >= 12)
+                        if(global_labhour == 3)
                         {
-                            load_type = 'TS';
-                        }
-                    }
+                            if(global_total_hrs < 12 || global_total_hrs == null)
+                            {
+                                load_type = 'PT';
+                            }
 
-                    if(global_labhour == 3)
-                    {
-                        if(global_total_hrs < 12 || global_total_hrs == null)
-                        {
-                            load_type = 'PT';
-                        }
-
-                        if(global_total_hrs >= 12)
-                        {
-                            load_type = 'TS';
+                            if(global_total_hrs >= 12)
+                            {
+                                load_type = 'TS';
+                            }
                         }
                     }
 

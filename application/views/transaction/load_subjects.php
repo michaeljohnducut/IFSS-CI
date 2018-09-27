@@ -102,6 +102,7 @@
                                         </div>
                                      </div> 
                                 </div>
+                                <input type="hidden" id="limit" name="limit"/>
                                 
 
 
@@ -284,7 +285,9 @@
                                 <!-- /.modal-dialog -->
     </div>
 
-   
+   <div class="ajax-loader">
+        <img src="<?php echo base_url(); ?>assets/images/loader.gif" class="img-responsive" />
+    </div>
 
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
@@ -569,36 +572,51 @@
 
             //8-20 UPDATE
             var fac_id_1;
+            var statement = "";
 
             $(document).on('click', '#btn_prof_load', function(e){
                 e.preventDefault();
                 fac_id_1 = $(this).data("id");
                 var acad_yr = $('#select_acadyr').val();
                 var sem = $('#select_sem').val();
+                
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/get_consec')?>",  
+                    method:"POST",  
+                    data:{faculty_id:fac_id_1},
+                    async: false,
+                    success:function(data)
+                    {  
+                        statement = data;
+                    },
+                    error: function (data) {
+                        alert(JSON.stringify(data));
+                    }
+                }); 
 
                 $.ajax({
-                method:"POST",
-                url:"<?php echo base_url('Transaction/get_faculty_specs')?>",
-                dataType: "json",
-                data:{fac_id:fac_id_1, acad_yr:acad_yr, sem:sem},
-                success:function(data)
-                {    
-                    $('#lbl_fac_id').empty();
-                    $('#lbl_fac_name').empty();
-                    $('#lbl_fac_type').empty();
-                    $('#lbl_spec').empty();
-                    $('#lbl_load').empty();
-                    $('#lbl_load_limit').empty();
-                    $('#lbl_fac_id').append('<b>FACULTY ID:</b>&nbsp;' + data[0][0]);
-                    $('#lbl_fac_name').append('<b>FACULTY NAME:</b>&nbsp;' + data[0][1]);
-                    $('#lbl_fac_type').append('<b>FACULTY TYPE:</b>&nbsp;' + data[0][2]);
-                    $('#lbl_spec').append('<b>SPECIALIZATIONS:</b>&nbsp;' + data[0][3]);
-                    $('#lbl_load_limit').append('<b>TOTAL LOAD LIMIT:</b>&nbsp;' + data[0][5]);
-                    $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data[0][4]);
-                    viewFacultyLoadTbl(fac_id_1);
-                    $('#openMod').trigger('click');
-                }
-               });
+                    method:"POST",
+                    url:"<?php echo base_url('Transaction/get_faculty_specs')?>",
+                    dataType: "json",
+                    data:{fac_id:fac_id_1, acad_yr:acad_yr, sem:sem, eval:statement},
+                    success:function(data)
+                    {    
+                        $('#lbl_fac_id').empty();
+                        $('#lbl_fac_name').empty();
+                        $('#lbl_fac_type').empty();
+                        $('#lbl_spec').empty();
+                        $('#lbl_load').empty();
+                        $('#lbl_load_limit').empty();
+                        $('#lbl_fac_id').append('<b>FACULTY ID:</b>&nbsp;' + data[0][0]);
+                        $('#lbl_fac_name').append('<b>FACULTY NAME:</b>&nbsp;' + data[0][1]);
+                        $('#lbl_fac_type').append('<b>FACULTY TYPE:</b>&nbsp;' + data[0][2]);
+                        $('#lbl_spec').append('<b>SPECIALIZATIONS:</b>&nbsp;' + data[0][3]);
+                        $('#lbl_load_limit').append('<b>TOTAL LOAD LIMIT:</b>&nbsp;' + data[0][5]);
+                        $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data[0][4]);
+                        viewFacultyLoadTbl(fac_id_1);
+                        $('#openMod').trigger('click');
+                    }
+                });
             });
 
             $(document).on('click', '#btn_assign', function(e)
@@ -612,11 +630,13 @@
                 var acad_yr = $('#select_acadyr').val();
                 var sem = $('#select_sem').val();
                 var fac_name = "";
+                var statement2 = "";
 
                 $.ajax({
                     method:"POST",
                     url:"<?php echo base_url('Maintenance/view_faculty')?>",
                     data:{faculty_id:fac_id},
+                    async: false,
                     dataType: 'json',
                     success:function(data)
                     {    
@@ -626,10 +646,41 @@
 
                 if(section_id)
                 {
+                    $.ajax({  
+                        url:"<?php echo base_url('Transaction/get_consec')?>",  
+                        method:"POST",  
+                        async: false,
+                        data:{faculty_id:fac_id},
+                        success:function(data)
+                        {  
+                            statement2 = data;
+                        },
+                        error: function (data) {
+                            alert(JSON.stringify(data));
+                        }
+                    }); 
+
+                    $.ajax({
+                        method:"POST",
+                        url:"<?php echo base_url('Transaction/get_faculty_specs')?>",
+                        dataType: "json",
+                        async:false,
+                        data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem, eval:statement2},
+                        success:function(data)
+                        {    
+                            $('#limit').val(data[0][5]);
+                        },
+                        error: function (data) {
+                            alert(JSON.stringify(data));
+                        }
+                    });
+
+                    $('.ajax-loader').css("visibility", "visible");
                     $.ajax({
                     method:"POST",
                     url:"<?php echo base_url('Transaction/add_subj_match')?>",
-                    data:{fac_id:fac_id, subj_id:subj_id, section_id:section_id, acad_yr:acad_yr, sem:sem},
+                    data:{fac_id:fac_id, subj_id:subj_id, section_id:section_id, acad_yr:acad_yr, sem:sem, limit:$('#limit').val()},
+                    async: false,
                     success:function(data)
                     {    
                        if(data == 'INSERTED')
@@ -638,11 +689,24 @@
                             $('#select_section').val('');
                             viewSubjectsSection();
                             loadSectionSubjects();
+
                        }
-                       else
+                       if(data == 'OVERLOAD')
                        {
-                            swal("Error!", "Refresh the page and try again", "error");
+                            swal("Overload!", "You can't assign " + subj_desc + " to faculty " + fac_name + " because it will overload the load limit.\n Please choose another faculty.", "error");
+                            loadSectionSubjects();
                        }
+                       if(data == 'EQUAL')
+                       {
+                            swal("Equal!", "You can't assign anymore to faculty " + fac_name + " because it reached the load limit.\n Please choose another faculty.", "error");
+                            loadSectionSubjects();
+                       }
+                    },
+                    error: function (data) {
+                        alert(JSON.stringify(data));
+                    },
+                    complete: function(){
+                        $('.ajax-loader').css("visibility", "hidden");
                     }
                    });
                 }
@@ -650,15 +714,12 @@
                 {
                     swal("There is no section!", "Please select a section from Available Sections.", "error"); 
                 }
-
-                
             });
 
             $(document).on('click', '#delete_match_data', function(e)
             {  
                e.preventDefault();
                var id = $(this).data("id");
-
                var fac_name = "";
                var section_desc = "";
                var subj_desc = "";
@@ -686,22 +747,27 @@
                         dangerMode: true,
               })
                 .then((willApprove) => {
-                  if (willApprove) {
+                  if (willApprove) 
+                  {
                     $.ajax({   
                       url: "<?php echo base_url('Transaction/delete_match_data')?>",
                       method: "POST",
-                      data: 'match_id='+id,
+                      data: {match_id:id, fac_id:fac_id_1},
+                      dataType: 'json',
+                      cache: false,
                       success: function(data) 
                       {
-                        if(data == 'DELETED')
+                        if(data['result'] == 'DELETED')
                         {
                             swal("Success!", fac_name + " has been unassigned from " + section_desc + " and subject " + subj_desc + ".\n" + section_desc + " is now added to Available Sections.", "success");
                             viewFacultyLoadTbl(fac_id_1);
                             viewSubjectsSection();
                             loadSectionSubjects();
+                            $('#lbl_load').empty();
+                            $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data['total']);
                         }
 
-                        if(data == 'NOT DELETED')
+                        if(data['result'] == 'NOT DELETED')
                         {
                             swal("Error!", "Refresh the page and try again", "error");
                         }       
@@ -712,7 +778,9 @@
                         alert(JSON.stringify(data));
                       }
                     });
-                  } else {
+                  } 
+                  else 
+                  {
                     swal("Cancelled");
                   }
                 });

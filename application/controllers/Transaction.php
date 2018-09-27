@@ -174,7 +174,7 @@ class Transaction extends CI_Controller
 	}
 
 	public function get_consec()
-	{
+	{		
 		echo ($this->getdata_model->get_consec($_POST));
 		exit();
 	}
@@ -470,13 +470,13 @@ class Transaction extends CI_Controller
 	public function set_sections_to_subj(){
 		
 		echo json_encode($this->getdata_model->get_prof_subj($_POST));
-			exit();
+		exit();
 	}
 
 	public function get_faculty_specs(){
 
 		echo json_encode($this->getdata_model->get_faculty_specs($_POST));
-			exit();
+		exit();
 	}
 
 	public function add_subj_match()
@@ -534,7 +534,7 @@ class Transaction extends CI_Controller
 	{
 		if(isset($_POST['match_id']))
 		{
-			echo ($this->savedata_model->delete_match_data($_POST));
+			echo json_encode($this->savedata_model->delete_match_data($_POST));
 			exit();
 		}
 	}

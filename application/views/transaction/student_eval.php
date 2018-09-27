@@ -436,6 +436,7 @@
             $("#modalShowConsec").on("hidden.bs.modal", function () {
                 $('#sel_faculty').val('').trigger('change');
                 $('#label_consec').hide();
+                $('#label_consec').text('');
                 $('#show-consec-table').hide();
                 $('#show-consec-table').dataTable().fnClearTable();
                 $('#show-consec-table').dataTable().fnDraw();
@@ -488,12 +489,14 @@
                 {  
                     if(data == 'CONSECUTIVE')
                     {
-                        $('#label_consec').html('WITH CONSECUTIVE SATISFACTORY RATING');
+                        $('#label_consec').show();
+                        $('#label_consec').text('WITH CONSECUTIVE SATISFACTORY RATING');
                         loadsummary(id);
                     }
                     if(data == 'NONE')
                     {
-                        $('#label_consec').html('NO CONSECUTIVE SATISFACTORY RATING');
+                        $('#label_consec').show();
+                        $('#label_consec').text('NO CONSECUTIVE SATISFACTORY RATING');
                         loadsummary(id);
                     }
                 },

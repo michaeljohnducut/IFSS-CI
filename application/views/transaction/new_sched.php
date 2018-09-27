@@ -186,7 +186,7 @@
                             </div>
                             <div class="col-md-2" id="ts_box">
                                 <div class="white-box text-center legend-purple">
-                                    <h4 class="text-white">Temporary Subs.</h4>
+                                    <h4 class="text-white">Temp. Sub.</h4>
                                     <!-- <p class="text-white">Curriculum year used</p> -->
                                 </div>
                             </div>
@@ -1037,6 +1037,7 @@
       function resetPlotForm(){
         $('.plot-green').removeClass().addClass('btn plot-regular');
         $('.plot-blue').removeClass().addClass('btn plot-regular');
+        $('.plot-orange').removeClass().addClass('btn plot-regular');
         $('.plot-darkBlue').removeClass().addClass('btn plot-regular')
         $('.plot-regular').text('');
       }
@@ -1827,8 +1828,99 @@
                });
       }
 
+      function generateAdviseTime(){
+
+        var day_temp = 1; 
+        var day_id;
+        var count_at = 0; 
+        var start_time; 
+        var first_id; 
+        var second_id;
+        var val_temp; 
+        var day_loop; 
+        var hour;
+
+        for(day_loop = 1; day_loop <= 5; day_loop++)
+        {
+            switch(day_loop)
+            {
+                case 1: day_id = '_mon';
+                        break;
+
+                case 2: day_id = '_tue';
+                        break;
+
+                case 3: day_id = '_wed';
+                        break;
+
+                case 4: day_id = '_thu';
+                        break;
+
+                 default: day_id = '_fri';
+            }
+
+            for(hour = 8; hour < 18; hour ++)
+            {   
+                var first_val = '0' + hour + ':00:00' + day_id; 
+                var second_val = '0' + hour + ':30:00' + day_id; 
+                if(hour > 9)
+                {
+                    first_val = hour + ':00:00' + day_id; 
+                    second_val = hour + ':30:00' + day_id; 
+                }
+
+                if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-regular'))
+                {
+                    if(hour != 12)
+                    {
+                        if(count_at < 20)
+                        {
+                            $('button[type="button"][value="' + first_val + '"]').addClass('plot-orange');
+                             
+                             count_at += 1;
+                        }
+                    }
+
+                    var pre_time = hour - 1; 
+                    var pre_val = '0' + pre_time + ':30:00' + day_id;
+                    if(pre_time > 9)
+                        pre_val = pre_time + ':30:00' + day_id;
+
+                    if($('button[type="button"][value="' + pre_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-purple'))
+                    {
+                        $('button[type="button"][value="' + first_val + '"]').text('Advising Time');
+                    }
+                }
+
+                if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-regular'))
+                {
+                    if(hour != 12)
+                    {
+                        if(count_at < 20)
+                        {
+                            $('button[type="button"][value="' + second_val + '"]').addClass('plot-orange');
+                            count_at += 1;
+                        }
+                    }
+
+                    var pre_time = hour
+                    var pre_val = '0' + pre_time + ':00:00' + day_id;
+                    if(hour > 9)
+                        pre_val = hour + ':00:00' + day_id;
+                    if($('button[type="button"][value="' + pre_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-purple'))
+                    {
+                        if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-orange'))
+                        {
+                            $('button[type="button"][value="' + second_val + '"]').text('Advising Time');
+                        }
+                    }
+                }
+            }
+        }
+      }
+
       function viewSubjDetails(subj_code){
-            $.ajax({  
+            $.ajax({ 
                 url:"<?php echo base_url('Transaction/view_subject')?>", 
                 method:"POST", 
                 data:{subj_code:subj_code}, 
@@ -3827,6 +3919,13 @@
 
                 }
             
+        }
+
+
+        //IF ADVISE TIME IS CHECKED
+        if($('#chk_advisetime').prop('checked'))
+        {
+            generateAdviseTime();
         }
 
     });

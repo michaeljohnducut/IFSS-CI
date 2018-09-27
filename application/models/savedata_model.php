@@ -2158,8 +2158,43 @@ class savedata_model extends CI_Model
 		$section_id = $this->security->xss_clean($this->input->post('section_id'));
 		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
 		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$limit = $this->security->xss_clean($this->input->post('limit'));
+		$subj_hrs = '';
+		$total_load_hrs = '';
+		$temp_total_hrs = '';
 
-		if($this->db->query("INSERT INTO `subject_match`(`acad_yr`, `sem`, `subj_id`, `section`, `faculty_id`) VALUES ('$acad_yr','$sem', $subj_id, $section_id, $fac_id)"))
+		$query2 = $this->db->select("SUM(lec_hrs + lab_hrs) AS hrs")
+							->where('subj_id', $subj_id)
+							->get('subject');
+
+		foreach ($query2->result() as $s) 
+		{
+			$subj_hrs = $s->hrs;
+		}
+
+		$query3 = $this->db->select("SUM(lec_hrs + lab_hrs) AS total_load_hrs")
+							->join('subject s ', 'sm.subj_id = s.subj_id')
+							->where('faculty_id', $fac_id)
+							->get('subject_match sm');
+
+		foreach ($query3->result() as $r) 
+		{
+			$total_load_hrs = $r->total_load_hrs;
+		}
+
+		$temp_total_hrs = $subj_hrs + $total_load_hrs;
+
+		if($total_load_hrs == $limit)
+		{
+			$output = 'EQUAL';
+		}
+		else if($temp_total_hrs > $limit)
+		{
+			$output = 'OVERLOAD';
+		}
+		else
+		{
+			if($this->db->query("INSERT INTO `subject_match`(`acad_yr`, `sem`, `subj_id`, `section`, `faculty_id`) VALUES ('$acad_yr','$sem', $subj_id, $section_id, $fac_id)"))
 			{
 				$output = 'INSERTED';
 			}
@@ -2167,25 +2202,39 @@ class savedata_model extends CI_Model
 			{
 				$output = 'NOT INSERTED';
 			}
-			
+		}
+
 		return $output;
 	}
 
 	public function delete_match_data()
 	{
-		$output = '';
+		$output = array();
 
 		$id = $this->security->xss_clean($this->input->post('match_id'));
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 
 		if($this->db->where('subj_match_id', $id)
 					->delete('subject_match'))
 		{
-			$output = 'DELETED';
+			$result = 'DELETED';
 		}
 		else
 		{
-			$output = 'NOT DELETED';
+			$result = 'NOT DELETED';
 		}
+
+		$query2 = $this->db->select("SUM(lec_hrs + lab_hrs) AS total_load_hrs")
+							->join('subject s ', 'sm.subj_id = s.subj_id')
+							->where('faculty_id', $fac_id)
+							->get('subject_match sm');
+
+		foreach ($query2->result() as $s) 
+		{
+			$total_load_hrs = $s->total_load_hrs;
+		}
+
+		$output = array('result' => $result, 'total' => $total_load_hrs);
 
 		return $output;
 	}

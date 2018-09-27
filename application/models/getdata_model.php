@@ -992,27 +992,36 @@ class getdata_model extends CI_Model{
 				->order_by('acad_yr DESC, sem DESC')
                 ->get('evaluation');
 
-		foreach($query->result() as $r)
-		{
-			if($r->rating_desc == $trackRating)
-			{
-			  $ctr++;
-			}
-			else
-			{
-			  $ctr = 0;
-			//$trackRating = $r->rating_desc;
-			}
+        $number_filter_row = $query->num_rows();
 
-			if($ctr >= 3)
+        if($number_filter_row == 0)
+        {
+        	$statement = 'NONE';	
+        }
+        else
+        {
+        	foreach($query->result() as $r)
 			{
-				$statement = 'CONSECUTIVE';
+				if($r->rating_desc == $trackRating)
+				{
+				  $ctr++;
+				}
+				else
+				{
+				  $ctr = 0;
+				//$trackRating = $r->rating_desc;
+				}
+
+				if($ctr >= 3)
+				{
+					$statement = 'CONSECUTIVE';
+				}
+				else
+				{
+					$statement = 'NONE';
+				}	
 			}
-			else
-			{
-				$statement = 'NONE';
-			}	
-		}
+        }
 
 		return $statement;
 	}
@@ -1795,6 +1804,7 @@ FROM subject_match sm
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
 		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$statement = $this->security->xss_clean($this->input->post('eval'));
 		$result = array();
 		$account_id = '';
 		$fac_name = '';
@@ -1803,7 +1813,6 @@ FROM subject_match sm
 		$spec = '';
 		$total_load_hrs = '';
 		$total_limit = '';
-		$statement = '';
 		$total_limit_final = '';
 
 		$query = $this->db->select("a.account_id, CONCAT(f.lname, ', ', f.fname, ' ',  f.mname) AS 'fac_name', ft.fac_type_desc, ft.fac_type_id, GROUP_CONCAT(DISTINCT(s.spec_desc) SEPARATOR '<br>') AS 'spec'")
@@ -1845,50 +1854,19 @@ FROM subject_match sm
 			($s->total_load_hrs == '')?$total_load_hrs = 0:$total_load_hrs = $s->total_load_hrs;
 		}
 
-		$trackRating = "SATISFACTORY";
-		$ctr = 0;
-
-		$query4 = $this->db->select('acad_yr, sem, faculty_id, rating, rating_desc')
-				->where('faculty_id', $fac_id)
-				->order_by('acad_yr DESC, sem DESC')
-                ->get('evaluation');
-
-		foreach($query4->result() as $r)
+		if($statement == 'CONSECUTIVE' && ($fac_type_id == 1 || $fac_type_id == 5 || $fac_type_id == 3))
 		{
-			if($r->rating_desc == $trackRating)
-			{
-			  $ctr++;
-			}
-			else
-			{
-			  $ctr = 0;
-			}
-
-			if($ctr >= 3)
-			{
-				$statement = 'CONSECUTIVE';
-			}
-			else
-			{
-				$statement = 'NONE';
-			}	
-		}
-
-		//NOT FINAL AAYUSIN KO PA TO MAYA PAGUWI 
-		if($statement == 'CONSECUTIVE' && ($fac_type_id == 1 || $fac_type_id == 5))
-		{
-			$total_limit_final == $total_limit - 6;
+			$total_limit_final = $total_limit - 6;
 		}
 		else
 		{
-			$total_limit_final == $total_limit;
+			$total_limit_final = $total_limit;
 		}
 
 		//3 Consecutive
-		//Regular Faculty -  6 PT NA LANG
+		//Regular Faculty and Designee -  6 PT NA LANG
 		// Part time - Full Time Faculty - 6 PT NA LANG
 		// Part time - Full Time Faculty - No TS na
-
 
 		$result[] = array(
 					$account_id,

@@ -724,7 +724,7 @@
                             data:{fac_id:fac_id, spec:spec, act:"add"},
                             success:function(data)
                             {  
-                                swal("Success!", spec_desc_add + " specialization is added", "success");
+                                swal("Success!", "Specialization is added", "success");
                             }, 
                             error: function(data)
                             {
@@ -756,7 +756,7 @@
                             data:{fac_id:fac_id, spec:spec, act:"delete"},
                             success:function(data)
                             {  
-                                swal("Success!", spec_desc_removed + " specialization is removed.", "success");
+                                swal("Success!", "Specialization is removed.", "success");
                             }, 
                             error: function(data)
                             {

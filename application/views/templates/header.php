@@ -81,6 +81,11 @@
             color: white;
         }
 
+        .plot-orange{
+            background-color: #e67e22; 
+            color: white;
+        }
+
         .legend-red{
             background-color: #e74c3c; 
             color: white;

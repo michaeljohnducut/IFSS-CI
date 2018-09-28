@@ -686,6 +686,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function add_advising_time()
+	{
+		echo ($this->savedata_model->add_advising_time($_POST));
+		exit();
+	}
+
 } 
 
 ?>

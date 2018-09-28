@@ -186,7 +186,7 @@
                             </div>
                             <div class="col-md-2" id="ts_box">
                                 <div class="white-box text-center legend-purple">
-                                    <h4 class="text-white">Temporary Subs.</h4>
+                                    <h4 class="text-white">Temp. Sub.</h4>
                                     <!-- <p class="text-white">Curriculum year used</p> -->
                                 </div>
                             </div>
@@ -1037,6 +1037,7 @@
       function resetPlotForm(){
         $('.plot-green').removeClass().addClass('btn plot-regular');
         $('.plot-blue').removeClass().addClass('btn plot-regular');
+        $('.plot-orange').removeClass().addClass('btn plot-regular');
         $('.plot-darkBlue').removeClass().addClass('btn plot-regular')
         $('.plot-regular').text('');
       }
@@ -1827,8 +1828,253 @@
                });
       }
 
+      function generateAdviseTime(){
+
+        var day_temp = 1; 
+        var day; 
+        var day_id;
+        var count_at = 0; 
+        var start_time; 
+        var first_id; 
+        var second_id;
+        var val_temp; 
+        var day_loop; 
+        var hour;
+
+        for(day_loop = 1; day_loop <= 5; day_loop++)
+        {
+            switch(day_loop)
+            {
+                case 1: day_id = '_mon';
+                        day = 'Monday';
+                        break;
+
+                case 2: day_id = '_tue';
+                        day = 'Tuesday';
+                        break;
+
+                case 3: day_id = '_wed';
+                        day = 'Wednesday';
+                        break;
+
+                case 4: day_id = '_thu';
+                        day = 'Thursday';
+                        break;
+
+                 default:   day_id = '_fri';
+                            day = 'Friday';
+            }
+
+            for(hour = 8; hour < 18; hour ++)
+            {   
+                var first_val = '0' + hour + ':00:00' + day_id; 
+                var second_val = '0' + hour + ':30:00' + day_id; 
+                if(hour > 9)
+                {
+                    first_val = hour + ':00:00' + day_id; 
+                    second_val = hour + ':30:00' + day_id; 
+                }
+
+                if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-regular'))
+                {
+                    if(hour != 12)
+                    {
+                        if(count_at < 20)
+                        {
+                            $('button[type="button"][value="' + first_val + '"]').removeClass('plot-regular').addClass('plot-orange');
+                             
+                             count_at += 1;
+                        }
+                    }
+
+                    // var pre_time = hour - 1; 
+                    // var pre_val = '0' + pre_time + ':30:00' + day_id;
+                    // if(pre_time > 9)
+                    //     pre_val = pre_time + ':30:00' + day_id;
+
+                    // if($('button[type="button"][value="' + pre_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-purple'))
+                    // {
+                    //     $('button[type="button"][value="' + first_val + '"]').text('Advising Time');
+                    // }
+                }
+
+                if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-regular'))
+                {
+                    if(hour != 12)
+                    {
+                        if(count_at < 20)
+                        {
+                            $('button[type="button"][value="' + second_val + '"]').removeClass('plot-regular').addClass('plot-orange');
+                            count_at += 1;
+                        }
+                    }
+
+                    // var pre_time = hour
+                    // var pre_val = '0' + pre_time + ':00:00' + day_id;
+                    // if(hour > 9)
+                    //     pre_val = hour + ':00:00' + day_id;
+                    // if($('button[type="button"][value="' + pre_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-purple'))
+                    // {
+                    //     if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-orange'))
+                    //     {
+                    //         $('button[type="button"][value="' + second_val + '"]').text('Advising Time');
+                    //     }
+                    // }
+                }
+            }
+        }
+      }
+
+      function saveAdviseTime()
+      {
+        var day_temp = 1; 
+        var day; 
+        var day_id;
+        var count_at = 0; 
+        var start_time; 
+        var end_time;
+        var first_id; 
+        var second_id;
+        var val_temp; 
+        var day_loop; 
+        var hour;
+        var bool_label;
+        var acad_yr = $('#sched_acad_year').val();
+        var fac_id = $('#sched_faculty').val();
+        var sem = $('#sched_sem').val();
+
+        for(day_loop = 1; day_loop <= 5; day_loop++)
+        {
+            switch(day_loop)
+            {
+                case 1: day_id = '_mon';
+                        day = 'Monday';
+                        break;
+
+                case 2: day_id = '_tue';
+                        day = 'Tuesday';
+                        break;
+
+                case 3: day_id = '_wed';
+                        day = 'Wednesday';
+                        break;
+
+                case 4: day_id = '_thu';
+                        day = 'Thursday';
+                        break;
+
+                 default:   day_id = '_fri';
+                            day = 'Friday';
+            }
+
+            for(hour = 8; hour < 18; hour ++)
+            {   
+                bool_label = true;
+                var first_val = '0' + hour + ':00:00' + day_id; 
+                var second_val = '0' + hour + ':30:00' + day_id; 
+                if(hour > 9)
+                {
+                    first_val = hour + ':00:00' + day_id; 
+                    second_val = hour + ':30:00' + day_id; 
+                }
+
+                var pre_time = hour - 1; 
+                var pre_val = '0' + pre_time + ':30:00' + day_id;
+                if(pre_time > 9)
+                    pre_val = pre_time + ':30:00' + day_id;
+
+                if($('button[type="button"][value="' + pre_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-regular'))
+                {
+                    if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-orange'))
+                    {
+                        $('button[type="button"][value="' + first_val + '"]').text('Advising Time');
+                        bool_label = false;
+                        start_time = '0' + hour + ':00';
+                        if(hour > 9)
+                            start_time = hour + ':00';
+
+                    }
+                }
+
+                var pre_time_b = hour
+                var pre_val_b = '0' + pre_time_b + ':00:00' + day_id;
+                if(hour > 9)
+                    pre_val_b = hour + ':00:00' + day_id;
+                if($('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-regular'))
+                {
+                    if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-orange') && bool_label == true)
+                    {
+                        $('button[type="button"][value="' + second_val + '"]').text('Advising Time');
+                        start_time = '0' + hour + ':30';
+                        if(hour > 9)
+                            start_time = hour + ':30';
+                    }
+                }
+
+                //GETTING THE END TIME
+                var post_time = hour;
+                var bool_last = true;
+                var post_val = '0' + post_time + ':30:00' + day_id;
+                if(hour > 9)
+                    post_val = post_time + ':30:00' + day_id;
+                if($('button[type="button"][value="' + post_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + post_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + post_val + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + post_val + '"]').hasClass('plot-regular'))
+                {
+                    if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-orange'))
+                    {
+                       end_time = '0' + post_time + ':30';
+                        if(hour > 9)
+                            end_time = post_time + ':30';
+                        bool_last = false;
+
+                        $.ajax({  
+                            url:"<?php echo base_url('Transaction/add_advising_time')?>", 
+                            method:"POST", 
+                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'AT'}, 
+                            dataType: "json",
+                            success:function(data){
+                                alert(data);
+                            },  
+                            error: function (data) {
+                            alert(JSON.stringify(data));
+                            }
+                       });
+                    }
+                }
+
+                var post_time_b = hour + 1;
+                var post_val_b = '0' + post_time_b + ':00:00' + day_id;
+                if(hour > 9)
+                    post_val_b = post_time_b + ':00:00' + day_id;
+                if($('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-regular'))
+                {
+                    if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-orange') && bool_last == true)
+                    {
+                        end_time = '0' + post_time_b + ':00';
+                        if(hour > 9)
+                            end_time = post_time_b + ':00';
+
+                        $.ajax({  
+                            url:"<?php echo base_url('Transaction/add_advising_time')?>", 
+                            method:"POST", 
+                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'AT'}, 
+                            dataType: "json",
+                            success:function(data){
+                                alert(data);
+                            },  
+                            error: function (data) {
+                            alert(JSON.stringify(data));
+                            }
+                       });
+
+                    }
+                }
+                
+            }
+        }
+      }
+
       function viewSubjDetails(subj_code){
-            $.ajax({  
+            $.ajax({ 
                 url:"<?php echo base_url('Transaction/view_subject')?>", 
                 method:"POST", 
                 data:{subj_code:subj_code}, 
@@ -1959,21 +2205,21 @@
             var temp_load = load_type;
             $('.ajax-loader').css("visibility", "visible");
              $.ajax({  
-                        url:"<?php echo base_url('Transaction/add_generated_sched')?>",  
-                        type:"POST",  
-                        data: {room_id:room_id, temp_start:temp_start, temp_end:temp_end, temp_day:temp_day, temp_acadyr:acad_year, temp_sem:sem, match_id:match_id, temp_load:temp_load },
-                        success:function(data)
-                        {  
-                           reflectSchedTable();
-                           loadSchedTable();
-                           getFacultyLoads();
-                           getUnitsUsed();
+                    url:"<?php echo base_url('Transaction/add_generated_sched')?>",  
+                    type:"POST",  
+                    data: {room_id:room_id, temp_start:temp_start, temp_end:temp_end, temp_day:temp_day, temp_acadyr:acad_year, temp_sem:sem, match_id:match_id, temp_load:temp_load },
+                    success:function(data)
+                    {  
+                       reflectSchedTable();
+                       loadSchedTable();
+                       getFacultyLoads();
+                       getUnitsUsed();
 
-                        },
-                         error: function (data) {
-                                alert(JSON.stringify(data));
-                        },
-                        });  
+                    },
+                     error: function (data) {
+                            alert(JSON.stringify(data));
+                    },
+                    });  
         }
 
 
@@ -3827,6 +4073,14 @@
 
                 }
             
+        }
+
+
+        //IF ADVISE TIME IS CHECKED
+        if($('#chk_advisetime').prop('checked'))
+        {
+            generateAdviseTime();
+            saveAdviseTime();
         }
 
     });

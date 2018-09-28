@@ -2428,5 +2428,30 @@ class savedata_model extends CI_Model
 			
 		return $output;
 	}
+
+	public function add_advising_time(){
+
+		$output = "";
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end_time = $this->security->xss_clean($this->input->post('end_time'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$load_type = $this->security->xss_clean($this->input->post('load_type'));
+
+		if($this->db->query("INSERT INTO `other_time_sched`(`time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type`) VALUES ('$start_time', '$end_time', '$day', '$acad_yr', '$sem', $fac_id, '$load_type')"))
+			{
+				$output = 'INSERTED';
+			}
+			else
+			{
+				$output = 'NOT INSERTED';
+			}
+
+
+		return $output;
+
+	}
 }
 ?>

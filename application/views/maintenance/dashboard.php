@@ -16,7 +16,7 @@
                             <div class="row row-in">
                                 <div class="col-lg-3 col-sm-6 row-in-br">
                                     <label class="control-label">Select Academic Year</label>
-                                     <select class="form-control" id="selectAcadYr">
+                                     <select class="form-control" id="selectAcadYr1">
                                         <option value="">-Academic Year-</option>
                                         <?php 
                                             for ($i = date("Y"); $i > 1900; $i-- ){
@@ -26,7 +26,7 @@
                                       </select>
                                       <br>
                                       <label class="control-label">Select Semester</label>
-                                     <select class="form-control" id="selectAcadYr">
+                                     <select class="form-control" id="selectSem1">
                                         <option value="">--Semester--</option>
                                         <option value="1st">First</option>
                                         <option value="2nd">Second</option>
@@ -102,10 +102,13 @@
                                         <a data-toggle="tab" class="nav-link" href="#regularFulltimeTab" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Regular Full-Time</span> </a>
                                     </li>
                                     <li class="tab nav-item" style="background-color:#fff; border:0px;">
-                                        <a data-toggle="tab" class="nav-link" href="#regularParttimeTab" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Regular Part-Time</span> </a>
+                                        <a data-toggle="tab" class="nav-link" href="#regularDesigneeTab" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Regular Designee</span> </a>
                                     </li>
                                     <li class="tab nav-item">
-                                        <a data-toggle="tab" aria-expanded="false" class="nav-link" data-toggle="tab" href="#vmessages3"> <span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Regular-Designee</span> </a>
+                                        <a data-toggle="tab" aria-expanded="false" class="nav-link" data-toggle="tab" href="#vmessages3"> <span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Part Time - Full Time</span> </a>
+                                    </li>
+                                    <li class="tab nav-item">
+                                        <a data-toggle="tab" aria-expanded="false" class="nav-link" data-toggle="tab" href="#vmessages3"> <span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Part Time - Part Time</span> </a>
                                     </li>
                                 </ul>
                             <div class="tab-content">
@@ -152,7 +155,7 @@
                         </div>
                                <div class="clearfix"></div>
                                     </div>
-                                    <div id="regularParttimeTab" class="tab-pane">
+                                    <div id="regularDesigneeTab" class="tab-pane">
                                            <div class="white-box"style="padding-top:0%; padding-bottom:0%;">
                             <div class="steamline">
                                 <div class="sl-item">
@@ -246,7 +249,7 @@
             <div class="row">
                 <div class="col-md-6">
                                  <label class="control-label">Select Academic Year</label>
-                                     <select class="form-control" id="selectAcadYr">
+                                     <select class="form-control" id="selectAcadYr2">
                                         <option value="">-Academic Year-</option>
                                         <?php 
                                             for ($i = date("Y"); $i > 1900; $i-- ){
@@ -259,7 +262,7 @@
                 <div class="col-md-6">
                 
                                       <label class="control-label">Select Semester</label>
-                                     <select class="form-control" id="selectAcadYr">
+                                     <select class="form-control" id="selectSem2">
                                         <option value="">--Semester--</option>
                                         <option value="1st">First</option>
                                         <option value="2nd">Second</option>
@@ -269,15 +272,18 @@
                               </div>
              <hr style="border: 1px solid">
             <div>
-            <!--  <canvas id="chart1" height="120"></canvas> -->
-            
-                            <ul class="basic-list">
-                                <li>Regular Full Time <span class="pull-right label-danger label">21.8%</span></li>
-                                <li>Regular Designee <span class="pull-right label-success label">21.8%</span></li>
-                                <li>Part Time Full Time<span class="pull-right label-info label">21.8%</span></li>
-                                <li>Part Time Part Time <span class="pull-right label-warning label">21.8%</span></li>
-
-                            </ul>
+                <ul class="basic-list">
+                    <?php
+                        foreach($fac_type as $ft)
+                        {
+                            echo '<li>'.$ft[0].'<span class="pull-right label-info label" id="'.$ft[2].'"></span></li>';
+                        } 
+                    ?>
+                    <!-- <li>Regular Full Time <span class="pull-right label-danger label">21.8%</span></li>
+                    <li>Regular Designee <span class="pull-right label-success label">21.8%</span></li>
+                    <li>Part Time Full Time<span class="pull-right label-info label">21.8%</span></li>
+                    <li>Part Time Part Time <span class="pull-right label-warning label">21.8%</span></li> -->
+                </ul>
             </div>
         </div>
                 
@@ -287,7 +293,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="white-box text-center bg-info">
-                            <h1 class="text-white">2013</h1>
+                            <label id="curr_used"></label>
                             <p class="text-white">Curriculum year used</p>
                         </div>
                     </div>
@@ -295,21 +301,27 @@
                  <div class="row">
                     <div class="col-md-12">
                         <div class="white-box text-center bg-purple">
-                            <h1 class="text-white">2018-2019</h1>
+                            <h1 class="text-white">
+                                <?php
+                                    $year = date('Y');
+                                    (date('m') < 6) ? $year - 1 : $year;
+                                    echo $year.'-'.($year+1); 
+                                ?>
+                            </h1>
                             <p class="text-white">Academic Year</p>
                         </div>
                     </div>
                  </div>
-                                  <div class="row">
+                <div class="row">
                     <div class="col-md-12">
                         <div class="white-box">
-                         <h3 class="box-title">top 5 specializations</h3>
+                         <h3 class="box-title">Top 5 Specializations</h3>
                         <div>
                          <canvas id="chart4" height="255"></canvas>
                     </div>
                         </div>
                     </div>
-                 </div>
+                </div>
                 </div>
             </div>
 <!--2nd row  OF DASHBOARD-->
@@ -324,43 +336,32 @@
                 </div>
                 <div class="col-md-3">
                     <div class="white-box">
-                    <h3 class="box-title">total number of faculty members </h3>
-                    
-                      <!--    <label class="control-label">Select Academic Year</label>
-                                     <select class="form-control" id="selectAcadYr">
-                                        <option value="">--ACADEMIC YEAR--</option>
-                                        <?php 
-                                            for ($i = date("Y"); $i > 1900; $i-- ){
-                                                echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
-                                            }
-                                        ?>
-                                      </select>
-                                      <hr> -->
+                    <h3 class="box-title">Total Number of Faculty Members</h3>
                     <div>
                          <canvas id="chart3" height="270"></canvas>
                     </div>
                     <hr style="border: 1px solid; color: #EEF0F0;">
-                    <label class="control-label">Total: </label>
+                    <label class="control-label" id="total_fac"></label>
                 </div>
                 </div>
-                  <div class="col-md-3">
+                    <div class="col-md-3">
                     <div class="white-box">
                      <h3 class="box-title"> top 5 preferred teaching time </h3>
-                            <label class="control-label">Select Academic Year</label>
-                                     <select class="form-control" id="selectAcadYr">
-                                        <option value="">--ACADEMIC YEAR--</option>
-                                        <?php 
-                                            for ($i = date("Y"); $i > 1900; $i-- ){
-                                                echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
-                                            }
-                                        ?>
-                                      </select>
-                                      <hr>
+                        <label class="control-label">Select Academic Year</label>
+                            <select class="form-control" id="selectAcadYr3">
+                                <option value="">--ACADEMIC YEAR--</option>
+                                    <?php 
+                                        for ($i = date("Y"); $i > 1900; $i-- ){
+                                            echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                        }
+                                    ?>
+                            </select>
+                            <hr>
                             <div>
                                 <canvas id="chart5" height="230"></canvas>
                             </div>
-                </div>
-                </div>
+                    </div>
+                    </div>
             </div>
 
              
@@ -436,46 +437,14 @@
         {
             $.ajax({
                type:"POST",
-               url:"<?php echo base_url('Maintenance/show_total_section')?>",
+               url:"<?php echo base_url('Maintenance/get_total_fac_pertype')?>",
                dataType: 'json',
                cache: false,
                success: function(data)
                 {
                     var ctx3 = document.getElementById("chart3").getContext("2d");
-                    var data3 = [
-                        {
-                            value: 300,
-                            color:"#25a6f7",
-                            highlight: "#25a6f7",
-                            label: "Blue"
-                        },
-                        {
-                            value: 50,
-                            color: "#edf1f5",
-                            highlight: "#edf1f5",
-                            label: "Light"
-                        },
-                         {
-                            value: 50,
-                            color: "#b4c1d7",
-                            highlight: "#b4c1d7",
-                            label: "Dark"
-                        },
-                         {
-                            value: 50,
-                            color: "#b8edf0",
-                            highlight: "#b8edf0",
-                            label: "Megna"
-                        },
-                        {
-                            value: 100,
-                            color: "#fcc9ba",
-                            highlight: "#fcc9ba",
-                            label: "Orange"
-                        }
-                    ];
                     
-                    var myPieChart = new Chart(ctx3).Pie(data3,{
+                    var myPieChart = new Chart(ctx3).Pie(data,{
                         segmentShowStroke : true,
                         segmentStrokeColor : "#fff",
                         segmentStrokeWidth : 0,
@@ -491,10 +460,86 @@
                 },
                 error: function(data)
                 {
-                    alerts('An error occured. Please reload the page and try again.','e');
+                    alert('An error occured. Please reload the page and try again.','e');
                 }
-
             });
+        }
+
+        function getUsedCurriculum()
+        {
+            $.ajax({  
+                url:"<?php echo base_url('Maintenance/get_curr_desc')?>", 
+                method:"POST",  
+                dataType: "json",
+                success:function(data){
+                    $('#curr_used').html('<h1 class="text-white">'+ data +'</h1>')
+                },
+                     error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+           });
+        }
+
+        function getTotalFaculty()
+        {
+            $.ajax({  
+                url:"<?php echo base_url('Maintenance/get_tot_faculty')?>", 
+                method:"POST",  
+                dataType: "json",
+                success:function(data){
+                    $('#total_fac').html('Total: '+ data)
+                },
+                     error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+           });
+        }
+
+        function show_top_specialization()
+        {
+            $.ajax({
+               type:"POST",
+               url:"<?php echo base_url('Maintenance/show_top_spec')?>",
+               dataType: 'json',
+               cache: false,
+               success: function(data)
+                {
+                    var ctx4 = document.getElementById("chart4").getContext("2d");
+                    
+                    var myDoughnutChart = new Chart(ctx4).Doughnut(data,{
+                        segmentShowStroke : true,
+                        segmentStrokeColor : "#fff",
+                        segmentStrokeWidth : 0,
+                        animationSteps : 100,
+                        tooltipCornerRadius: 2,
+                        animationEasing : "easeOutBounce",
+                        animateRotate : true,
+                        animateScale : false,
+                        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                        responsive: true
+                    });
+                },
+                error: function(data)
+                {
+                    alert('An error occured. Please reload the page and try again.','e');
+                }
+            });
+        }
+
+        function fetch_data(acad_yr, sem)
+        {
+            //$('#1').text('21%');
+            $.ajax({  
+                url:"<?php echo base_url('Maintenance/get_tot_faculty')?>", 
+                method:"POST",  
+                dataType: "json",
+                success:function(data){
+                    
+                },
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+           });           
         }
 
         $(document).ready(function()
@@ -503,89 +548,63 @@
 
             show_total_faculty_pertype();
 
+            getUsedCurriculum();
 
-     var ctx4 = document.getElementById("chart4").getContext("2d");
-    var data4 = [
-        {
-            value: 300,
-            color:"#01c0c8",
-            highlight: "#01c0c8",
-            label: "Megna"
-        },
-        {
-            value: 50,
-            color: "#25a6f7",
-            highlight: "#25a6f7",
-            label: "Blue"
-        },
-        {
-            value: 100,
-            color: "#fb9678",
-            highlight: "#fb9678",
-            label: "Orange"
-        }
-    ];
-    
-    var myDoughnutChart = new Chart(ctx4).Doughnut(data4,{
-        segmentShowStroke : true,
-        segmentStrokeColor : "#fff",
-        segmentStrokeWidth : 0,
-        animationSteps : 100,
-        tooltipCornerRadius: 2,
-        animationEasing : "easeOutBounce",
-        animateRotate : true,
-        animateScale : false,
-        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
-        responsive: true
-    });
-    
-    var ctx5 = document.getElementById("chart5").getContext("2d");
-    var data5 =  [
-        {
-            value: 300,
-            color:"#01c0c8",
-            highlight: "#01c0c8",
-            label: "Megna"
-        },
-        {
-            value: 50,
-            color: "#25a6f7",
-            highlight: "#25a6f7",
-            label: "Blue"
-        },
-        {
-            value: 100,
-            color: "#fb9678",
-            highlight: "#fb9678",
-            label: "Orange"
-        },
-        {
-            value: 40,
-            color: "#949FB1",
-            highlight: "#A8B3C5",
-            label: "Grey"
-        }
+            getTotalFaculty();
 
-    ];
-    
-    var myPolarArea = new Chart(ctx5).PolarArea(data5, {
-        scaleShowLabelBackdrop : true,
-        scaleBackdropColor : "rgba(255,255,255,0.75)",
-        scaleBeginAtZero : true,
-        scaleBackdropPaddingY : 2,
-        scaleBackdropPaddingX : 2,
-        scaleShowLine : true,
-        segmentShowStroke : true,
-        segmentStrokeColor : "#fff",
-        segmentStrokeWidth : 2,
-        animationSteps : 100,
-        tooltipCornerRadius: 2,
-        animationEasing : "easeOutBounce",
-        animateRotate : true,
-        animateScale : false,
-        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
-        responsive: true
-    });
+            show_top_specialization();
+
+            $('#selectAcadYr3').on('change', function()
+            {
+                var acad_yr = $('#selectAcadYr3').val();
+                $.ajax({
+                   type:"POST",
+                   url:"<?php echo base_url('Maintenance/show_pref_time')?>",
+                   data: {acad_yr:acad_yr},
+                   dataType: 'json',
+                   cache: false,
+                   success: function(data)
+                    {
+                        var ctx5 = document.getElementById("chart5").getContext("2d");
+                        
+                        var myPolarArea = new Chart(ctx5).PolarArea(data, {
+                            scaleShowLabelBackdrop : true,
+                            scaleBackdropColor : "rgba(255,255,255,0.75)",
+                            scaleBeginAtZero : true,
+                            scaleBackdropPaddingY : 2,
+                            scaleBackdropPaddingX : 2,
+                            scaleShowLine : true,
+                            segmentShowStroke : true,
+                            segmentStrokeColor : "#fff",
+                            segmentStrokeWidth : 2,
+                            animationSteps : 100,
+                            tooltipCornerRadius: 2,
+                            animationEasing : "easeOutBounce",
+                            animateRotate : true,
+                            animateScale : false,
+                            legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                            responsive: true
+                        });
+                    },
+                    error: function(data)
+                    {
+                        alert('An error occured. Please reload the page and try again.','e');
+                    }
+                });
+            });
+        
+            $('#selectAcadYr2').on('change', function(){
+                var acad_yr = $('#selectAcadYr2').val();
+                var sem = $('#selectSem2').val();
+                fetch_data(acad_yr, sem);
+            });
+
+            $('#selectSem2').on('change', function(){
+                var acad_yr = $('#selectAcadYr2').val();
+                var sem = $('#selectSem2').val();
+                fetch_data(acad_yr, sem);
+            });
+
         });
 
 

@@ -2154,6 +2154,40 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function reflect_advise_time(){
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("`time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type` ")
+				->where('ot.faculty_id', $fac_id)
+				->where('ot.acad_yr', $acad_year)
+				->where('ot.sem', $sem)
+                ->get('other_time_sched ot');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$blank = ' ';
+			$label = 'Advising Time';
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$label,
+					$blank,
+					$blank, 
+					$blank, 
+					$time,
+					$r->day,
+					$blank,
+					$r->load_type
+					);
+		}
+
+		return $result;
+	}
+
 	public function reflect_section_table(){	//GETS SECTION'S SUMMARY OF SCHEDULES
 
 		$section_id = $this->security->xss_clean($this->input->post('section_id'));

@@ -1082,6 +1082,25 @@
 
         }
 
+        function getAdviseTime(){
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_advise_time')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+        }
+
         function loadRoomTable(){
 
             var sem = $('#room_sem').val();
@@ -1665,6 +1684,14 @@
                     $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-blue");
                    }
 
+                   else if (temp_load == 'AT')
+                   {
+                    $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-orange");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn plot-orange");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn plot-orange");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-orange");
+                   }
+
                    else if (temp_load == 'TS')
                    {
                      $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-darkBlue");                 
@@ -1757,6 +1784,11 @@
                         $('button[type="button"][value="'+final_val2+'"]').removeClass();
                         $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-blue");
                    }
+                   else if(temp_load == 'AT')
+                   {
+                        $('button[type="button"][value="'+final_val2+'"]').removeClass();
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-orange");
+                   }
                    else if(temp_load == 'TS')
                    {
                         $('button[type="button"][value="'+final_val2+'"]').removeClass();
@@ -1826,6 +1858,69 @@
                 }, 
                 async:false
                });
+      }
+
+      function generateOfficeHours(){
+        var day_temp = 1; 
+        var day; 
+        var day_id;
+        var count_at = 0; 
+        var start_time; 
+        var first_id; 
+        var second_id;
+        var val_temp; 
+        var day_loop; 
+        var hour;
+
+        for(day_loop = 1; day_loop <= 5; day_loop++)
+        {
+            switch(day_loop)
+            {
+                case 1: day_id = '_mon';
+                        day = 'Monday';
+                        break;
+
+                case 2: day_id = '_tue';
+                        day = 'Tuesday';
+                        break;
+
+                case 3: day_id = '_wed';
+                        day = 'Wednesday';
+                        break;
+
+                case 4: day_id = '_thu';
+                        day = 'Thursday';
+                        break;
+
+                 default:   day_id = '_fri';
+                            day = 'Friday';
+            }
+
+            for(hour = 17; hour < 21; hour ++)
+            {   
+                var first_val = '0' + hour + ':00:00' + day_id; 
+                var second_val = '0' + hour + ':30:00' + day_id; 
+
+                if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-regular'))
+                {
+                    if(count_at < 20)
+                    {
+                        $('button[type="button"][value="' + first_val + '"]').removeClass('plot-regular').addClass('plot-orange');
+                         
+                         count_at += 1;
+                    }
+                }
+
+                if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-regular'))
+                {
+                    if(count_at < 20)
+                    {
+                        $('button[type="button"][value="' + second_val + '"]').removeClass('plot-regular').addClass('plot-orange');
+                        count_at += 1;
+                    }
+                }
+            }
+        }
       }
 
       function generateAdviseTime(){
@@ -3045,6 +3140,10 @@
             reflectServices();
             showSpec(temp_fac);
             resetPlotForm();
+            if(global_factype == 1)
+            {
+                getAdviseTime();
+            }
         });
 
         $('#sched_acad_year').on('change', function(){

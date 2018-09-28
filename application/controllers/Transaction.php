@@ -692,6 +692,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function reflect_advise_time(){
+		
+		echo json_encode($this->getdata_model->reflect_advise_time($_POST));
+		exit();
+	}
+
 } 
 
 ?>

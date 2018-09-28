@@ -3025,6 +3025,54 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function get_faculty_satisfactory()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query = $this->db->query('SELECT ft.fac_type_desc AS faculty_type, ft.fac_type_id, SUM(IF(e.acad_yr = "'.$acad_yr.'" AND e.sem = "'.$sem.'" AND e.rating_desc = "SATISFACTORY", 1, 0)) AS count
+								FROM faculty f 
+								RIGHT JOIN faculty_type ft 
+								ON ft.fac_type_id = f.faculty_type 
+								LEFT JOIN evaluation e 
+								ON e.faculty_id = f.faculty_id
+								GROUP BY ft.fac_type_desc');
+
+		foreach($query->result() as $r)
+		{	
+			$result[] = array(
+               			$r->fac_type_id,
+               			$r->faculty_type,
+               			$r->count,
+						);
+		}
+
+		return $result;
+	}
+
+	public function get_facultytot_satisfactory()
+	{
+		$result = array();
+		$id = $this->security->xss_clean($this->input->post('id'));
+
+		$query = $this->db->query('SELECT COUNT(f.faculty_id) AS total_count
+									FROM faculty f 
+									RIGHT JOIN faculty_type ft 
+									ON ft.fac_type_id = f.faculty_type
+									WHERE ft.fac_type_id = "'.$id.'"');
+
+		foreach($query->result() as $r)
+		{	
+			$result[] = array(
+               			$r->total_count,
+						);
+		}
+
+		return $result;
+	}
+
 	public function get_pref_day(){
 
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));

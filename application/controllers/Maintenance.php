@@ -960,4 +960,16 @@ class Maintenance extends CI_Controller {
 		exit();
 	}
 
+	public function get_faculty_satisfactory()
+	{
+		echo json_encode($this->getdata_model->get_faculty_satisfactory($_POST));
+		exit();
+	}
+
+	public function get_facultytot_satisfactory()
+	{
+		echo json_encode($this->getdata_model->get_facultytot_satisfactory($_POST));
+		exit();
+	}
+
 }

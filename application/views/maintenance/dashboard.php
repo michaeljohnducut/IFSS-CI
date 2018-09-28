@@ -98,105 +98,24 @@
                                              border:0px;
                                         }
                                     </style>
-                                    <li class="tab nav-item active">
-                                        <a data-toggle="tab" class="nav-link" href="#regularFulltimeTab" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Regular Full-Time</span> </a>
-                                    </li>
-                                    <li class="tab nav-item" style="background-color:#fff; border:0px;">
-                                        <a data-toggle="tab" class="nav-link" href="#regularDesigneeTab" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Regular Designee</span> </a>
+                                    <?php
+                                        foreach($fac_type as $ft)
+                                        {
+                                           echo '<li class="tab nav-item">
+                                                    <a data-toggle="tab" class="nav-link" href="#vmessages3" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">'.$ft[0].'</span> </a>
+                                                </li>';
+                                        } 
+                                    ?>
+                                    <!-- <li class="tab nav-item active">
+                                        <a data-toggle="tab" class="nav-link" href="#vmessages3" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Regular Full-Time</span> </a>
                                     </li>
                                     <li class="tab nav-item">
-                                        <a data-toggle="tab" aria-expanded="false" class="nav-link" data-toggle="tab" href="#vmessages3"> <span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Part Time - Full Time</span> </a>
+                                        <a data-toggle="tab" class="nav-link" href="#vmessages3" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Regular Designee</span> </a>
                                     </li>
-                                    <li class="tab nav-item">
-                                        <a data-toggle="tab" aria-expanded="false" class="nav-link" data-toggle="tab" href="#vmessages3"> <span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Part Time - Part Time</span> </a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             <div class="tab-content">
-                                <div id="regularFulltimeTab" class="tab-pane active">
-                                <div class="white-box"style="padding-top:0%; padding-bottom:0%;">
-                                    <div class="steamline">
-                                        <div class="sl-item">
-                                             <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> 
-                                             </div>
-                                        <div class="sl-right">
-                                            <div><label>Rachel Nayre1</label></div>
-                                            <p>Rating: 100%</p>
-                                        </div>
-                                    </div>
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Atian-Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                               <div class="clearfix"></div>
-                                    </div>
-                                    <div id="regularDesigneeTab" class="tab-pane">
-                                           <div class="white-box"style="padding-top:0%; padding-bottom:0%;">
-                            <div class="steamline">
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre2</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                                    </div>
-                                    <div id="vmessages3" class="tab-pane">
+                                    <div id="vmessages3" class="tab-pane active">
                                          <div class="white-box"style="padding-top:0%; padding-bottom:0%;">
                             <div class="steamline">
                                 <div class="sl-item">
@@ -258,18 +177,16 @@
                                         ?>
                                       </select>
                 </div>
-            
                 <div class="col-md-6">
-                
-                                      <label class="control-label">Select Semester</label>
-                                     <select class="form-control" id="selectSem2">
-                                        <option value="">--Semester--</option>
-                                        <option value="1st">First</option>
-                                        <option value="2nd">Second</option>
-                                        <option value="Summer">Summer</option>
-                                      </select>
-                                  </div>
-                              </div>
+                    <label class="control-label">Select Semester</label>
+                        <select class="form-control" id="selectSem2">
+                            <option value="">--Semester--</option>
+                            <option value="1st">First</option>
+                            <option value="2nd">Second</option>
+                            <option value="Summer">Summer</option>
+                        </select>
+                </div>
+                </div>
              <hr style="border: 1px solid">
             <div>
                 <ul class="basic-list">
@@ -371,7 +288,7 @@
     <!-- Ito ung inidagdag ko para sa may alert animation at ung nasa ajax part kasama nito ung mga title chuchu -->
     <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/morrisjs/morris.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/widget.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/widget.js"></script>
     <!-- BOOTSTRAP SELECT -->
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
 
@@ -383,6 +300,9 @@
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/raphael/raphael-min.js"></script>
  
     <script src="<?php echo base_url(); ?>assets/js/morris-data.js"></script>
+
+    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/bower_components/counterup/jquery.counterup.min.js"></script>
 
     <script type="text/javascript">
 
@@ -528,19 +448,69 @@
 
         function fetch_data(acad_yr, sem)
         {
-            //$('#1').text('21%');
-            $.ajax({  
-                url:"<?php echo base_url('Maintenance/get_tot_faculty')?>", 
-                method:"POST",  
-                dataType: "json",
-                success:function(data){
-                    
-                },
-                error: function (data) {
-                    alert(JSON.stringify(data));
-                }
-           });           
+            if(acad_yr && sem)
+            {
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_faculty_satisfactory')?>", 
+                    method:"POST",  
+                    data: {acad_yr:acad_yr, sem:sem},
+                    dataType: "json",
+                    success:function(data)
+                    {
+                        var len = data.length;
+                        var id, count;
+                        for (var i=0; i<len; i++)
+                        {   
+                            id = data[i][0];
+                            count = data[i][2];
+                            get_percentage(id, count);
+                        }
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+               });  
+            }           
         }
+
+        function get_percentage(id, count)
+        {
+            $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_facultytot_satisfactory')?>", 
+                    method:"POST",
+                    dataType: "json",
+                    data: {id: id},
+                    async: false,
+                    success:function(data)
+                    {
+                        var percent;
+                        var final;
+                        
+                        percent = (count / data[0][0]) * 100;
+
+                        if(isNaN(percent))
+                        {
+                            final = 0;
+                        }
+                        else
+                        {
+                            final = percent;
+                        }
+
+                        $('#'+id).text(Math.round(final)+'%');  
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+               });  
+        }
+
+        $(".counter").counterUp({
+            delay: 100,
+            time: 1200
+        });
 
         $(document).ready(function()
         {

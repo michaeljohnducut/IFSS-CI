@@ -603,8 +603,7 @@ class getdata_model extends CI_Model{
 				->get('curriculum_year');
 
 		foreach($query->result() as $r)
-		{
-					
+		{				
 			$result = $r->curr_year_id;
 		}
 
@@ -2913,6 +2912,197 @@ FROM subject_match sm
                				$t->acad_yr,
 						);
         }
+
+		return $result;
+	}
+
+	public function get_curr_desc()
+	{
+		$result = '';
+		$query = $this->db->select('curr_year_desc')
+				->where ('is_used',1)
+				->get('curriculum_year');
+
+		foreach($query->result() as $r)
+		{				
+			$result = $r->curr_year_desc;
+		}
+
+		return $result;
+	}
+
+	public function get_total_fac_pertype()
+	{
+		$result = array();
+		$query = $this->db->query('SELECT COUNT(f.faculty_id) AS fac_number, ft.fac_type_desc
+										FROM faculty f JOIN faculty_type ft
+										ON f.faculty_type = ft.fac_type_id
+										GROUP BY f.faculty_type');
+
+		foreach($query->result() as $r)
+		{	
+			$hex = '#';		
+			//Create a loop.
+			foreach(array('r', 'g', 'b') as $color){
+			    //Random number between 0 and 255.
+			    $val = mt_rand(0, 255);
+			    //Convert the random number into a Hex value.
+			    $dechex = dechex($val);
+			    //Pad with a 0 if length is less than 2.
+			    if(strlen($dechex) < 2){
+			        $dechex = "0" . $dechex;
+			    }
+			    //Concatenate
+			    $hex .= $dechex;
+			}
+
+			$result[] = array(
+               			'value' => $r->fac_number,
+               			'color' =>	$hex,
+               			'highlight' =>	$hex,
+               			'label' => $r->fac_type_desc,
+						);
+		}
+
+		return $result;
+	}
+
+	public function get_tot_faculty()
+	{
+		$result = '';
+		$query = $this->db->select('COUNT(faculty_id) AS total_faculty')
+				->get('faculty ');
+
+		foreach($query->result() as $r)
+		{				
+			$result = $r->total_faculty;
+		}
+
+		return $result;
+	}
+
+	public function show_top_spec()
+	{
+		$result = array();
+		$query = $this->db->query('SELECT spec_desc AS specialization, COUNT(spec_desc) AS count
+									FROM faculty_spec fs
+									JOIN specialization s ON s.spec_id = fs.spec_id
+									GROUP BY spec_desc
+									ORDER BY COUNT(spec_desc) DESC
+									LIMIT 5');
+
+		foreach($query->result() as $r)
+		{	
+			$hex = '#';		
+			//Create a loop.
+			foreach(array('r', 'g', 'b') as $color){
+			    //Random number between 0 and 255.
+			    $val = mt_rand(0, 255);
+			    //Convert the random number into a Hex value.
+			    $dechex = dechex($val);
+			    //Pad with a 0 if length is less than 2.
+			    if(strlen($dechex) < 2){
+			        $dechex = "0" . $dechex;
+			    }
+			    //Concatenate
+			    $hex .= $dechex;
+			}
+
+			$result[] = array(
+               			'value' => $r->count,
+               			'color' =>	$hex,
+               			'highlight' =>	$hex,
+               			'label' => $r->specialization,
+						);
+		}
+
+		return $result;
+	}
+
+	public function show_pref_time()
+	{
+		$result = array();
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+
+		$query = $this->db->query('SELECT COUNT(CONCAT(TIME_FORMAT(start_time, "%h:%i %p")," - ", TIME_FORMAT(end_time, "%h:%i %p"))) AS count, CONCAT(TIME_FORMAT(start_time, "%h:%i %p")," - ", TIME_FORMAT(end_time, "%h:%i %p")) AS time, day
+									FROM preferred_time
+									WHERE acad_yr = "'.$acad_yr.'"
+									GROUP BY DAY, CONCAT(TIME_FORMAT(start_time, "%h:%i %p")," - ", TIME_FORMAT(end_time, "%h:%i %p"))
+									ORDER BY COUNT(CONCAT(TIME_FORMAT(start_time, "%h:%i %p")," - ", TIME_FORMAT(end_time, "%h:%i %p"))) DESC
+									LIMIT 5');
+
+		foreach($query->result() as $r)
+		{	
+			$hex = '#';		
+			//Create a loop.
+			foreach(array('r', 'g', 'b') as $color){
+			    //Random number between 0 and 255.
+			    $val = mt_rand(0, 255);
+			    //Convert the random number into a Hex value.
+			    $dechex = dechex($val);
+			    //Pad with a 0 if length is less than 2.
+			    if(strlen($dechex) < 2){
+			        $dechex = "0" . $dechex;
+			    }
+			    //Concatenate
+			    $hex .= $dechex;
+			}
+
+			$result[] = array(
+               			'value' => $r->count,
+               			'color' =>	$hex,
+               			'highlight' =>	$hex,
+               			'label' => $r->day.'-'.$r->time,
+						);
+		}
+
+		return $result;
+	}
+
+	public function get_faculty_satisfactory()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query = $this->db->query('SELECT ft.fac_type_desc AS faculty_type, ft.fac_type_id, SUM(IF(e.acad_yr = "'.$acad_yr.'" AND e.sem = "'.$sem.'" AND e.rating_desc = "SATISFACTORY", 1, 0)) AS count
+								FROM faculty f 
+								RIGHT JOIN faculty_type ft 
+								ON ft.fac_type_id = f.faculty_type 
+								LEFT JOIN evaluation e 
+								ON e.faculty_id = f.faculty_id
+								GROUP BY ft.fac_type_desc');
+
+		foreach($query->result() as $r)
+		{	
+			$result[] = array(
+               			$r->fac_type_id,
+               			$r->faculty_type,
+               			$r->count,
+						);
+		}
+
+		return $result;
+	}
+
+	public function get_facultytot_satisfactory()
+	{
+		$result = array();
+		$id = $this->security->xss_clean($this->input->post('id'));
+
+		$query = $this->db->query('SELECT COUNT(f.faculty_id) AS total_count
+									FROM faculty f 
+									RIGHT JOIN faculty_type ft 
+									ON ft.fac_type_id = f.faculty_type
+									WHERE ft.fac_type_id = "'.$id.'"');
+
+		foreach($query->result() as $r)
+		{	
+			$result[] = array(
+               			$r->total_count,
+						);
+		}
 
 		return $result;
 	}

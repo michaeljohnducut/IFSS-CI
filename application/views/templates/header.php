@@ -272,6 +272,8 @@
 
                     <li><a href="<?php echo base_url();?>Transaction/view_schedule" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">View Schedules<span class="fa arrow"></span></span></a>
                     </li>
+                    <li><a href="<?php echo base_url();?>Transaction/Query" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Query<span class="fa arrow"></span></span></a>
+                    </li>
                     <li><a href="javascript:;" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Reports &nbsp;  <span class="ti-angle-down"></span><span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="<?php echo base_url();?>Report/subject_offer">Subject Offerings</a></li>

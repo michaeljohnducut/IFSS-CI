@@ -67,6 +67,14 @@ class Transaction extends CI_Controller
 		$this->load->view('templates/footer');
 	}
 
+	public function query()
+	{
+		$data['title'] = "IFSS | Query";
+		$this->load->view('templates/header', $data);
+		$this->load->view('transaction/query');
+		$this->load->view('templates/footer');
+	}
+
 	public function load_subjects()
 	{
 		$data['faculty_type'] = $this->getdata_model->faculty_type();

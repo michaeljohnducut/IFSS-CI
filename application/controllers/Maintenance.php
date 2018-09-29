@@ -13,6 +13,8 @@ class Maintenance extends CI_Controller {
     {
     	if($this->session->userdata('USERTYPE') == 'admin')
     	{
+    		$data['fac_type'] = $this->getdata_model->faculty_type();
+
     		$data['title'] = "IFSS | Dashboard";
 			$this->load->view('templates/header', $data);
 			$this->load->view('maintenance/dashboard');
@@ -926,6 +928,48 @@ class Maintenance extends CI_Controller {
 
 		echo json_encode(array($section, $acad_yr));
 		exit();
-	}	
+	}
+
+	public function get_curr_desc()
+	{
+		echo ($this->getdata_model->get_curr_desc());
+		exit();
+	}
+
+	public function get_total_fac_pertype()
+	{
+		echo json_encode($this->getdata_model->get_total_fac_pertype());
+		exit();
+	}
+
+	public function get_tot_faculty()
+	{
+		echo ($this->getdata_model->get_tot_faculty());
+		exit();
+	}
+
+	public function show_top_spec()
+	{
+		echo json_encode($this->getdata_model->show_top_spec());
+		exit();
+	}
+
+	public function show_pref_time()
+	{
+		echo json_encode($this->getdata_model->show_pref_time($_POST));
+		exit();
+	}
+
+	public function get_faculty_satisfactory()
+	{
+		echo json_encode($this->getdata_model->get_faculty_satisfactory($_POST));
+		exit();
+	}
+
+	public function get_facultytot_satisfactory()
+	{
+		echo json_encode($this->getdata_model->get_facultytot_satisfactory($_POST));
+		exit();
+	}
 
 }

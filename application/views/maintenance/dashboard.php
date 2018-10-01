@@ -108,10 +108,6 @@
                                     ?>
                                     <!-- <li class="tab nav-item active">
                                         <a data-toggle="tab" class="nav-link" href="#vmessages3" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Regular Full-Time</span> </a>
-                                    </li>
-                                    <li class="tab nav-item">
-                                        <a data-toggle="tab" class="nav-link" href="#vmessages3" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Regular Designee</span> </a>
-                                    </li>
                                     </li> -->
                                 </ul>
                             <div class="tab-content">

@@ -2429,7 +2429,7 @@ class savedata_model extends CI_Model
 		return $output;
 	}
 
-	public function add_advising_time(){
+	public function add_other_time(){
 
 		$output = "";
 		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
@@ -2448,9 +2448,6 @@ class savedata_model extends CI_Model
 			{
 				$output = 'NOT INSERTED';
 			}
-
-
-		return $output;
 
 	}
 }

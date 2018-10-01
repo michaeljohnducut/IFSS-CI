@@ -96,6 +96,11 @@
             color: white;
         }
 
+        .plot-red{
+            background-color: #e74c3c; 
+            color: white;
+        }
+
         .plot-darkBlue{
             background-color: #34495e; 
             color: white;

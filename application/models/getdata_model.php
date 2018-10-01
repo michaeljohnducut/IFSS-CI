@@ -2163,6 +2163,7 @@ FROM subject_match sm
 				->where('ot.faculty_id', $fac_id)
 				->where('ot.acad_yr', $acad_year)
 				->where('ot.sem', $sem)
+				->where('ot.load_type', 'AT')
                 ->get('other_time_sched ot');
                 // ->order_by('ta.day', 'asc');
 
@@ -2170,6 +2171,41 @@ FROM subject_match sm
 		{
 			$blank = ' ';
 			$label = 'Advising Time';
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$label,
+					$blank,
+					$blank, 
+					$blank, 
+					$time,
+					$r->day,
+					$blank,
+					$r->load_type
+					);
+		}
+
+		return $result;
+	}
+
+	public function reflect_night_office(){
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("`time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type` ")
+				->where('ot.faculty_id', $fac_id)
+				->where('ot.acad_yr', $acad_year)
+				->where('ot.sem', $sem)
+				->where('ot.load_type', 'NO')
+                ->get('other_time_sched ot');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$blank = ' ';
+			$label = 'Night Office';
 			$time = $r->time_start. ' - '. $r->time_finish;
 
 			$result[] = array(

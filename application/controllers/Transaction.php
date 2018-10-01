@@ -694,15 +694,21 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
-	public function add_advising_time()
+	public function add_other_time()
 	{
-		echo ($this->savedata_model->add_advising_time($_POST));
+		echo ($this->savedata_model->add_other_time($_POST));
 		exit();
 	}
 
 	public function reflect_advise_time(){
 		
 		echo json_encode($this->getdata_model->reflect_advise_time($_POST));
+		exit();
+	}
+
+	public function reflect_night_office(){
+		
+		echo json_encode($this->getdata_model->reflect_night_office($_POST));
 		exit();
 	}
 

@@ -91,6 +91,11 @@
             color: white;
         }
 
+        .plot-red{
+            background-color: #e74c3c; 
+            color: white;
+        }
+
         .legend-darkBlue{
             background-color: #34495e; 
             color: white;

@@ -1038,6 +1038,7 @@
         $('.plot-green').removeClass().addClass('btn plot-regular');
         $('.plot-blue').removeClass().addClass('btn plot-regular');
         $('.plot-orange').removeClass().addClass('btn plot-regular');
+        $('.plot-red').removeClass().addClass('btn plot-regular');
         $('.plot-darkBlue').removeClass().addClass('btn plot-regular')
         $('.plot-regular').text('');
       }
@@ -1117,7 +1118,26 @@
                 error: function (data) {
                 // alert(JSON.stringify(data));
                 }
-           });
+           }); 
+        }
+
+        function getOfficeHours(){
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var fac_id = $('#sched_faculty').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_office_hours')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           }); 
         }
 
         function loadRoomTable(){
@@ -1719,6 +1739,14 @@
                     $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-darkBlue");
                    }
 
+                   else if (temp_load == 'OH')
+                   {
+                    $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-red");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn plot-red");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn plot-red");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-red");
+                   }
+
                    else if (temp_load == 'TS')
                    {
                      $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-darkBlue");                 
@@ -1816,6 +1844,11 @@
                         $('button[type="button"][value="'+final_val2+'"]').removeClass();
                         $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-orange");
                    }
+                   else if(temp_load == 'OH')
+                   {
+                        $('button[type="button"][value="'+final_val2+'"]').removeClass();
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-red");
+                   }
                    else if(temp_load == 'NO')
                    {
                         $('button[type="button"][value="'+final_val2+'"]').removeClass();
@@ -1892,7 +1925,7 @@
                });
       }
 
-      function generateOfficeHours(){
+      function generateNightOffice(){
         var day_temp = 1; 
         var day; 
         var day_id;
@@ -1953,6 +1986,81 @@
                         $('button[type="button"][value="' + second_val + '"]').removeClass('plot-regular').addClass('plot-darkBlue');
                         count_oh += 1;
                         daily_oh += 1;
+                    }
+                }
+            }
+        }
+      }
+
+      function generateOfficeHours(){
+
+        var day_temp = 1; 
+        var day; 
+        var day_id;
+        var count_oh = 0; 
+        var start_time; 
+        var first_id; 
+        var second_id;
+        var val_temp; 
+        var day_loop; 
+        var hour;
+
+        for(day_loop = 1; day_loop <= 5; day_loop++)
+        {
+            switch(day_loop)
+            {
+                case 1: day_id = '_mon';
+                        day = 'Monday';
+                        break;
+
+                case 2: day_id = '_tue';
+                        day = 'Tuesday';
+                        break;
+
+                case 3: day_id = '_wed';
+                        day = 'Wednesday';
+                        break;
+
+                case 4: day_id = '_thu';
+                        day = 'Thursday';
+                        break;
+
+                 default:   day_id = '_fri';
+                            day = 'Friday';
+            }
+
+            for(hour = 8; hour < 17; hour ++)
+            {   
+                var first_val = '0' + hour + ':00:00' + day_id; 
+                var second_val = '0' + hour + ':30:00' + day_id; 
+                if(hour > 9)
+                {
+                    first_val = hour + ':00:00' + day_id; 
+                    second_val = hour + ':30:00' + day_id; 
+                }
+
+                if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-regular'))
+                {
+                    if(hour != 12)
+                    {
+                        if(count_oh < 68)
+                        {
+                            $('button[type="button"][value="' + first_val + '"]').removeClass('plot-regular').addClass('plot-red');
+                             
+                             count_oh += 1;
+                        }
+                    }
+                }
+
+                if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-regular'))
+                {
+                    if(hour != 12)
+                    {
+                        if(count_oh < 68)
+                        {
+                            $('button[type="button"][value="' + second_val + '"]').removeClass('plot-regular').addClass('plot-red');
+                            count_oh += 1;
+                        }
                     }
                 }
             }
@@ -2051,6 +2159,81 @@
                     //         $('button[type="button"][value="' + second_val + '"]').text('Advising Time');
                     //     }
                     // }
+                }
+            }
+        }
+      }
+
+      function generateAdviseTime(){
+
+        var day_temp = 1; 
+        var day; 
+        var day_id;
+        var count_at = 0; 
+        var start_time; 
+        var first_id; 
+        var second_id;
+        var val_temp; 
+        var day_loop; 
+        var hour;
+
+        for(day_loop = 1; day_loop <= 5; day_loop++)
+        {
+            switch(day_loop)
+            {
+                case 1: day_id = '_mon';
+                        day = 'Monday';
+                        break;
+
+                case 2: day_id = '_tue';
+                        day = 'Tuesday';
+                        break;
+
+                case 3: day_id = '_wed';
+                        day = 'Wednesday';
+                        break;
+
+                case 4: day_id = '_thu';
+                        day = 'Thursday';
+                        break;
+
+                 default:   day_id = '_fri';
+                            day = 'Friday';
+            }
+
+            for(hour = 8; hour < 18; hour ++)
+            {   
+                var first_val = '0' + hour + ':00:00' + day_id; 
+                var second_val = '0' + hour + ':30:00' + day_id; 
+                if(hour > 9)
+                {
+                    first_val = hour + ':00:00' + day_id; 
+                    second_val = hour + ':30:00' + day_id; 
+                }
+
+                if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-regular'))
+                {
+                    if(hour != 12)
+                    {
+                        if(count_at < 20)
+                        {
+                            $('button[type="button"][value="' + first_val + '"]').removeClass('plot-regular').addClass('plot-orange');
+                             
+                             count_at += 1;
+                        }
+                    }
+                }
+
+                if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-regular'))
+                {
+                    if(hour != 12)
+                    {
+                        if(count_at < 20)
+                        {
+                            $('button[type="button"][value="' + second_val + '"]').removeClass('plot-regular').addClass('plot-orange');
+                            count_at += 1;
+                        }
+                    }
                 }
             }
         }
@@ -2161,7 +2344,6 @@
                             url:"<?php echo base_url('Transaction/add_other_time')?>", 
                             method:"POST", 
                             data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'AT'}, 
-                            dataType: "json",
                             success:function(data){
                                 // alert(data);
                             },  
@@ -2187,8 +2369,7 @@
                         $.ajax({  
                             url:"<?php echo base_url('Transaction/add_other_time')?>", 
                             method:"POST", 
-                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'AT'}, 
-                            dataType: "json",
+                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'AT'},
                             success:function(data){
                                 // alert(data);
                             },  
@@ -2204,7 +2385,152 @@
         }
       }
 
-      function saveOfficeHours(){
+      function saveOfficeHours()
+      {
+        var day_temp = 1; 
+        var day; 
+        var day_id;
+        var count_at = 0; 
+        var start_time; 
+        var end_time;
+        var first_id; 
+        var second_id;
+        var val_temp; 
+        var day_loop; 
+        var hour;
+        var bool_label;
+        var acad_yr = $('#sched_acad_year').val();
+        var fac_id = $('#sched_faculty').val();
+        var sem = $('#sched_sem').val();
+
+        for(day_loop = 1; day_loop <= 5; day_loop++)
+        {
+            switch(day_loop)
+            {
+                case 1: day_id = '_mon';
+                        day = 'Monday';
+                        break;
+
+                case 2: day_id = '_tue';
+                        day = 'Tuesday';
+                        break;
+
+                case 3: day_id = '_wed';
+                        day = 'Wednesday';
+                        break;
+
+                case 4: day_id = '_thu';
+                        day = 'Thursday';
+                        break;
+
+                 default:   day_id = '_fri';
+                            day = 'Friday';
+            }
+
+            for(hour = 8; hour < 17; hour ++)
+            {   
+                bool_label = true;
+                var first_val = '0' + hour + ':00:00' + day_id; 
+                var second_val = '0' + hour + ':30:00' + day_id; 
+                if(hour > 9)
+                {
+                    first_val = hour + ':00:00' + day_id; 
+                    second_val = hour + ':30:00' + day_id; 
+                }
+
+                var pre_time = hour - 1; 
+                var pre_val = '0' + pre_time + ':30:00' + day_id;
+                if(pre_time > 9)
+                    pre_val = pre_time + ':30:00' + day_id;
+
+                if($('button[type="button"][value="' + pre_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-regular'))
+                {
+                    if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-red'))
+                    {
+                        $('button[type="button"][value="' + first_val + '"]').text('Office Hours');
+                        bool_label = false;
+                        start_time = '0' + hour + ':00';
+                        if(hour > 9)
+                            start_time = hour + ':00';
+
+                    }
+                }
+
+                var pre_time_b = hour
+                var pre_val_b = '0' + pre_time_b + ':00:00' + day_id;
+                if(hour > 9)
+                    pre_val_b = hour + ':00:00' + day_id;
+                if($('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-regular'))
+                {
+                    if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-red') && bool_label == true)
+                    {
+                        $('button[type="button"][value="' + second_val + '"]').text('Office Hours');
+                        start_time = '0' + hour + ':30';
+                        if(hour > 9)
+                            start_time = hour + ':30';
+                    }
+                }
+
+                //GETTING THE END TIME
+                var post_time = hour;
+                var bool_last = true;
+                var post_val = '0' + post_time + ':30:00' + day_id;
+                if(hour > 9)
+                    post_val = post_time + ':30:00' + day_id;
+                if($('button[type="button"][value="' + post_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + post_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + post_val + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + post_val + '"]').hasClass('plot-regular') || $('button[type="button"][value="' + post_val + '"]').hasClass('plot-darkBlue'))
+                {
+                    if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-red'))
+                    {
+                       end_time = '0' + post_time + ':30';
+                        if(hour > 9)
+                            end_time = post_time + ':30';
+                        bool_last = false;
+                        $.ajax({  
+                            url:"<?php echo base_url('Transaction/add_other_time')?>", 
+                            method:"POST", 
+                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'OH'}, 
+                            success:function(data){
+                                // alert(data);
+                            },  
+                            error: function (data) {
+                            alert(JSON.stringify(data));
+                            }
+                       });
+                    }
+                }
+
+                var post_time_b = hour + 1;
+                var post_val_b = '0' + post_time_b + ':00:00' + day_id;
+                if(hour > 9)
+                    post_val_b = post_time_b + ':00:00' + day_id;
+                if($('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-regular') || $('button[type="button"][value="' + post_val + '"]').hasClass('plot-darkBlue'))
+                {
+
+                    if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-red') && bool_last == true)
+                    {
+                        end_time = '0' + post_time_b + ':00';
+                        if(hour > 9)
+                            end_time = post_time_b + ':00';
+                        $.ajax({  
+                            url:"<?php echo base_url('Transaction/add_other_time')?>", 
+                            method:"POST", 
+                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'OH'}, 
+                            success:function(data){
+                                // alert(data);
+                            },  
+                            error: function (data) {
+                            alert(JSON.stringify(data));
+                            }
+                       });
+
+                    }
+                }
+                
+            }
+        }
+      }
+
+      function saveNightOffice(){
         var day_temp = 1; 
         var day; 
         var day_id;
@@ -2290,8 +2616,7 @@
                         $.ajax({  
                             url:"<?php echo base_url('Transaction/add_other_time')?>", 
                             method:"POST", 
-                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'NO'}, 
-                            dataType: "json",
+                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'NO'},
                             error: function (data) {
                             alert(JSON.stringify(data));
                             }
@@ -2309,8 +2634,7 @@
                         $.ajax({  
                             url:"<?php echo base_url('Transaction/add_other_time')?>", 
                             method:"POST", 
-                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'NO'}, 
-                            dataType: "json",
+                            data:{acad_yr:acad_yr, sem:sem, fac_id:fac_id, start_time:start_time, end_time:end_time, day:day, load_type:'NO'},
                             error: function (data) {
                             alert(JSON.stringify(data));
                             }
@@ -3302,6 +3626,7 @@
             if(global_factype == 3)
             {
                 getNightOffice();
+                getOfficeHours();
             }
         });
 
@@ -4339,13 +4664,23 @@
         {
             generateAdviseTime();
             saveAdviseTime();
+            $('#chk_advisetime').prop('checked', false);
         }
 
         //IF OFFICE HOURS IS CHECKED
-        if($('#chk_nightofc').prop('checked'))
+        if($('#chk_officehrs').prop('checked'))
         {
             generateOfficeHours();
             saveOfficeHours();
+            $('#chk_officehrs').prop('checked',false);
+        }
+
+        //IF NIGHT OFFICE IS CHECKED
+        if($('#chk_nightofc').prop('checked'))
+        {
+            generateNightOffice();
+            saveNightOffice();
+            $('#chk_nightofc').prop('checked', false);
         }
 
     });

@@ -712,6 +712,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function reflect_office_hours(){
+		
+		echo json_encode($this->getdata_model->reflect_office_hours($_POST));
+		exit();
+	}
+
 } 
 
 ?>

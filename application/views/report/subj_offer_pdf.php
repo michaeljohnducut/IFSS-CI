@@ -3,10 +3,15 @@
 <head>
 	<title>Subject Offering</title>
 	<style type="text/css">
+		table
+		{
+			width: 100%;
+		}
 		table, th, td 
 		{
 		    border: 1px solid black;
 		    border-collapse: collapse;
+
 		}
 
 		th, td 
@@ -25,7 +30,9 @@
             top: -80px;
             left: 0px;
             right: 0px;
-            height: 250px;
+     		height: 50PX;
+            font-family: Times New Roman;
+            
         }
 
        footer 
@@ -34,49 +41,53 @@
             bottom: -10px; 
             left: 0px; 
             right: 0px;
-            height: 50px;  
+            height: 40px;  
+            font-family: Times New Roman;
         }
+
 
 	</style>
 </head>
-<body style="font-family: 'Arial Narrow',Arial,sans-serif;">
-		<!-- <header>
-			<img src = "<?php echo base_url(); ?>assets/images/PUPLogo.png" style= "width:7%;float: left; margin-right:1%; margin-left: 5%;">
-				<label >Republic of the Philippines <br> 
-				<label style="font-size: 100%">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES<br>
-				<label style="font-size: 100%">Office of the Vice President for Academic Affairs<br>
-				<label style="font-size: 150%">COLLEGE OF COMPUTER AND INFORMATION SCIENCES<br>
-			 <hr style="border: 1px solid">    
-        </header> -->
+<body style="font-family: 'Arial Narrow',Arial,sans-serif; padding-top: 2em; padding-bottom: 1.5em;">
+		<header>
+			 <div>
+					<img src ="<?php echo base_url(); ?>assets/images/PUPLogo.png" style="width:10%; float:left; margin-right:1%; margin-left: 5%; padding-top: 0%">
+						<label>Republic of the Philippines</label><br>
+						<label style="font-size: 100%">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES<br>
+						<label style="font-size: 100%">Office of the Vice President for Academic Affairs<br>
+						<label style="font-size: 120%">COLLEGE OF COMPUTER AND INFORMATION SCIENCES<br>
+					 <hr style="border: 1px solid">
 
-        <!-- <footer>
-            <hr style="border: 1px solid">
-			<center>
-				CCIS Office N207 2F North Wing PUP A. Mabini Campus Anonas Street, Sta. Mesa, 1016 Manila  Phone: (Direct Line) 335-1768<br>
-		 		(Trunk Line) 335-1PUP or 3351777 (Local)272 / 264 ; website: www.pup.edu.ph &emsp;e ccis@pup.edu.ph 
+			 </div>   
+
+        </header> 
+
+        <footer>
+            <div style="font-size: 90%">
+				<hr style="border: 1px solid">
+				<center>
+					CCIS Office N207 2F North Wing PUP A. Mabini Campus Anonas Street, Sta. Mesa, 1016 Manila  Phone: (Direct Line) 335-1768<br>
+			 		(Trunk Line) 335-1PUP or 3351777 (Local)272/264; website: www.pup.edu.ph &emsp;ccis@pup.edu.ph 
 			<br>
 			<br>
+			</style>
+			<label style="font-size:130%">“<span style="font-size:150%">T</span>HE <span style="font-size:150%">C</span>OUNTRY’S <span style="font-size:150%">1</span><sup>st </sup><span style="font-size:150%">P</span>OLYTECHNIC<span><span style="font-size:150%"> U”
 
-			<label style="font-size:130%">“<span style="font-size:135%">T</span>HE <span style="font-size:135%">C</span>OUNTRY’S <span style="font-size:135%">1</span><sup>st</sup> <span style="font-size:135%">P</span>OLYTECHNIC<span style="font-size:135%">U”</span>
-			</label>
-			</center>
-        </footer> -->
+				</center>
+			</div>
+        </footer>
 
         <!-- <br><br><br><br> -->
-
         <main>
-            <div>
-                <p><center>COURSE OFFERINGS</center></p>
-                <p><center><strong><?php echo $course; ?></strong></center></p>
-                <p><center><strong><?php echo $sem; ?>&nbsp;Semester, AY&nbsp;<?php echo $acadyr; ?></strong></center></p>
-            </div>
-
+                <label style="font-size: 120%;"><center>COURSE OFFERINGS</center></label>
+                <label style="font-size: 120%; text-transform: uppercase;"><center><strong><?php echo $course; ?></strong></center></label>
+                <label><center><strong><?php echo $sem; ?>&nbsp;Semester, AY&nbsp;<?php echo $acadyr; ?></strong></center></label>
             <br>
             <div>
-                <div style="margin-left: 10%;">
+                <div style="margin-left: 2%; margin-right: 2%">
                     <h5><u><b>FIRST YEAR</b></u></h5>
                 </div>
-                <div style="margin-left: 10%;">
+                <div style="margin-left: 2%; margin-right: 2%">
                 <?php 
                 	$result2 = array();
                 	$result3 = array();
@@ -89,7 +100,7 @@
                 			$result3 = $this->getdata_model->get_section_total($acadyr, $sem, $section_id);
                 			echo '<label><b>'.$s[1].'</b></label>';
                 			echo '<div style="font-size:11px; page-break-inside: avoid;">
-                					<table>
+                					<table style="width:100%;">
 			                			<thead>
 					                       <tr>
 					                        	<th>Course Code</th>
@@ -138,13 +149,11 @@
                 </div>
            	</div>
 
-           	<br>
-
-           	<div>
-                <div style="margin-left: 10%;">
+           	<div style="margin-left: 2%; margin-right: 2%">
+                <div>
                     <h5><u><b>SECOND YEAR</b></u></h5>
                 </div>
-                <div style="margin-left: 10%;">
+                <div>
                 <?php 
                 	$result2 = array();
                 	$result3 = array();
@@ -157,7 +166,7 @@
                 			$result3 = $this->getdata_model->get_section_total($acadyr, $sem, $section_id);
                 			echo '<label><b>'.$s[1].'</b></label>';
                 			echo '<div style="font-size:11px; page-break-inside: avoid;">
-                					<table>
+                					<table style="width:100%;">
 			                			<thead>
 					                       <tr>
 					                        	<th>Course Code</th>
@@ -205,14 +214,11 @@
                 ?>
                 </div>
            	</div>
-
-           	<br>
-
-           	<div>
-                <div style="margin-left: 10%;">
+           	<div style="margin-left: 2%; margin-right: 2%">
+                <div>
                     <h5><u><b>THIRD YEAR</b></u></h5>
                 </div>
-                <div style="margin-left: 10%;">
+                <div>
                 <?php 
                 	$result2 = array();
                 	$result3 = array();
@@ -225,7 +231,7 @@
                 			$result3 = $this->getdata_model->get_section_total($acadyr, $sem, $section_id);
                 			echo '<label><b>'.$s[1].'</b></label>';
                 			echo '<div style="font-size:11px; page-break-inside: avoid;">
-                					<table>
+                					<table style="width:100%">
 			                			<thead>
 					                       <tr>
 					                        	<th>Course Code</th>
@@ -274,13 +280,11 @@
                 </div>
            	</div>
 
-           	<br>
-
-           	<div>
-                <div style="margin-left: 10%;">
+           	<div style="margin-left: 2%; margin-right: 2%">
+                <div>
                     <h5><u><b>FOURTH YEAR</b></u></h5>
                 </div>
-                <div style="margin-left: 10%;">
+                <div>
                 <?php 
                 	$result2 = array();
                 	$result3 = array();
@@ -292,7 +296,7 @@
                 			$result2 = $this->getdata_model->get_section_schedule($acadyr, $sem, $section_id);
                 			echo '<label><b>'.$s[1].'</b></label>';
                 			echo '<div style="font-size:11px; page-break-inside: avoid;">
-                					<table>
+                					<table style="width:100%">
 			                			<thead>
 					                       <tr>
 					                        	<th>Course Code</th>
@@ -341,7 +345,7 @@
                 </div>
            	</div>
            	<br><br>
-           	<div style="margin-left: 10%;">
+           	<div style="margin-left: 5%;">
            		<label>Prepared by:</label>
 	           	<br><br><br>
 	           	<div style="page-break-inside: avoid;">
@@ -357,9 +361,9 @@
 	           			Chairperson, Department of Information Technology
 	           		</p>
 	           	</div>
-	           	<br><br><br><br>
+	           	<br><br>
 	           	<label>Noted by:</label>
-	           	<br><br><br>
+	           	<br><br><br><br>
 	           	<div style="page-break-inside: avoid;">
 	           		<p>
 	           			<b>Dr. Gisela May A. Albano</b><br>

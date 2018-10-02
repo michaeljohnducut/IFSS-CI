@@ -8,8 +8,7 @@
                             <li class="active">Dashboard</li>
                         </ol>
                     </div>
-                </div>
-                
+                </div>  
                 <div class="row">
                     <div class="col-md-12 col-lg-12 col-sm-12">
                         <div class="white-box">
@@ -85,65 +84,157 @@
                     </div>
                     
                     <!--TOP 5 FACULTY MEMBERS-->
-                    <div class="row">
+                      <div class="row">
                      <div class="col-md-5">
-                         <div class="white-box">
+                         <div class="white-box" style="height: 98%;">
                             <h3 class="box-title">Top 5 Faculty Members</h3>
                             <p class="text-muted m-b-30"> with 3 Consecutive Outstanding Ratings</p>
-                            <div class="vtabs">
-                                <ul class="nav tabs-vertical" >
-                                    <style>
-                                     .nav-item {
-                                             background-color:#fff; 
-                                             border:0px;
-                                        }
-                                    </style>
-                                    <?php
-                                        foreach($fac_type as $ft)
-                                        {
-                                           echo '<li class="tab nav-item">
-                                                    <a data-toggle="tab" class="nav-link" href="#vmessages3" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">'.$ft[0].'</span> </a>
-                                                </li>';
-                                        } 
-                                    ?>
-                                    <!-- <li class="tab nav-item active">
-                                        <a data-toggle="tab" class="nav-link" href="#vmessages3" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Regular Full-Time</span> </a>
-                                    </li> -->
-                                </ul>
-                            <div class="tab-content">
-                                    <div id="vmessages3" class="tab-pane active">
-                                         <div class="white-box"style="padding-top:0%; padding-bottom:0%;">
+                             <hr style="border: 1px solid">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                     <label class="control-label">Select Academic Year</label>
+                                         <select class="form-control" id="selectAcadYr2">
+                                          <option value="">-Academic Year-</option>
+                                           <?php 
+                                             for ($i = date("Y"); $i > 1900; $i-- ){
+                                                echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                                  }
+                                           ?> 
+                                         </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                     <label class="control-label">Select Semester</label>
+                                            <select class="form-control" id="selectSem2">
+                                             <option value="">--Semester--</option>
+                                             <option value="1st">First</option>
+                                             <option value="2nd">Second</option>
+                                             <option value="Summer">Summer</option>
+                                            </select>
+                                    </div>
+                                 </div>
+                  <hr style="border: 1px solid">
+                 <div class="vtabs">
+                     <ul class="nav tabs-vertical" >
+                         <style>
+                             .nav-item {
+                              background-color:#fff; 
+                              border:0px;
+                              }
+                        </style>
+                    <li class="tab nav-item active">
+                     <a data-toggle="tab" class="nav-link" href="#regularFulltimeTab" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Outstanding</span> </a>
+                    </li>
+                   <li class="tab nav-item" style="background-color:#fff; border:0px;">
+                     <a data-toggle="tab" class="nav-link" href="#regularParttimeTab" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Full load</span> </a>
+                  </li>
+                   </ul>
+                   <div class="tab-content">
+                      <div id="regularFulltimeTab" class="tab-pane active">
+                         <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
+                          <div>
+                            <div class="sl-item">
+                                <div class="sl-right">
+                                    <div><label>Rachel Nayre1</label></div>
+                                     <p>Rating: 100%</p>
+                                 </div>
+                            </div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Nayre</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Atian-Nayre</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Nayre</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Nayre</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="clearfix"></div>
+                </div>
+                     <div id="regularParttimeTab" class="tab-pane">
+                        <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
+                            <div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Nayre2</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Nayre</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Nayre</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Nayre</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div><label>Rachel Nayre</label></div>
+                                        <p>Rating: 100%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- <div id="vmessages3" class="tab-pane">
+                        <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
                             <div class="steamline">
                                 <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
+                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre3</label></div>
                                         <p>Rating: 100%</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
+                                    <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
                                         <p>Rating: 100%</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
+                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
                                         <p>Rating: 100%</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
+                                    <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
                                         <p>Rating: 100%</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="<?php echo base_url(); ?>assets/images/profile.png"> </div>
+                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
                                         <p>Rating: 100%</p>
@@ -151,13 +242,13 @@
                                   </div>
                             </div>
                         </div>
-                 </div>
+                 </div> -->
              </div>
           </div>  
      </div>
      </div>
             <div class="col-sm-5">
-            <div class="white-box" style="padding-bottom: 15%;">
+            <div class="white-box" style="padding-bottom: 15%; height: 98%;">
             <h3 class="box-title"> total number of faculty members</h3>
              <p class="text-muted m-b-30">with satisfactory rating per faculty type</p>
             <hr style="border: 1px solid">
@@ -182,7 +273,7 @@
                             <option value="Summer">Summer</option>
                         </select>
                 </div>
-                </div>
+            </div>
              <hr style="border: 1px solid">
             <div>
                 <ul class="basic-list">
@@ -243,7 +334,7 @@
                     <div class="white-box">
                     <h3 class="box-title">TOTAL NUMBER OF SECTIONS</h3>
                      <div>
-                        <canvas id="chart2" height="150"></canvas>
+                        <canvas id="chart2" height="175%"></canvas>
                     </div>
                 </div>
                 </div>
@@ -251,7 +342,7 @@
                     <div class="white-box">
                     <h3 class="box-title">Total Number of Faculty Members</h3>
                     <div>
-                         <canvas id="chart3" height="270"></canvas>
+                         <canvas id="chart3" height="315"></canvas>
                     </div>
                     <hr style="border: 1px solid; color: #EEF0F0;">
                     <label class="control-label" id="total_fac"></label>
@@ -271,7 +362,7 @@
                             </select>
                             <hr>
                             <div>
-                                <canvas id="chart5" height="230"></canvas>
+                                <canvas id="chart5" height="267%"></canvas>
                             </div>
                     </div>
                     </div>

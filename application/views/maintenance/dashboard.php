@@ -88,13 +88,13 @@
                      <div class="col-md-5">
                          <div class="white-box" style="height: 98%;">
                             <h3 class="box-title">Top 5 Faculty Members</h3>
-                            <p class="text-muted m-b-30"> with 3 Consecutive Outstanding Ratings</p>
+                            <!-- <p class="text-muted m-b-30"> with 3 Consecutive Outstanding Ratings</p> -->
                              <hr style="border: 1px solid">
                                 <div class="row">
                                     <div class="col-md-6">
                                      <label class="control-label">Select Academic Year</label>
-                                         <select class="form-control" id="selectAcadYr2">
-                                          <option value="">-Academic Year-</option>
+                                         <select class="form-control select2" id="selectAcadYr4">
+                                          <!-- <option value="">-Academic Year-</option> -->
                                            <?php 
                                              for ($i = date("Y"); $i > 1900; $i-- ){
                                                 echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -104,8 +104,8 @@
                                     </div>
                                     <div class="col-md-6">
                                      <label class="control-label">Select Semester</label>
-                                            <select class="form-control" id="selectSem2">
-                                             <option value="">--Semester--</option>
+                                            <select class="form-control select2" id="selectSem4">
+                                             <!-- <option value="">--Semester--</option> -->
                                              <option value="1st">First</option>
                                              <option value="2nd">Second</option>
                                              <option value="Summer">Summer</option>
@@ -122,17 +122,17 @@
                               }
                         </style>
                     <li class="tab nav-item active">
-                     <a data-toggle="tab" class="nav-link" href="#regularFulltimeTab" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Outstanding</span> </a>
+                     <a data-toggle="tab" class="nav-link" href="#outstanding" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Outstanding</span> </a>
                     </li>
                    <li class="tab nav-item" style="background-color:#fff; border:0px;">
-                     <a data-toggle="tab" class="nav-link" href="#regularParttimeTab" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Full load</span> </a>
+                     <a data-toggle="tab" class="nav-link" href="#full_load" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Full load</span> </a>
                   </li>
                    </ul>
                    <div class="tab-content">
-                      <div id="regularFulltimeTab" class="tab-pane active">
+                      <div id="outstanding" class="tab-pane active">
                          <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
-                          <div>
-                            <div class="sl-item">
+                          <div id="outstanding_result">
+                            <!-- <div class="sl-item">
                                 <div class="sl-right">
                                     <div><label>Rachel Nayre1</label></div>
                                      <p>Rating: 100%</p>
@@ -161,88 +161,47 @@
                                         <div><label>Rachel Nayre</label></div>
                                         <p>Rating: 100%</p>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     <div class="clearfix"></div>
                 </div>
-                     <div id="regularParttimeTab" class="tab-pane">
+                     <div id="full_load" class="tab-pane">
                         <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
-                            <div>
-                                <div class="sl-item">
+                            <div id="full_load_result">
+                                <!-- <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre2</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
-                     <!-- <div id="vmessages3" class="tab-pane">
-                        <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
-                            <div class="steamline">
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre3</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                  </div>
-                            </div>
-                        </div>
-                 </div> -->
              </div>
           </div>  
      </div>
@@ -679,8 +638,66 @@
                     {
                         alert(JSON.stringify(data));
                     }
-                });   
+                }); 
             }       
+        }
+
+        function fetch_data3(acad_yr, sem)
+        {
+            if(acad_yr && sem)
+            {
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_top_outstanding')?>", 
+                    method:"POST",
+                    dataType: 'json',
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#outstanding_result').empty();
+
+                        var i;
+
+                        for(i=0; i<data.length; i++)
+                        {
+                            $('#outstanding_result').append('<div class="sl-item">'+
+                                                            '<div class="sl-right">'+
+                                                            '<div><label>'+data[i][0]+'</label></div>'+
+                                                            '<p>Rating: '+data[i][1]+'</p>'+
+                                                            '</div> </div>');
+                        }
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
+
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_fullload_outstanding')?>", 
+                    method:"POST",
+                    dataType: 'json',
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#full_load_result').empty();
+
+                        var i;
+
+                        for(i=0; i<data.length; i++)
+                        {
+                            $('#full_load_result').append('<div class="sl-item">'+
+                                                            '<div class="sl-right">'+
+                                                            '<div><label>'+data[i][0]+'</label></div>'+
+                                                            '<p>Load: '+data[i][1]+' hours</p>'+
+                                                            '</div> </div>');
+                        }
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
+            }
         }
 
         $(document).ready(function()
@@ -701,10 +718,12 @@
 
             fetch_data2($('#selectAcadYr1').val(), $('#selectSem1').val());
 
-            $(".counter").counterUp({
-                delay: 100,
-                time: 1200
-            });    
+            fetch_data3($('#selectAcadYr4').val(), $('#selectSem4').val());
+
+            // $(".counter").counterUp({
+            //     delay: 100,
+            //     time: 1200
+            // });    
 
             $('#selectAcadYr3').on('change', function()
             {
@@ -734,6 +753,18 @@
                 var acad_yr = $('#selectAcadYr1').val();
                 var sem = $('#selectSem1').val();
                 fetch_data2(acad_yr, sem);
+            });
+
+            $('#selectAcadYr4').on('change', function(){
+                var acad_yr = $('#selectAcadYr4').val();
+                var sem = $('#selectSem4').val();
+                fetch_data3(acad_yr, sem);
+            });
+
+            $('#selectSem4').on('change', function(){
+                var acad_yr = $('#selectAcadYr4').val();
+                var sem = $('#selectSem4').val();
+                fetch_data3(acad_yr, sem);
             });
 
             $(".select2").select2();

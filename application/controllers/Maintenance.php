@@ -990,4 +990,16 @@ class Maintenance extends CI_Controller {
 		exit();
 	}
 
+	public function get_top_outstanding()
+	{
+		echo json_encode($this->getdata_model->get_top_outstanding($_POST));
+		exit();
+	}
+
+	public function get_fullload_outstanding()
+	{
+		echo json_encode($this->getdata_model->get_fullload_outstanding($_POST));
+		exit();
+	}
+
 }

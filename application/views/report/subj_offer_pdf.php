@@ -40,14 +40,14 @@
 	</style>
 </head>
 <body style="font-family: 'Arial Narrow',Arial,sans-serif;">
-		<!-- <header>
+		<header>
 			<img src = "<?php echo base_url(); ?>assets/images/PUPLogo.png" style= "width:7%;float: left; margin-right:1%; margin-left: 5%;">
 				<label >Republic of the Philippines <br> 
 				<label style="font-size: 100%">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES<br>
 				<label style="font-size: 100%">Office of the Vice President for Academic Affairs<br>
 				<label style="font-size: 150%">COLLEGE OF COMPUTER AND INFORMATION SCIENCES<br>
 			 <hr style="border: 1px solid">    
-        </header> -->
+        </header>
 
         <!-- <footer>
             <hr style="border: 1px solid">

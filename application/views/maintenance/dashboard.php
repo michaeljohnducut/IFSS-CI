@@ -15,8 +15,8 @@
                             <div class="row row-in">
                                 <div class="col-lg-3 col-sm-6 row-in-br">
                                     <label class="control-label">Select Academic Year</label>
-                                     <select class="form-control" id="selectAcadYr1">
-                                        <option value="">-Academic Year-</option>
+                                     <select class="form-control select2" id="selectAcadYr1">
+                                        <!-- <option value="">-Academic Year-</option> -->
                                         <?php 
                                             for ($i = date("Y"); $i > 1900; $i-- ){
                                                 echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -25,8 +25,8 @@
                                       </select>
                                       <br>
                                       <label class="control-label">Select Semester</label>
-                                     <select class="form-control" id="selectSem1">
-                                        <option value="">--Semester--</option>
+                                     <select class="form-control select2" id="selectSem1">
+                                        <!-- <option value="">--Semester--</option> -->
                                         <option value="1st">First</option>
                                         <option value="2nd">Second</option>
                                         <option value="Summer">Summer</option>
@@ -39,11 +39,11 @@
                                             <h5 class="text-muted vb">FACULTY MEMBER <BR> WITH COMPLETE SCHEDULE</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <h3 class="counter text-right m-t-15 text-megna">52</h3>
+                                            <h3 class="counter text-right m-t-15 text-megna" id="fac_comp" val></h3>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">40% Complete (success)</span> </div>
+                                                <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="fac_prog"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -54,11 +54,11 @@
                                             <h5 class="text-muted vb">SECTIONS WITH <BR>COMPLETE SCHEDULE</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <h3 class="counter text-right m-t-15 text-primary">43</h3>
+                                            <h3 class="counter text-right m-t-15 text-primary" id="sec_comp"></h3>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 75%"> <span class="sr-only">40% Complete (success)</span> </div>
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="sec_prog"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -69,11 +69,11 @@
                                             <h5 class="text-muted vb">SERVICES WITH ASSIGNED FACULTY MEMBER</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <h3 class="counter text-right m-t-15 text-success">28</h3>
+                                            <h3 class="counter text-right m-t-15 text-success" id="services_assign"></h3>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
+                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="services_prog"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -88,13 +88,13 @@
                      <div class="col-md-5">
                          <div class="white-box" style="height: 98%;">
                             <h3 class="box-title">Top 5 Faculty Members</h3>
-                            <p class="text-muted m-b-30"> with 3 Consecutive Outstanding Ratings</p>
+                            <!-- <p class="text-muted m-b-30"> with 3 Consecutive Outstanding Ratings</p> -->
                              <hr style="border: 1px solid">
                                 <div class="row">
                                     <div class="col-md-6">
                                      <label class="control-label">Select Academic Year</label>
-                                         <select class="form-control" id="selectAcadYr2">
-                                          <option value="">-Academic Year-</option>
+                                         <select class="form-control select2" id="selectAcadYr4">
+                                          <!-- <option value="">-Academic Year-</option> -->
                                            <?php 
                                              for ($i = date("Y"); $i > 1900; $i-- ){
                                                 echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -104,8 +104,8 @@
                                     </div>
                                     <div class="col-md-6">
                                      <label class="control-label">Select Semester</label>
-                                            <select class="form-control" id="selectSem2">
-                                             <option value="">--Semester--</option>
+                                            <select class="form-control select2" id="selectSem4">
+                                             <!-- <option value="">--Semester--</option> -->
                                              <option value="1st">First</option>
                                              <option value="2nd">Second</option>
                                              <option value="Summer">Summer</option>
@@ -122,17 +122,17 @@
                               }
                         </style>
                     <li class="tab nav-item active">
-                     <a data-toggle="tab" class="nav-link" href="#regularFulltimeTab" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Outstanding</span> </a>
+                     <a data-toggle="tab" class="nav-link" href="#outstanding" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Outstanding</span> </a>
                     </li>
                    <li class="tab nav-item" style="background-color:#fff; border:0px;">
-                     <a data-toggle="tab" class="nav-link" href="#regularParttimeTab" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Full load</span> </a>
+                     <a data-toggle="tab" class="nav-link" href="#full_load" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Full load</span> </a>
                   </li>
                    </ul>
                    <div class="tab-content">
-                      <div id="regularFulltimeTab" class="tab-pane active">
+                      <div id="outstanding" class="tab-pane active">
                          <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
-                          <div>
-                            <div class="sl-item">
+                          <div id="outstanding_result">
+                            <!-- <div class="sl-item">
                                 <div class="sl-right">
                                     <div><label>Rachel Nayre1</label></div>
                                      <p>Rating: 100%</p>
@@ -161,88 +161,47 @@
                                         <div><label>Rachel Nayre</label></div>
                                         <p>Rating: 100%</p>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     <div class="clearfix"></div>
                 </div>
-                     <div id="regularParttimeTab" class="tab-pane">
+                     <div id="full_load" class="tab-pane">
                         <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
-                            <div>
-                                <div class="sl-item">
+                            <div id="full_load_result">
+                                <!-- <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre2</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
                                 </div>
                                 <div class="sl-item">
                                     <div class="sl-right">
                                         <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
+                                        <p>Load: 20hrs</p>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
-                     <!-- <div id="vmessages3" class="tab-pane">
-                        <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
-                            <div class="steamline">
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre3</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                   <div class="sl-left"> <img class="img-circle" alt="user" src="assets/images/profile.png"> </div>
-                                    <div class="sl-right">
-                                        <div><label>Rachel Nayre</label></div>
-                                        <p>Rating: 100%</p>
-                                    </div>
-                                  </div>
-                            </div>
-                        </div>
-                 </div> -->
              </div>
           </div>  
      </div>
@@ -254,20 +213,20 @@
             <hr style="border: 1px solid">
             <div class="row">
                 <div class="col-md-6">
-                     <label class="control-label">Select Academic Year</label>
-                        <select class="form-control" id="selectAcadYr2">
-                            <option value="">-Academic Year-</option>
-                             <?php 
-                                 for ($i = date("Y"); $i > 1900; $i-- ){
-                                    echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
-                                      }
-                            ?> 
-                        </select>
+                                 <label class="control-label">Select Academic Year</label>
+                                     <select class="form-control select2" id="selectAcadYr2">
+                                        <!-- <option value="">-Academic Year-</option> -->
+                                        <?php 
+                                            for ($i = date("Y"); $i > 1900; $i-- ){
+                                                echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
+                                            }
+                                        ?>
+                                      </select>
                 </div>
                 <div class="col-md-6">
                     <label class="control-label">Select Semester</label>
-                        <select class="form-control" id="selectSem2">
-                            <option value="">--Semester--</option>
+                        <select class="form-control select2" id="selectSem2">
+                            <!-- <option value="">--Semester--</option> -->
                             <option value="1st">First</option>
                             <option value="2nd">Second</option>
                             <option value="Summer">Summer</option>
@@ -352,8 +311,8 @@
                     <div class="white-box">
                      <h3 class="box-title"> top 5 preferred teaching time </h3>
                         <label class="control-label">Select Academic Year</label>
-                            <select class="form-control" id="selectAcadYr3">
-                                <option value="">--ACADEMIC YEAR--</option>
+                            <select class="form-control select2" id="selectAcadYr3">
+                                <!-- <option value="">--ACADEMIC YEAR--</option> -->
                                     <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
                                             echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -533,6 +492,44 @@
             });
         }
 
+        function get_pref_time(acad_yr)
+        {
+            $.ajax({
+                   type:"POST",
+                   url:"<?php echo base_url('Maintenance/show_pref_time')?>",
+                   data: {acad_yr:acad_yr},
+                   dataType: 'json',
+                   cache: false,
+                   success: function(data)
+                    {
+                        var ctx5 = document.getElementById("chart5").getContext("2d");
+                        
+                        var myPolarArea = new Chart(ctx5).PolarArea(data, {
+                            scaleShowLabelBackdrop : true,
+                            scaleBackdropColor : "rgba(255,255,255,0.75)",
+                            scaleBeginAtZero : true,
+                            scaleBackdropPaddingY : 2,
+                            scaleBackdropPaddingX : 2,
+                            scaleShowLine : true,
+                            segmentShowStroke : true,
+                            segmentStrokeColor : "#fff",
+                            segmentStrokeWidth : 2,
+                            animationSteps : 100,
+                            tooltipCornerRadius: 2,
+                            animationEasing : "easeOutBounce",
+                            animateRotate : true,
+                            animateScale : false,
+                            legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                            responsive: true
+                        });
+                    },
+                    error: function(data)
+                    {
+                        alert('An error occured. Please reload the page and try again.','e');
+                    }
+                });
+        }
+
         function fetch_data(acad_yr, sem)
         {
             if(acad_yr && sem)
@@ -594,10 +591,114 @@
                });  
         }
 
-        $(".counter").counterUp({
-            delay: 100,
-            time: 1200
-        });
+        function fetch_data2(acad_yr, sem)
+        {
+            if(acad_yr && sem)
+            {
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_faculty_complete')?>", 
+                    method:"POST",
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#fac_comp').html(data);
+                        $('#fac_prog').css('width', data + "%");
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
+
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_section_complete')?>", 
+                    method:"POST",
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#sec_comp').html(data);
+                        $('#sec_prog').css('width', data + "%");
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
+
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_services_complete')?>", 
+                    method:"POST",
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#services_assign').html(data);
+                        $('#services_prog').css('width', data + "%");
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                }); 
+            }       
+        }
+
+        function fetch_data3(acad_yr, sem)
+        {
+            if(acad_yr && sem)
+            {
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_top_outstanding')?>", 
+                    method:"POST",
+                    dataType: 'json',
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#outstanding_result').empty();
+
+                        var i;
+
+                        for(i=0; i<data.length; i++)
+                        {
+                            $('#outstanding_result').append('<div class="sl-item">'+
+                                                            '<div class="sl-right">'+
+                                                            '<div><label>'+data[i][0]+'</label></div>'+
+                                                            '<p>Rating: '+data[i][1]+'</p>'+
+                                                            '</div> </div>');
+                        }
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
+
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_fullload_outstanding')?>", 
+                    method:"POST",
+                    dataType: 'json',
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#full_load_result').empty();
+
+                        var i;
+
+                        for(i=0; i<data.length; i++)
+                        {
+                            $('#full_load_result').append('<div class="sl-item">'+
+                                                            '<div class="sl-right">'+
+                                                            '<div><label>'+data[i][0]+'</label></div>'+
+                                                            '<p>Load: '+data[i][1]+' hours</p>'+
+                                                            '</div> </div>');
+                        }
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
+            }
+        }
 
         $(document).ready(function()
         {
@@ -611,43 +712,23 @@
 
             show_top_specialization();
 
+            get_pref_time($('#selectAcadYr3').val());
+
+            fetch_data($('#selectAcadYr2').val(), $('#selectSem2').val());
+
+            fetch_data2($('#selectAcadYr1').val(), $('#selectSem1').val());
+
+            fetch_data3($('#selectAcadYr4').val(), $('#selectSem4').val());
+
+            // $(".counter").counterUp({
+            //     delay: 100,
+            //     time: 1200
+            // });    
+
             $('#selectAcadYr3').on('change', function()
             {
                 var acad_yr = $('#selectAcadYr3').val();
-                $.ajax({
-                   type:"POST",
-                   url:"<?php echo base_url('Maintenance/show_pref_time')?>",
-                   data: {acad_yr:acad_yr},
-                   dataType: 'json',
-                   cache: false,
-                   success: function(data)
-                    {
-                        var ctx5 = document.getElementById("chart5").getContext("2d");
-                        
-                        var myPolarArea = new Chart(ctx5).PolarArea(data, {
-                            scaleShowLabelBackdrop : true,
-                            scaleBackdropColor : "rgba(255,255,255,0.75)",
-                            scaleBeginAtZero : true,
-                            scaleBackdropPaddingY : 2,
-                            scaleBackdropPaddingX : 2,
-                            scaleShowLine : true,
-                            segmentShowStroke : true,
-                            segmentStrokeColor : "#fff",
-                            segmentStrokeWidth : 2,
-                            animationSteps : 100,
-                            tooltipCornerRadius: 2,
-                            animationEasing : "easeOutBounce",
-                            animateRotate : true,
-                            animateScale : false,
-                            legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
-                            responsive: true
-                        });
-                    },
-                    error: function(data)
-                    {
-                        alert('An error occured. Please reload the page and try again.','e');
-                    }
-                });
+                get_pref_time(acad_yr);
             });
         
             $('#selectAcadYr2').on('change', function(){
@@ -662,6 +743,32 @@
                 fetch_data(acad_yr, sem);
             });
 
+            $('#selectAcadYr1').on('change', function(){
+                var acad_yr = $('#selectAcadYr1').val();
+                var sem = $('#selectSem1').val();
+                fetch_data2(acad_yr, sem);
+            });
+
+            $('#selectSem1').on('change', function(){
+                var acad_yr = $('#selectAcadYr1').val();
+                var sem = $('#selectSem1').val();
+                fetch_data2(acad_yr, sem);
+            });
+
+            $('#selectAcadYr4').on('change', function(){
+                var acad_yr = $('#selectAcadYr4').val();
+                var sem = $('#selectSem4').val();
+                fetch_data3(acad_yr, sem);
+            });
+
+            $('#selectSem4').on('change', function(){
+                var acad_yr = $('#selectAcadYr4').val();
+                var sem = $('#selectSem4').val();
+                fetch_data3(acad_yr, sem);
+            });
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
         });
 
 

@@ -57,7 +57,6 @@
 						<label style="font-size: 100%">Office of the Vice President for Academic Affairs<br>
 						<label style="font-size: 120%">COLLEGE OF COMPUTER AND INFORMATION SCIENCES<br>
 					 <hr style="border: 1px solid">
-
 			 </div>   
 
         </header> 

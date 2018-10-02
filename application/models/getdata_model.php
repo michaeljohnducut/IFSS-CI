@@ -2839,7 +2839,7 @@ FROM subject_match sm
 	{
 		$result = array();
 		
-		$query = $this->db->query('SELECT day, TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0 AS hours, load_type AS load_type
+		$query = $this->db->query('SELECT day, SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours, load_type AS load_type
 									FROM other_time_sched
 									WHERE faculty_id = "'.$faculty.'" AND acad_yr = "'.$acadyr.'" AND sem = "'.$sem.'"
 									GROUP BY load_type, day
@@ -3176,6 +3176,163 @@ FROM subject_match sm
 		}
 
 		return $result;
+	}
+
+	public function get_faculty_complete()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('faculty_id, faculty_type')
+                ->get('faculty');
+
+        $ctr = 0;
+
+		foreach($query1->result() as $r)
+		{		
+			if($r->faculty_type == 3)
+			{
+				$query2 = $this->db->select('SUM(num_hrs) AS total_hrs_faculty')
+					->where('fac_type_desc', $r->faculty_type)
+					->where('status', 1)
+					->not_like('fac_load_desc', 'Temporary')
+					->not_like('fac_load_desc', 'Part time')
+	                ->get('faculty_load_type');
+
+		        foreach($query2->result() as $s)
+		        {
+		        	$fac_type_total = $s->total_hrs_faculty;
+		        }
+			}
+			else
+			{
+				$query2 = $this->db->select('SUM(num_hrs) AS total_hrs_faculty')
+					->where('fac_type_desc', $r->faculty_type)
+					->where('status', 1)
+					->not_like('fac_load_desc', 'Temporary')
+	                ->get('faculty_load_type');
+
+		        foreach($query2->result() as $s)
+		        {
+		        	$fac_type_total = $s->total_hrs_faculty;
+		        }
+			}
+
+	        $query3 = $this->db->query('SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours_load
+										FROM teaching_assign_sched tas JOIN subject_match sm
+										ON tas.subj_match_id = sm.subj_match_id
+										WHERE sm.faculty_id = "'.$r->faculty_id.'" AND sm.acad_yr = "'.$acad_yr.'" AND sm.sem = "'.$sem.'"');
+
+	        foreach($query3->result() as $t)
+	        {
+	        	($t->hours_load == '')?$hours_load = 0:$hours_load = $t->hours_load;
+	        	
+	        }
+
+	        $query4 = $this->db->query('SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours_other
+										FROM other_time_sched 
+										WHERE faculty_id = "'.$r->faculty_id.'" AND acad_yr = "'.$acad_yr.'" AND sem = "'.$sem.'"');
+
+	        foreach($query4->result() as $u)
+	        {
+	        	($u->hours_other == '')?$hours_other = 0:$hours_other = $u->hours_other;
+	        }
+
+	        $total_count = $hours_load + $hours_other;
+
+	        if($fac_type_total == $total_count)
+	        {
+	        	$ctr++;
+	        }
+
+	        $result[] = array(
+	        			$r->faculty_type,
+               			$fac_type_total,
+               			$hours_load,
+               			$hours_other,
+               			$r->faculty_id
+						);
+		}
+
+		return $ctr;
+	}
+
+	public function get_section_complete()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('section_id, year_lvl, course')
+				->where('acad_yr', $acad_yr)
+				->where('status', 1)
+                ->get('section');
+
+        $ctr = 0;
+
+		foreach($query1->result() as $r)
+		{		
+			$query2 = $this->db->select('SUM(lab_hrs + lec_hrs) AS off_total_hrs')
+					->join('curriculum c', 's.subj_id = c.subj_code')
+					->where('sem', $sem)
+					->where('year_lvl', $r->year_lvl)
+					->where('course', $r->course)
+	                ->get('subject s');
+
+		    foreach($query2->result() as $s)
+		    {
+		       	($s->off_total_hrs == '')?$off_total_hrs = 0:$off_total_hrs = $s->off_total_hrs;
+		    }
+
+	        $query3 = $this->db->query('SELECT SUM(lec_hrs + lab_hrs) AS total_hours
+										FROM subject sub
+										JOIN subject_match sm
+										ON sub.subj_id = sm.subj_id
+										JOIN section sec
+										ON sm.section = sec.section_id
+										WHERE sec.section_id = "'.$r->section_id.'" AND sm.acad_yr = "'.$acad_yr.'" AND sm.sem = "'.$sem.'"');
+
+	        foreach($query3->result() as $t)
+	        {
+	        	($t->total_hours == '')?$total_hours = 0:$total_hours = $t->total_hours;
+	        }
+
+	        if($off_total_hrs == $total_hours)
+	        {
+	        	$ctr++;
+	        }
+
+	        $result[] = array(
+	        			$r->section_id,
+	        			$off_total_hrs,
+	        			$total_hours
+						);
+		}
+
+		return $ctr;
+	}
+
+	public function get_services_complete()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('COUNT(faculty_id) AS total_services')
+				->where('acad_yr', $acad_yr)
+				->where('sem', $sem)
+                ->get('services_assign');
+
+		foreach($query1->result() as $r)
+		{		
+			$ctr = $r->total_services;
+		}
+
+		return $ctr;
 	}
 
 	public function get_pref_day(){

@@ -229,6 +229,15 @@ class Report extends CI_Controller
         $this->pdf->stream("faculty_assignment.pdf", array('Attachment' => 0));
 	}
 
+	public function official_time()
+	{
+		$data['faculty'] = $this->getdata_model->faculty();
+
+		$data['title'] = "IFSS | Official Time";
+		$this->load->view('templates/header', $data);
+		$this->load->view('report/report_official_time');
+		$this->load->view('templates/footer');
+	}
 
 	public function room_schedule()
 	{

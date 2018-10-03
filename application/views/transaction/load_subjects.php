@@ -693,7 +693,7 @@
                        }
                        if(data == 'OVERLOAD')
                        {
-                            swal("Overload!", "You can't assign " + subj_desc + " to faculty " + fac_name + " because it will overload the load limit.\n Please choose another faculty.", "error");
+                            swal("Load Limit will Exceed!", "You can't assign " + subj_desc + " to faculty " + fac_name + " because it will exceed the load limit.\n Please choose another faculty.", "error");
                             loadSectionSubjects();
                        }
                        if(data == 'EQUAL')

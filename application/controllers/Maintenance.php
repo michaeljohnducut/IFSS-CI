@@ -972,4 +972,34 @@ class Maintenance extends CI_Controller {
 		exit();
 	}
 
+	public function get_faculty_complete()
+	{
+		echo ($this->getdata_model->get_faculty_complete($_POST));
+		exit();
+	}
+
+	public function get_section_complete()
+	{
+		echo ($this->getdata_model->get_section_complete($_POST));
+		exit();
+	}
+
+	public function get_services_complete()
+	{
+		echo ($this->getdata_model->get_services_complete($_POST));
+		exit();
+	}
+
+	public function get_top_outstanding()
+	{
+		echo json_encode($this->getdata_model->get_top_outstanding($_POST));
+		exit();
+	}
+
+	public function get_fullload_outstanding()
+	{
+		echo json_encode($this->getdata_model->get_fullload_outstanding($_POST));
+		exit();
+	}
+
 }

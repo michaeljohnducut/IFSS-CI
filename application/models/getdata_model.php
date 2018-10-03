@@ -2839,7 +2839,7 @@ FROM subject_match sm
 	{
 		$result = array();
 		
-		$query = $this->db->query('SELECT day, TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0 AS hours, load_type AS load_type
+		$query = $this->db->query('SELECT day, SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours, load_type AS load_type
 									FROM other_time_sched
 									WHERE faculty_id = "'.$faculty.'" AND acad_yr = "'.$acadyr.'" AND sem = "'.$sem.'"
 									GROUP BY load_type, day
@@ -3178,6 +3178,219 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function get_faculty_complete()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('faculty_id, faculty_type')
+                ->get('faculty');
+
+        $ctr = 0;
+
+		foreach($query1->result() as $r)
+		{		
+			if($r->faculty_type == 3)
+			{
+				$query2 = $this->db->select('SUM(num_hrs) AS total_hrs_faculty')
+					->where('fac_type_desc', $r->faculty_type)
+					->where('status', 1)
+					->not_like('fac_load_desc', 'Temporary')
+					->not_like('fac_load_desc', 'Part time')
+	                ->get('faculty_load_type');
+
+		        foreach($query2->result() as $s)
+		        {
+		        	$fac_type_total = $s->total_hrs_faculty;
+		        }
+			}
+			else
+			{
+				$query2 = $this->db->select('SUM(num_hrs) AS total_hrs_faculty')
+					->where('fac_type_desc', $r->faculty_type)
+					->where('status', 1)
+					->not_like('fac_load_desc', 'Temporary')
+	                ->get('faculty_load_type');
+
+		        foreach($query2->result() as $s)
+		        {
+		        	$fac_type_total = $s->total_hrs_faculty;
+		        }
+			}
+
+	        $query3 = $this->db->query('SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours_load
+										FROM teaching_assign_sched tas JOIN subject_match sm
+										ON tas.subj_match_id = sm.subj_match_id
+										WHERE sm.faculty_id = "'.$r->faculty_id.'" AND sm.acad_yr = "'.$acad_yr.'" AND sm.sem = "'.$sem.'"');
+
+	        foreach($query3->result() as $t)
+	        {
+	        	($t->hours_load == '')?$hours_load = 0:$hours_load = $t->hours_load;
+	        	
+	        }
+
+	        $query4 = $this->db->query('SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours_other
+										FROM other_time_sched 
+										WHERE faculty_id = "'.$r->faculty_id.'" AND acad_yr = "'.$acad_yr.'" AND sem = "'.$sem.'"');
+
+	        foreach($query4->result() as $u)
+	        {
+	        	($u->hours_other == '')?$hours_other = 0:$hours_other = $u->hours_other;
+	        }
+
+	        $total_count = $hours_load + $hours_other;
+
+	        if($fac_type_total == $total_count)
+	        {
+	        	$ctr++;
+	        }
+
+	        $result[] = array(
+	        			$r->faculty_type,
+               			$fac_type_total,
+               			$hours_load,
+               			$hours_other,
+               			$r->faculty_id
+						);
+		}
+
+		return $ctr;
+	}
+
+	public function get_section_complete()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('section_id, year_lvl, course')
+				->where('acad_yr', $acad_yr)
+				->where('status', 1)
+                ->get('section');
+
+        $ctr = 0;
+
+		foreach($query1->result() as $r)
+		{		
+			$query2 = $this->db->select('SUM(lab_hrs + lec_hrs) AS off_total_hrs')
+					->join('curriculum c', 's.subj_id = c.subj_code')
+					->where('sem', $sem)
+					->where('year_lvl', $r->year_lvl)
+					->where('course', $r->course)
+	                ->get('subject s');
+
+		    foreach($query2->result() as $s)
+		    {
+		       	($s->off_total_hrs == '')?$off_total_hrs = 0:$off_total_hrs = $s->off_total_hrs;
+		    }
+
+	        $query3 = $this->db->query('SELECT SUM(lec_hrs + lab_hrs) AS total_hours
+										FROM subject sub
+										JOIN subject_match sm
+										ON sub.subj_id = sm.subj_id
+										JOIN section sec
+										ON sm.section = sec.section_id
+										WHERE sec.section_id = "'.$r->section_id.'" AND sm.acad_yr = "'.$acad_yr.'" AND sm.sem = "'.$sem.'"');
+
+	        foreach($query3->result() as $t)
+	        {
+	        	($t->total_hours == '')?$total_hours = 0:$total_hours = $t->total_hours;
+	        }
+
+	        if($off_total_hrs == $total_hours)
+	        {
+	        	$ctr++;
+	        }
+
+	        $result[] = array(
+	        			$r->section_id,
+	        			$off_total_hrs,
+	        			$total_hours
+						);
+		}
+
+		return $ctr;
+	}
+
+	public function get_services_complete()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('COUNT(faculty_id) AS total_services')
+				->where('acad_yr', $acad_yr)
+				->where('sem', $sem)
+                ->get('services_assign');
+
+		foreach($query1->result() as $r)
+		{		
+			$ctr = $r->total_services;
+		}
+
+		return $ctr;
+	}
+
+	public function get_top_outstanding()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('CONCAT(fname," ",mname," ",lname) AS fac_member, rating')
+				->join('evaluation e', 'e.faculty_id = f.faculty_id')
+				->where('acad_yr', $acad_yr)
+				->where('sem', $sem)
+				->where('rating_desc', 'OUTSTANDING')
+				->order_by('rating')
+				->limit(5)
+                ->get('faculty f');
+
+		foreach($query1->result() as $r)
+		{		
+			$result[] = array(
+	        			$r->fac_member,
+	        			$r->rating
+						);
+		}
+
+		return $result;
+	}
+
+	public function get_fullload_outstanding()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->query('SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours_load, 
+	CONCAT(fname," ",mname," ",lname) AS fac_member
+									FROM teaching_assign_sched tas JOIN subject_match sm
+									ON tas.subj_match_id = sm.subj_match_id
+									JOIN faculty f
+									ON f.faculty_id = sm.faculty_id 
+									WHERE sm.acad_yr = "'.$acad_yr.'" AND sm.sem = "'.$sem.'"
+									GROUP BY sm.faculty_id
+									ORDER BY SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) DESC
+									LIMIT 5');
+
+		foreach($query1->result() as $r)
+		{		
+			$result[] = array(
+	        			$r->fac_member,
+	        			$r->hours_load
+						);
+		}
+
+		return $result;
+	}
+
 	public function get_pref_day(){
 
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
@@ -3200,7 +3413,50 @@ FROM subject_match sm
 		}
 
 		return $result;	
+	}
 
+	public function get_account()
+	{
+		$result = array();
+
+		$query = $this->db->select('account_id, CONCAT(f.lname, ", ", f.fname, " ",  f.mname) AS fac_name')
+				->join('faculty f', 'a.faculty_id = f.faculty_id')
+                ->where('a.status', 1)
+                ->get('account a');
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->account_id.'"><span class="fa fa-pencil"></span></button>
+					<button class="btn btn-sm  btn-info" id="view_data" data-id="'.$r->account_id.'"><span class="fa fa-eye"></span></button>';
+
+			$result[] = array(
+					$r->account_id,
+					$r->fac_name,
+					$btn,
+					);
+		}
+
+		return $result;
+	}
+
+	public function view_account($id)
+	{
+		$result = array();
+
+		$query = $this->db->select('password, account_type, account_id')
+                ->where('account_id', $id)
+                ->get('account');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->password,
+					$r->account_type,
+					$r->account_id
+					);
+		}
+
+		return $result;
 	}
 
 

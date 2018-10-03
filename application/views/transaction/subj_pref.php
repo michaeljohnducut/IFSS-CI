@@ -515,12 +515,12 @@ function getPrefTime(faculty_id, acad_year, sem){
                     $("input[value = 'mon_mor']").prop('checked',true);
                 }
 
-                else if (start_temp == '12:00:00' && end_temp == '06:00:00'){
+                else if (start_temp == '12:00:00' && end_temp == '18:00:00'){
 
                     $("input[value = 'mon_aft']").prop('checked',true);
                 }
 
-                else if (start_temp == '06:00:00' && end_temp == '09:00:00'){
+                else if (start_temp == '18:00:00' && end_temp == '21:00:00'){
 
                     $("input[value = 'mon_eve']").prop('checked',true);
                 }
@@ -535,12 +535,12 @@ function getPrefTime(faculty_id, acad_year, sem){
                     $("input[value = 'tue_mor']").prop('checked',true);
                 }
 
-                else if (start_temp == '12:00:00' && end_temp == '06:00:00'){
+                else if (start_temp == '12:00:00' && end_temp == '18:00:00'){
 
                     $("input[value = 'tue_aft']").prop('checked',true);
                 }
 
-                else if (start_temp == '06:00:00' && end_temp == '09:00:00'){
+                else if (start_temp == '18:00:00' && end_temp == '21:00:00'){
 
                     $("input[value = 'tue_eve']").prop('checked',true);
                 }
@@ -555,12 +555,12 @@ function getPrefTime(faculty_id, acad_year, sem){
                     $("input[value = 'wed_mor']").prop('checked',true);
                 }
 
-                else if (start_temp == '12:00:00' && end_temp == '06:00:00'){
+                else if (start_temp == '12:00:00' && end_temp == '18:00:00'){
 
                     $("input[value = 'wed_aft']").prop('checked',true);
                 }
 
-                else if (start_temp == '06:00:00' && end_temp == '09:00:00'){
+                else if (start_temp == '18:00:00' && end_temp == '21:00:00'){
 
                     $("input[value = 'wed_eve']").prop('checked',true);
                 }
@@ -575,12 +575,12 @@ function getPrefTime(faculty_id, acad_year, sem){
                     $("input[value = 'thr_mor']").prop('checked',true);
                 }
 
-                else if (start_temp == '12:00:00' && end_temp == '06:00:00'){
+                else if (start_temp == '12:00:00' && end_temp == '18:00:00'){
 
                     $("input[value = 'thr_aft']").prop('checked',true);
                 }
 
-                else if (start_temp == '06:00:00' && end_temp == '09:00:00'){
+                else if (start_temp == '18:00:00' && end_temp == '21:00:00'){
 
                     $("input[value = 'thr_eve']").prop('checked',true);
                 }
@@ -594,12 +594,12 @@ function getPrefTime(faculty_id, acad_year, sem){
                     $("input[value = 'fri_mor']").prop('checked',true);
                 }
 
-                else if (start_temp == '12:00:00' && end_temp == '06:00:00'){
+                else if (start_temp == '12:00:00' && end_temp == '18:00:00'){
 
                     $("input[value = 'fri_aft']").prop('checked',true);
                 }
 
-                else if (start_temp == '06:00:00' && end_temp == '09:00:00'){
+                else if (start_temp == '18:00:00' && end_temp == '21:00:00'){
 
                     $("input[value = 'fri_eve']").prop('checked',true);
                 }
@@ -613,12 +613,12 @@ function getPrefTime(faculty_id, acad_year, sem){
                     $("input[value = 'sat_mor']").prop('checked',true);
                 }
 
-                else if (start_temp == '12:00:00' && end_temp == '06:00:00'){
+                else if (start_temp == '12:00:00' && end_temp == '18:00:00'){
 
                     $("input[value = 'sat_aft']").prop('checked',true);
                 }
 
-                else if (start_temp == '06:00:00' && end_temp == '09:00:00'){
+                else if (start_temp == '18:00:00' && end_temp == '21:00:00'){
 
                     $("input[value = 'sat_eve']").prop('checked',true);
                 }
@@ -973,13 +973,13 @@ $(document).ready(function(){
 
                 case 'mon_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Monday';
                     break;
 
                 case 'mon_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Monday';
                     break;
 
@@ -991,13 +991,13 @@ $(document).ready(function(){
 
                 case 'tue_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Tuesday';
                     break;
 
                 case 'tue_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Tuesday';
                     break;
 
@@ -1009,13 +1009,13 @@ $(document).ready(function(){
 
                 case 'wed_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Wednesday';
                     break;
 
                 case 'wed_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Wednesday';
                     break;
 
@@ -1027,13 +1027,13 @@ $(document).ready(function(){
 
                 case 'thr_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Thursday';
                     break;
 
                 case 'thr_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Thursday';
                     break;
 
@@ -1045,13 +1045,13 @@ $(document).ready(function(){
 
                 case 'fri_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Friday';
                     break;
 
                 case 'fri_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Friday';
                     break;
 
@@ -1063,13 +1063,13 @@ $(document).ready(function(){
 
                 case 'sat_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Saturday';
                     break;
 
                 default: 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Saturday';
             }
 
@@ -1114,13 +1114,13 @@ $(document).ready(function(){
 
                 case 'mon_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Monday';
                     break;
 
                 case 'mon_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Monday';
                     break;
 
@@ -1132,13 +1132,13 @@ $(document).ready(function(){
 
                 case 'tue_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Tuesday';
                     break;
 
                 case 'tue_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Tuesday';
                     break;
 
@@ -1150,13 +1150,13 @@ $(document).ready(function(){
 
                 case 'wed_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Wednesday';
                     break;
 
                 case 'wed_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Wednesday';
                     break;
 
@@ -1168,13 +1168,13 @@ $(document).ready(function(){
 
                 case 'thr_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Thursday';
                     break;
 
                 case 'thr_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Thursday';
                     break;
 
@@ -1186,13 +1186,13 @@ $(document).ready(function(){
 
                 case 'fri_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Friday';
                     break;
 
                 case 'fri_eve': 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Friday';
                     break;
 
@@ -1204,13 +1204,13 @@ $(document).ready(function(){
 
                 case 'sat_aft': 
                     start = '12:00';
-                    end = '06:00';
+                    end = '18:00';
                     day = 'Saturday';
                     break;
 
                 default: 
-                    start = '6:00';
-                    end = '9:00';
+                    start = '18:00';
+                    end = '21:00';
                     day = 'Saturday';
             }
 

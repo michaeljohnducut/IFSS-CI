@@ -2448,7 +2448,27 @@ class savedata_model extends CI_Model
 			{
 				$output = 'NOT INSERTED';
 			}
+	}
 
+	public function edit_account()
+	{
+		$output = '';
+
+		$password = $this->security->xss_clean($this->input->post('edit_password'));
+		$type = $this->security->xss_clean($this->input->post('select_type'));
+		$id = $this->security->xss_clean($this->input->post('account_hid'));
+
+		if($this->db->where('account_id', $id)
+					->update('account', array('password' => $password, 'account_type' => $type)))
+		{
+			$output = 'UPDATED';
+		}
+		else
+		{
+			$output = 'NOT UPDATED';
+		}
+		
+		return $output;
 	}
 }
 ?>

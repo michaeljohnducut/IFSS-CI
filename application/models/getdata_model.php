@@ -3413,7 +3413,50 @@ FROM subject_match sm
 		}
 
 		return $result;	
+	}
 
+	public function get_account()
+	{
+		$result = array();
+
+		$query = $this->db->select('account_id, CONCAT(f.lname, ", ", f.fname, " ",  f.mname) AS fac_name')
+				->join('faculty f', 'a.faculty_id = f.faculty_id')
+                ->where('a.status', 1)
+                ->get('account a');
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->account_id.'"><span class="fa fa-pencil"></span></button>
+					<button class="btn btn-sm  btn-info" id="view_data" data-id="'.$r->account_id.'"><span class="fa fa-eye"></span></button>';
+
+			$result[] = array(
+					$r->account_id,
+					$r->fac_name,
+					$btn,
+					);
+		}
+
+		return $result;
+	}
+
+	public function view_account($id)
+	{
+		$result = array();
+
+		$query = $this->db->select('password, account_type, account_id')
+                ->where('account_id', $id)
+                ->get('account');
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->password,
+					$r->account_type,
+					$r->account_id
+					);
+		}
+
+		return $result;
 	}
 
 

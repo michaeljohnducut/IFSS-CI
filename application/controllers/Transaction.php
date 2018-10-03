@@ -55,7 +55,6 @@ class Transaction extends CI_Controller
 		}		
 	}
 
-
 	public function student_eval()
 	{
 		$data['dept'] = $this->getdata_model->department();
@@ -715,6 +714,45 @@ class Transaction extends CI_Controller
 	public function reflect_office_hours(){
 		
 		echo json_encode($this->getdata_model->reflect_office_hours($_POST));
+		exit();
+	}
+
+	public function utilities()
+	{
+		$data['title'] = "IFSS | Utilities";
+		$this->load->view('templates/header', $data);
+		$this->load->view('transaction/utilities');
+		$this->load->view('templates/footer');
+	}
+
+	public function get_account()
+	{
+		$output = $this->getdata_model->get_account();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
+		exit();
+	}
+
+	public function view_account()
+	{
+		if(isset($_POST['account_id']))
+		{
+			$id = $this->security->xss_clean($this->input->post('account_id'));
+
+			echo json_encode($this->getdata_model->view_account($id));
+			exit();
+		}
+	}
+
+	public function edit_account()
+	{
+		echo ($this->savedata_model->edit_account($_POST));
 		exit();
 	}
 

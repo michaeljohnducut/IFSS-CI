@@ -2884,7 +2884,7 @@ FROM subject_match sm
 	{
 		$result = array();
 		
-		$query = $this->db->query('SELECT pt.day, GROUP_CONCAT(CONCAT(TIME_FORMAT(pt.start_time, "%h:%i %p"), " - ", TIME_FORMAT(pt.end_time, "%h:%i %p")) SEPARATOR "<br>") AS time_pref
+		$query = $this->db->query('SELECT pt.day, MIN(start_time) AS start_time, MAX(end_time) AS end_time
 									FROM preferred_time PT
 									JOIN faculty F ON f.faculty_id = pt.faculty_id
 									JOIN account A ON A.faculty_id = F.faculty_id
@@ -2894,9 +2894,17 @@ FROM subject_match sm
 
         foreach($query->result() as $t)
         {      
+        	$start = new DateTime($t->start_time);
+        	$time_start = $start->format('h:i A');
+
+        	$end = new DateTime($t->end_time);
+        	$time_end = $end->format('h:i A');
+
+        	$time_pref = $time_start.' - '.$time_end;
+
             $result[] = array(
                				$t->day,
-               				$t->time_pref,
+               				$time_pref,
 						);
         }
 

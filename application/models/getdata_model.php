@@ -2867,8 +2867,7 @@ FROM subject_match sm
 
 		foreach($q->result() as $r)
 		{
-			$btn = '<button class="btn btn-success" id="view_excel" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp; Excel</span></button>
-					<button class="btn btn-info" id="view_pdf" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp; PDF</span></button>';
+			$btn = '<button class="btn btn-info" id="view_pdf" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp; PDF</span></button>';
 					
 			$result[] = array(
 					$r->account_id,
@@ -2877,6 +2876,8 @@ FROM subject_match sm
 					);
 		}
 
+		//<button class="btn btn-success" id="view_excel" data-id="'.$r->faculty_id.'"><span class="fa fa-file">&nbsp;&nbsp; Excel</span></button>
+
 		return $result;
 	}
 
@@ -2884,7 +2885,7 @@ FROM subject_match sm
 	{
 		$result = array();
 		
-		$query = $this->db->query('SELECT pt.day, GROUP_CONCAT(CONCAT(TIME_FORMAT(pt.start_time, "%h:%i %p"), " - ", TIME_FORMAT(pt.end_time, "%h:%i %p")) SEPARATOR "<br>") AS time_pref
+		$query = $this->db->query('SELECT pt.day, MIN(start_time) AS start_time, MAX(end_time) AS end_time
 									FROM preferred_time PT
 									JOIN faculty F ON f.faculty_id = pt.faculty_id
 									JOIN account A ON A.faculty_id = F.faculty_id
@@ -2894,9 +2895,17 @@ FROM subject_match sm
 
         foreach($query->result() as $t)
         {      
+        	$start = new DateTime($t->start_time);
+        	$time_start = $start->format('h:i A');
+
+        	$end = new DateTime($t->end_time);
+        	$time_end = $end->format('h:i A');
+
+        	$time_pref = $time_start.' - '.$time_end;
+
             $result[] = array(
                				$t->day,
-               				$t->time_pref,
+               				$time_pref,
 						);
         }
 
@@ -2928,21 +2937,45 @@ FROM subject_match sm
 	{
 		$result = array();
 		
-		$query = $this->db->query('SELECT GROUP_CONCAT(pt.day SEPARATOR "<hr>") AS day, GROUP_CONCAT(CONCAT(TIME_FORMAT(pt.start_time, "%h:%i %p"), " - ", TIME_FORMAT(pt.end_time, "%h:%i %p")) SEPARATOR "<hr>") AS time_pref
+		// $query = $this->db->query('SELECT GROUP_CONCAT(DISTINCT pt.day SEPARATOR "<hr>") AS day, GROUP_CONCAT(CONCAT(TIME_FORMAT(pt.start_time, "%h:%i %p"), " - ", TIME_FORMAT(pt.end_time, "%h:%i %p")) SEPARATOR "<hr>") AS time_pref
+		// 							FROM preferred_time pt
+		// 							JOIN faculty f ON f.faculty_id = pt.faculty_id
+		// 							JOIN account a ON A.faculty_id = F.faculty_id
+		// 							WHERE f.faculty_id = "'.$faculty.'" AND pt.acad_yr = "'.$acadyr.'" AND pt.sem = "'.$sem.'"
+		// 							ORDER BY FIELD(pt.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
+
+  //       foreach($query->result() as $t)
+  //       {      
+  //           $result[] = array(
+  //              				$t->day,
+  //              				$t->time_pref,
+		// 				);
+  //       }
+
+        $query = $this->db->query('SELECT pt.day, MIN(start_time) AS start_time, MAX(end_time) AS end_time
 									FROM preferred_time PT
 									JOIN faculty F ON f.faculty_id = pt.faculty_id
 									JOIN account A ON A.faculty_id = F.faculty_id
 									WHERE F.faculty_id = "'.$faculty.'" AND pt.acad_yr = "'.$acadyr.'" AND pt.sem = "'.$sem.'"
+									GROUP BY pt.day
 									ORDER BY FIELD(day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
 
         foreach($query->result() as $t)
         {      
+        	$start = new DateTime($t->start_time);
+        	$time_start = $start->format('h:i A');
+
+        	$end = new DateTime($t->end_time);
+        	$time_end = $end->format('h:i A');
+
+        	$time_pref = $time_start.' - '.$time_end;
+
             $result[] = array(
                				$t->day,
-               				$t->time_pref,
+               				$time_pref,
 						);
         }
-
+	
 		return $result;
 	}
 
@@ -2950,7 +2983,21 @@ FROM subject_match sm
 	{
 		$result = array();
 		
-		$query = $this->db->query('SELECT GROUP_CONCAT(s.subj_desc SEPARATOR "<hr>") AS subj_desc
+		// $query = $this->db->query('SELECT GROUP_CONCAT(s.subj_desc SEPARATOR "<hr>") AS subj_desc
+		// 							FROM preferred_subj ps JOIN faculty f 
+		// 							ON ps.faculty_id = f.faculty_id
+		// 							JOIN SUBJECT s
+		// 							ON ps.subj_code = s.subj_id
+		// 							WHERE f.faculty_id = "'.$faculty.'" AND ps.acad_yr = "'.$acadyr.'" AND ps.sem = "'.$sem.'"');
+
+  //       foreach($query->result() as $t)
+  //       {      
+  //           $result[] = array(
+  //              				$t->subj_desc,
+		// 				);
+  //       }
+
+		$query = $this->db->query('SELECT s.subj_desc
 									FROM preferred_subj ps JOIN faculty f 
 									ON ps.faculty_id = f.faculty_id
 									JOIN SUBJECT s
@@ -2963,6 +3010,8 @@ FROM subject_match sm
                				$t->subj_desc,
 						);
         }
+
+		return $result;
 
 		return $result;
 	}
@@ -3454,6 +3503,186 @@ FROM subject_match sm
 					$r->account_type,
 					$r->account_id
 					);
+		}
+
+		return $result;
+	}
+
+	public function query_avail_prof()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$result = array();
+
+		$query = $this->db->select("CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
+				->where('f.faculty_id NOT IN (SELECT sm.faculty_id
+                           FROM subject_match sm 
+                           WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
+          			FROM teaching_assign_sched ta 
+          			WHERE ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					AND ta.time_start > "'.$start_time.'"
+					AND ta.time_start < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_finish > "'.$start_time.'"
+					AND ta.time_finish < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_start = "'.$start_time.'"
+					AND ta.time_finish = "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"))', NULL, FALSE)
+                ->get('faculty f');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->facname
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_avail_sections()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$result = array();
+
+		$query = $this->db->select('c.course_code, s.year_lvl, s.section_desc')
+				->join('course c', 's.course = c.course_id')
+				->where('s.section_id NOT IN (SELECT sm.section
+                           FROM subject_match sm 
+                           WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
+          			FROM teaching_assign_sched ta 
+          			WHERE ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					AND ta.time_start > "'.$start_time.'"
+					AND ta.time_start < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_finish > "'.$start_time.'"
+					AND ta.time_finish < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_start = "'.$start_time.'"
+					AND ta.time_finish = "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"))', NULL, FALSE)
+                ->get('section s');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->course_code, 
+					$r->year_lvl, 
+					$r->section_desc
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_top_eval()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query = $this->db->select('f.lname, f.fname, f.mname, e.rating')
+				->join('evaluation e ', 'f.faculty_id =  e.faculty_id')
+				->where('e.acad_yr', $acad_year)
+				->where('e.sem', $sem)
+				->order_by('e.rating', 'DESC')
+				->limit(10)
+                ->get('faculty f');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->lname, 
+					$r->fname, 
+					$r->mname, 
+					$r->rating
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_unsched_load()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query = $this->db->select('f.lname, f.fname, f.mname, c.course_code, s.year_lvl, s.section_desc, sb.subj_desc')
+				->join('faculty f  ', 'sm.faculty_id = f.faculty_id ')
+				->join('section s ', 's.section_id = sm.section ')
+				->join('course c ', 'c.course_id = s.course ')
+				->join('subject sb', 'sb.subj_id = sm.subj_id')
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->where('sm.subj_match_id NOT IN (SELECT ta.subj_match_id
+                             FROM teaching_assign_sched ta
+                             WHERE sm.acad_yr = "'.$acad_year.'" 
+                             AND sm.sem = "'.$sem.'") ')
+                ->get('subject_match sm');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->lname, 
+					$r->fname, 
+					$r->mname, 
+					$r->course_code,
+					$r->year_lvl,
+					$r->section_desc,
+					$r->subj_desc
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_top_loads()
+	{
+		$result = array();
+
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->query('SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours_load, 
+	CONCAT(fname," ",mname," ",lname) AS fac_member
+									FROM teaching_assign_sched tas JOIN subject_match sm
+									ON tas.subj_match_id = sm.subj_match_id
+									JOIN faculty f
+									ON f.faculty_id = sm.faculty_id 
+									WHERE sm.acad_yr = "'.$acad_year.'" AND sm.sem = "'.$sem.'"
+									GROUP BY sm.faculty_id
+									ORDER BY SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) DESC
+									LIMIT 10');
+
+		foreach($query1->result() as $r)
+		{		
+			$result[] = array(
+	        			$r->fac_member,
+	        			$r->hours_load
+						);
 		}
 
 		return $result;

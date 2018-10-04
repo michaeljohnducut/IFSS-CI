@@ -231,7 +231,7 @@ class Report extends CI_Controller
 
 	public function official_time()
 	{
-		$data['faculty'] = $this->getdata_model->faculty();
+		$data['faculty'] = $this->getdata_model->get_faculty_designee();
 
 		$data['title'] = "IFSS | Official Time";
 		$this->load->view('templates/header', $data);

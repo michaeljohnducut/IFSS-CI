@@ -2231,7 +2231,7 @@ class savedata_model extends CI_Model
 
 		foreach ($query2->result() as $s) 
 		{
-			$total_load_hrs = $s->total_load_hrs;
+			($s->total_load_hrs == '')?$total_load_hrs = 0:$total_load_hrs = $s->total_load_hrs;
 		}
 
 		$output = array('result' => $result, 'total' => $total_load_hrs);

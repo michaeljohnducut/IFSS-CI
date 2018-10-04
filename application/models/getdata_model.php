@@ -1813,6 +1813,9 @@ FROM subject_match sm
 		$total_load_hrs = '';
 		$total_limit = '';
 		$total_limit_final = '';
+		$regular_limit = '';
+		$pt_limit = '';
+		$ts_limit = '';
 
 		$query = $this->db->select("a.account_id, CONCAT(f.lname, ', ', f.fname, ' ',  f.mname) AS 'fac_name', ft.fac_type_desc, ft.fac_type_id, GROUP_CONCAT(DISTINCT(s.spec_desc) SEPARATOR '<br>') AS 'spec'")
 				->where('f.faculty_id', $fac_id)
@@ -1831,16 +1834,20 @@ FROM subject_match sm
 			$fac_type_id = $r->fac_type_id;
 		}
 
-		$query3 = $this->db->query('SELECT SUM(IF (fac_load_desc LIKE "%Regular%", num_hrs, 0)) AS regular_load,
-									       SUM(IF (fac_load_desc LIKE "%Part%", num_hrs, 0)) AS parttime_load,
-									       SUM(IF (fac_load_desc LIKE "%Regular%", num_hrs, 0)) + 
-									       SUM(IF (fac_load_desc LIKE "%Part%", num_hrs, 0)) AS total_load
+		$query3 = $this->db->query('SELECT  SUM(IF( fac_load_desc LIKE "%Regular%", num_hrs, 0)) AS regular_load,
+									SUM(IF( fac_load_desc LIKE "%Part%", num_hrs, 0)) AS parttime_load,
+									SUM(IF( fac_load_desc LIKE "%Temporary%", num_hrs, 0)) AS tempsub_load,
+									SUM(IF( fac_load_desc LIKE "%Regular%", num_hrs, 0)) + SUM(IF( fac_load_desc LIKE "%Part%", num_hrs, 0)) + 
+										SUM(IF( fac_load_desc LIKE "%Temporary%", num_hrs, 0)) AS total_load
 									FROM faculty_load_type
 									WHERE fac_type_desc = "'.$fac_type_id.'"');
 
 		foreach ($query3->result() as $t) 
 		{
-			$total_limit = $t->total_load;			
+			$total_limit = $t->total_load;	
+			$regular_limit = $t->regular_load;
+			$pt_limit = $t->parttime_load;
+			$ts_limit = $t->tempsub_load;		
 		}
 
 		$query2 = $this->db->select("SUM(lec_hrs + lab_hrs) AS total_load_hrs")
@@ -1855,7 +1862,9 @@ FROM subject_match sm
 
 		if($statement == 'CONSECUTIVE' && ($fac_type_id == 1 || $fac_type_id == 5 || $fac_type_id == 3))
 		{
-			$total_limit_final = $total_limit - 6;
+			$pt_limit = $pt_limit - 6;
+			$ts_limit = $ts_limit - $ts_limit;
+			$total_limit_final = $pt_limit + $ts_limit + $regular_limit;
 		}
 		else
 		{
@@ -1865,7 +1874,7 @@ FROM subject_match sm
 		//3 Consecutive
 		//Regular Faculty and Designee -  6 PT NA LANG
 		// Part time - Full Time Faculty - 6 PT NA LANG
-		// Part time - Full Time Faculty - No TS na
+		// Regular and Part time - Full Time Faculty - No TS na
 
 		$result[] = array(
 					$account_id,
@@ -1873,7 +1882,10 @@ FROM subject_match sm
 					$fac_type,
 					$spec,
 					$total_load_hrs,
-					$total_limit_final	
+					$total_limit_final,
+					$regular_limit,
+					$pt_limit,
+					$ts_limit
 					);
 
 		return $result;	
@@ -3012,6 +3024,32 @@ FROM subject_match sm
         }
 
 		return $result;
+
+		return $result;
+	}
+
+	public function get_faculty_designee()
+	{
+		$result = array();
+
+		$q = $this->db->select('account_id, f.faculty_id, lname, fname, mname, email, contact_no')
+				->join('faculty f', 'a.faculty_id = f.faculty_id')
+				->where('faculty_type', 3)
+                ->where('f.status', 1)
+                ->where('a.status', 1)
+                ->get('account a');
+
+		foreach($q->result() as $r)
+		{		
+			$result[] = array(
+					$r->faculty_id,
+					$r->account_id,
+					$r->lname,
+					$r->fname,
+					$r->mname,
+					$r->contact_no,
+					);
+		}
 
 		return $result;
 	}

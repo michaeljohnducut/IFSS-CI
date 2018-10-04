@@ -16,7 +16,7 @@
                 <div class="col-sm-12">
                     <div class="white-box">                        
                         <div class="row">
-                            <h2>Report on Official Time</h2>
+                            <h2>Report on Official Time (for Regular-Designee Only)</h2>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
                             </div>
                             <br>
@@ -28,7 +28,7 @@
                                 <label class="control-label">Select Faculty:</label>
                                 <select class="form-control" id="select_faculty">
                                     <option value="">-SELECT FACULTY-</option>
-                                    <?php foreach($faculty as $r) echo '<option value="'.$r[7].'">'.$r[1].', '.$r[2].' '.$r[3].'</option>';?>
+                                    <?php foreach($faculty as $r) echo '<option value="'.$r[0].'">'.$r[2].', '.$r[3].' '.$r[4].'</option>';?>
                                 </select>
                                 
                             </div>
@@ -64,26 +64,127 @@
                         <br>
                         <div class="row">
                             <div class="col-md-6">
-                                <p><b>NAME:</b>&nbsp;&nbsp;&nbsp;<span id="emp_no"></span></p>
+                                <p><b>NAME:</b>&nbsp;&nbsp;&nbsp;<span id="emp_name"></span></p>
                                 <p><b>COLLEGE:</b>&nbsp;&nbsp;&nbsp;<span>COLLEGE OF COMPUTER AND INFORMATION SCIENCES</span></p>
                             </div>
                         </div>
                         <br>
                         <div class="row">
-                            <table class="table color-table inverse-table table-striped table-bordered table-condensed">
-                                <thead>
+                            <table class="table color-table table-striped table-bordered table-condensed">
                                     <tr>
-                                        <th>DAYS</th>
-                                        <th colspan="2">REGULAR TIME </th>
-                                        <th>PART TIME</th>
-                                        <th>TEMPORARY SUBSTITUTION</th>
-                                        <th>NIGHT SERVICE</th>
+                                        <th rowspan="2">DAYS</th>
+                                        <th colspan="3">REGULAR TIME </th>
+                                        <th colspan="2">PART TIME</th>
+                                        <th colspan="2">TEMPORARY SUBSTITUTION</th>
+                                        <th colspan="2">NIGHT SERVICE</th>
                                     </tr>
-                                </thead>
-
-                                <tbody id="regular_load">
-                                    
-                                </tbody>       
+                                    <tr>
+                                        <th>Administrative Time</th>
+                                        <th>Teaching Time</th>
+                                        <th>No. of Hrs</th>
+                                        <th>Time</th>
+                                        <th>No. of Hrs</th>
+                                        <th>Time</th>
+                                        <th>No. of Hrs</th>
+                                        <th>Time</th>
+                                        <th>No. of Hrs</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Monday</td>
+                                        <td id="m_admin_time"></td>
+                                        <td id="m_teach_time"></td>
+                                        <td id="m_tot_reg"></td>
+                                        <td id="m_pt_time"></td>
+                                        <td id="m_tot_pt"></td>
+                                        <td id="m_ts_time"></td>
+                                        <td id="m_tot_ts"></td>
+                                        <td id="m_ns_time"></td>
+                                        <td id="m_tot_ns"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tuesday</td>
+                                        <td id="t_admin_time"></td>
+                                        <td id="t_teach_time"></td>
+                                        <td id="t_tot_reg"></td>
+                                        <td id="t_pt_time"></td>
+                                        <td id="t_tot_pt"></td>
+                                        <td id="t_ts_time"></td>
+                                        <td id="t_tot_ts"></td>
+                                        <td id="t_ns_time"></td>
+                                        <td id="t_tot_ns"></td>
+                                    </tr> 
+                                    <tr>
+                                        <td>Wednesday</td>
+                                        <td id="w_admin_time"></td>
+                                        <td id="w_teach_time"></td>
+                                        <td id="w_tot_reg"></td>
+                                        <td id="w_pt_time"></td>
+                                        <td id="w_tot_pt"></td>
+                                        <td id="w_ts_time"></td>
+                                        <td id="w_tot_ts"></td>
+                                        <td id="w_ns_time"></td>
+                                        <td id="w_tot_ns"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Thursday</td>
+                                        <td id="th_admin_time"></td>
+                                        <td id="th_teach_time"></td>
+                                        <td id="th_tot_reg"></td>
+                                        <td id="th_pt_time"></td>
+                                        <td id="th_tot_pt"></td>
+                                        <td id="th_ts_time"></td>
+                                        <td id="th_tot_ts"></td>
+                                        <td id="th_ns_time"></td>
+                                        <td id="th_tot_ns"></td>
+                                    </tr> 
+                                    <tr>
+                                        <td>Friday</td>
+                                        <td id="f_admin_time"></td>
+                                        <td id="f_teach_time"></td>
+                                        <td id="f_tot_reg"></td>
+                                        <td id="f_pt_time"></td>
+                                        <td id="f_tot_pt"></td>
+                                        <td id="f_ts_time"></td>
+                                        <td id="f_tot_ts"></td>
+                                        <td id="f_ns_time"></td>
+                                        <td id="f_tot_ns"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Saturday</td>
+                                        <td id="st_admin_time"></td>
+                                        <td id="st_teach_time"></td>
+                                        <td id="st_tot_reg"></td>
+                                        <td id="st_pt_time"></td>
+                                        <td id="st_tot_pt"></td>
+                                        <td id="st_ts_time"></td>
+                                        <td id="st_tot_ts"></td>
+                                        <td id="st_ns_time"></td>
+                                        <td id="st_tot_ns"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunday</td>
+                                        <td id="sn_admin_time"></td>
+                                        <td id="sn_teach_time"></td>
+                                        <td id="sn_tot_reg"></td>
+                                        <td id="sn_pt_time"></td>
+                                        <td id="sn_tot_pt"></td>
+                                        <td id="sn_ts_time"></td>
+                                        <td id="sn_tot_ts"></td>
+                                        <td id="sn_ns_time"></td>
+                                        <td id="sn_tot_ns"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td id="tot_reg"></td>
+                                        <td></td>
+                                        <td id="tot_pt"></td>
+                                        <td></td>
+                                        <td id="tot_ts"></td>
+                                        <td></td>
+                                        <td id="tot_ns"></td>
+                                    </tr>                 
                             </table>   
                         </div>
                       </div>
@@ -122,6 +223,42 @@
         $(document).ready(function()
         {
             $('#btn_pdf').prop("disabled", true);
+
+            $('#select_faculty').on('change', function(){
+                var acadyr = $('#select_acadyr').val();
+                var sem = $('#select_sem').val();
+                var faculty = $('#select_faculty').val();
+                //fetch_schedule(acadyr, sem, course);
+                enabled_button(acadyr, sem, faculty);
+
+                $.ajax({
+                    method:"POST",
+                    url:"<?php echo base_url('Maintenance/view_faculty')?>",
+                    dataType: "json",
+                    data:{faculty_id:faculty},
+                    success:function(data)
+                    {    
+                        $('#emp_name').empty();
+                        $('#emp_name').append(data[0][1] + ', ' + data[0][2] + ' ' + data[0][3]);
+                    }
+                });
+            });
+
+            $('#select_acadyr').on('change', function(){
+                var acadyr = $('#select_acadyr').val();
+                var sem = $('#select_sem').val();
+                var faculty = $('#select_faculty').val();
+                //fetch_schedule(acadyr, sem, course);
+                enabled_button(acadyr, sem, faculty);
+            });
+
+            $('#select_sem').on('change', function(){
+                var acadyr = $('#select_acadyr').val();
+                var sem = $('#select_sem').val();
+                var faculty = $('#select_faculty').val();
+                //fetch_schedule(acadyr, sem, course);
+                enabled_button(acadyr, sem, faculty);
+            });
 
         });
     </script>

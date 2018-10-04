@@ -235,7 +235,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <h4 id="lbl_load_limit"><b>TOTAL LOAD LIMIT:</b>&nbsp; </h4>
-                                                <br>
+                                                <h5>Regular Load: <span id="reg_limit"></span></h5>
+                                                <h5>Part time Load: <span id="pt_limit"></span></h5>
+                                                <h5>Temporary Substitution: <span id="ts_limit"></span></h5>
                                             </div>
                                             <div class="col-md-6">
                                                 <h4 id="lbl_load"><b>Current Load Count:</b>&nbsp; </h4>
@@ -607,12 +609,18 @@
                         $('#lbl_spec').empty();
                         $('#lbl_load').empty();
                         $('#lbl_load_limit').empty();
+                        $('#reg_limit').empty();
+                        $('#pt_limit').empty();
+                        $('#ts_limit').empty();
                         $('#lbl_fac_id').append('<b>FACULTY ID:</b>&nbsp;' + data[0][0]);
                         $('#lbl_fac_name').append('<b>FACULTY NAME:</b>&nbsp;' + data[0][1]);
                         $('#lbl_fac_type').append('<b>FACULTY TYPE:</b>&nbsp;' + data[0][2]);
                         $('#lbl_spec').append('<b>SPECIALIZATIONS:</b>&nbsp;' + data[0][3]);
                         $('#lbl_load_limit').append('<b>TOTAL LOAD LIMIT:</b>&nbsp;' + data[0][5]);
                         $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data[0][4]);
+                        $('#reg_limit').append(data[0][6]);
+                        $('#pt_limit').append(data[0][7]);
+                        $('#ts_limit').append(data[0][8]);
                         viewFacultyLoadTbl(fac_id_1);
                         $('#openMod').trigger('click');
                     }
@@ -693,12 +701,12 @@
                        }
                        if(data == 'OVERLOAD')
                        {
-                            swal("Load Limit will Exceed!", "You can't assign " + subj_desc + " to faculty " + fac_name + " because it will exceed the load limit.\n Please choose another faculty.", "error");
+                            swal("Load Limit will Exceed!", "You can't assign " + subj_desc + " to faculty " + fac_name + " because it will exceed the total load limit.\n Please choose another faculty.", "error");
                             loadSectionSubjects();
                        }
                        if(data == 'EQUAL')
                        {
-                            swal("Equal!", "You can't assign anymore to faculty " + fac_name + " because it reached the load limit.\n Please choose another faculty.", "error");
+                            swal("Equal!", "You can't assign anymore to faculty " + fac_name + " because it reached the total load limit.\n Please choose another faculty.", "error");
                             loadSectionSubjects();
                        }
                     },
@@ -741,7 +749,7 @@
 
               swal({
                         title: "Are you sure?",
-                        text: "You're about to unassign this " + fac_name + " from "+ section_desc + " and subject " + subj_desc, 
+                        text: "You're about to unassign " + fac_name + " from "+ section_desc + " and subject " + subj_desc, 
                         icon: "warning",
                         buttons: true,
                         dangerMode: true,

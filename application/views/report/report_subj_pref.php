@@ -49,7 +49,7 @@
                             </div>
                             <div class="col-md-6" style="margin-left: 30px">
                                 <br>
-                                <button type="button" onclick="excel_()" class="btn btn-success" style="margin-top: 5px;"> <span class="fa fa-file"></span>&nbsp; Generate Summary (Excel)</button>&nbsp;
+                                <!-- <button type="button" onclick="excel_()" class="btn btn-success" style="margin-top: 5px;"> <span class="fa fa-file"></span>&nbsp; Generate Summary (Excel)</button>&nbsp; -->
                                 <button type="button" onclick="pdf_()" class="btn btn-info" style="margin-top: 5px;"> <span class="fa fa-file"></span>&nbsp; Generate Summary (PDF)</button>
                                 
                             </div>

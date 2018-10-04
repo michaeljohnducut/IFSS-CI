@@ -3,35 +3,45 @@
 <head>
 	<title>Faculty Assignment</title>
 	<style type="text/css">
-		table, th, td 
+		table
 		{
 		    border: 1px solid black;
 		    border-collapse: collapse;
+            width: 100%
 		}
 
 		th, td 
 		{
 		    padding: 5px;
+            border: 1px solid black;
+            border-collapse: collapse;
 		}
 
         @page 
         {
             margin: 50px 50px;
         }
-
+        h5
+        {
+            margin-bottom: 1%;
+        }
+        h6
+        {
+            margin-top: 1%;
+        }
 	</style>
 </head>
 <body style="font-family: 'Arial Narrow',Arial,sans-serif;">
         
-            <div>
-                <p><center>Polytechnic University of the Philippines</center></p>
-                <p><center>Sta.Mesa, Manila</center></p><br><br>
-                <p><center>FACULTY ASSIGNMENT</center></p>
-                <p><center><strong><?php echo $sem; ?>&nbsp;Semester, AY&nbsp;<?php echo $acadyr; ?></strong></center></p>
+            <div align="center">
+                <label>Polytechnic University of the Philippines</label><br>
+                <label>Sta.Mesa, Manila</label><br><br>
+                <label style="font-size:120%">FACULTY ASSIGNMENT<br></label>
+                <label style="font-size:100%"><?php echo $sem; ?>&nbsp;Semester, AY&nbsp;<?php echo $acadyr; ?></label>
             </div>
             <br>
             <div>
-                <div style="font-size:11px; page-break-inside: avoid;">
+                <div style="font-size:11px; page-break-inside: avoid; text-transform: uppercase;">
                 	<?php 
                 		echo '<table>';
                 		foreach($details as $d)
@@ -525,7 +535,7 @@
 	           	<div style="page-break-inside: avoid;">
 	           		<p>
 	           			DR. EMANUEL C. DE GUZMAN<br>
-	           			President
+	           			<span style="font-size:90%; margin-right: 10%;">President
 	           		</p>
 	           	</div>
            	</div>

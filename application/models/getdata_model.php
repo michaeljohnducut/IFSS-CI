@@ -3659,6 +3659,35 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function query_top_loads()
+	{
+		$result = array();
+
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->query('SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours_load, 
+	CONCAT(fname," ",mname," ",lname) AS fac_member
+									FROM teaching_assign_sched tas JOIN subject_match sm
+									ON tas.subj_match_id = sm.subj_match_id
+									JOIN faculty f
+									ON f.faculty_id = sm.faculty_id 
+									WHERE sm.acad_yr = "'.$acad_year.'" AND sm.sem = "'.$sem.'"
+									GROUP BY sm.faculty_id
+									ORDER BY SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) DESC
+									LIMIT 10');
+
+		foreach($query1->result() as $r)
+		{		
+			$result[] = array(
+	        			$r->fac_member,
+	        			$r->hours_load
+						);
+		}
+
+		return $result;
+	}
+
 
 }
 ?>

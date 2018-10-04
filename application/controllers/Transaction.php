@@ -780,6 +780,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function query_top_loads(){
+		
+		echo json_encode($this->getdata_model->query_top_loads($_POST));
+		exit();
+	}
+
 } 
 
 ?>

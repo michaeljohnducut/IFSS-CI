@@ -409,6 +409,33 @@
                 });
             }
 
+            //QuERY OF TOP 10 LOADS
+            if(picked_query == 5)
+            {
+                var acad_year = $('#acad_year_drop').val();
+                var sem = $('#sem_drop').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/query_top_loads')?>", 
+                    method:"POST", 
+                    data:{ acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        $('#txtResult').empty();
+                        var len = data.length;
+                        for (var x = 0; x < len; x++)
+                        {   
+                            
+                            var name = data[x][0];
+                            var loads = data[x][1];
+                            $('#txtResult').append((x+1) + '. ' + name + ' - ' + loads +   ' hours\n');
+                        }
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+                });
+            }
+
         });
 
       });

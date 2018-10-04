@@ -756,6 +756,30 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function query_avail_prof(){
+		
+		echo json_encode($this->getdata_model->query_avail_prof($_POST));
+		exit();
+	}
+
+	public function query_avail_sections(){
+		
+		echo json_encode($this->getdata_model->query_avail_sections($_POST));
+		exit();
+	}
+
+	public function query_top_eval(){
+		
+		echo json_encode($this->getdata_model->query_top_eval($_POST));
+		exit();
+	}
+
+	public function query_unsched_load(){
+		
+		echo json_encode($this->getdata_model->query_unsched_load($_POST));
+		exit();
+	}
+
 } 
 
 ?>

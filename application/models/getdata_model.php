@@ -3459,6 +3459,157 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function query_avail_prof()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$result = array();
+
+		$query = $this->db->select("CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
+				->where('f.faculty_id NOT IN (SELECT sm.faculty_id
+                           FROM subject_match sm 
+                           WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
+          			FROM teaching_assign_sched ta 
+          			WHERE ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					AND ta.time_start > "'.$start_time.'"
+					AND ta.time_start < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_finish > "'.$start_time.'"
+					AND ta.time_finish < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_start = "'.$start_time.'"
+					AND ta.time_finish = "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"))', NULL, FALSE)
+                ->get('faculty f');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->facname
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_avail_sections()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$result = array();
+
+		$query = $this->db->select('c.course_code, s.year_lvl, s.section_desc')
+				->join('course c', 's.course = c.course_id')
+				->where('s.section_id NOT IN (SELECT sm.section
+                           FROM subject_match sm 
+                           WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
+          			FROM teaching_assign_sched ta 
+          			WHERE ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					AND ta.time_start > "'.$start_time.'"
+					AND ta.time_start < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_finish > "'.$start_time.'"
+					AND ta.time_finish < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_start = "'.$start_time.'"
+					AND ta.time_finish = "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"))', NULL, FALSE)
+                ->get('section s');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->course_code, 
+					$r->year_lvl, 
+					$r->section_desc
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_top_eval()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query = $this->db->select('f.lname, f.fname, f.mname, e.rating')
+				->join('evaluation e ', 'f.faculty_id =  e.faculty_id')
+				->where('e.acad_yr', $acad_year)
+				->where('e.sem', $sem)
+				->order_by('e.rating', 'DESC')
+				->limit(10)
+                ->get('faculty f');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->lname, 
+					$r->fname, 
+					$r->mname, 
+					$r->rating
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_unsched_load()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query = $this->db->select('f.lname, f.fname, f.mname, c.course_code, s.year_lvl, s.section_desc, sb.subj_desc')
+				->join('faculty f  ', 'sm.faculty_id = f.faculty_id ')
+				->join('section s ', 's.section_id = sm.section ')
+				->join('course c ', 'c.course_id = s.course ')
+				->join('subject sb', 'sb.subj_id = sm.subj_id')
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->where('sm.subj_match_id NOT IN (SELECT ta.subj_match_id
+                             FROM teaching_assign_sched ta
+                             WHERE sm.acad_yr = "'.$acad_year.'" 
+                             AND sm.sem = "'.$sem.'") ')
+                ->get('subject_match sm');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->lname, 
+					$r->fname, 
+					$r->mname, 
+					$r->course_code,
+					$r->year_lvl,
+					$r->section_desc,
+					$r->subj_desc
+					);
+		}
+
+		return $result;
+	}
+
 
 }
 ?>

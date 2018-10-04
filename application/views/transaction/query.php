@@ -32,7 +32,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Acad Year:</label>
-                                <select class="form-control select2" name="acad_year" id="acad_year">
+                                <select class="form-control select2" id="acad_year_drop">
                                     <option value="0">-ACAD YEAR-</option>
                                         <?php 
                                             for ($i = date("Y"); $i > 1900; $i-- ){
@@ -44,7 +44,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Semester:</label>
-                                <select class="form-control select2" name="selected_sem" id="selected_sem">
+                                <select class="form-control select2" id="sem_drop">
                                     <option value="0">-SELECT SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
@@ -62,20 +62,118 @@
                 <div class="col-sm-12">
                     <div class="white-box">
 
-                    
                         
                         <div class="row">
                             <div class="col-md-6">
+                                <div class="vtabs">
+                     <ul class="nav tabs-vertical" >
+                         <style>
+                             .nav-item {
+                              background-color:#fff; 
+                              border:0px;
+                              }
+                        </style>
+                    <li class="tab nav-item active">
+                     <a data-toggle="tab" class="nav-link" href="#fac_query" aria-expanded="true"> <span class="visible-xs"><i class="ti-home"></i></span> <span class="hidden-xs">Faculty</span> </a>
+                    </li>
+                   <li class="tab nav-item" style="background-color:#fff; border:0px;">
+                     <a data-toggle="tab" class="nav-link" href="#section_query" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Sections</span> </a>
+                  </li>
+                  <li class="tab nav-item" style="background-color:#fff; border:0px;">
+                     <a data-toggle="tab" class="nav-link" href="#room_query" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Rooms/Labs</span> </a>
+                  </li>
+                   </ul>
+                   <div class="tab-content" style="width: 100%">
+                      <div id="fac_query" class="tab-pane active">
+                         <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
+                            <div id="fac_members_div">
                                 <div class="col-md-12">
                                     <h3>Select a Query</h3>
-                                    <select class="form-control select2" id="drop_query">
+                                    <select class="form-control select2" id="query_faculty">
                                         <option value="0" selected="" disabled="">Queries</option>
-                                        <option value="1">Available Professors</option>
-                                        <option value="2">Available Rooms and Labs</option>
-                                        <option value="3">Available Sections</option>
-                                        <option value="4">Top 10 Faculty Members with highest evaluation</option>
-                                        <option value="5">Faculty Members with satisfactory ratings</option>
-                                        <option value="6">Teaching Assignments with no Schedules</option>
+                                        <option value="1">Available faculty members</option>
+                                        <option value="2">Top 10 Faculty Members with highest evaluation</option>
+                                        <option value="3">Faculty Members with consecutive satisfactory ratings</option>
+                                        <option value="4">Teaching Assignments with no Schedules</option>
+                                        <option value="5">Top 10 faculty members with highest total loads</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <br>
+                                    <label class="control-label">Start time:</label>
+                                    <input type="time" id="query_start_fac" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <br>
+                                    <label class="control-label">End time:</label>
+                                    <input type="time" id="query_end_fac" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <br>
+                                    <label class="control-label">Day:</label>
+                                    <select class="form-control select2" id="query_day_fac">
+                                        <option value="0" selected="" disabled="">Day</option>
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                        <option value="Saturday">Saturday</option>
+                                        <option value="Sunday">Sunday</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="clearfix"></div>
+                </div>
+                 <div id="section_query" class="tab-pane">
+                    <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
+                        <div>
+                            <div class="col-md-12">
+                                    <h3>Select a Query</h3>
+                                    <select class="form-control select2" id="query_section">
+                                        <option value="0" selected="" disabled="">Queries</option>
+                                        <option value="1">Available Sections</option>
+                                        <option value="2">Sections with incomplete schedules</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <br>
+                                    <label class="control-label">Start time:</label>
+                                    <input type="time" id="query_start_sec" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <br>
+                                    <label class="control-label">End time:</label>
+                                    <input type="time" id="query_end_sec" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <br>
+                                    <label class="control-label">Day:</label>
+                                    <select class="form-control select2" id="query_day_sec">
+                                        <option value="0" selected="" disabled="">Day</option>
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                        <option value="Saturday">Saturday</option>
+                                        <option value="Sunday">Sunday</option>
+                                    </select>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="room_query" class="tab-pane">
+                    <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
+                        <div>
+                            <div class="col-md-12">
+                                    <h3>Select a Query</h3>
+                                    <select class="form-control select2" id="query_faculty">
+                                        <option value="0" selected="" disabled="">Queries</option>
+                                        <option value="1">Available Rooms and Labs</option>
+                                        <option value="2">Top 10 used rooms / labs</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
@@ -91,7 +189,7 @@
                                 <div class="col-md-4">
                                     <br>
                                     <label class="control-label">Day:</label>
-                                    <select class="form-control select2" id="drop_query">
+                                    <select class="form-control select2">
                                         <option value="0" selected="" disabled="">Day</option>
                                         <option value="Monday">Monday</option>
                                         <option value="Tuesday">Tuesday</option>
@@ -102,12 +200,17 @@
                                         <option value="Sunday">Sunday</option>
                                     </select>
                                 </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <h3>Results</h3>
-                                <textarea readonly="" class="form-control" rows="20" id="txtResult"></textarea>
-                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+          </div>  
+            
+        </div>
+        <div class="col-md-6" style="padding-top: 30px;">
+            <h3>Results</h3>
+            <textarea style="font-size: 16px;" readonly="" class="form-control" rows="20" cols="3" id="txtResult"></textarea>
+        </div>
                         </div>
 
                     </div>
@@ -127,12 +230,186 @@
 
     <script type="text/javascript">
 
+    //FUNCTIONS 
+    function queryAvailProf(){
+        var sem = $('#sem_drop').val();
+        var acad_year = $('#acad_year_drop').val();
+        var start_time = $('#query_start_fac').val();
+        var end_time = $('#query_end_fac').val();
+        var day = $('#query_day_fac').val();
+
+         if (sem != 0 && acad_year != 0 && start_time != null && end_time != null && day != 0)
+         {
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/query_avail_prof')?>", 
+                method:"POST", 
+                data:{ acad_year:acad_year, sem:sem, start_time:start_time, end:end_time, day:day}, 
+                dataType: "json",
+                success:function(data){
+                    $('#txtResult').empty();
+                    var len = data.length;
+                    for (var x = 0; x < len; x++)
+                    {
+                        $('#txtResult').append((x+1) + '. ' + data[x][0] + '\n');
+                    }
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+            });
+         }
+    }
+
+    function queryAvailSections(){
+        var sem = $('#sem_drop').val();
+        var acad_year = $('#acad_year_drop').val();
+        var start_time = $('#query_start_sec').val();
+        var end_time = $('#query_end_sec').val();
+        var day = $('#query_day_sec').val();
+
+         if (sem != 0 && acad_year != 0 && start_time != null && end_time != null && day != 0)
+         {
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/query_avail_sections')?>", 
+                method:"POST", 
+                data:{ acad_year:acad_year, sem:sem, start_time:start_time, end:end_time, day:day}, 
+                dataType: "json",
+                success:function(data){
+                    $('#txtResult').empty();
+                    var len = data.length;
+                    for (var x = 0; x < len; x++)
+                    {   
+                        var section = data[x][0] + ' ' + data[x][1][0] + ' - ' + data[x][2];
+                        $('#txtResult').append((x+1) + '. ' + section + '\n');
+                    }
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+            });
+         }
+    }
+
     //SELECT2
       $(".select2").select2();
       $('.selectpicker').selectpicker();
 
       $(document).ready(function(){
 
+        //FACULTY QUERIES
+        $('#query_start_fac').on('blur', function(){
+            var picked_query = $('#query_faculty').val();
+            if(picked_query == 1)
+            {
+                queryAvailProf();
+            }
+        });
+
+        $('#query_end_fac').on('blur', function(){
+            var picked_query = $('#query_faculty').val();
+            if(picked_query == 1)
+            {
+                queryAvailProf();
+            }
+        });
+
+        $('#query_day_fac').on('change', function(){
+            var picked_query = $('#query_faculty').val();
+            if(picked_query == 1)
+            {
+                queryAvailProf();
+            }
+        });
+
+        //SECTION QUERIES
+
+        $('#query_start_sec').on('blur', function(){
+            var picked_query = $('#query_section').val();
+            if(picked_query == 1)
+            {
+                queryAvailSections();
+            }
+        });
+
+        $('#query_end_sec').on('blur', function(){
+            var picked_query = $('#query_section').val();
+            if(picked_query == 1)
+            {
+                queryAvailSections();
+            }
+        });
+
+        $('#query_day_sec').on('change', function(){
+            var picked_query = $('#query_section').val();
+            if(picked_query == 1)
+            {
+                queryAvailSections();
+            }
+        });
+
+        $('#query_faculty').on('change', function(){
+            var picked_query = $('#query_faculty').val();
+            if(picked_query == 1)
+            {
+                queryAvailProf();
+            }
+
+            //TOP 10 EVALUATION
+            if(picked_query == 2)
+            {
+                var acad_year = $('#acad_year_drop').val();
+                var sem = $('#sem_drop').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/query_top_eval')?>", 
+                    method:"POST", 
+                    data:{ acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        $('#txtResult').empty();
+                        var len = data.length;
+                        for (var x = 0; x < len; x++)
+                        {   
+                            var name = data[x][0] + ', ' + data[x][1] + ' ' + data[x][2];
+                            var rating = data[x][3].substring(0,5);
+
+                            $('#txtResult').append((x+1) + '. ' + name + ' - ' + rating + '%\n');
+                        }
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+                });
+            }
+
+            //SUBJECT MATCH WITH NO SCHEDULES
+            if(picked_query == 4)
+            {
+                var acad_year = $('#acad_year_drop').val();
+                var sem = $('#sem_drop').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/query_unsched_load')?>", 
+                    method:"POST", 
+                    data:{ acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        $('#txtResult').empty();
+                        var len = data.length;
+                        for (var x = 0; x < len; x++)
+                        {   
+                            var name = data[x][0] + ', ' + data[x][1] + ' ' + data[x][2];
+                            var section = data[x][3] + ' ' + data[x][4][0] + ' - ' + data[x][5];
+                            var subject = data[x][6];
+ 
+                            $('#txtResult').append((x+1) + '. ' + name + ' - ' + section + ' - ' + subject +   '\n');
+                        }
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+                });
+            }
+
+        });
 
       });
 

@@ -786,6 +786,18 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function query_inc_sec(){
+		
+		echo json_encode($this->getdata_model->query_inc_sec($_POST));
+		exit();
+	}
+
+	public function query_avail_rooms(){
+		
+		echo json_encode($this->getdata_model->query_avail_rooms($_POST));
+		exit();
+	}
+
 } 
 
 ?>

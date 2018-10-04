@@ -170,7 +170,7 @@
                         <div>
                             <div class="col-md-12">
                                     <h3>Select a Query</h3>
-                                    <select class="form-control select2" id="query_faculty">
+                                    <select class="form-control select2" id="query_rooms">
                                         <option value="0" selected="" disabled="">Queries</option>
                                         <option value="1">Available Rooms and Labs</option>
                                         <option value="2">Top 10 used rooms / labs</option>
@@ -179,17 +179,17 @@
                                 <div class="col-md-4">
                                     <br>
                                     <label class="control-label">Start time:</label>
-                                    <input type="time" id="minor_start_a" class="form-control">
+                                    <input type="time" id="query_start_room" class="form-control">
                                 </div>
                                 <div class="col-md-4">
                                     <br>
                                     <label class="control-label">End time:</label>
-                                    <input type="time" id="minor_start_a" class="form-control">
+                                    <input type="time" id="query_end_room" class="form-control">
                                 </div>
                                 <div class="col-md-4">
                                     <br>
                                     <label class="control-label">Day:</label>
-                                    <select class="form-control select2">
+                                    <select class="form-control select2" id="query_day_room">
                                         <option value="0" selected="" disabled="">Day</option>
                                         <option value="Monday">Monday</option>
                                         <option value="Tuesday">Tuesday</option>
@@ -290,6 +290,35 @@
          }
     }
 
+    function queryAvailRooms(){
+        var sem = $('#sem_drop').val();
+        var acad_year = $('#acad_year_drop').val();
+        var start_time = $('#query_start_room').val();
+        var end_time = $('#query_end_room').val();
+        var day = $('#query_day_room').val();
+
+         if (sem != 0 && acad_year != 0 && start_time != null && end_time != null && day != 0)
+         {
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/query_avail_rooms')?>", 
+                method:"POST", 
+                data:{ acad_year:acad_year, sem:sem, start_time:start_time, end:end_time, day:day}, 
+                dataType: "json",
+                success:function(data){
+                    $('#txtResult').empty();
+                    var len = data.length;
+                    for (var x = 0; x < len; x++)
+                    {   
+                        $('#txtResult').append((x+1) + '. ' + data[x][1] + '\n');
+                    }
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+            });
+         }
+    }
+
     //SELECT2
       $(".select2").select2();
       $('.selectpicker').selectpicker();
@@ -321,7 +350,7 @@
             }
         });
 
-        //SECTION QUERIES
+        //SECTION QUERIES====================================
 
         $('#query_start_sec').on('blur', function(){
             var picked_query = $('#query_section').val();
@@ -346,6 +375,38 @@
                 queryAvailSections();
             }
         });
+
+        $('#query_section').on('change', function(){
+            var picked_query = $('#query_section').val();
+            if(picked_query == 2)
+            {
+                var acad_year = $('#acad_year_drop').val();
+                var sem = $('#sem_drop').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/query_inc_sec')?>", 
+                    method:"POST", 
+                    data:{ acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        // $('#txtResult').empty();
+                        // var len = data.length;
+                        // for (var x = 0; x < len; x++)
+                        // {   
+                        //     var name = data[x][0] + ', ' + data[x][1] + ' ' + data[x][2];
+                        //     var rating = data[x][3].substring(0,5);
+
+                        //     $('#txtResult').append((x+1) + '. ' + name + ' - ' + rating + '%\n');
+                        // }
+                        alert(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+                });
+            }
+        });
+
+        //===================================================
 
         $('#query_faculty').on('change', function(){
             var picked_query = $('#query_faculty').val();
@@ -424,7 +485,6 @@
                         var len = data.length;
                         for (var x = 0; x < len; x++)
                         {   
-                            
                             var name = data[x][0];
                             var loads = data[x][1];
                             $('#txtResult').append((x+1) + '. ' + name + ' - ' + loads +   ' hours\n');
@@ -435,6 +495,25 @@
                     }
                 });
             }
+
+        });
+
+
+        //QUERIES ON ROOMS
+        $('#query_rooms').on('change', function(){
+            var picked_query = $('#query_rooms').val();
+
+            $('#query_start_room').on('blur',function(){
+                queryAvailRooms();
+            });
+
+            $('#query_end_room').on('blur',function(){
+                queryAvailRooms();
+            });
+
+            $('#query_day_room').on('change',function(){
+                queryAvailRooms();
+            });
 
         });
 

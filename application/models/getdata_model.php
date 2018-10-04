@@ -3688,6 +3688,104 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function query_inc_sec()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('s.section_id, s.year_lvl, s.course, CONCAT(c.course_code + " " + LEFT(s.year_lvl, 1) + " - " + s.section_desc) AS "section_name"')
+				->where('s.acad_yr', $acad_yr)
+				->where('s.status', 1)
+				->join('course c', 'c.course_id = s.course')
+                ->get('section s');
+
+        $ctr = 0;
+
+		foreach($query1->result() as $r)
+		{		
+			$query2 = $this->db->select('SUM(lab_hrs + lec_hrs) AS off_total_hrs')
+					->join('curriculum c', 's.subj_id = c.subj_code')
+					->where('sem', $sem)
+					->where('year_lvl', $r->year_lvl)
+					->where('course', $r->course)
+	                ->get('subject s');
+
+		    foreach($query2->result() as $s)
+		    {
+		       	($s->off_total_hrs == '')?$off_total_hrs = 0:$off_total_hrs = $s->off_total_hrs;
+		    }
+
+	        $query3 = $this->db->query('SELECT SUM(lec_hrs + lab_hrs) AS total_hours
+										FROM subject sub
+										JOIN subject_match sm
+										ON sub.subj_id = sm.subj_id
+										JOIN section sec
+										ON sm.section = sec.section_id
+										WHERE sec.section_id = "'.$r->section_id.'" AND sm.acad_yr = "'.$acad_yr.'" AND sm.sem = "'.$sem.'"');
+
+	        foreach($query3->result() as $t)
+	        {
+	        	($t->total_hours == '')?$total_hours = 0:$total_hours = $t->total_hours;
+	        }
+
+	        if($off_total_hrs != $total_hours)
+	        {
+	        	array_push($result, $r->section_name);
+	        }
+
+	        
+		}
+
+		return $result;
+	}
+
+	public function query_avail_rooms(){ //GETS AVAILABLE ROOMS FOR A SPECIFIC TIME
+
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$result = array();
+
+		$query = $this->db->select('r.room_id, r.room_code')
+				->where('r.room_id NOT IN (SELECT ta.room_id
+					FROM teaching_assign_sched ta
+					WHERE ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					AND ta.time_start > "'.$start_time.'"
+					AND ta.time_start < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_finish > "'.$start_time.'"
+					AND ta.time_finish < "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					OR ta.time_start = "'.$start_time.'"
+					AND ta.time_finish = "'.$end.'"
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'")', NULL, FALSE)
+				->order_by('room_code', 'asc')
+                ->get('room r');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->room_id,
+					$r->room_code
+					);
+		}
+
+		return $result;
+	}
+
+
+
 
 }
 ?>

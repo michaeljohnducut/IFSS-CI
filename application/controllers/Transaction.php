@@ -333,6 +333,7 @@ class Transaction extends CI_Controller
 		{
 			$data['title'] = "IFSS | View Schedule";
 			$data['acc_type'] = 'admin';
+			$data['fac_id'] = $this->session->userdata('USERID');
 			$data['faculty'] = $this->getdata_model->faculty();
 			$data['courses'] = $this->getdata_model->course();
 			$data['rooms'] = $this->getdata_model->room_sorted();
@@ -346,6 +347,7 @@ class Transaction extends CI_Controller
 		{
 			$data['title'] = "IFSS | View Schedule";
 			$data['acc_type'] = 'faculty';
+			$data['fac_id'] = $this->session->userdata('USERID');
 			
 			$this->load->view('templates/header_f', $data);
 			$this->load->view('transaction/view_sched');

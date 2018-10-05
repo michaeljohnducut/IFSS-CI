@@ -43,6 +43,76 @@
             background-color: #f1f1f1;
         }
 
+        .plot-blue{
+            background-color: #3498db; 
+            color: white;
+        }
+
+        .plot-green{
+            background-color: #2ecc71; 
+            color: white;
+        }
+
+        .legend-green{
+            background-color: #2ecc71; 
+            color: white;
+        }
+
+        .legend-blue{
+            background-color: #3498db; 
+            color: white;
+        }
+
+        .legend-darkBlue{
+            background-color: #34495e; 
+            color: white;
+        }
+
+        .legend-purple{
+            background-color: #9b59b6; 
+            color: white;
+        }
+
+        .legend-orange{
+            background-color: #e67e22; 
+            color: white;
+        }
+
+        .plot-orange{
+            background-color: #e67e22; 
+            color: white;
+        }
+
+        .legend-red{
+            background-color: #e74c3c; 
+            color: white;
+        }
+
+        .plot-red{
+            background-color: #e74c3c; 
+            color: white;
+        }
+
+        .legend-darkBlue{
+            background-color: #34495e; 
+            color: white;
+        }
+
+        .plot-red{
+            background-color: #e74c3c; 
+            color: white;
+        }
+
+        .plot-darkBlue{
+            background-color: #34495e; 
+            color: white;
+        }
+
+        .plot-regular{
+            background-color: #b2bec3
+            color: white;
+        }
+
         /* Style the buttons that are used to open the tab content */
         .tab button {
             background-color: inherit;
@@ -70,6 +140,69 @@
             padding: 6px 12px;
             border: 1px solid #ccc;
             border-top: none;
+        }
+
+        .schedBorder{
+            border:1px white solid;
+            height:30px;
+            text-align:center;
+            font-family:tahoma;
+            font-size:11px;
+        }
+
+        .schedBorderMid{
+            /*border:1px #000000 solid;*/
+            border-left:1px #000000 solid;
+            border-right:1px #000000 solid;
+            height:30px;
+            text-align:center;
+            font-family:tahoma;
+            font-size:11px;
+        }
+
+        .schedBorderTop{
+            border-top:1px #000000 solid;
+            border-left:1px #000000 solid;
+            border-right:1px #000000 solid;
+            height:30px;
+            text-align:center;
+            font-family:tahoma;
+            font-size:11px;
+        }
+
+        .schedBorderBot{
+            border-bottom:1px #000000 solid;
+            border-left:1px #000000 solid;
+            border-right:1px #000000 solid;
+            height:30px;
+            text-align:center;
+            font-family:tahoma;
+            font-size:11px;
+        }
+
+        .ajax-loader {
+          visibility: hidden;
+          background-color: rgba(255,255,255,0.7);
+          position: absolute;
+          z-index: +100 !important;
+          width: 100%;
+          height:100%;
+        }
+
+        .ajax-loader img {
+          /*position: relative;
+          top:50%;
+          left:50%;*/
+            /*display: block;
+            margin-left: auto;
+            margin-right: auto;*/
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           width: 100px;
+           height: 100px;
+           margin-top: -50px; /* Half the height */
+           margin-left: -50px; /* Half the width */
         }
     </style>
 </head>

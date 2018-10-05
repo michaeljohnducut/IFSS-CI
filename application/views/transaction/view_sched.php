@@ -21,7 +21,7 @@
                             <div class="col-md-9">
                                 <h2 style="margin-top: 30px;">Search for a schedule</h2>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" id="view_div">
                                 <label class="control-label">View Schedules by:</label>
                                 <select class="form-control " id="change_view">
                                   <option selected="" value="1">Faculty</option>
@@ -56,7 +56,7 @@
                                     <option value="summer">Summer</option> 
                                 </select>   
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" id="for_hiding">
                                 <label class="control-label">Select Faculty:</label>
                                 <select class="form-control " id="sched_faculty">
                                     <option value="0">-SELECT FACULTY-</option>
@@ -639,8 +639,24 @@
 
       //FUNCTIONS
       //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
-      function showSpec(id)
+
+      function hide_dropdown()
         {
+            var data = "<?php echo $acc_type?>";
+            if(data == 'faculty')
+            {
+                $('#for_hiding').hide();
+                $('#view_div').hide(); 
+            }
+            else
+            {
+                $('#for_hiding').show();
+                $('#view_div').show();
+            }
+        }
+
+      function showSpec(id)
+        {   
             event.preventDefault();  
                 $.ajax({  
                 url:"<?php echo base_url('Transaction/get_consec')?>",  
@@ -681,7 +697,13 @@
 
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
-            var fac_id = $('#sched_faculty').val();
+            var account = "<?php echo $acc_type?>"; 
+            if(account == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
 
             var dataTable = $('#tbl_sched_sum').DataTable({           
               "processing" : true,
@@ -720,7 +742,13 @@
         function getAdviseTime(){
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
-            var fac_id = $('#sched_faculty').val();
+            var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
 
              $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_advise_time')?>", 
@@ -739,7 +767,13 @@
         function getNightOffice(){
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
-            var fac_id = $('#sched_faculty').val();
+            var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
 
              $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_night_office')?>", 
@@ -758,7 +792,13 @@
         function getOfficeHours(){
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
-            var fac_id = $('#sched_faculty').val();
+            var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
 
              $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_office_hours')?>", 
@@ -798,7 +838,13 @@
 
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
-            var fac_id = $('#sched_faculty').val();
+            var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
 
              $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
@@ -819,7 +865,13 @@
 
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
-            var fac_id = $('#sched_faculty').val();
+            var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
 
              $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_services')?>", 
@@ -900,7 +952,13 @@
         }
 
       function getFacultyLoads(){
-        var fac_id =  $('#sched_faculty').val();
+        var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
         var acad_yr =  $('#sched_acad_year').val();
         var sem =  $('#sched_sem').val();
         $.ajax({
@@ -925,9 +983,14 @@
                });
       }
 
-
       function getFacultyType(){
-        var fac_id =  $('#sched_faculty').val();
+        var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
         $.ajax({
                 method:"POST",
                 url:"<?php echo base_url('Transaction/get_faculty_type')?>",
@@ -937,6 +1000,7 @@
                 {   
                    global_factype = data[0][0];
                    global_factypedesc = data[0][1];
+                   displayLegends();
                 }, 
                 async:false
 
@@ -944,7 +1008,13 @@
       }
 
       function getPrefDay_gen(){
-        var fac_id =  $('#sched_faculty').val();
+        var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
         var acad_yr =  $('#sched_acad_year').val();
         var sem =  $('#sched_sem').val();
         $.ajax({
@@ -995,7 +1065,13 @@
 
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
-            var fac_id = $('#sched_faculty').val();
+            var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
 
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_units_used')?>", 
@@ -1357,6 +1433,13 @@
 
       $(document).ready(function(){
 
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'faculty'){
+            getFacultyType();
+        }
+
+        hide_dropdown();
+
         $('#sched_b').hide();
         // $('#divsplit').hide();
         $('#sched_lab').hide();
@@ -1370,7 +1453,13 @@
 
         $('#sched_faculty').on('change', function(){
           global_total_hrs = 0;
-          var temp_fac = $('#sched_faculty').val();
+          var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var temp_fac = $('#sched_faculty').val();
+            }
+            else{
+                var temp_fac = "<?php echo $fac_id?>";
+            }
           var temp_sem = $('#sched_sem').val();
           var temp_acadyr = $('#sched_acad_year').val();
           if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
@@ -1413,7 +1502,13 @@
 
         $('#sched_acad_year').on('change', function(){
           global_total_hrs = 0;
-          var temp_fac = $('#sched_faculty').val();
+          var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var temp_fac = $('#sched_faculty').val();
+            }
+            else{
+                var temp_fac = "<?php echo $fac_id?>";
+            }
           var temp_sem = $('#sched_sem').val();
           var temp_acadyr = $('#sched_acad_year').val();
           if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
@@ -1432,11 +1527,27 @@
             reflectSchedTable();
             reflectServices();
             resetPlotForm();
+            if(global_factype == 1)
+            {
+                getAdviseTime();
+            }
+            if(global_factype == 3)
+            {
+                getNightOffice();
+                getOfficeHours();
+            }
+
         });
 
         $('#sched_sem').on('change', function(){
           global_total_hrs = 0;
-          var temp_fac = $('#sched_faculty').val();
+          var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var temp_fac = $('#sched_faculty').val();
+            }
+            else{
+                var temp_fac = "<?php echo $fac_id?>";
+            }
           var temp_sem = $('#sched_sem').val();
           var temp_acadyr = $('#sched_acad_year').val();
           if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
@@ -1455,6 +1566,15 @@
             reflectSchedTable();
             reflectServices();
             resetPlotForm();
+            if(global_factype == 1)
+            {
+                getAdviseTime();
+            }
+            if(global_factype == 3)
+            {
+                getNightOffice();
+                getOfficeHours();
+            }
         });
 
         //=========================================================

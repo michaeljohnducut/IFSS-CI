@@ -335,14 +335,24 @@
     }
 
     // KUYA! ETO UNG FUNCTION NA YUN!
-    function sample_display()
+    function queryConsecFaculty()
     {
         $.ajax({  
                 url:"<?php echo base_url('Transaction/query_faculty_consec')?>", 
                 method:"POST", 
                 dataType: "json",
                 success:function(data){
-                    
+                    $('#txtResult').empty();
+                    var len = data.length;
+                    for (var x = 0; x < len; x++)
+                    {   
+                        $('#txtResult').append((x+1) + '. ' + data[x][0] + '\n');
+                    }
+
+                    if(len == 0)
+                    {
+                        $('#txtResult').append('--NO RESULTS--');
+                    }
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
@@ -355,10 +365,6 @@
       $('.selectpicker').selectpicker();
 
       $(document).ready(function(){
-
-        //KUYA! ETO UNG GINAMIT KONG SAMPLE NA FUNCTION PARA ILABAS UNG MGA LIST NG FACULTY
-        sample_display();
-
         //FACULTY QUERIES
         $('#query_start_fac').on('blur', function(){
             var picked_query = $('#query_faculty').val();
@@ -479,6 +485,11 @@
                     // alert(JSON.stringify(data));
                     }
                 });
+            }
+
+            if(picked_query == 3)
+            {
+                queryConsecFaculty();
             }
 
             //SUBJECT MATCH WITH NO SCHEDULES

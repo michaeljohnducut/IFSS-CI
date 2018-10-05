@@ -3955,7 +3955,7 @@ FROM subject_match sm
 		$result = array();
 		$state = '';
 
-		$query1 = $this->db->select('faculty_id, lname')
+		$query1 = $this->db->select('faculty_id, CONCAT(lname, ", ", fname, " ", mname) AS "facname" ')
 						->order_by('faculty_id')
 						->get('faculty');
 
@@ -3965,11 +3965,11 @@ FROM subject_match sm
 
 			if($state == 'CONSECUTIVE')
 			{
-				array_push($result, $t->faculty_id);
+				array_push($result, $t->facname);
 			}
 		}
 
-		print_r($result); die();
+		return $result;
 	
 	}
 

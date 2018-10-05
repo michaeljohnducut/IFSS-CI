@@ -365,7 +365,85 @@ class Report extends CI_Controller
 
 		$this->load->view('report/subj_pref_excel', $data);
 	}
+
+	public function get_other_offtime()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		echo json_encode($this->getdata_model->get_other_offtime($acadyr, $sem, $faculty));
+		exit();
+	}
+
+	public function get_teaching_offtime()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		echo json_encode($this->getdata_model->get_teaching_offtime($acadyr, $sem, $faculty));
+		exit();
+	}
 	
+	public function get_tot_day_offtime()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		echo json_encode($this->getdata_model->get_tot_day_offtime($acadyr, $sem, $faculty));
+		exit();
+	}
+
+	public function get_total_type_offtime()
+	{
+		$acadyr = $this->security->xss_clean($this->input->post('acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$faculty = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		echo json_encode($this->getdata_model->get_total_type_offtime($acadyr, $sem, $faculty));
+		exit();
+	}
+
+	public function official_sched_pdf()
+	{
+		$result1 = array();
+		$result2 = array();
+		$result3 = array();
+		$result4 = array();
+		$result5 = array();
+
+		$this->load->library('pdf');
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+		$faculty = $this->security->xss_clean($this->input->get('faculty'));
+		$sem_desc = $this->security->xss_clean($this->input->get('sem_desc'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		$data['faculty'] = $faculty;
+		
+		$result1 = $this->getdata_model->get_faculty_details($faculty);
+		$result2 = $this->getdata_model->get_other_offtime($acadyr, $sem_desc, $faculty);
+		$result3 = $this->getdata_model->get_teaching_offtime($acadyr, $sem_desc, $faculty);
+		$result4 = $this->getdata_model->get_tot_day_offtime($acadyr, $sem_desc, $faculty);
+		$result5 = $this->getdata_model->get_total_type_offtime($acadyr, $sem_desc, $faculty);
+
+		$data['details'] = $result1;
+		$data['other_off'] = $result2;
+		$data['teach_off'] = $result3;
+		$data['total_day'] = $result4;
+		$data['total_type'] = $result5;
+
+        $this->pdf->load_view('report/official_sched_pdf',$data);
+        $this->pdf->set_paper('legal', 'landscape');
+        $this->pdf->render();
+        $this->pdf->output();
+          
+        $this->pdf->stream("official_time.pdf", array('Attachment' => 0));
+	}
 } 
 
 ?>

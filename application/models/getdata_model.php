@@ -3024,8 +3024,6 @@ FROM subject_match sm
         }
 
 		return $result;
-
-		return $result;
 	}
 
 	public function get_faculty_designee()
@@ -3052,6 +3050,111 @@ FROM subject_match sm
 		}
 
 		return $result;
+	}
+
+	public function get_other_offtime($acadyr, $sem, $faculty)
+	{
+		$result = array();
+
+		$query = $this->db->query('SELECT ots.day, load_type, GROUP_CONCAT(CONCAT(TIME_FORMAT(time_start, "%h:%i %p"), " - ", TIME_FORMAT(time_finish, "%h:%i %p")) SEPARATOR "<br>") AS time_used
+									FROM other_time_sched ots
+									WHERE faculty_id = "'.$faculty.'" AND acad_yr = "'.$acadyr.'" AND sem = "'.$sem.'"
+									GROUP BY ots.day, load_type
+									ORDER BY FIELD(ots.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->day,
+               				$t->load_type,
+               				$t->time_used
+						);
+        }
+
+        return $result;
+	}
+
+	public function get_teaching_offtime($acadyr, $sem, $faculty)
+	{
+		$result = array();
+
+		$query = $this->db->query('SELECT tas.day, load_type, GROUP_CONCAT(CONCAT(TIME_FORMAT(time_start, "%h:%i %p"), " - ", TIME_FORMAT(time_finish, "%h:%i %p")) SEPARATOR "<br>") AS time_used
+									FROM teaching_assign_sched tas
+									JOIN subject_match sm
+									ON tas.subj_match_id = sm.subj_match_id
+									WHERE sm.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'"
+									GROUP BY tas.day, load_type
+									ORDER BY FIELD(tas.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->day,
+               				$t->load_type,
+               				$t->time_used
+						);
+        }
+
+        return $result;
+	}
+
+	public function get_tot_day_offtime($acadyr, $sem, $faculty)
+	{
+		$result = array();
+		$temp_hrs_r = '';
+		$temp_hrs_o = '';
+		$total_temp = '';
+		$temp_day = '';
+
+		$query = $this->db->query('(SELECT tas.day, load_type, SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours
+									FROM teaching_assign_sched tas JOIN subject_match sm
+									ON tas.subj_match_id = sm.subj_match_id
+									WHERE sm.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'"
+									GROUP BY tas.day, load_type
+									ORDER BY FIELD(tas.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"))
+									UNION ALL
+									(SELECT day, load_type, SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours
+									FROM other_time_sched
+									WHERE faculty_id = "'.$faculty.'" AND acad_yr = "'.$acadyr.'" AND sem = "'.$sem.'"
+									GROUP BY DAY, load_type
+									ORDER BY FIELD(DAY, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"))');
+
+        foreach($query->result() as $t)
+        {    
+            $result[] = array(
+               				$t->day,
+               				$t->load_type,
+               				$t->hours
+						);
+        }
+
+        return $result;
+	}
+
+	public function get_total_type_offtime($acadyr, $sem, $faculty)
+	{
+		$result = array();
+
+		$query = $this->db->query('(SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours, load_type
+									FROM other_time_sched
+									WHERE faculty_id = "'.$faculty.'" AND acad_yr = "'.$acadyr.'" AND sem = "'.$sem.'"
+									GROUP BY load_type)
+									UNION ALL
+									(SELECT SUM(TRIM(CAST(TIME_TO_SEC(TIMEDIFF(time_finish,time_start)) / (60 * 60) AS DECIMAL(10,1)))+0) AS hours, load_type
+									FROM teaching_assign_sched tas JOIN subject_match sm
+									ON tas.subj_match_id = sm.subj_match_id
+									WHERE sm.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'"
+									GROUP BY load_type)');
+
+        foreach($query->result() as $t)
+        {      
+            $result[] = array(
+               				$t->hours,
+               				$t->load_type
+						);
+        }
+
+        return $result;
 	}
 
 	public function get_total_section()

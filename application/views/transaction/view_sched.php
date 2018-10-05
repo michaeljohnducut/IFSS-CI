@@ -1409,19 +1409,6 @@
                     $('button[type="button"][value="'+final_val2+'"]').text(''); 
                 }
 
-                // 
-                // if (looper < 10){
-
-                //     last_box = '0' + looper + ':' + temp_min_end + ':00' + day_id; 
-                //     last_text = looper + ':'
-                // }
-                // else{
-                //     last_box = looper + ':' + temp_min_end + ':00' + day_id; 
-                // }
-
-                // $('button[type="button"][value="'+last_box+'"]').removeClass().addClass("btn plot-regular"); 
-                // $('button[type="button"][value="'+last_box+'"]').text('');
-
             }
         }
 

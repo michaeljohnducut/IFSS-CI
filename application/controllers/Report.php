@@ -242,6 +242,7 @@ class Report extends CI_Controller
 	public function room_schedule()
 	{
 		$data['title'] = "IFSS | Room and Laboratory Schedule";
+		$data['rooms'] = $this->getdata_model->room_sorted();
 		$this->load->view('templates/header', $data);
 		$this->load->view('report/report_room_sched');
 		$this->load->view('templates/footer');

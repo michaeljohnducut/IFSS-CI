@@ -181,8 +181,10 @@ class Transaction extends CI_Controller
 	}
 
 	public function get_consec()
-	{		
-		echo ($this->getdata_model->get_consec($_POST));
+	{	
+		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		echo ($this->getdata_model->get_consec($faculty_id));
 		exit();
 	}
 
@@ -806,6 +808,13 @@ class Transaction extends CI_Controller
 	public function query_top_used_room(){
 		
 		echo json_encode($this->getdata_model->query_top_used_room($_POST));
+		exit();
+	}
+
+	//KUYA! ETO UNG GINAMIT KONG CONTROLLER
+	public function query_faculty_consec()
+	{
+		echo json_encode($this->getdata_model->query_faculty_consec($_POST));
 		exit();
 	}
 

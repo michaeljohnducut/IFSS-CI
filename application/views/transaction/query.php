@@ -334,11 +334,30 @@
          }
     }
 
+    // KUYA! ETO UNG FUNCTION NA YUN!
+    function sample_display()
+    {
+        $.ajax({  
+                url:"<?php echo base_url('Transaction/query_faculty_consec')?>", 
+                method:"POST", 
+                dataType: "json",
+                success:function(data){
+                    
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+            });
+    }
+
     //SELECT2
       $(".select2").select2();
       $('.selectpicker').selectpicker();
 
       $(document).ready(function(){
+
+        //KUYA! ETO UNG GINAMIT KONG SAMPLE NA FUNCTION PARA ILABAS UNG MGA LIST NG FACULTY
+        sample_display();
 
         //FACULTY QUERIES
         $('#query_start_fac').on('blur', function(){

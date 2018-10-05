@@ -976,10 +976,8 @@ class getdata_model extends CI_Model{
 		return $result;
 	}
 
-	public function get_consec()
+	public function get_consec($faculty_id)
 	{
-		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
-
 		$result = array();
 		$statement = "";
 
@@ -3950,8 +3948,29 @@ FROM subject_match sm
 		return $result;
 	}
 
+	//KUYA! ETO YUNG GINAMIT KONG MODEL! NILALABAS LANG NETO FACULTY ID GAWIN MO NA LANG NA NAME HAHAHHAHAHA
+	public function query_faculty_consec()
+	{
+		$result = array();
+		$state = '';
 
+		$query1 = $this->db->select('faculty_id, lname')
+						->order_by('faculty_id')
+						->get('faculty');
 
+		foreach ($query1->result() as $t) 
+		{
+			$state = $this->getdata_model->get_consec($t->faculty_id);
+
+			if($state == 'CONSECUTIVE')
+			{
+				array_push($result, $t->faculty_id);
+			}
+		}
+
+		print_r($result); die();
+	
+	}
 
 }
 ?>

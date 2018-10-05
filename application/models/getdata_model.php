@@ -1641,7 +1641,7 @@ class getdata_model extends CI_Model{
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(LEFT(ta.time_start,5), "-", LEFT(ta.time_finish,5)) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
 				->where('sm.faculty_id', $fac_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -1651,7 +1651,7 @@ class getdata_model extends CI_Model{
 				->join('course c','se.course = c.course_id')
 				->join('room r','r.room_id = ta.room_id')
 				->group_by('ta.subj_match_id')
-				->order_by('ta.day', 'asc')
+				->order_by('FIELD(ta.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
                 ->get('teaching_assign_sched ta');
                 
 
@@ -2538,7 +2538,7 @@ FROM subject_match sm
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(LEFT(ta.time_start,5), "-", LEFT(ta.time_finish,5)) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2547,7 +2547,7 @@ FROM subject_match sm
 				->join('faculty f','f.faculty_id = sm.faculty_id', 'LEFT')
 				->join('room r','r.room_id = ta.room_id')
 				->group_by('ta.subj_match_id')
-				->order_by('ta.day', 'asc')
+				->order_by('FIELD(ta.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
                 ->get('teaching_assign_sched ta');
                 
 
@@ -2576,7 +2576,7 @@ FROM subject_match sm
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(LEFT(ta.time_start,5), "-", LEFT(ta.time_finish,5)) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", ta.subj_match_id')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", ta.subj_match_id')
 				->where('ta.room_id', $room_id)
 				->where('ta.acad_yr', $acad_year)
 				->where('ta.sem', $sem)
@@ -2587,6 +2587,7 @@ FROM subject_match sm
 				->join('faculty f','f.faculty_id = sm.faculty_id')
 				->join('subject s','sm.subj_id = s.subj_id')
 				->join('room r','r.room_id = ta.room_id')
+				->order_by('FIELD(ta.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
                 ->get('teaching_assign_sched ta');
 
 		foreach ($query->result() as $r) 
@@ -2599,8 +2600,8 @@ FROM subject_match sm
 					$r->subj_code,
 					$r->subj_desc,
 					$r->units,
-					$r->facname, 
 					$section, 
+					$r->facname, 
 					$r->times,
 					$r->days,
 					$btn

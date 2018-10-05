@@ -64,7 +64,7 @@
         }
 
         .legend-darkBlue{
-            background-color: #34495e; 
+            background-color: #778beb; 
             color: white;
         }
 
@@ -74,37 +74,37 @@
         }
 
         .legend-orange{
-            background-color: #e67e22; 
+            background-color: #f6b93b; 
             color: white;
         }
 
         .plot-orange{
-            background-color: #e67e22; 
+            background-color: #f6b93b; 
             color: white;
         }
 
         .legend-red{
-            background-color: #e74c3c; 
+            background-color: #DA9694; 
             color: white;
         }
 
         .plot-red{
-            background-color: #e74c3c; 
+            background-color: #DA9694; 
             color: white;
         }
 
         .legend-darkBlue{
-            background-color: #34495e; 
+            background-color: #778beb; 
             color: white;
         }
 
         .plot-red{
-            background-color: #e74c3c; 
+            background-color: #DA9694; 
             color: white;
         }
 
         .plot-darkBlue{
-            background-color: #34495e; 
+            background-color: #778beb; 
             color: white;
         }
 
@@ -204,6 +204,7 @@
            margin-top: -50px; /* Half the height */
            margin-left: -50px; /* Half the width */
         }
+
     </style>
 </head>
 

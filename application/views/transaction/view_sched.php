@@ -555,7 +555,6 @@
                 <th width="200px">Time</th>
                 <th>Day/s</th>
                 <th>Room</th>
-                <th>Action</th>
             </tr>
         </thead>
 
@@ -577,7 +576,6 @@
                 <th width="200px">Professor</th>
                 <th>Time/s</th>
                 <th>Day/s</th>
-                <th>Action</th>
             </tr>
         </thead>
 

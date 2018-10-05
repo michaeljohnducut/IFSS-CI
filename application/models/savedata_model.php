@@ -2470,5 +2470,51 @@ class savedata_model extends CI_Model
 		
 		return $output;
 	}
+
+	public function remove_office_hrs()
+	{
+		$output = '';
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$load_type = $this->security->xss_clean($this->input->post('load_type'));
+
+			if($this->db->query("DELETE FROM other_time_sched WHERE faculty_id = $fac_id AND acad_yr = '$acad_year' AND sem = '$sem' AND load_type = 'OH'"))
+			{
+				$output = 'DELETED';
+			}
+			else
+			{
+				$output = 'NOT DELETED';
+			}
+
+		return $output;
+	}
+
+	public function remove_teaching_load()
+	{
+		$output = '';
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+			if($this->db->query("DELETE FROM teaching_assign_sched 
+						WHERE subj_match_id IN (SELECT subj_match_id 
+                        FROM subject_match 
+                        WHERE acad_yr = '$acad_year'
+                        AND sem = '$sem'
+                        AND faculty_id = $fac_id)"))
+			{
+				$output = 'DELETED';
+			}
+			else
+			{
+				$output = 'NOT DELETED';
+			}
+
+		return $output;
+	}
 }
 ?>

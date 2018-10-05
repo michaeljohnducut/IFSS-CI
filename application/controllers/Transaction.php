@@ -809,6 +809,18 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function remove_office_hrs()
+	{
+		echo ($this->savedata_model->remove_office_hrs($_POST));
+		exit();
+	}
+
+	public function remove_teaching_load()
+	{
+		echo ($this->savedata_model->remove_teaching_load($_POST));
+		exit();
+	}
+
 } 
 
 ?>

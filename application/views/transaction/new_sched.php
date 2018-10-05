@@ -1002,6 +1002,8 @@
       var global_num_loads;
       var global_minor_split = 0;
       var global_splitcontrol = 0;
+      var global_officehrs;
+      var global_bool_next; 
 
       //FUNCTIONS
       //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
@@ -1603,6 +1605,7 @@
       }
 
       function changeSchedColor(arr){
+            global_bool_next = false;
             var len = arr.length;
             var temp_subj = '';
             var temp_sec = '';
@@ -2064,6 +2067,8 @@
                     }
                 }
             }
+
+            global_officehrs = count_oh;
         }
       }
 
@@ -2162,6 +2167,45 @@
                 }
             }
         }
+      }
+
+      function removeOfficeHours(){
+        var fac_id = $('#sched_faculty').val();
+        var acad_year = $('#sched_acad_year').val();
+        var sem = $('#sched_sem').val();
+        $.ajax({  
+            url:"<?php echo base_url('Transaction/remove_office_hrs')?>", 
+            method:"POST", 
+            data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'OH'}, 
+            success:function(data){
+               resetPlotForm();
+               reflectSchedTable();
+               getOfficeHours();
+               getNightOffice();
+            },  
+            error: function (data) {
+            alert(JSON.stringify(data));
+            }
+       });
+
+      }
+
+      function removeTeachingLoad(){
+        var fac_id = $('#sched_faculty').val();
+        var acad_year = $('#sched_acad_year').val();
+        var sem = $('#sched_sem').val();
+        $.ajax({  
+            url:"<?php echo base_url('Transaction/remove_teaching_load')?>", 
+            method:"POST", 
+            data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+            success:function(data){
+
+            },  
+            error: function (data) {
+            alert(JSON.stringify(data));
+            }
+       });
+
       }
 
       function generateAdviseTime(){
@@ -2528,6 +2572,17 @@
                 
             }
         }
+
+          if(day_loop == 6)
+            {
+                if(global_officehrs < 68)
+                {
+                    var shortage = (68 - global_officehrs)/2;
+                    swal("Warning!", "Generation of office hours lacks " + shortage +" hours. Move part-time loads to weekends and generate again.", "error");
+                    removeOfficeHours();
+                    getOfficeHours();
+                }
+            }
       }
 
       function saveNightOffice(){
@@ -3615,18 +3670,19 @@
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
-            reflectSchedTable();
             reflectServices();
             showSpec(temp_fac);
             resetPlotForm();
             if(global_factype == 1)
             {
                 getAdviseTime();
+                reflectSchedTable();
             }
             if(global_factype == 3)
             {
                 getNightOffice();
                 getOfficeHours();
+                reflectSchedTable();
             }
         });
 
@@ -4042,6 +4098,7 @@
         //IF TEACHING LOADS IS CHECKED
         if($('#chk_loads').prop('checked'))
         {
+            removeTeachingLoad();
             var start_time; 
             var start_time_b;
             var end_time; 
@@ -4669,7 +4726,8 @@
 
         //IF OFFICE HOURS IS CHECKED
         if($('#chk_officehrs').prop('checked'))
-        {
+        {   
+            removeOfficeHours();
             generateOfficeHours();
             saveOfficeHours();
             $('#chk_officehrs').prop('checked',false);

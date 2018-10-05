@@ -333,6 +333,9 @@ class Transaction extends CI_Controller
 		{
 			$data['title'] = "IFSS | View Schedule";
 			$data['acc_type'] = 'admin';
+			$data['faculty'] = $this->getdata_model->faculty();
+			$data['courses'] = $this->getdata_model->course();
+			$data['rooms'] = $this->getdata_model->room_sorted();
 
 			$this->load->view('templates/header', $data);
 			$this->load->view('transaction/view_sched');
@@ -795,6 +798,12 @@ class Transaction extends CI_Controller
 	public function query_avail_rooms(){
 		
 		echo json_encode($this->getdata_model->query_avail_rooms($_POST));
+		exit();
+	}
+
+	public function query_top_used_room(){
+		
+		echo json_encode($this->getdata_model->query_top_used_room($_POST));
 		exit();
 	}
 

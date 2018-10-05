@@ -3822,6 +3822,31 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function query_top_used_room()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query = $this->db->query("SELECT COUNT(*) as 'tot_count', r.room_code, ta.room_id
+									FROM teaching_assign_sched ta JOIN room r 
+											ON ta.room_id = r.room_id
+									WHERE ta.acad_yr = '2018‐2019' 
+									AND ta.sem = '1st' 
+									GROUP BY room_id
+									ORDER BY tot_count DESC 
+									LIMIT 10 ");
+
+        foreach ($query->result() as $r){
+
+			$result[] = array(
+					$r->room_code
+					);
+		}
+
+		return $result;
+	}
+
 
 
 

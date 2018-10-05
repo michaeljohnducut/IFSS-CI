@@ -252,6 +252,11 @@
                     {
                         $('#txtResult').append((x+1) + '. ' + data[x][0] + '\n');
                     }
+
+                    if(len == 0)
+                    {
+                        $('#txtResult').append('--NO RESULTS--');
+                    }
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
@@ -282,6 +287,11 @@
                         var section = data[x][0] + ' ' + data[x][1][0] + ' - ' + data[x][2];
                         $('#txtResult').append((x+1) + '. ' + section + '\n');
                     }
+
+                    if(len == 0)
+                    {
+                        $('#txtResult').append('--NO RESULTS--');
+                    }
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
@@ -310,6 +320,11 @@
                     for (var x = 0; x < len; x++)
                     {   
                         $('#txtResult').append((x+1) + '. ' + data[x][1] + '\n');
+                    }
+
+                    if(len == 0)
+                    {
+                        $('#txtResult').append('--NO RESULTS--');
                     }
                 },
                 error: function (data) {
@@ -435,6 +450,11 @@
 
                             $('#txtResult').append((x+1) + '. ' + name + ' - ' + rating + '%\n');
                         }
+
+                        if(len == 0)
+                        {
+                            $('#txtResult').append('--NO RESULTS--');
+                        }
                     },
                     error: function (data) {
                     // alert(JSON.stringify(data));
@@ -463,6 +483,11 @@
  
                             $('#txtResult').append((x+1) + '. ' + name + ' - ' + section + ' - ' + subject +   '\n');
                         }
+
+                        if(len == 0)
+                        {
+                            $('#txtResult').append('--NO RESULTS--');
+                        }
                     },
                     error: function (data) {
                     // alert(JSON.stringify(data));
@@ -489,6 +514,11 @@
                             var loads = data[x][1];
                             $('#txtResult').append((x+1) + '. ' + name + ' - ' + loads +   ' hours\n');
                         }
+
+                        if(len == 0)
+                        {
+                            $('#txtResult').append('--NO RESULTS--');
+                        }
                     },
                     error: function (data) {
                     // alert(JSON.stringify(data));
@@ -514,6 +544,34 @@
             $('#query_day_room').on('change',function(){
                 queryAvailRooms();
             });
+
+            if(picked_query == 2)
+            {
+                var acad_year = $('#acad_year_drop').val();
+                var sem = $('#sem_drop').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/query_top_used_room')?>", 
+                    method:"POST", 
+                    data:{ acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        $('#txtResult').empty();
+                        var len = data.length;
+                        for (var x = 0; x < len; x++)
+                        {   
+                            $('#txtResult').append((x+1) + '. ' +  data[x][0] +   '\n');
+                        }
+
+                        if(len == 0)
+                        {
+                            $('#txtResult').append('--NO RESULTS--');
+                        }
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+                });
+            }
 
         });
 

@@ -1,6 +1,6 @@
 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                         <h4 class="page-title">New Schedule</h4>
+                         <h4 class="page-title">Plot Schedules</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <ol class="breadcrumb">
@@ -171,7 +171,7 @@
 
                         </div>
                         <br>
-                        <div class="row">
+                        <div class="row" id="legend_div">
                             <div class="col-md-2" id="reg_box">
                                 <div class="white-box text-center legend-green">
                                     <h4 class="text-white">Regular Load</h4>
@@ -3786,7 +3786,7 @@
             $('#section_table').hide();
             $('#room_table').hide();
             $('#btnGenerate').hide();
-
+            $('#legend_div').show();
           }
 
           else if(temp_val == 2){
@@ -3806,6 +3806,7 @@
             $('#section_table').show();
             $('#room_table').hide();
             $('#btnGenerate').hide();
+            $('#legend_div').hide();
           }
 
           else{
@@ -3826,6 +3827,7 @@
             $('#section_table').hide();
             $('#room_table').show();
             $('#btnGenerate').hide();
+            $('#legend_div').hide();
           }
         });
 

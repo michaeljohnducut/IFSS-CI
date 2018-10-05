@@ -407,7 +407,7 @@ class Transaction extends CI_Controller
 	}
 
 	public function time_pref_table(){
-		$output = $this->getdata_model->get_pref_time($_POST);
+		$output = $this->getdata_model->time_pref_table($_POST);
 
 		$response = array(
 			'aaData' => $output,

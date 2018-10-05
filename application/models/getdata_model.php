@@ -1497,6 +1497,36 @@ class getdata_model extends CI_Model{
 		return $result;	
 	}
 
+	public function time_pref_table(){	//GETS FACULTY'S PREFERRED TIME
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select(' preferred_time_id, day, TIME_FORMAT(start_time, "%h:%i %p") as "start_time", TIME_FORMAT(end_time, "%h:%i %p") as "end_time"')
+				->where('faculty_id', $fac_id)
+				->where('acad_yr', $acad_year)
+				->where('sem', $sem)
+				->order_by('FIELD(day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
+                ->get('preferred_time');
+                // ->order_by('acad_yr_desc', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-danger" id="remove_pref" data-id="'.$r->preferred_time_id.'">UNSELECT</button>';
+
+			$result[] = array(
+					$r->day,
+					$r->start_time,
+					$r->end_time, 
+					$btn
+					);
+		}
+
+		return $result;	
+	}
+
 	
 // ==========================================================================
 // -----------------------------NEW UPDATE (7-25-18)------------------------

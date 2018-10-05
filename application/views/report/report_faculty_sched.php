@@ -636,8 +636,7 @@
                             {
                                 $('#at_sun').html(data[i][1]);
                             }
-                        }
-                        
+                        } 
                     },
                     error: function (data) {
                         alert(JSON.stringify(data));

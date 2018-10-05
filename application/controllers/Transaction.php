@@ -181,8 +181,10 @@ class Transaction extends CI_Controller
 	}
 
 	public function get_consec()
-	{		
-		echo ($this->getdata_model->get_consec($_POST));
+	{	
+		$faculty_id = $this->security->xss_clean($this->input->post('faculty_id'));
+
+		echo ($this->getdata_model->get_consec($faculty_id));
 		exit();
 	}
 
@@ -809,6 +811,7 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+<<<<<<< HEAD
 	public function remove_office_hrs()
 	{
 		echo ($this->savedata_model->remove_office_hrs($_POST));
@@ -818,6 +821,12 @@ class Transaction extends CI_Controller
 	public function remove_teaching_load()
 	{
 		echo ($this->savedata_model->remove_teaching_load($_POST));
+=======
+	//KUYA! ETO UNG GINAMIT KONG CONTROLLER
+	public function query_faculty_consec()
+	{
+		echo json_encode($this->getdata_model->query_faculty_consec($_POST));
+>>>>>>> 3ead0d8f2f943abc9aab95b77dc6bc8b75b75e8d
 		exit();
 	}
 

@@ -832,7 +832,7 @@
 
         }
 
-        function reflectSchedTable(){
+        function reflectRegular(){
 
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
@@ -847,7 +847,61 @@
              $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
                 method:"POST", 
-                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'R'}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        function reflectPartTime(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'PT'}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
+        function reflectTS(){
+
+            var sem = $('#sched_sem').val();
+            var acad_year = $('#sched_acad_year').val();
+            var data = "<?php echo $acc_type?>"; 
+            if(data == 'admin'){
+                var fac_id = $('#sched_faculty').val();
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+            }
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'TS'}, 
                 dataType: "json",
                 success:function(data){
                     changeSchedColor(data);
@@ -1470,18 +1524,24 @@
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
-            reflectSchedTable();
             reflectServices();
             showSpec(temp_fac);
             resetPlotForm();
             if(global_factype == 1)
             {
                 getAdviseTime();
+                reflectRegular();
+                reflectPartTime();
+                reflectTS();
+
             }
             if(global_factype == 3)
             {
                 getNightOffice();
-                getOfficeHours();
+                getOfficeHours(); 
+                reflectRegular();
+                reflectPartTime();
+                reflectTS();
             }
         });
 
@@ -1509,7 +1569,9 @@
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
-            reflectSchedTable();
+            reflectRegular();
+            reflectPartTime();
+            reflectTS();
             reflectServices();
             resetPlotForm();
             if(global_factype == 1)
@@ -1548,7 +1610,9 @@
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
-            reflectSchedTable();
+            reflectRegular();
+            reflectPartTime();
+            reflectTS();
             reflectServices();
             resetPlotForm();
             if(global_factype == 1)
@@ -1991,7 +2055,9 @@
                               $('#sched_lab').hide();
                               $('#sched_load').empty();
                               $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                              reflectSchedTable();
+                              reflectRegular();
+                                reflectPartTime();
+                                reflectTS();
                               reflectServices();
                               getFacultyLoads();
                               loadSchedTable();
@@ -2034,11 +2100,13 @@
                           $('#sched_lab').hide();
                           $('#sched_load').empty();
                           $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                          reflectSchedTable();
-                          reflectServices();
-                          getFacultyLoads();
-                          loadSchedTable();
-                          getUnitsUsed();
+                            reflectRegular();
+                            reflectPartTime();
+                            reflectTS();
+                            reflectServices();
+                            getFacultyLoads();
+                            loadSchedTable();
+                            getUnitsUsed();
                         }
                     },
                      error: function (data) {
@@ -2086,11 +2154,13 @@
                               $('#sched_lab').hide();
                               $('#sched_load').empty();
                               $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                              reflectSchedTable();
-                              reflectServices();
-                              getFacultyLoads();
-                              loadSchedTable();
-                              getUnitsUsed();
+                                reflectRegular();
+                                reflectPartTime();
+                                reflectTS();
+                                reflectServices();
+                                getFacultyLoads();
+                                loadSchedTable();
+                                getUnitsUsed();
                             }
                         },
                          error: function (data) {
@@ -2129,11 +2199,13 @@
                           $('#sched_lab').hide();
                           $('#sched_load').empty();
                           $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                          reflectSchedTable();
-                          reflectServices();
-                          getFacultyLoads();
-                          loadSchedTable();
-                          getUnitsUsed();
+                            reflectRegular();
+                            reflectPartTime();
+                            reflectTS();
+                            reflectServices();
+                            getFacultyLoads();
+                            loadSchedTable();
+                            getUnitsUsed();
                         }
                     },
                      error: function (data) {
@@ -2178,7 +2250,9 @@ $(document).on('click', '#btn_reschedule', function(e){
                             swal("Success!", "Teaching load available for rescheduling.", "success");  
                             getFacultyLoads();
                             resetPlotForm();
-                            reflectSchedTable();
+                            reflectRegular();
+                            reflectPartTime();
+                            reflectTS();
                             reflectServices();
                             loadSchedTable();
 

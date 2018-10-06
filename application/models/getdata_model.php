@@ -2159,12 +2159,14 @@ FROM subject_match sm
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
 		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$load_type = $this->security->xss_clean($this->input->post('load_type'));
 		$result = array();
 
 		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code, ta.load_type')
 				->where('sm.faculty_id', $fac_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
+				->where('ta.load_type', $load_type)
 				->join('subject_match sm ','ta.subj_match_id = sm.subj_match_id')
 				->join('subject s','sm.subj_id = s.subj_id')
 				->join('section se','se.section_id = sm.section')

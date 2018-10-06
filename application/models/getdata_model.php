@@ -2432,7 +2432,24 @@ FROM subject_match sm
 				AND ta.time_finish = "'.$end.'"
 				AND ta.day = "'.$day.'"
 				AND ta.acad_yr = "'.$acad_year.'"
-				AND ta.sem = "'.$sem.'")')
+				AND ta.sem = "'.$sem.'")', NULL, FALSE)
+				->where('f.faculty_id NOT IN(SELECT ot.faculty_id
+				FROM other_time_sched ot
+				WHERE ot.acad_yr = "'.$acad_year.'"
+				AND ot.sem = "'.$sem.'"
+				AND ot.time_start > "'.$start_time.'"
+				AND ot.time_start < "'.$end.'"
+				AND ot.day = "'.$day.'"
+				OR ot.time_finish > "'.$start_time.'"
+				AND ot.time_finish < "'.$end.'"
+				AND ot.day = "'.$day.'"
+				AND ot.acad_yr = "'.$acad_year.'"
+				AND ot.sem = "'.$sem.'"
+				OR ot.time_start = "'.$start_time.'"
+				AND ot.time_finish = "'.$end.'"
+				AND ot.day = "'.$day.'"
+				AND ot.acad_yr = "'.$acad_year.'"
+				AND ot.sem = "'.$sem.'")', NULL, FALSE)
                 ->get('faculty f');
 
 		foreach ($query->result() as $r) 

@@ -958,7 +958,7 @@ $(document).ready(function(){
         var day = '';
 
         if(fac_id == 0 || sem == 0 || acad_year == 0){
-            alert('Complete parameters first!');
+            swal('Warning', 'Complete parameters first!', 'warning');
             $(this).prop("checked", false);
         }
         else{
@@ -1249,6 +1249,12 @@ $(document).ready(function(){
 
 
          if($(this).prop("checked")){
+
+            if(fac_id == 0 || sem == 0 || acad_year == 0)
+            {
+                swal('Warning','Complete parameters first!','warning');
+                $(this).prop("checked", false);
+            }
 
             event.preventDefault();  
             $.ajax({  

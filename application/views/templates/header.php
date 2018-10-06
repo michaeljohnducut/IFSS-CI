@@ -76,6 +76,11 @@
             color: white;
         }
 
+        .plot-purple{
+            background-color: #9b59b6; 
+            color: white;
+        }
+
         .legend-orange{
             background-color: #f6b93b; 
             color: white;

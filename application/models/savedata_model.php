@@ -2480,7 +2480,7 @@ class savedata_model extends CI_Model
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$load_type = $this->security->xss_clean($this->input->post('load_type'));
 
-			if($this->db->query("DELETE FROM other_time_sched WHERE faculty_id = $fac_id AND acad_yr = '$acad_year' AND sem = '$sem' AND load_type = 'OH'"))
+			if($this->db->query("DELETE FROM other_time_sched WHERE faculty_id = $fac_id AND acad_yr = '$acad_year' AND sem = '$sem' AND load_type = '$load_type'"))
 			{
 				$output = 'DELETED';
 			}

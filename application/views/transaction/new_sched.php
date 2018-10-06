@@ -4217,11 +4217,69 @@
                             if(global_total_hrs > 15 && global_total_hrs <= 27)
                             {
                                 load_type = 'PT';
+                                day = global_pref_day[day_temp][0];
+
+                                start_time = '0' + hour + ':30'; 
+
+                                    end_time = '0' + (hour + 3) + ':30'; 
+                                    if(hour > 9)
+                                        start_time = hour + ':30';
+                                        end_time = (hour + 3) + ':30'; 
+
+                                    //GET AVAIL ROOM
+                                    showAvailRoom_gen(day, start_time, end_time);
+                                    if(global_room == null)
+                                    {
+                                        hour+=1;
+                                    }
+                                    else
+                                    {
+                                        if (start_time > '07:29' && start_time < '16:01')
+                                        {   
+                                            addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type); 
+                                            hour += 4;
+                                            if(hour >= 16)
+                                            {
+                                                day_temp += 1;
+                                                hour = 7;
+                                            }
+                                            x += 1;
+                                        }
+                                    }
                             }
 
                             if(global_total_hrs > 27)
                             {
                                 load_type = 'TS';
+                                day = global_pref_day[day_temp][0];
+
+                                start_time = '0' + hour + ':30'; 
+
+                                    end_time = '0' + (hour + 3) + ':30'; 
+                                    if(hour > 9)
+                                        start_time = hour + ':30';
+                                        end_time = (hour + 3) + ':30'; 
+
+                                    //GET AVAIL ROOM
+                                    showAvailRoom_gen(day, start_time, end_time);
+                                    if(global_room == null)
+                                    {
+                                        hour+=1;
+                                    }
+                                    else
+                                    {
+                                        if (start_time > '07:29' && start_time < '16:01')
+                                        {   
+                                            addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type); 
+                                            hour += 4;
+                                            if(hour >= 16)
+                                            {
+                                                day_temp += 1;
+                                                hour = 7;
+                                            }
+                                            x += 1;
+                                        }
+                                    }
                             }
                         }
 

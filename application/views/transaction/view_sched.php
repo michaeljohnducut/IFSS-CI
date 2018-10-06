@@ -67,11 +67,11 @@
                                 <div class="col-md-4" style="margin-top: 28px;" id="edit_at_div">
                                     <button type="button" class="btn legend-orange" id="btnUpdateAT">Update Advising Time</button>
                                     <div class="col-md-12" style="margin-top: 5px;" id="at_details">
-                                        <div class="col-md-8">
+                                        <div class="col-md-9">
                                             <label class="control-label">Hours Count</label>
                                             <input type="number" id="txt_at" readonly="" class="form-control" >
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <button style="margin-top: 25px;" type="button" id="save_at" class="btn legend-orange"><span class="fa fa-check"></span></button>
                                         </div>
                                     </div>
@@ -79,11 +79,11 @@
                                 <div class="col-md-4" style="margin-top: 28px;" id="edit_oh_div">
                                     <button type="button" class="btn legend-red" id="btnUpdateOH">Update Office Hours</button>
                                     <div class="col-md-12" style="margin-top: 5px;" id="oh_details">
-                                        <div class="col-md-8">
+                                        <div class="col-md-9">
                                             <label class="control-label">Hours Count</label>
                                             <input type="number" id="txt_oh" readonly="" class="form-control" >
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <button style="margin-top: 25px;" type="button" id="save_oh" class="btn legend-red"><span class="fa fa-check"></span></button>
                                         </div>
                                     </div>
@@ -91,11 +91,11 @@
                                 <div class="col-md-4" style="margin-top: 28px;" id="edit_no_div">
                                     <button type="button" class="btn legend-darkBlue" id="btnUpdateNO">Update Night Office</button>
                                     <div class="col-md-12" style="margin-top: 5px;" id="no_details">
-                                        <div class="col-md-8">
+                                        <div class="col-md-9">
                                             <label class="control-label">Hours Count</label>
                                             <input type="number" id="txt_no" readonly="" class="form-control" >
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <button style="margin-top: 25px;" id="save_no" type="button" class="btn legend-darkBlue"><span class="fa fa-check"></span></button>
                                         </div>
                                     </div>

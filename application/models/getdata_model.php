@@ -2543,39 +2543,45 @@ FROM subject_match sm
 		$start_time = $this->security->xss_clean($this->input->post('start_time'));
 		$end = $this->security->xss_clean($this->input->post('end'));
 		$match_id = $this->security->xss_clean($this->input->post('match_id')); 
-		$output; 
+		$output = 'AVAILABLE'; 
+
+		$query0 = $this->db->query('SELECT section
+					FROM subject_match 
+					WHERE subj_match_id = $match_id');
+
+		$sec_result = $query0->row(0);
+
+		$query2 = $this->db->query('SELECT section
+							FROM subject_match 
+							WHERE subj_match_id IN (SELECT subj_match_id
+                           FROM teaching_assign_sched ta 
+                            WHERE time_start > "'.$start_time.'"
+									AND time_start < "'.$end.'"
+									AND day = "'.$day.'"
+									AND acad_yr = "'.$acad_year.'"
+									AND sem = "'.$sem.'"
+									OR time_finish > "'.$start_time.'"
+									AND time_finish < "'.$end.'"
+									AND day = "'.$day.'"
+									AND acad_yr = "'.$acad_year.'"
+									AND sem = "'.$sem.'"
+									OR time_start = "'.$start_time.'"
+									AND time_finish = "'.$end.'"
+									AND day = "'.$day.'"
+									AND acad_yr = "'.$acad_year.'"
+									AND sem = "'.$sem.'")');
+		foreach ($query2->result() as $r)
+		{
+			if($sec_result == $r->section)
+			{
+				$output = 'EXISTING';
+			}
+		} 
+
+		return $output;
 
 
-		$query2 = $this->db->where('ta.time_start > "'.$start_time.'"
-									AND ta.time_start < "'.$end.'"
-									AND ta.day = "'.$day.'"
-									AND ta.acad_yr = "'.$acad_year.'"
-									AND ta.sem = "'.$sem.'"
-									AND ta.subj_match_id = '.$match_id.'
-									OR ta.time_finish > "'.$start_time.'"
-									AND ta.time_finish < "'.$end.'"
-									AND ta.day = "'.$day.'"
-									AND ta.acad_yr = "'.$acad_year.'"
-									AND ta.sem = "'.$sem.'"
-									AND ta.subj_match_id = '.$match_id.'
-									OR ta.time_start = "'.$start_time.'"
-									AND ta.time_finish = "'.$end.'"
-									AND ta.day = "'.$day.'"
-									AND ta.acad_yr = "'.$acad_year.'"
-									AND ta.sem = "'.$sem.'"
-									AND ta.subj_match_id = '.$match_id.'')
-                			->get('teaching_assign_sched ta');
 
-        $number_filter_row = $query2->num_rows(); 
-        if ($number_filter_row != 0) {
-        	
-        	$output = 'EXISTING';	
-        }
-        else{
-        	$output = 'AVAILABLE';
-        }
-
-        return $output;
 	}
 
 	public function load_section_table(){	//GETS FACULTY'S SUMMARY OF SCHEDULES

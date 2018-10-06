@@ -75,7 +75,7 @@
                             <div class="col-md-2" style="text-align: right; color: red;">
                                 <p id="factype_id">Faculty Type:</p>
                             
-                                <button type="button" id="btnGenerate" class="btn btn-info" data-toggle = "modal" data-target ="#modalGenerate">AUTO GENERATE SCHEDULE</button>
+                                <button type="button" id="btnGenerate" class="btn btn-info" data-toggle = "modal" data-target ="#modalGenerate">AUTO GENERATE LOADS</button>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="RLoad_id">Regular Load: </p>
@@ -1038,6 +1038,7 @@
 
       function resetPlotForm(){
         $('.plot-green').removeClass().addClass('btn plot-regular');
+        $('.plot-purple').removeClass().addClass('btn plot-regular');
         $('.plot-blue').removeClass().addClass('btn plot-regular');
         $('.plot-orange').removeClass().addClass('btn plot-regular');
         $('.plot-red').removeClass().addClass('btn plot-regular');
@@ -1079,7 +1080,7 @@
               "ajax" : {
                url:"<?php echo base_url('Transaction/load_section_table')?>",
                data:{sem: sem, acad_year:acad_year, section_id:section_id},
-               type:"POST"
+               type:"POST`"
               }
              });
 
@@ -1097,6 +1098,7 @@
                 dataType: "json",
                 success:function(data){
                     changeSchedColor(data);
+                    showTeachingLoads();
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
@@ -1160,6 +1162,12 @@
               }
              });
 
+        }
+
+        function showTeachingLoads(){
+            reflectRegular();
+            reflectPartTime();
+            reflectTS();
         }
 
         function reflectRegular(){
@@ -1794,10 +1802,10 @@
 
                    else if (temp_load == 'TS')
                    {
-                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-darkBlue");                 
-                    $('button[type="button"][value="'+final_val+'"]').addClass("btn plot-darkBlue");
-                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn plot-darkBlue");                 
-                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-darkBlue");
+                     $('button[type="button"][value="'+final_val+'"]').removeClass().addClass("btn plot-purple");                 
+                    $('button[type="button"][value="'+final_val+'"]').addClass("btn plot-purple");
+                    $('button[type="button"][value="'+final_val2+'"]').removeClass().addClass("btn plot-purple");                 
+                    $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-purple");
                    }
 
                     $('button[type="button"][value="'+final_val2+'"]').text('');
@@ -1902,7 +1910,7 @@
                    else if(temp_load == 'TS')
                    {
                         $('button[type="button"][value="'+final_val2+'"]').removeClass();
-                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-darkBlue");
+                        $('button[type="button"][value="'+final_val2+'"]').addClass("btn plot-purple");
                    }
 
                     $('button[type="button"][value="'+final_val2+'"]').text(''); 
@@ -2221,9 +2229,7 @@
             data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'OH'}, 
             success:function(data){
                resetPlotForm();
-               reflectRegular();
-               reflectPartTime();
-               reflectTS();
+               showTeachingLoads();
                getOfficeHours();
                getNightOffice();
             },  
@@ -2883,9 +2889,7 @@
                     data: {room_id:room_id, temp_start:temp_start, temp_end:temp_end, temp_day:temp_day, temp_acadyr:acad_year, temp_sem:sem, match_id:match_id, temp_load:temp_load },
                     success:function(data)
                     {  
-                       reflectRegular();
-                       reflectPartTime();
-                       reflectTS();
+                       showTeachingLoads();
                        loadSchedTable();
                        getFacultyLoads();
                        getUnitsUsed();
@@ -3722,17 +3726,13 @@
             if(global_factype == 1)
             {
                 getAdviseTime();
-                reflectRegular();
-                reflectPartTime();
-                reflectTS();
+                
             }
             if(global_factype == 3)
             {
                 getNightOffice();
                 getOfficeHours();
-                reflectRegular();
-                reflectPartTime();
-                reflectTS();
+                showTeachingLoads();
             }
             if(global_factype == 4 || global_factype == 5)
             {
@@ -3759,9 +3759,7 @@
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
-            reflectRegular();
-            reflectPartTime();
-            reflectTS();
+            showTeachingLoads();
             reflectServices();
             resetPlotForm();
         });
@@ -3784,9 +3782,7 @@
             getFacultyLoads();
             getUnitsUsed();
             loadSchedTable();
-            reflectRegular();
-            reflectPartTime();
-            reflectTS();
+            showTeachingLoads();
             reflectServices();
             resetPlotForm();
         });
@@ -4905,9 +4901,7 @@
                               $('#sched_lab').hide();
                               $('#sched_load').empty();
                               $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                              reflectRegular();
-                              reflectPartTime();
-                              reflectTS();
+                              showTeachingLoads();
                               reflectServices();
                               getFacultyLoads();
                               loadSchedTable();
@@ -4950,9 +4944,7 @@
                           $('#sched_lab').hide();
                           $('#sched_load').empty();
                           $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                          reflectRegular();
-                          reflectPartTime();
-                          reflectTS();
+                          showTeachingLoads();
                           reflectServices();
                           getFacultyLoads();
                           loadSchedTable();
@@ -5004,9 +4996,7 @@
                               $('#sched_lab').hide();
                               $('#sched_load').empty();
                               $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                              reflectRegular();
-                              reflectPartTime();
-                              reflectTS();
+                              showTeachingLoads();
                               reflectServices();
                               getFacultyLoads();
                               loadSchedTable();
@@ -5049,9 +5039,7 @@
                           $('#sched_lab').hide();
                           $('#sched_load').empty();
                           $('#sched_load').append('<option value="0">-SELECT TEACHING ASSIGNMENT-</option>');
-                          reflectRegular();
-                          reflectPartTime();
-                          reflectTS();
+                          showTeachingLoads();
                           reflectServices();
                           getFacultyLoads();
                           loadSchedTable();
@@ -5100,9 +5088,7 @@ $(document).on('click', '#btn_reschedule', function(e){
                             swal("Success!", "Teaching load available for rescheduling.", "success");  
                             getFacultyLoads();
                             resetPlotForm();
-                            reflectRegular();
-                            reflectPartTime();
-                            reflectTS();
+                            showTeachingLoads();
                             reflectServices();
                             loadSchedTable();
 

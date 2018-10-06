@@ -63,6 +63,11 @@
             color: white;
         }
 
+        .plot-purple{
+            background-color: #9b59b6; 
+            color: white;
+        }
+
         .legend-darkBlue{
             background-color: #778beb; 
             color: white;

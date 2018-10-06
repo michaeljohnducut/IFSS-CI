@@ -675,6 +675,7 @@
       var bool_at; 
       var bool_oh; 
       var bool_no;
+      var global_bool_checker;
 
       //FUNCTIONS
       //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
@@ -1267,6 +1268,105 @@
         }
 
 
+    function checkTime(load_type, btn_value, class_name){
+
+            var day_temp = 1; 
+            var start; 
+            var end;
+            var day; 
+            var day_id;
+            var count_at = 0; 
+            var start_time; 
+            var first_id; 
+            var second_id;
+            var val_temp; 
+            var day_loop; 
+            var hour;
+            var bool_validity = false;
+
+
+            if(load_type == 'AT' || load_type == 'OH')
+            {
+                start = 8;
+                end = 18;
+            }
+
+            else if(load_type == 'NO')
+            {
+                start = 17;
+                end = 21;
+            }
+
+            for(day_loop = 1; day_loop <= 5; day_loop++)
+            {
+                switch(day_loop)
+                {
+                    case 1: day_id = '_mon';
+                            day = 'Monday';
+                            break;
+
+                    case 2: day_id = '_tue';
+                            day = 'Tuesday';
+                            break;
+
+                    case 3: day_id = '_wed';
+                            day = 'Wednesday';
+                            break;
+
+                    case 4: day_id = '_thu';
+                            day = 'Thursday';
+                            break;
+
+                    default:   day_id = '_fri';
+                                day = 'Friday';
+                }
+
+                for(hour = start; hour < end; hour ++)
+                {   
+                    var first_val = '0' + hour + ':00:00' + day_id; 
+                    var second_val = '0' + hour + ':30:00' + day_id; 
+                    if(hour > 9)
+                    {
+                        first_val = hour + ':00:00' + day_id; 
+                        second_val = hour + ':30:00' + day_id; 
+                    }   
+
+                    if(btn_value == first_val)
+                    {
+                        bool_validity = true;
+                    }
+
+                    if(btn_value == second_val)
+                    {
+                        bool_validity = true;
+                    }
+                }
+            }
+
+            global_bool_checker = bool_validity;
+
+            if (bool_validity == false)
+            {
+                if(load_type == 'AT')
+                {
+                    swal("Invalid", "Advising Time is only between 8am to 6pm on Weekdays", "error");
+                }
+
+                if(load_type == 'OH')
+                {
+                    swal("Invalid", "Office Hours are only between 8am to 6pm on Weekdays", "error");
+                }
+
+                if(load_type == 'NO')
+                {
+                    swal("Invalid", "Night office can only be between 5pm to 9pm on Weekdays", "error");
+                }
+
+                $('button[type="button"][value="' + btn_value + '"]').removeClass(class_name).addClass('plot-regular');
+            }
+            
+        }
+
       function changeSchedColor(arr){
             var len = arr.length;
             var temp_subj = '';
@@ -1737,6 +1837,7 @@
                 
             }
         }
+        bool_at = false;
       }
 
       function saveOfficeHours()
@@ -1781,7 +1882,7 @@
                             day = 'Friday';
             }
 
-            for(hour = 8; hour < 17; hour ++)
+            for(hour = 8; hour < 18; hour ++)
             {   
                 bool_label = true;
                 var first_val = '0' + hour + ':00:00' + day_id; 
@@ -1797,7 +1898,7 @@
                 if(pre_time > 9)
                     pre_val = pre_time + ':30:00' + day_id;
 
-                if($('button[type="button"][value="' + pre_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-regular'))
+                if($('button[type="button"][value="' + pre_val + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-regular') || $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-darkBlue'))
                 {
                     if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-red'))
                     {
@@ -1814,7 +1915,7 @@
                 var pre_val_b = '0' + pre_time_b + ':00:00' + day_id;
                 if(hour > 9)
                     pre_val_b = hour + ':00:00' + day_id;
-                if($('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + pre_val + '"]').hasClass('plot-regular'))
+                if($('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-regular')|| $('button[type="button"][value="' + pre_val_b + '"]').hasClass('plot-darkBlue'))
                 {
                     if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-red') && bool_label == true)
                     {
@@ -1857,7 +1958,7 @@
                 var post_val_b = '0' + post_time_b + ':00:00' + day_id;
                 if(hour > 9)
                     post_val_b = post_time_b + ':00:00' + day_id;
-                if($('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-regular') || $('button[type="button"][value="' + post_val + '"]').hasClass('plot-darkBlue'))
+                if($('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-regular') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-darkBlue'))
                 {
 
                     if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-red') && bool_last == true)
@@ -1881,6 +1982,9 @@
                 }
                 
             }
+            swal("Success!", "Office Hours have been updated!", "success");
+            $('#oh_details').hide();
+            bool_oh = false;
         }
 
           if(day_loop == 6)
@@ -2009,6 +2113,8 @@
                 }
             }
         }
+
+        bool_no = false;
       }
 
       function removeHours(temp_load){
@@ -2028,13 +2134,13 @@
                         saveAdviseTime();
                         swal("Success!", "Advising Time has been updated!", "success");
                         $('#at_details').hide();
+                        bool_at = false;
                     }
 
                     if(temp_load == 'OH')
                     {
                         saveOfficeHours();
-                        swal("Success!", "Office Hours have been updated!", "success");
-                        $('#oh_details').hide();
+                        bool_oh = false;
                     }
 
                     if(temp_load == 'NO')
@@ -2042,6 +2148,7 @@
                         saveNightOffice();
                         swal("Success!", "Night Office has been updated!", "success");
                         $('#no_details').hide();
+                        bool_no = false;
                     }
                 }
             },  
@@ -2141,15 +2248,16 @@
                     var btn_value = $(this).attr('value');
                     $('button[type="button"][value="' + btn_value + '"]').removeClass('plot-regular').addClass('plot-orange');
                     $('button[type="button"][value="' + btn_value + '"]').text('');
+                    checkTime('AT', btn_value, 'plot-orange');
                     countHours('plot-orange', 8, 18, 'txt_at');
-                    if(end_at == 9.5)
+                    if(end_at == 9.5 && global_bool_checker == true)
                     {
                         swal("Info!", "You have reached the maximum hours for Advising Time. Click the check button to save it!", "info");
                         $('#save_at').removeAttr('disabled');
                     }
                 }
 
-                if(end_at == 10)
+                if(end_at == 10 && bool_at == true)
                 {
                     swal("Info!", "You have reached the maximum hours for Advising Time. Click the check button to save it!", "info");
                 }
@@ -2161,15 +2269,16 @@
                     var btn_value = $(this).attr('value');
                     $('button[type="button"][value="' + btn_value + '"]').removeClass('plot-regular').addClass('plot-red');
                     $('button[type="button"][value="' + btn_value + '"]').text('');
+                    checkTime('OH', btn_value, 'plot-red');
                     countHours('plot-red', 8, 18, 'txt_oh');
-                    if(end_oh == 33.5)
+                    if(end_oh == 33.5 && global_bool_checker == true)
                     {   
                         swal("Info!", "You have reached the maximum hours for Office Hours. Click the check button to save it!", "info");
                         $('#save_oh').removeAttr('disabled');
                     }
                 }
 
-                if(end_oh == 34)
+                if(end_oh == 34 && bool_oh == true)
                 {
                     swal("Info!", "You have reached the maximum hours for Office Hours. Click the check button to save it!", "info");
                 }
@@ -2181,15 +2290,16 @@
                     var btn_value = $(this).attr('value');
                     $('button[type="button"][value="' + btn_value + '"]').removeClass('plot-regular').addClass('plot-darkBlue');
                     $('button[type="button"][value="' + btn_value + '"]').text('');
+                    checkTime('NO', btn_value, 'plot-darkBlue');
                     countHours('plot-darkBlue', 17, 21, 'txt_no');
-                    if(end_no == 14.5)
+                    if(end_no == 14.5 && global_bool_checker == true)
                     {
                         swal("Info!", "You have reached the maximum hours for Night Office. Click the check button to save it!", "info");
                         $('#save_no').removeAttr('disabled');
                     }
                 }
 
-                if(end_no == 15)
+                if(end_no == 15 && bool_no == true)
                 {
                     swal("Info!", "You have reached the maximum hours for Night Office. Click the check button to save it!", "info");
                 }

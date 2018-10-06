@@ -2521,7 +2521,7 @@
                             day = 'Friday';
             }
 
-            for(hour = 8; hour < 17; hour ++)
+            for(hour = 8; hour < 18; hour ++)
             {   
                 bool_label = true;
                 var first_val = '0' + hour + ':00:00' + day_id; 
@@ -2597,7 +2597,7 @@
                 var post_val_b = '0' + post_time_b + ':00:00' + day_id;
                 if(hour > 9)
                     post_val_b = post_time_b + ':00:00' + day_id;
-                if($('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-regular') || $('button[type="button"][value="' + post_val + '"]').hasClass('plot-darkBlue'))
+                if($('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-green') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-blue') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-purple')|| $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-regular') || $('button[type="button"][value="' + post_val_b + '"]').hasClass('plot-darkBlue'))
                 {
 
                     if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-red') && bool_last == true)

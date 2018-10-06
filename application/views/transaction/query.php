@@ -346,7 +346,7 @@
                     var len = data.length;
                     for (var x = 0; x < len; x++)
                     {   
-                        $('#txtResult').append((x+1) + '. ' + data[x][0] + '\n');
+                        $('#txtResult').append((x+1) + '. ' + data[x] + '\n');
                     }
 
                     if(len == 0)

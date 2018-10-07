@@ -3657,6 +3657,7 @@ FROM subject_match sm
 				->where('pt.faculty_id', $fac_id)
 				->where('pt.sem', $sem)
 				->where('pt.acad_yr', $acad_yr)
+				->order_by('FIELD(pt.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
                 ->get('preferred_time pt');
 
 		foreach ($query->result() as $r) 

@@ -1,6 +1,6 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class savedata_model extends CI_Model
+class Savedata_model extends CI_Model
 {
 	public function add_faculty($input = array(), $file)
 	{

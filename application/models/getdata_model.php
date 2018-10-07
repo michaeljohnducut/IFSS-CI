@@ -1,6 +1,6 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class getdata_model extends CI_Model{
+class Getdata_model extends CI_Model{
 
 	public function faculty()
 	{
@@ -156,7 +156,7 @@ class getdata_model extends CI_Model{
 		$query = $this->db->select('c.course_id, c.course_code, c.course_desc, d.dept_code')
 				->join('department d', 'c.dept = d.dept_id')
                 ->where('c.status', 1)
-                ->get('course C');
+                ->get('course c');
 
 		foreach ($query->result() as $r) 
 		{
@@ -1932,8 +1932,8 @@ FROM subject_match sm
 				->where('sm.acad_yr', $acad_yr)
 				->where('sm.sem', $sem)
 				->join('section s','s.section_id = sm.section')
-				->join('subject sb  ','sb.subj_id = sm.subj_id')
-				->join('course c  ','c.course_id = s.course')
+				->join('subject sb','sb.subj_id = sm.subj_id')
+				->join('course c','c.course_id = s.course')
                 ->get('subject_match sm');
                 // ->order_by('ta.day', 'asc');
 
@@ -1960,7 +1960,7 @@ FROM subject_match sm
 		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
 		$result = array();
 		$query = $this->db->select("s.section_id, CONCAT(LEFT(s.year_lvl, 1), '-', s.section_desc) as 'section'")
-				->where('s.course ', $course_id)
+				->where('s.course', $course_id)
 				->where('s.acad_yr', $acad_yr)
 				->order_by('s.year_lvl', 'asc')
                 ->get(' section s');
@@ -1983,7 +1983,7 @@ FROM subject_match sm
 		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
 		$result = array();
 		$query = $this->db->select("s.subj_code, s.subj_desc, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname', s.units, s.lab_hrs, s.lec_hrs, sm.subj_match_id")
-				->where('sm.section ', $section_id)
+				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_yr)
 				->where('sm.sem', $sem)
 				->join('subject_match sm', 's.subj_id = sm.subj_id')
@@ -2012,8 +2012,8 @@ FROM subject_match sm
 		$result = array();
 		$query = $this->db->select("s.subj_code, s.subj_desc,  CONCAT(c.course_code, ' ', LEFT(se.year_lvl, 1) , ' - ', se.section_desc) as 'section', s.units, s.lec_hrs, s.lab_hrs")
 				->where('sm.subj_match_id ', $load_id)
-				->join('subject s ', 'sm.subj_id = s.subj_id')
-				->join('section se ', 'sm.section = se.section_id')
+				->join('subject s', 'sm.subj_id = s.subj_id')
+				->join('section se', 'sm.section = se.section_id')
 				->join('course c', 'c.course_id = se.course')
                 ->get('subject_match sm ');
 
@@ -2038,7 +2038,7 @@ FROM subject_match sm
 
 		$query = $this->db->select("ft.fac_type_id, ft.fac_type_desc")
 				->where('f.faculty_id', $fac_id)
-				->join('faculty f ', 'f.faculty_type = ft.fac_type_id')
+				->join('faculty f', 'f.faculty_type = ft.fac_type_id')
                 ->get('faculty_type ft');
 
         foreach ($query->result() as $r) 
@@ -2132,8 +2132,8 @@ FROM subject_match sm
 				->where('sm.acad_yr', $acad_yr)
 				->where('sm.sem', $sem)
 				->join('section s','s.section_id = sm.section')
-				->join('subject sb  ','sb.subj_id = sm.subj_id')
-				->join('course c  ','c.course_id = s.course')
+				->join('subject sb','sb.subj_id = sm.subj_id')
+				->join('course c','c.course_id = s.course')
                 ->get('subject_match sm');
                 // ->order_by('ta.day', 'asc');
 
@@ -2937,9 +2937,9 @@ FROM subject_match sm
 	{
 		$result = array();
 
-		$q = $this->db->select('A.account_id, CONCAT(lname,", ",fname," ",mname) AS faculty_name, F.faculty_id')
-				->join('account A', 'A.faculty_id = F.faculty_id')
-                ->get('faculty F');
+		$q = $this->db->select('a.account_id, CONCAT(lname,", ",fname," ",mname) AS faculty_name, f.faculty_id')
+				->join('account a', 'a.faculty_id = f.faculty_id')
+                ->get('faculty f');
 
 		foreach($q->result() as $r)
 		{
@@ -2995,7 +2995,7 @@ FROM subject_match sm
 		$query = $this->db->query('SELECT s.subj_desc
 									FROM preferred_subj ps JOIN faculty f 
 									ON ps.faculty_id = f.faculty_id
-									JOIN SUBJECT s
+									JOIN subject s
 									ON ps.subj_code = s.subj_id
 									WHERE f.faculty_id = "'.$faculty.'" AND ps.acad_yr = "'.$acadyr.'" AND ps.sem = "'.$sem.'"');
 
@@ -3076,7 +3076,7 @@ FROM subject_match sm
 		$query = $this->db->query('SELECT s.subj_desc
 									FROM preferred_subj ps JOIN faculty f 
 									ON ps.faculty_id = f.faculty_id
-									JOIN SUBJECT s
+									JOIN subject s
 									ON ps.subj_code = s.subj_id
 									WHERE f.faculty_id = "'.$faculty.'" AND ps.acad_yr = "'.$acadyr.'" AND ps.sem = "'.$sem.'"');
 

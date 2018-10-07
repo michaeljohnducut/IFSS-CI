@@ -46,7 +46,7 @@
                                 </select>  
                             </div>
                             <div class="col-md-4">
-                                <label class="control-label">Select Semester</label>
+                                <label class="control-label">Select Course</label>
                                 <select class="form-control" id="select_course">
                                     <option value="" disabled selected>-SELECT COURSE-</option>
                                     <?php foreach($department as $r) echo '<option value="'.$r[4].'">'.$r[2].'</option>';?>

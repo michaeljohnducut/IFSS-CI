@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-md-3">
                                 <br>
-                                <label class="control-label">Select subject:</label>
+                                <label class="control-label">Subject:</label>
                                 <select class="form-control select2" id="select_subject" >
                                     <option value="0" disabled selected>-Subjects-</option>
                                 </select>

@@ -676,6 +676,7 @@
       var bool_oh; 
       var bool_no;
       var global_bool_checker;
+      var global_fac_id; //for account type variable only!
 
       //FUNCTIONS
       //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
@@ -1097,13 +1098,13 @@
                    global_factype = data[0][0];
                    global_factypedesc = data[0][1];
                    displayLegends();
-                   if(global_factype == 1)
+                    if(global_factype == 1)
                     {
                         $('#edit_at_div').show();
                         $('#edit_no_div').hide();
                         $('#edit_oh_div').hide();
                     }
-                    if(global_factype == 3)
+                    else if(global_factype == 3)
                     {
                         $('#edit_at_div').hide();
                         $('#edit_no_div').show();
@@ -1717,8 +1718,18 @@
         var hour;
         var bool_label;
         var acad_yr = $('#sched_acad_year').val();
-        var fac_id = $('#sched_faculty').val();
+        //var fac_id = $('#sched_faculty').val();
         var sem = $('#sched_sem').val();
+
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin')
+        {
+            var fac_id = $('#sched_faculty').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         for(day_loop = 1; day_loop <= 5; day_loop++)
         {
@@ -1864,8 +1875,18 @@
         var hour;
         var bool_label;
         var acad_yr = $('#sched_acad_year').val();
-        var fac_id = $('#sched_faculty').val();
+        //var fac_id = $('#sched_faculty').val();
         var sem = $('#sched_sem').val();
+
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin')
+        {
+            var fac_id = $('#sched_faculty').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         for(day_loop = 1; day_loop <= 5; day_loop++)
         {
@@ -2022,8 +2043,18 @@
         var hour;
         var bool_label;
         var acad_yr = $('#sched_acad_year').val();
-        var fac_id = $('#sched_faculty').val();
+        //var fac_id = $('#sched_faculty').val();
         var sem = $('#sched_sem').val();
+
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin')
+        {
+            var fac_id = $('#sched_faculty').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
         for(day_loop = 1; day_loop <= 5; day_loop++)
         {
@@ -2127,9 +2158,20 @@
       }
 
       function removeHours(temp_load){
-        var fac_id = $('#sched_faculty').val();
+        //var fac_id = $('#sched_faculty').val();
         var acad_year = $('#sched_acad_year').val();
         var sem = $('#sched_sem').val();
+
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin')
+        {
+            var fac_id = $('#sched_faculty').val();
+        }
+        else
+        {
+            var fac_id = "<?php echo $fac_id?>";
+        }
+        
         $.ajax({  
             url:"<?php echo base_url('Transaction/remove_office_hrs')?>", 
             method:"POST", 

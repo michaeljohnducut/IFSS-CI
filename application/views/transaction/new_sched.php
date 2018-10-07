@@ -1080,7 +1080,7 @@
               "ajax" : {
                url:"<?php echo base_url('Transaction/load_section_table')?>",
                data:{sem: sem, acad_year:acad_year, section_id:section_id},
-               type:"POST`"
+               type:"POST"
               }
              });
 
@@ -1413,6 +1413,31 @@
            });
         }
 
+        function validateMinorSched(start, end, day, start_id, end_id, day_id){
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var section_id = $('#sec_yearsec').val();
+
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/validate_section_sched')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, section_id:section_id, start_time:start, end:end, day:day}, 
+                dataType: "json",
+                success:function(data){
+                    if(data == 'EXISTING')
+                    {
+                        alert('This section is not available for this schedule. Input a time and day where the section is available.')
+                        $('#'+ start_id).val('');
+                        $('#'+ end_id).val('');
+                        $('#'+ day_id).val('0');
+                    }
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+
         function minorSecondSave(match_id){
 
             var sem = $('#sec_sem').val();
@@ -1479,6 +1504,15 @@
                 async:false
 
                });
+      }
+
+      function resetLegends(){
+        $('#reg_box').show();
+        $('#pt_box').show();
+        $('#ts_box').show();
+        $('#at_box').show();
+        $('#no_box').show();
+        $('#oh_box').show();
       }
 
       function displayLegends(){
@@ -3858,7 +3892,7 @@
             var start = $('#starttime_a').val();
             var end = $('#endtime_a').val();
             showAvailRoom(day, start, end,'rooms_a');
-            validateSectionSched(start, end, day, 'starttime_a', 'endtime_a', 'day_a');
+            // validateSectionSched(start, end, day, 'starttime_a', 'endtime_a', 'day_a');
         });
 
         $('#day_b').on('change', function(){
@@ -3866,7 +3900,7 @@
             var start = $('#starttime_b').val();
             var end = $('#endtime_b').val();
             showAvailRoom(day, start, end,'rooms_b');
-            validateSectionSched(start, end, day, 'starttime_b', 'endtime_b', 'day_b');
+            // validateSectionSched(start, end, day, 'starttime_b', 'endtime_b', 'day_b');
         });
 
          $('#day_c').on('change', function(){
@@ -3874,7 +3908,7 @@
             var start = $('#starttime_c').val();
             var end = $('#endtime_c').val();
             showAvailLab(day, start, end,'rooms_c');
-            validateSectionSched(start, end, day, 'starttime_c', 'endtime_c', 'day_c')
+            // validateSectionSched(start, end, day, 'starttime_c', 'endtime_c', 'day_c')
         });
 
         //CHANGE VIEW DROP DOWN
@@ -3898,6 +3932,7 @@
             $('#room_table').hide();
             $('#btnGenerate').hide();
             $('#legend_div').show();
+            resetLegends();
           }
 
           else if(temp_val == 2){
@@ -4102,7 +4137,7 @@
             var end = $('#minor_end_a').val();
             var day = $('#day_minor_a').val();
             showAvailRoom(day, start, end, 'rooms_minor_a');
-            validateSectionSched(start, end, day, 'minor_start_a', 'minor_end_a', 'day_minor_a');
+            validateMinorSched(start, end, day, 'minor_start_a', 'minor_end_a', 'day_minor_a');
         });
 
         $('#day_minor_b').on('change',function(){
@@ -4110,7 +4145,7 @@
             var end = $('#minor_end_b').val();
             var day = $('#day_minor_b').val();
             showAvailRoom(day, start, end, 'rooms_minor_b');
-            validateSectionSched(start, end, day, 'minor_start_b', 'minor_end_b', 'day_minor_br');
+            validateMinorSched(start, end, day, 'minor_start_b', 'minor_end_b', 'day_minor_br');
         });
 //==========================================================================================
 //END NG MINOR ELEMENTS

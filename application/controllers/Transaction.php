@@ -654,9 +654,9 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
-	public function load_section_table(){
+	public function load_room_table(){
 		
-		$output = $this->getdata_model->load_section_table();
+		$output = $this->getdata_model->load_room_table();
 
 		$response = array(
 			'aaData' => $output,
@@ -668,9 +668,10 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
-	public function load_room_table(){
+
+	public function load_section_table(){
 		
-		$output = $this->getdata_model->load_room_table();
+		$output = $this->getdata_model->load_section_table();
 
 		$response = array(
 			'aaData' => $output,
@@ -821,7 +822,7 @@ class Transaction extends CI_Controller
 	{
 		echo ($this->savedata_model->remove_teaching_load($_POST));
 	}
-	
+
 	//KUYA! ETO UNG GINAMIT KONG CONTROLLER
 	public function query_faculty_consec()
 	{

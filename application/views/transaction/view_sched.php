@@ -1144,6 +1144,15 @@
                });
       }
 
+      function resetLegends(){
+        $('#reg_box').show();
+        $('#pt_box').show();
+        $('#ts_box').show();
+        $('#at_box').show();
+        $('#no_box').show();
+        $('#oh_box').show();
+      }
+
       function displayLegends(){
         if(global_factype == 1)
             {
@@ -2604,6 +2613,7 @@
             $('#room_table').hide();
             $('#btnGenerate').hide();
             $('#legend_div').show();
+            resetLegends();
 
           }
 

@@ -1143,7 +1143,7 @@ class Getdata_model extends CI_Model{
 	{
 		$result = array();
 
-		$id = $this->security->xss_clean($this->input->post('service_id'));
+		$id = $this->security->xss_clean($this->input->post('service_sched_id'));
 
 		$query = $this->db->select('day, time_start, time_end, room, services_id, acad_yr, sem')
                 ->where('services_id', $id)

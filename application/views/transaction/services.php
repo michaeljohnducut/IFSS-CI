@@ -705,7 +705,7 @@
                     {  
                         if(data == 'UPDATED')
                         {
-                            swal("Updated!", "The schedule has been updated.", "success");
+                            swal("Updated!", "The services has been updated.", "success");
                             $('#editService').hide();
                             $('#edit_service_form')[0].reset();  
                             $('#services-table').DataTable().destroy();
@@ -783,7 +783,7 @@
         $.ajax({  
             url:"<?php echo base_url('Transaction/view_spec_service')?>", 
             method:"POST",  
-            data:'service_id='+id,  
+            data:'service_sched_id='+id,  
             dataType: "json",
             success:function(data){  
                 var day = data[0][0];

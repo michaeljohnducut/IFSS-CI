@@ -295,7 +295,7 @@
                             <li><a href="<?php echo base_url();?>Report/faculty_schedule">Teaching Assignments</a></li>
                             <li><a href="<?php echo base_url();?>Report/official_time">Official Time(Designee)</a></li>
                             <li><a href="<?php echo base_url();?>Report/room_schedule">Room Schedules</a></li>
-                            <li><a href="<?php echo base_url();?>Report/subject_pref">Subject Preference Report</a></li>
+                            <li><a href="<?php echo base_url();?>Report/subject_pref">Subject Preference</a></li>
                         </ul>
                     </li>
                     <li><a href="<?php echo base_url();?>Transaction/utilities" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Utilities<span class="fa arrow"></span></span></a>

@@ -864,6 +864,17 @@
         });
     });
 
+    $('#btnPrint').on('click', function(){
+
+      var acadyr = $('#room_acad_year').val();
+      var sem = $('#room_sem').val();
+      var faculty = 1;
+      var room_val = $('#room_labs').val();
+      var room_text = $('#room_labs option:selected').text();
+      window.open('<?php echo base_url("Report/report_room_sched_pdf")?>'+'?acadyr='+acadyr+'&sem='+sem+'&faculty='+faculty+'&room_val='+room_val+'&room_text='+room_text);
+
+    });
+
         //=========================================================
         // END ROOM VIEW
 

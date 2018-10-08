@@ -2644,7 +2644,7 @@ FROM subject_match sm
 
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDssER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2652,7 +2652,6 @@ FROM subject_match sm
 				->join('subject s','sm.subj_id = s.subj_id')
 				->join('faculty f','f.faculty_id = sm.faculty_id', 'LEFT')
 				->join('room r','r.room_id = ta.room_id')
-				->group_by('ta.subj_match_id')
 				->order_by('FIELD(ta.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
                 ->get('teaching_assign_sched ta');
 
@@ -4037,6 +4036,44 @@ FROM subject_match sm
 
 		return $result;
 	
+	}
+
+	public function get_room_sched_report($room_id, $acad_year, $sem){	//GETS SECTION'S SUMMARY OF SCHEDULES
+		$result = array();
+
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", ta.subj_match_id')
+				->where('ta.room_id', $room_id)
+				->where('ta.acad_yr', $acad_year)
+				->where('ta.sem', $sem)
+				->group_by('sm.subj_match_id')
+				->join('subject_match sm','ta.subj_match_id = sm.subj_match_id')
+				->join('section se','se.section_id = sm.section')
+				->join('course c','c.course_id = se.course')
+				->join('faculty f','f.faculty_id = sm.faculty_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('room r','r.room_id = ta.room_id')
+				->order_by('FIELD(ta.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
+                ->get('teaching_assign_sched ta');
+
+		foreach ($query->result() as $r) 
+		{	
+
+			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units,
+					$section, 
+					$r->facname, 
+					$r->times,
+					$r->days,
+					$btn
+					);
+		}
+
+		return $result;	
 	}
 
 }

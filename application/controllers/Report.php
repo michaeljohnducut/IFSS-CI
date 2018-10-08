@@ -444,6 +444,44 @@ class Report extends CI_Controller
           
         $this->pdf->stream("official_time.pdf", array('Attachment' => 0));
 	}
+
+	public function report_room_sched_pdf()
+	{
+		$result1 = array();
+		$result2 = array();
+		$result3 = array();
+		$result4 = array();
+		$result5 = array();
+		$result6 = array();
+		$result7 = array();
+		$result8 = array();
+
+		$this->load->library('pdf');
+			
+		$acadyr = $this->security->xss_clean($this->input->get('acadyr'));
+		$sem = $this->security->xss_clean($this->input->get('sem'));
+		$faculty = $this->security->xss_clean($this->input->get('faculty'));
+		$room_val = $this->security->xss_clean($this->input->get('room_val'));
+		$room_text = $this->security->xss_clean($this->input->get('room_text'));
+
+		$data['acadyr'] = $acadyr;
+		$data['sem'] = $sem;
+		$data['faculty'] = $faculty;
+		$data['room_val'] = $room_val;
+		$data['room_text'] = $room_text;
+		
+		
+		$result2 = $this->getdata_model->get_room_sched_report($room_val, $acadyr, $sem);
+
+		$data['sched'] = $result2;
+
+        $this->pdf->load_view('report/report_room_sched_pdf',$data);
+        $this->pdf->set_paper('letter', 'landscape');
+        $this->pdf->render();
+        $this->pdf->output();
+          
+        $this->pdf->stream("room_sched.pdf", array('Attachment' => 0));
+	}
 } 
 
 ?>

@@ -1118,6 +1118,7 @@
                 dataType: "json",
                 success:function(data){
                     changeSchedColor(data);
+                    showTeachingLoads();
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
@@ -1137,6 +1138,7 @@
                 dataType: "json",
                 success:function(data){
                     changeSchedColor(data);
+                    showTeachingLoads();
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
@@ -2669,6 +2671,31 @@
             }
       }
 
+      function removeHours(temp_load){
+        var acad_year = $('#sched_acad_year').val();
+        var sem = $('#sched_sem').val();
+        var fac_id = $('#sched_faculty').val();
+
+        $.ajax({  
+            url:"<?php echo base_url('Transaction/remove_office_hrs')?>", 
+            method:"POST", 
+            data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:temp_load}, 
+            success:function(data){
+
+            },  
+            error: function (data) {
+            alert(JSON.stringify(data));
+            }
+       });
+
+      }
+
+      function resetSpecificHours(class_name){
+
+        $('.' + class_name).removeClass(class_name).addClass('btn plot-regular');
+        $('.' + class_name).text('');
+      }
+
       function saveNightOffice(){
         var day_temp = 1; 
         var day; 
@@ -4101,11 +4128,12 @@
 
           var sem = $('#sec_sem').val();
           var section_id = $('#sec_yearsec').val();
+          var acad_yr = $('#sec_acadyr').val();
 
           $.ajax({   
               url:"<?php echo base_url('Transaction/get_minor_subj')?>",  
               method: "POST",
-              data: {sem:sem,section_id:section_id},
+              data: {sem:sem,section_id:section_id, acad_yr:acad_yr},
               dataType:'JSON',
               success: function (data) 
               {   
@@ -4465,16 +4493,24 @@
                                                 hour += 1;
                                                 day = global_pref_day[day_temp][0];
                                                 start_time = '0' + hour + ':30'; 
-                                                end_time = '0' + (hour + 3) + ':30'; 
+                                                end_time = '0' + (hour + 2) + ':30'; 
                                                 if(hour > 9)
                                                 {
                                                     start_time = hour + ':30';
-                                                    end_time = (hour + 3) + ':30'; 
+                                                    end_time = (hour + 2) + ':30'; 
                                                 }
                                                 if (start_time > '07:29' && start_time < '16:01')
                                                 {   
                                                     addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
-                                                    hour += 4;
+                                                    if(x == 0)
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour, 16);
+                                                    }
+                                                    else
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour+last_hour, 16);
+                                                    }
+                                                    hour += 3;
                                                     bool_stop = true;
                                                 }
 
@@ -4541,16 +4577,24 @@
                                                 hour += 1;
                                                 day = global_pref_day[day_temp][0];
                                                 start_time = '0' + hour + ':30'; 
-                                                end_time = '0' + (hour + 3) + ':30'; 
+                                                end_time = '0' + (hour + 2) + ':30'; 
                                                 if(hour > 9)
                                                 {
                                                     start_time = hour + ':30';
-                                                    end_time = (hour + 3) + ':30'; 
+                                                    end_time = (hour + 2) + ':30'; 
                                                 }
                                                 if (start_time > '07:29' && start_time < '16:01')
                                                 {   
                                                     addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
-                                                    hour += 4;
+                                                    if(x == 0)
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour, 16);
+                                                    }
+                                                    else
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour+last_hour, 16);
+                                                    }
+                                                    hour += 3;
                                                     bool_stop = true;
                                                 }
 
@@ -4616,16 +4660,24 @@
                                                 hour += 1;
                                                 day = global_pref_day[day_temp][0];
                                                 start_time = '0' + hour + ':30'; 
-                                                end_time = '0' + (hour + 3) + ':30'; 
+                                                end_time = '0' + (hour + 2) + ':30'; 
                                                 if(hour > 9)
                                                 {
                                                     start_time = hour + ':30';
-                                                    end_time = (hour + 3) + ':30'; 
+                                                    end_time = (hour + 2) + ':30'; 
                                                 }
                                                 if (start_time > '07:29' && start_time < '16:01')
                                                 {   
                                                     addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
-                                                    hour += 4;
+                                                    if(x == 0)
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour, 16);
+                                                    }
+                                                    else
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour+last_hour, 16);
+                                                    }
+                                                    hour += 3;
                                                     bool_stop = true;
                                                 }
 
@@ -4641,9 +4693,6 @@
                             }
 
                         }
-                    
-
-                    alert(x);
                     }
                 }
 
@@ -4830,16 +4879,24 @@
                                                 hour += 1;
                                                 day = global_pref_day[day_temp][0];
                                                 start_time = '0' + hour + ':30'; 
-                                                end_time = '0' + (hour + 3) + ':30'; 
+                                                end_time = '0' + (hour + 2) + ':30'; 
                                                 if(hour > 9)
                                                 {
                                                     start_time = hour + ':30';
-                                                    end_time = (hour + 3) + ':30'; 
+                                                    end_time = (hour + 2) + ':30'; 
                                                 }
                                                 if (start_time > '07:29' && start_time < '16:01')
                                                 {   
                                                     addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
-                                                    hour += 4;
+                                                    if(x == 0)
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour, 16);
+                                                    }
+                                                    else
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour+last_hour, 16);
+                                                    }
+                                                    hour += 3;
                                                     bool_stop = true;
                                                 }
 
@@ -4887,11 +4944,11 @@
                                         {
                                             hour += 1;
                                             start_time = '0' + hour + ':30'; 
-                                            end_time = '0' + (hour + 3) + ':30'; 
+                                            end_time = '0' + (hour + 2) + ':30'; 
                                                 if(hour > 9)
                                                 {
                                                     start_time = hour + ':30';
-                                                    end_time = (hour + 3) + ':30';  
+                                                    end_time = (hour + 2) + ':30';  
                                                 }
                                         }
                                     }
@@ -5118,16 +5175,24 @@
                                                 hour += 1;
                                                 day = global_pref_day[day_temp][0];
                                                 start_time = '0' + hour + ':30'; 
-                                                end_time = '0' + (hour + 3) + ':30'; 
+                                                end_time = '0' + (hour + 2) + ':30'; 
                                                 if(hour > 9)
                                                 {
                                                     start_time = hour + ':30';
-                                                    end_time = (hour + 3) + ':30'; 
+                                                    end_time = (hour + 2) + ':30'; 
                                                 }
                                                 if (start_time > '07:29' && start_time < '16:01')
                                                 {   
                                                     addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
-                                                    hour += 4;
+                                                    if(x == 0)
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour, 16);
+                                                    }
+                                                    else
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour+last_hour, 16);
+                                                    }
+                                                    hour += 3;
                                                     bool_stop = true;
                                                 }
 
@@ -5196,16 +5261,24 @@
                                                 hour += 1;
                                                 day = global_pref_day[day_temp][0];
                                                 start_time = '0' + hour + ':30'; 
-                                                end_time = '0' + (hour + 3) + ':30'; 
+                                                end_time = '0' + (hour + 2) + ':30'; 
                                                 if(hour > 9)
                                                 {
                                                     start_time = hour + ':30';
-                                                    end_time = (hour + 3) + ':30'; 
+                                                    end_time = (hour + 2) + ':30'; 
                                                 }
                                                 if (start_time > '07:29' && start_time < '16:01')
                                                 {   
                                                     addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
-                                                    hour += 4;
+                                                    if(x == 0)
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour, 16);
+                                                    }
+                                                    else
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour+last_hour, 16);
+                                                    }
+                                                    hour += 3;
                                                     bool_stop = true;
                                                 }
 
@@ -5229,9 +5302,12 @@
 
         //IF ADVISE TIME IS CHECKED
         if($('#chk_advisetime').prop('checked'))
-        {
+        {   
+            removeHours('AT');
+            resetSpecificHours('plot-orange')
             generateAdviseTime();
             saveAdviseTime();
+            swal("Success!", "Advising Time has been generated!", "success");
             $('#chk_advisetime').prop('checked', false);
         }
 
@@ -5239,16 +5315,21 @@
         if($('#chk_officehrs').prop('checked'))
         {   
             removeOfficeHours();
+            resetSpecificHours('plot-red')
             generateOfficeHours();
             saveOfficeHours();
+            swal("Success!", "Office Hours been generated!", "success");
             $('#chk_officehrs').prop('checked',false);
         }
 
         //IF NIGHT OFFICE IS CHECKED
         if($('#chk_nightofc').prop('checked'))
-        {
+        {   
+            removeHours('NO');
+            resetSpecificHours('plot-darkBlue')
             generateNightOffice();
             saveNightOffice();
+            swal("Success!", "Night Office Hours have been generated!", "success");
             $('#chk_nightofc').prop('checked', false);
         }
 

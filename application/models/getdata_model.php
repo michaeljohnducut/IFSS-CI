@@ -2384,19 +2384,16 @@ FROM subject_match sm
 		$result = array();
 
 		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
-				->where('s.subj_id NOT IN (SELECT s.subj_id
-						FROM subject s 
-							JOIN subject_match sm 
-						    ON s.subj_id = sm.subj_id
-						WHERE sm.acad_yr = "'.$acad_yr.'"
-						AND sm.sem = "'.$sem.'"
-						AND sm.section = '.$section_id.')',NULL,FALSE)
 				->where('c.year_lvl = (SELECT se.year_lvl
                     FROM section se
                     WHERE se.section_id = '.$section_id.')', NULL, FALSE)
-				->where('s.specialization is null', NULL, FALSE)
+				->where('s.specialization is null')
 				->where('c.sem ', $sem)
-				
+				->where('s.subj_id NOT IN (SELECT sm.subj_id
+						FROM subject_match sm 
+						WHERE sm.acad_yr = "'.$acad_yr.'"
+						AND sm.sem = "'.$sem.'"
+						AND sm.section = '.$section_id.')',NULL,FALSE)
 				->join('subject s','s.subj_id = c.subj_code')
                 ->get('curriculum c ');
 
@@ -2644,7 +2641,7 @@ FROM subject_match sm
 
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDssER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2652,6 +2649,7 @@ FROM subject_match sm
 				->join('subject s','sm.subj_id = s.subj_id')
 				->join('faculty f','f.faculty_id = sm.faculty_id', 'LEFT')
 				->join('room r','r.room_id = ta.room_id')
+				->group_by('ta.subj_match_id')
 				->order_by('FIELD(ta.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
                 ->get('teaching_assign_sched ta');
 

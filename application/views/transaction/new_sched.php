@@ -4101,11 +4101,12 @@
 
           var sem = $('#sec_sem').val();
           var section_id = $('#sec_yearsec').val();
+          var acad_yr = $('#sec_acadyr').val();
 
           $.ajax({   
               url:"<?php echo base_url('Transaction/get_minor_subj')?>",  
               method: "POST",
-              data: {sem:sem,section_id:section_id},
+              data: {sem:sem,section_id:section_id, acad_yr:acad_yr},
               dataType:'JSON',
               success: function (data) 
               {   

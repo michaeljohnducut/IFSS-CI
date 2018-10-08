@@ -4792,27 +4792,11 @@
                                         hour+=1;
                                     }
                                     else
-                                    {
-                                        var bool_fit = false; 
-                                        while(bool_fit == false)
-                                        {
-                                            if (temp_start > '07:29' && temp_start < '09:01' || temp_start > '11:59' && temp_start < '13:31' || temp_start > '16:29' && temp_start < '18:01' )
-                                            {   
-                                                bool_fit = true;
-                                            }
-                                            else
-                                            {
-                                                hour += 1;
-                                                start_time = '0' + hour + ':30'; 
-                                                end_time = '0' + (hour + 3) + ':30'; 
-                                                    if(hour > 9)
-                                                    {
-                                                        start_time = hour + ':30';
-                                                        end_time = (hour + 3) + ':30';  
-                                                    }
-                                            }
-                                        }
-                                        addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type); 
+                                    {   
+
+                                        if (start_time > '07:29' && start_time < '09:01' || start_time > '11:59' && start_time < '13:31' || start_time > '16:29' && start_time < '18:01' )
+                                        {  
+                                            addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type); 
                                             hour += 4;
                                             if(hour >= 16)
                                             {
@@ -4820,6 +4804,37 @@
                                                 hour = 7;
                                             }
                                             x += 1;
+                                        }
+
+                                        else
+                                        {
+                                            var bool_stop = false;
+                                            while(bool_stop == false)
+                                            {
+                                                hour += 1;
+                                                day = global_pref_day[day_temp][0];
+                                                start_time = '0' + hour + ':30'; 
+                                                end_time = '0' + (hour + 3) + ':30'; 
+                                                if(hour > 9)
+                                                {
+                                                    start_time = hour + ':30';
+                                                    end_time = (hour + 3) + ':30'; 
+                                                }
+                                                if (start_time > '07:29' && start_time < '09:01' || start_time > '11:59' && start_time < '13:31' || start_time > '16:29' && start_time < '18:01' )
+                                                {   
+                                                    addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                                    hour += 4;
+                                                    bool_stop = true;
+                                                }
+
+                                                if(hour >= 16)
+                                                {
+                                                    day_temp += 1;
+                                                    hour = 7;
+                                                }
+                                            }
+                                            x += 1;
+                                        }
                                     }
                             }
 
@@ -4931,52 +4946,77 @@
                                         hour+=1;
                                     }
                                     else
-                                    {
+                                    { 
 
-                                    var bool_fit = false; 
-                                    while(bool_fit == false)
-                                    {
+
                                         if (start_time > '07:29' && start_time < '09:01' || start_time > '11:59' && start_time < '13:31' || start_time > '16:29' && start_time < '18:01' )
                                         {   
-                                            bool_fit = true;
+                                            addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                            
+                                            if(x == 0)
+                                            {
+                                                generateLabSched(day_temp, load_type, hour, 16);
+                                            }
+                                            else
+                                            {
+                                                generateLabSched(day_temp, load_type, hour+last_hour, 16);
+                                            }
+
+                                                hour += 3;
+                                                if(hour >= 16)
+                                                {
+                                                    day_temp += 1;
+                                                    hour = 7;
+                                                    last_hour = 0; 
+                                                }
+                                                x += 1;
+                                                last_hour += 1;
                                         }
+
                                         else
                                         {
-                                            hour += 1;
-                                            start_time = '0' + hour + ':30'; 
-                                            end_time = '0' + (hour + 2) + ':30'; 
+                                            var bool_stop = false;
+                                            while(bool_stop == false)
+                                            {
+                                                hour += 1;
+                                                day = global_pref_day[day_temp][0];
+                                                start_time = '0' + hour + ':30'; 
+                                                end_time = '0' + (hour + 2) + ':30'; 
                                                 if(hour > 9)
                                                 {
                                                     start_time = hour + ':30';
-                                                    end_time = (hour + 2) + ':30';  
+                                                    end_time = (hour + 2) + ':30'; 
                                                 }
-                                        }
-                                    }
+                                                if (start_time > '07:29' && start_time < '09:01' || start_time > '11:59' && start_time < '13:31' || start_time > '16:29' && start_time < '18:01' )
+                                                {   
+                                                    addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
+                                                    if(x == 0)
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour, 16);
+                                                    }
+                                                    else
+                                                    {
+                                                        generateLabSched(day_temp, load_type, hour+last_hour, 16);
+                                                    }
+                                                    hour += 3;
+                                                    bool_stop = true;
+                                                }
 
-                                    addScheduleGen(global_room, day, start_time, end_time, global_match_id, load_type);
-                                        
-                                    if(x == 0)
-                                    {
-                                        generateLabSched(day_temp, load_type, hour, 20);
-                                    }
-                                    else
-                                    {
-                                        generateLabSched(day_temp, load_type, hour+last_hour, 20);
-                                    }
-                                        hour += 3;
-                                        if(hour >= 20)
-                                        {
-                                            day_temp += 1;
-                                            hour = 7;
-                                            last_hour = 0;
+                                                if(hour >= 16)
+                                                {
+                                                    day_temp += 1;
+                                                    hour = 7;
+                                                }
+                                            }
+                                            x += 1;
                                         }
-                                        x += 1;
-                                        last_hour += 1; 
                                         
                                     }
                             }
                             
                         }
+                    
+
                     }
 
                 }

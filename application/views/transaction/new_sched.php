@@ -1118,6 +1118,7 @@
                 dataType: "json",
                 success:function(data){
                     changeSchedColor(data);
+                    showTeachingLoads();
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
@@ -1137,6 +1138,7 @@
                 dataType: "json",
                 success:function(data){
                     changeSchedColor(data);
+                    showTeachingLoads();
                 },
                 error: function (data) {
                 // alert(JSON.stringify(data));
@@ -2667,6 +2669,31 @@
                     getOfficeHours();
                 }
             }
+      }
+
+      function removeHours(temp_load){
+        var acad_year = $('#sched_acad_year').val();
+        var sem = $('#sched_sem').val();
+        var fac_id = $('#sched_faculty').val();
+
+        $.ajax({  
+            url:"<?php echo base_url('Transaction/remove_office_hrs')?>", 
+            method:"POST", 
+            data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:temp_load}, 
+            success:function(data){
+
+            },  
+            error: function (data) {
+            alert(JSON.stringify(data));
+            }
+       });
+
+      }
+
+      function resetSpecificHours(class_name){
+
+        $('.' + class_name).removeClass(class_name).addClass('btn plot-regular');
+        $('.' + class_name).text('');
       }
 
       function saveNightOffice(){
@@ -5275,9 +5302,12 @@
 
         //IF ADVISE TIME IS CHECKED
         if($('#chk_advisetime').prop('checked'))
-        {
+        {   
+            removeHours('AT');
+            resetSpecificHours('plot-orange')
             generateAdviseTime();
             saveAdviseTime();
+            swal("Success!", "Advising Time has been generated!", "success");
             $('#chk_advisetime').prop('checked', false);
         }
 
@@ -5285,16 +5315,21 @@
         if($('#chk_officehrs').prop('checked'))
         {   
             removeOfficeHours();
+            resetSpecificHours('plot-red')
             generateOfficeHours();
             saveOfficeHours();
+            swal("Success!", "Office Hours been generated!", "success");
             $('#chk_officehrs').prop('checked',false);
         }
 
         //IF NIGHT OFFICE IS CHECKED
         if($('#chk_nightofc').prop('checked'))
-        {
+        {   
+            removeHours('NO');
+            resetSpecificHours('plot-darkBlue')
             generateNightOffice();
             saveNightOffice();
+            swal("Success!", "Night Office Hours have been generated!", "success");
             $('#chk_nightofc').prop('checked', false);
         }
 

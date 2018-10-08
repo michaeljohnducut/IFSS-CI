@@ -33,6 +33,9 @@ class Transaction extends CI_Controller
 			$data['faculty'] = $this->getdata_model->faculty();
 			$data['subjects'] = $this->getdata_model->get_disc_subj();
 			$data['acc_type'] = 'admin';
+			$data['curr_month'] = date("m");
+			$data['curr_year'] = date("Y");
+
 			$data['fac_id'] = $this->session->userdata('USERID');
 
 			$data['title'] = "IFSS | Subject Preference";

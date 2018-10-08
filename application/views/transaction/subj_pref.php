@@ -42,7 +42,7 @@
                                 <select class="form-control select2" name="acad_year" id="acad_year">
                                     <option value="0">-ACAD YEAR-</option>
                                         <?php 
-                                            for ($i = date("Y"); $i > 1900; $i-- ){
+                                            for ($i = (date("Y") + 1); $i > 1900; $i-- ){
                                                 echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
                                             }
                                         ?>
@@ -375,6 +375,13 @@
 
     <script type="text/javascript">
 
+
+    //GLOBAL VARIABLES 
+    var global_year = "<?php echo $curr_year?>";
+    var global_month = "<?php echo $curr_month?>";
+    var global_acadyr; 
+    var global_sem;
+
 function hide_dropdown()
     {
         var data = "<?php echo $acc_type?>";
@@ -651,6 +658,18 @@ function getPrefTime(faculty_id, acad_year, sem){
                 }); 
     }
 
+    function disableButtons(){
+        $("input[name = 'set_time']").attr('disabled', 'disabled');
+        $("input[name = 'chk_subj']").attr('disabled', 'disabled');
+    }
+
+    function enableButtons(){
+        $("input[name = 'set_time']").removeAttr('disabled');
+        $("input[name = 'chk_subj']").removeAttr('disabled');
+    }
+
+
+
     function checkSubj(arr){
 
             var code_temp = '';
@@ -690,6 +709,14 @@ function getPrefTime(faculty_id, acad_year, sem){
         e.preventDefault();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
+        if(acad_year != global_acadyr)
+        {
+            disableButtons();
+        }
+        else
+        {
+            enableButtons();
+        }
         var data = "<?php echo $acc_type?>"; 
         if(data == 'admin'){
             var fac_id = $('#fac_list').val();
@@ -711,6 +738,15 @@ function getPrefTime(faculty_id, acad_year, sem){
         e.preventDefault();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
+        if(acad_year != global_acadyr)
+        {
+            disableButtons();
+        }
+        else
+        {
+            enableButtons();
+        }
+        
         var data = "<?php echo $acc_type?>"; 
         if(data == 'admin'){
             var fac_id = $('#fac_list').val();
@@ -731,8 +767,8 @@ $(document).ready(function(){
 
     $('#modalDisclaimer').modal('show');
 
-    $(".select2").select2();
-    $('.selectpicker').selectpicker();
+    // $(".select2").select2();
+    // $('.selectpicker').selectpicker();
 
     hide_dropdown();
 
@@ -746,6 +782,32 @@ $('#btnCloseDisclaimer').on('click', function(){
 
 $(document).ready(function(){
     // TRANSFERRING PREFERRED TIME. NOTE: Experimental
+    if (global_month == '06' || global_month == '07' || global_month == '08' || global_month == '09' || global_month == '10')
+    {
+        global_sem = '2nd';
+    }
+    else
+    {
+        global_sem = '1st';
+    }
+
+    var next_year = parseInt(global_year) + 1;
+    $("input[name = 'set_time']").attr('disabled', 'disabled');
+
+    global_acadyr = global_year + '\u2010' + next_year;
+    $('#selected_sem option[value='+global_sem+']').attr('selected','selected');
+    $('#acad_year option[value='+global_acadyr+']').attr('selected','selected');
+
+    var acad_year = $('#acad_year').val();
+        if(acad_year != global_acadyr)
+        {
+            disableButtons();
+        }
+        else
+        {
+            enableButtons();
+        }
+
     $('#btnOtherMon').on('click',function()
     {
         var data = "<?php echo $acc_type?>";

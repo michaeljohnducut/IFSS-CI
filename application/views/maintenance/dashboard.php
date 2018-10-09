@@ -208,8 +208,8 @@
      </div>
             <div class="col-sm-5">
             <div class="white-box" style="padding-bottom: 15%; height: 98%;">
-            <h3 class="box-title"> total number of faculty members</h3>
-             <p class="text-muted m-b-30">with satisfactory rating per faculty type</p>
+            <h3 class="box-title"> Satisfactory Rating Summary</h3>
+             <p class="text-muted m-b-30">percentage per faculty type</p>
             <hr style="border: 1px solid">
             <div class="row">
                 <div class="col-md-6">

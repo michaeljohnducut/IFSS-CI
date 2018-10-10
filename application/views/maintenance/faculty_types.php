@@ -58,7 +58,7 @@
                                             <form id="add_type_form" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group col-md-8">
                                                     <label class="control-label">Faculty type:</label>
-                                                    <input class="form-control" id="fac_type" name="fac_type" type="text" pattern="[A-Za-z,-\s'.\/]{2,}" title="Characters only." required>
+                                                    <input class="form-control" id="fac_type" name="fac_type" type="text" pattern="[A-Za-z-\s]{2,}" title="Characters only." required>
                                                 </div>
                                             
                                             <div class="col-md-6">
@@ -93,7 +93,7 @@
                                             <form id="updateFacTypeForm" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group col-md-8">
                                                     <label class="control-label">Faculty Type:</label>
-                                                    <input class="form-control" id="fac_type_update" name="fac_type_update" type="text" pattern="[A-Za-z,-\s'.\/]{2,}" title="Characters only." required>
+                                                    <input class="form-control" id="fac_type_update" name="fac_type_update" type="text" pattern="[A-Za-z-\s]{2,}" title="Characters only." required>
                                                     <input type="hidden" name="hid_type_id" id="hid_type_id">
                                                 </div>
                                             

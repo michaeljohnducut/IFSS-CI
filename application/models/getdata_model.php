@@ -1328,9 +1328,12 @@ class Getdata_model extends CI_Model{
 		$spec = '';
 		$statement = "";
 		$statement2 = "";
+		$eval = '';
 
 		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
 		$type = $this->security->xss_clean($this->input->post('temp_type'));
+		$acad_yr = $this->security->xss_clean($this->input->post('temp_acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('temp_sem'));
 
 		if($type != 0)
 		{	
@@ -1355,10 +1358,22 @@ class Getdata_model extends CI_Model{
 									ON f.faculty_type = ft.fac_type_id
 									JOIN faculty_spec fs
 									ON f.faculty_id = fs.faculty_id
-									WHERE fs.spec_id = '$spec' $statement2");
+									WHERE fs.spec_id = '$spec' $statement2
+									ORDER BY ft.fac_type_desc DESC");
 
         foreach ($query2->result() as $r) 
 		{
+			$query1 = $this->db->select('CONCAT(rating, " - ", rating_desc) AS rate')
+				->where('acad_yr', $acad_yr)
+				->where('sem', $sem)
+				->where('faculty_id', $r->faculty_id)
+                ->get('evaluation');
+
+			foreach($query1->result() as $t)
+			{		
+				$eval = $t->rate;
+			}
+
 			$trackRating = "SATISFACTORY";
 			$ctr = 0;
 
@@ -1388,13 +1403,103 @@ class Getdata_model extends CI_Model{
 				}	
 			}
 
-			($statement == 'CONSECUTIVE')?$consec = 'WITH CONSECUTIVE SATISFACTORY RATING':$consec = 'WITHOUT CONSECUTIVE SATISFACTORY RATING';
+			($statement == 'CONSECUTIVE')?$consec = 'CONSECUTIVE':$consec = 'NONE';
 
 			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
 
 			$result[] = array(
 					$r->fac_name,
 					$r->fac_type_desc,
+					$eval,
+					$consec,
+					$btn
+					);
+		}
+
+		return $result;
+	}
+
+	public function view_other_faculty($id)
+	{
+		$result = array();
+		$spec = '';
+		$statement = "";
+		$statement2 = "";
+		$eval = '';
+
+		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
+		$acad_yr = $this->security->xss_clean($this->input->post('temp_acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('temp_sem'));
+
+		$query = $this->db->select('specialization')
+				->where('subj_id', $subject)
+                ->get('subject');
+
+		foreach($query->result() as $r)
+		{		
+			$spec = $r->specialization;
+		}
+
+		$query2 = $this->db->query("SELECT f.faculty_id, ft.fac_type_desc, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) AS fac_name
+									FROM faculty f JOIN faculty_type ft
+									ON f.faculty_type = ft.fac_type_id
+									WHERE f.faculty_id NOT IN(SELECT f.faculty_id
+													FROM faculty f 
+													JOIN faculty_spec fs
+													ON f.faculty_id = fs.faculty_id
+													WHERE fs.spec_id = '".$spec."')
+									ORDER BY ft.fac_type_desc DESC");
+
+        foreach ($query2->result() as $r) 
+		{
+			$query1 = $this->db->select('CONCAT(rating, " - ", rating_desc) AS rate')
+				->where('acad_yr', $acad_yr)
+				->where('sem', $sem)
+				->where('faculty_id', $r->faculty_id)
+                ->get('evaluation');
+
+			foreach($query1->result() as $t)
+			{		
+				$eval = $t->rate;
+			}
+
+			$trackRating = "SATISFACTORY";
+			$ctr = 0;
+
+			$query3 = $this->db->select('acad_yr, sem, faculty_id, rating, rating_desc')
+					->where('faculty_id', $r->faculty_id)
+					->order_by('acad_yr DESC, sem DESC')
+	                ->get('evaluation');
+
+			foreach($query3->result() as $s)
+			{
+				if($s->rating_desc == $trackRating)
+				{
+				  $ctr++;
+				}
+				else
+				{
+				  $ctr = 0;
+				}
+
+				if($ctr >= 3)
+				{
+					$statement = 'CONSECUTIVE';
+				}
+				else
+				{
+					$statement = 'NONE';
+				}	
+			}
+
+			($statement == 'CONSECUTIVE')?$consec = 'CONSECUTIVE':$consec = 'NONE';
+
+			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
+
+			$result[] = array(
+					$r->fac_name,
+					$r->fac_type_desc,
+					$eval,
 					$consec,
 					$btn
 					);
@@ -1986,6 +2091,7 @@ FROM subject_match sm
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_yr)
 				->where('sm.sem', $sem)
+				->order_by('s.subj_code')
 				->join('subject_match sm', 's.subj_id = sm.subj_id')
 				->join('faculty f', 'f.faculty_id = sm.faculty_id')
                 ->get('subject s');

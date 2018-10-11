@@ -65,7 +65,7 @@
                                             <form id="add_subj_form" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">Course Code:</label>
-                                                    <input class="form-control" type="text" name="subj_code" id="subj_code" maxlength="10" required>
+                                                    <input class="form-control" type="text" name="subj_code" id="subj_code" maxlength="10" pattern="[A-Za-z]{4}[0-9]{4}" title="e.g. COMP2013" required>
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Course Title:</label>
@@ -135,7 +135,7 @@
                                             <form id="edit_subj_form" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">Course Code:</label>
-                                                    <input class="form-control" type="text" name="edit_subj_code" id="edit_subj_code" maxlength="10" required>
+                                                    <input class="form-control" type="text" name="edit_subj_code" id="edit_subj_code" maxlength="10" pattern="[A-Za-z]{4}[0-9]{4}" title="e.g. COMP2013" required>
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Course Title:</label>

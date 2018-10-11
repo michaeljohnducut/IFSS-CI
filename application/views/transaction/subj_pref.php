@@ -95,7 +95,7 @@
                                         <input class="form-control" type="time" id="endMon" placeholder="Start">
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" id="btnOtherMon" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
+                                        <button type="button" data-toggle="tooltip" data-placement="top" title="Add time" id="btnOtherMon" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                                         <input class="form-control" id="endTue" type="time">
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" id="btnOtherTue" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
+                                        <button type="button" data-toggle="tooltip" data-placement="top" title="Add time" id="btnOtherTue" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +161,7 @@
                                         <input class="form-control" type="time" id="endWed" >
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" id="btnOtherWed" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
+                                        <button type="button" data-toggle="tooltip" data-placement="top" title="Add time" id="btnOtherWed" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
                                     </div>
                                 </div>
                             </div>
@@ -198,7 +198,7 @@
                                         <input class="form-control" type="time" id="endThr">
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" id="btnOtherThr" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
+                                        <button type="button" data-toggle="tooltip" data-placement="top" title="Add time" id="btnOtherThr" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
                                     </div>
                                 </div>
                             </div>
@@ -231,7 +231,7 @@
                                         <input class="form-control" type="time" id="endFri">
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" id="btnOtherFri" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
+                                        <button type="button" data-toggle="tooltip" data-placement="top" title="Add time" id="btnOtherFri" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
                                     </div>
                                 </div>
                             </div>
@@ -264,7 +264,7 @@
                                         <input class="form-control" type="time" id="endSat">
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" id="btnOtherSat" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
+                                        <button type="button" data-toggle="tooltip" data-placement="top" title="Add time" id="btnOtherSat" style="margin-top: 25px;" class="btn btn-success waves-effect text-left"><span class="fa fa-plus"></span> </button>
                                     </div>
                                 </div>
                             </div>

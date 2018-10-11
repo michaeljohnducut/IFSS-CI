@@ -1669,7 +1669,6 @@ class Savedata_model extends CI_Model
 			else
 			{
 				$output = 'NOT INSERTED';
-				echo $this->db->error();
 			}
 		}
 		else

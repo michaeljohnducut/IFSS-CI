@@ -2925,7 +2925,7 @@ FROM subject_match sm
 								JOIN room r
 								ON tas.room_id = r.room_id
 								WHERE f.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'" AND tas.load_type = "'.$load.'"
-								GROUP BY s.subj_id');
+								GROUP BY s.subj_id, section_id');
 
         foreach($query->result() as $t)
         {      

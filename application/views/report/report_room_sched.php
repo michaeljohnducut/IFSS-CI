@@ -31,7 +31,7 @@
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control" id="room_acad_year">
-                                    <option value="0">-ACAD YEAR-</option>
+                                    <option value="0" disabled selected>-ACAD YEAR-</option>
                                     <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
                                             echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -42,7 +42,7 @@
                             <div class="col-md-2">
                                 <label class="control-label">Semester</label>
                                 <select class="form-control" id="room_sem">
-                                    <option value="0">-SEM-</option>
+                                    <option value="0" disabled selected>-SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
                                     <option value="summer">Summer</option> 
@@ -51,7 +51,7 @@
                             <div class="col-md-3">
                                 <label class="control-label">Select Room:</label>
                                 <select class="form-control" id="room_labs">
-                                    <option value="0">-ROOMS/LABS-</option>
+                                    <option value="0" disabled selected>-ROOMS/LABS-</option>
                                     <?php foreach($rooms as $r) echo '<option value="'.$r[4].'">'.$r[0].'</option>';?>
                                 </select>
                             </div>

@@ -15,8 +15,8 @@ class Getdata_model extends CI_Model{
 
 		foreach($q->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-info" rel="tooltip" title="View Profile" id="view_data" data-id="'.$r->faculty_id.'"><span class="fa fa-eye"></span></button>
-					<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Profile" id="edit_data" data-id="'.$r->faculty_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-info" data-toggle="tooltip" data-placement="top" title="View Profile" id="view_data" data-id="'.$r->faculty_id.'"><span class="fa fa-eye"></span></button>
+					<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Profile" id="edit_data" data-id="'.$r->faculty_id.'"><span class="fa fa-pencil"></span></button>';
 					
 			$result[] = array(
 					$r->account_id,
@@ -44,7 +44,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm btn-success" rel="tooltip" title="Edit Details" id="edit_educbg_data" data-id="'.$r->educ_bg_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Edit Details" id="edit_educbg_data" data-id="'.$r->educ_bg_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->level,
@@ -160,7 +160,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Course" id="edit_data" data-id="'.$r->course_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Course" id="edit_data" data-id="'.$r->course_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->dept_code,
@@ -208,7 +208,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Deparment"  id="edit_data" data-id="'.$r->dept_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Deparment"  id="edit_data" data-id="'.$r->dept_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->dept_code,
@@ -255,7 +255,7 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Subject" id="edit_data" data-id="'.$r->subj_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Subject" id="edit_data" data-id="'.$r->subj_id.'"><span class="fa fa-pencil"></span></button>';
 					
 			$result[] = array(
 					$r->subj_code,
@@ -344,7 +344,7 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="View Subject Prerequisite" id="edit_data" data-id="'.$r->subj_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Subject Prerequisite" id="edit_data" data-id="'.$r->subj_id.'"><span class="fa fa-pencil"></span></button>';
 					
 			$result[] = array(
 					$r->subj_code,
@@ -391,7 +391,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Type" id="edit_data" data-id="'.$r->fac_type_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Type" id="edit_data" data-id="'.$r->fac_type_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->fac_type_desc,
@@ -433,7 +433,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Limit" id="edit_data" data-id="'.$r->load_type_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Limit" id="edit_data" data-id="'.$r->load_type_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->fac_type_desc,
@@ -482,7 +482,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm btn-success" rel="tooltip" title="Edit Specialization" id="edit_data" data-id="'.$r->spec_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Edit Specialization" id="edit_data" data-id="'.$r->spec_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->spec_desc,
@@ -657,7 +657,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Year" id="edit_data" data-id="'.$r->curr_year_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Year" id="edit_data" data-id="'.$r->curr_year_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->curr_year_desc,
@@ -730,7 +730,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Section" id="edit_data" data-id="'.$r->section_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Section" id="edit_data" data-id="'.$r->section_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->acad_yr,
@@ -784,7 +784,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{	
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Room" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Room" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->room_code,
@@ -810,7 +810,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" rel="tooltip" title="Edit Room" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Room" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->room_code,
@@ -1057,8 +1057,8 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-info btn-sm" data-id = "'.$r->services_id.'" id = "assign_prof" btn-success">A</button>
-					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Assign professor" data-id = "'.$r->services_id.'" id = "assign_prof" btn-success">A</button>
+					<button class="btn btn-sm  btn-success" id="edit_data" data-toggle="tooltip" data-placement="top" title="Edit services" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->acad_yr,
@@ -1124,7 +1124,7 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r) 
 		{
-			($number_filter_row == 1)?$btn = '<button class="btn btn-sm  btn-success" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>':$btn = '<button class="btn btn-sm  btn-success" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button><button class="btn btn-sm  btn-danger" id="delete_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-trash-o "></span></button>';
+			($number_filter_row == 1)?$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Schedule" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>':$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit schedule" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button><button class="btn btn-sm data-toggle="tooltip" data-placement="top" title="Remove schedule" btn-danger" id="delete_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-trash-o "></span></button>';
 
 			$result[] = array(
 					$r->day,
@@ -1189,8 +1189,8 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success">A</button>
-					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Assign professor" data-id = "'.$r->services_id.'" id = "assign_prof" btn-success">A</button>
+					<button class="btn btn-sm  btn-success" id="edit_data" data-toggle="tooltip" data-placement="top" title="Edit services" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->acad_yr,
@@ -1405,7 +1405,7 @@ class Getdata_model extends CI_Model{
 
 			($statement == 'CONSECUTIVE')?$consec = 'CONSECUTIVE':$consec = 'NONE';
 
-			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
+			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="View subject assignment" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Assign subject" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
 
 			$result[] = array(
 					$r->fac_name,
@@ -1494,7 +1494,7 @@ class Getdata_model extends CI_Model{
 
 			($statement == 'CONSECUTIVE')?$consec = 'CONSECUTIVE':$consec = 'NONE';
 
-			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
+			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="View subject assignment" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Assign subject" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
 
 			$result[] = array(
 					$r->fac_name,
@@ -1790,7 +1790,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
 
 			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
 			$result[] = array(
@@ -2044,7 +2044,7 @@ FROM subject_match sm
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-danger" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-danger" data-toggle="tooltip" data-placement="top" title="Unassign subject" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
 
 			$result[] = array(
 					$r->section,
@@ -2098,7 +2098,7 @@ FROM subject_match sm
 
         foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-danger" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-danger" data-toggle="tooltip" data-placement="top" title="Unassign subject" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
@@ -2725,7 +2725,7 @@ FROM subject_match sm
 		{	
 
 			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
-			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
 
 			$result[] = array(
 					$r->subj_code,
@@ -2764,7 +2764,7 @@ FROM subject_match sm
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
@@ -2925,7 +2925,7 @@ FROM subject_match sm
 								JOIN room r
 								ON tas.room_id = r.room_id
 								WHERE f.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'" AND tas.load_type = "'.$load.'"
-								GROUP BY s.subj_id');
+								GROUP BY s.subj_id, section_id');
 
         foreach($query->result() as $t)
         {      
@@ -3787,8 +3787,8 @@ FROM subject_match sm
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->account_id.'"><span class="fa fa-pencil"></span></button>
-					<button class="btn btn-sm  btn-info" id="view_data" data-id="'.$r->account_id.'"><span class="fa fa-eye"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit account details" id="edit_data" data-id="'.$r->account_id.'"><span class="fa fa-pencil"></span></button>
+					<button class="btn btn-sm  btn-info" data-toggle="tooltip" data-placement="top" title="View account details" id="view_data" data-id="'.$r->account_id.'"><span class="fa fa-eye"></span></button>';
 
 			$result[] = array(
 					$r->account_id,

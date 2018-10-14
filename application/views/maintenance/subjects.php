@@ -328,8 +328,8 @@
                      $('#edit_units').val(data[0][3]);
                      $('#edit_lec_hrs').val(data[0][5]);
                      $('#edit_lab_hrs').val(data[0][4]);
-                     $('#edit_spec').val(data[0][8]);
-                     $("input[name=edit_major][value="+data[0][7]+"]").prop('checked', true);
+                     $('#edit_spec').val(data[0][7]);
+                     $("input[name=edit_major][value="+data[0][6]+"]").prop('checked', true);
                      $('#showMod').trigger('click');   
                 },
                 error: function (data) {

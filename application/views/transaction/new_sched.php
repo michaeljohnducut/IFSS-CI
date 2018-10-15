@@ -133,7 +133,7 @@
                                 <button style="margin-top: 25px; margin-left: 10px"  type="button" class="btn btn-info" id="btn_add_minor" data-toggle = "modal" data-target ="#modalAddMinor">Add minor subjects</button>
                             </div>
                             <div class="col-md-2">
-                                <button style="margin-top: 25px; margin-left: 10px"  type="button" class="btn btn-success" id="btn_add_minor" data-toggle = "modal" data-target ="#modalAddMinor">Add major subjects</button>
+                                <button style="margin-top: 25px; margin-left: 10px"  type="button" class="btn btn-success" id="btn_add_major" data-toggle = "modal" data-target ="#modalAddMajor">Add major subjects</button>
                             </div>
                         </div>
 
@@ -686,7 +686,7 @@
                           </select>
                       </div>
                       <div class="col-md-3">
-                          <label class="control-label">Lecture Room:</label>
+                          <label class="control-label">Available Rooms:</label>
                           <select class="form-control" id="rooms_minor_a" name="rooms_minor[]" required="">
                             
                           </select>
@@ -721,7 +721,7 @@
                       </div>
                       <div class="col-md-3">
                         <br>
-                          <label class="control-label">Lecture Room:</label>
+                          <label class="control-label">Available Rooms:</label>
                           <select class="form-control" id="rooms_minor_b"  name="spec_room">
                             
                           </select>
@@ -729,6 +729,120 @@
                         </div>
                         
                       </div>                        
+                      </div>
+                    <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect text-left">Save</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+</div>
+
+
+<!-- MAJOR SUBJECTS MODAL -->
+<div class="modal fade bs-example-modal-lg" id="modalAddMajor" tabindex="-1" role="dialog" aria-labelledby="modalAddMinor" aria-hidden="true" style=" display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Add major subjects</h4>
+                    </div>
+                    <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                    </div>
+                    <div class="modal-body">
+                      <div class="col-md-12">
+                        <div class="col-md-8">
+                          <label class="control-label">Select Major Subject:</label>
+                          <select id="major_subj" class="form-control">
+                            <option value="0">-Major Subjects-</option>
+                          </select>
+                          <br><br>
+                        </div>
+                        <div class="col-md-4" style="text-align:right;">
+                          <input style="margin-top: 35px;" type="checkbox" id="chk_split_major">
+                          <label style="margin-top: 35px;" for="chk_split_major">Split hours</label>
+                        </div>
+                      </div>
+                      <form id="add_major_form" method="POST">
+                      <div class="col-md-12" id="sched_a_major">
+                        <div class="col-md-3">
+                          <label class="control-label">Start time:</label>
+                          <input type="time" id="major_start_a" name="major_start[]" class="form-control" required="">
+                        </div>
+                        <div class="col-md-3">
+                          <label class="control-label">End time:</label>
+                          <input type="time" id="major_end_a" name="major_end[]" readonly="" class="form-control" required="">
+                        </div>
+                        <div class="col-md-3">
+                          <label class="control-label">Day:</label>
+                          <select class="form-control" id="day_major_a" name="day_major[]" required="">
+                            <option value="0">-Day-</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                          </select>
+                      </div>
+                      <div class="col-md-3">
+                          <label class="control-label">Available Rooms:</label>
+                          <select class="form-control" id="rooms_major_a" name="rooms_major[]" required="">
+                            
+                          </select>
+                          <br>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12" id="sched_b_major">
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">Start time:</label>
+                          <input type="time" id="major_start_b" name="major_start[]" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">End time:</label>
+                          <input type="time" id="major_end_b" name="major_end[]" readonly="" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label class="control-label">Day:</label>
+                          <select class="form-control" id="day_major_b" name="day_major[]">
+                            <option value="0">-Day-</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                          </select>
+                      </div>
+                      <div class="col-md-3">
+                        <br>
+                          <label class="control-label">Available Rooms:</label>
+                          <select class="form-control" id="rooms_major_b"  name="spec_room_b">
+                            
+                          </select>
+                          <br>
+                        </div>
+                        
+                      </div>
+                      <div class="col-md-12">
+                          <div class="col-md-6">
+                            <br>
+                              <label class="control-label">Select Available Faculty:</label>
+                              <select id="major_fac_members" class="form-control" hidden="">
+                                <option value="0">-Faculty Members-</option>
+                              </select>
+                              <br><br>
+                            </div>
+                          </div>                     
                       </div>
                     <div class="modal-footer">
                             <button type="submit" class="btn btn-info waves-effect text-left">Save</button>
@@ -1004,9 +1118,12 @@
       var global_pref_day = [];
       var global_num_loads;
       var global_minor_split = 0;
+      var global_major_split = 0;
       var global_splitcontrol = 0;
       var global_officehrs;
       var global_bool_next; 
+      var global_fac_set_1 = [];
+      var global_fac_set_2 = [];
 
       //FUNCTIONS
       //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
@@ -1301,6 +1418,28 @@
 
         }
 
+        function reflectSectionMajor(){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var section_id = $('#sec_yearsec').val();
+
+             $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_section_major')?>", 
+                method:"POST", 
+                data:{section_id:section_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                    loadSectionTable();
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+
+        }
+
         function reflectRoomTable(){
 
             var sem = $('#room_sem').val();
@@ -1393,6 +1532,26 @@
            });
         }
 
+        function majorFirstSave(){
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var subj_id = $('#major_subj').val();
+            var section_id = $('#sec_yearsec').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/major_first_save')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, subj_id:subj_id, section_id:section_id}, 
+                dataType: "json",
+                success:function(data){
+                    var match_id = data;
+                    majorSecondSave(match_id);
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+
         function validateSectionSched(start, end, day, start_id, end_id, day_id){
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
@@ -1462,6 +1621,33 @@
                 {  
                     $('#modalAddMinor').modal('hide');
                     reflectSectionMinor();
+                },
+                 error: function (data) {
+                        alert(JSON.stringify(data));
+                }
+            });  
+
+        }
+
+        function majorSecondSave(match_id){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var data = {
+              'acad_yr': acad_year, 
+              'sem': sem,
+              'match_id':match_id,
+              'split_control':global_major_split,
+              'load_type': 'INC'
+            };
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/major_second_save')?>",  
+                type:"POST",  
+                data: $('#add_major_form').serialize() + '&' + $.param(data), 
+                success:function(data)
+                {  
+                    $('#modalAddMajor').modal('hide');
+                    reflectSectionMajor();
                 },
                  error: function (data) {
                         alert(JSON.stringify(data));
@@ -2833,6 +3019,60 @@
            });
         }
 
+        function showAvailProf(day, start, end){
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_prof')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, start_time:start, end:end, day:day}, 
+                dataType: "json",
+                success:function(data){
+                    $('#major_fac_members').empty();
+                    $('#major_fac_members').append('<option value = "0">Leave Blank</option>');
+                    var len = data.length;
+                     for(var i = 0 ; i < len ; i++){
+                        $('#major_fac_members').append('<option value = "' + data[i][0]+ '">' + data[i][1] + '</option>');
+                     }
+
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+        }
+
+        function showProfOnSplit(){
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            var start = $('#major_start_a').val();
+            var end = $('#major_end_a').val();
+            var day = $('#day_major_a').val();
+            var start_b = $('#major_start_b').val();
+            var end_b = $('#major_end_b').val();
+            var day_b = $('#day_major_b').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_major_prof')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, start_time:start, end:end, day:day, start_time_b:start_b, end_b:end_b, day_b:day_b}, 
+                dataType: "json",
+                success:function(data){
+                    $('#major_fac_members').empty();
+                    $('#major_fac_members').append('<option value = "0">Leave Blank</option>');
+                    var len = data.length;
+                     for(var i = 0 ; i < len ; i++){
+                        $('#major_fac_members').append('<option value = "' + data[i][0]+ '">' + data[i][1] + '</option>');
+                     }
+
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+        }
+
 
         function checkSecAvail(day, start, end){
             var sem = $('#sched_sem').val();
@@ -2906,9 +3146,9 @@
             if(day_temp == 1)
                 day = global_pref_day[3][0];
             if(day_temp == 2)
-                day = global_pref_day[0][0];
-            if(day_temp == 3)
-                day = global_pref_day[1][0];
+                day = global_pref_day[4][0];
+            // if(day_temp == 3)
+            //     day = global_pref_day[1][0];
 
             start_time = '0' + hour + ':30'; 
 
@@ -2977,6 +3217,7 @@
       $(document).ready(function(){
 
         $('#sched_b').hide();
+        $('#sched_b_major').hide();
         // $('#divsplit').hide();
         $('#sched_lab').hide();
         $('#div_by_room').hide();
@@ -4045,6 +4286,17 @@
             }
         });
 
+        $('#chk_split_major').on('change', function(){
+            if($(this).prop("checked")){
+              $('#sched_b_major').show();
+              global_major_split = 1;
+            }
+            else{
+              $('#sched_b_major').hide();
+              global_major_split = 0;
+            }
+        });
+
         $('#minor_start_a').on('blur', function(){
 
             var temp_start = $('#minor_start_a').val();
@@ -4126,6 +4378,104 @@
 
         });
 
+        $('#major_start_a').on('blur', function(){
+
+            var temp_start = $('#major_start_a').val();
+            var added_value = '';
+            var adder;
+            var end_value;
+            if (temp_start > '07:29' &&  temp_start < '18:01' ){
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
+              
+              if(global_labhour == 0)
+              {
+                if($('#chk_split_major').prop("checked")){
+                    if(temp_start_mins == '30'){
+                      adder = 2;
+                      temp_start_mins = '00';
+                    }
+                    else{
+                      adder = 1;
+                      temp_start_mins = '30';
+                    }
+                  }
+
+                  else{
+                    adder = 3;
+                  }
+              }
+
+              else
+              {
+                adder = 2;
+              }
+
+              temp_start_hour += adder;
+              if (temp_start_hour < 10){
+                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+              }
+              else{
+                end_value = temp_start_hour + ':' + temp_start_mins;
+              }
+
+              $('#major_end_a').val(end_value);
+            }
+
+            else{
+              alert('PLEASE INPUT A VALID TIME');
+              $('#minor_start_a').val('');
+              $('#minor_end_a').val('');
+            }
+
+        });
+
+        $('#major_start_b').on('blur', function(){
+
+            var temp_start = $('#major_start_b').val();
+            var added_value = '';
+            var adder;
+            var end_value;
+            if (temp_start > '07:29' &&  temp_start < '18:01' ){
+              var temp_start_hour = parseInt(temp_start[0] + temp_start[1]);
+              var temp_start_mins = temp_start[3] + temp_start[4];
+              
+              if(global_labhour == 0)
+              {
+                    if(temp_start_mins == '30'){
+                      adder = 2;
+                      temp_start_mins = '00';
+                    }
+                    else{
+                      adder = 1;
+                      temp_start_mins = '30';
+                    }
+              }
+
+              else
+              {
+                adder = 3;
+              }
+
+              temp_start_hour += adder;
+              if (temp_start_hour < 10){
+                end_value = '0' + temp_start_hour + ':' + temp_start_mins;
+              }
+              else{
+                end_value = temp_start_hour + ':' + temp_start_mins;
+              }
+
+              $('#major_end_b').val(end_value);
+            }
+
+            else{
+              alert('PLEASE INPUT A VALID TIME');
+              $('#minor_start_a').val('');
+              $('#minor_end_a').val('');
+            }
+
+        });
+
 
         $('#btn_add_minor').on('click', function(){
 
@@ -4163,6 +4513,50 @@
 
         });
 
+        $('#btn_add_major').on('click', function(){
+
+          var sem = $('#sec_sem').val();
+          var section_id = $('#sec_yearsec').val();
+          var acad_yr = $('#sec_acadyr').val();
+
+          $.ajax({   
+              url:"<?php echo base_url('Transaction/get_major_subj')?>",  
+              method: "POST",
+              data: {sem:sem,section_id:section_id, acad_yr:acad_yr},
+              dataType:'JSON',
+              success: function (data) 
+              {   
+                  $('#major_subj').empty();
+                  $('#major_subj').append('<option value="0">-Minor Subjects-</option>');
+                  // $('#modalAddMinor').modal('show');
+
+                  var len = data.length;
+                  for(var i = 0; i < len ; i++)
+                  {
+                    var val = data[i][0];
+                    var code = data[i][1];
+                    var desc = data[i][2];
+                    $('#major_subj').append('<option value="'+val+'">'+code+'-'+desc+'</option>');
+                  }
+
+                  
+              },
+              error: function (data) {
+                swal("Error!", "Failed to reschedule.", "error");
+                alert(JSON.stringify(data));
+              }
+            });
+
+        });
+
+
+        $('#major_subj').on('change',function(){
+            var subj_code = $('#major_subj').val();
+            viewSubjDetails(subj_code);
+            
+        });
+
+
         $('#day_minor_a').on('change',function(){
             var start = $('#minor_start_a').val();
             var end = $('#minor_end_a').val();
@@ -4177,6 +4571,39 @@
             var day = $('#day_minor_b').val();
             showAvailRoom(day, start, end, 'rooms_minor_b');
             validateMinorSched(start, end, day, 'minor_start_b', 'minor_end_b', 'day_minor_br');
+        });
+
+        $('#day_major_a').on('change',function(){
+            var start = $('#major_start_a').val();
+            var end = $('#major_end_a').val();
+            var day = $('#day_major_a').val();
+            showAvailRoom(day, start, end, 'rooms_major_a');
+            validateMinorSched(start, end, day, 'major_start_a', 'major_end_a', 'day_major_a');
+            if($('#chk_split_major').prop('checked', false))
+            {
+                showAvailProf(day, start, end);
+            }
+
+            else
+            {
+                showProfOnSplit();
+            }
+        });
+
+        $('#day_major_b').on('change',function(){
+            var start = $('#major_start_b').val();
+            var end = $('#major_end_b').val();
+            var day = $('#day_major_b').val();
+            if(global_labhour == 0)
+            {
+                showAvailRoom(day, start, end, 'rooms_major_b');
+            }
+            else
+            {
+                showAvailLab(day, start, end, 'rooms_major_b');
+            }
+            validateMinorSched(start, end, day, 'major_start_b', 'major_end_b', 'day_major_b');
+            showProfOnSplit();
         });
 //==========================================================================================
 //END NG MINOR ELEMENTS
@@ -5640,6 +6067,11 @@
 $('#add_minor_form').on('submit', function(e){
     e.preventDefault();
     minorFirstSave();
+});
+
+$('#add_major_form').on('submit', function(e){
+    e.preventDefault();
+    majorFirstSave();
 });
 
 

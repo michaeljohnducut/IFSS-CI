@@ -668,6 +668,33 @@ function getPrefTime(faculty_id, acad_year, sem){
         $("input[name = 'chk_subj']").removeAttr('disabled');
     }
 
+    // function displayCurrent(){
+
+    //         var global_year = "<?php echo $curr_year?>";    //HANAPIN MO NALANG TO 
+    //         var global_month = "<?php echo $curr_month?>"; //SA CONTROLLER NG SUBJ PREF
+    //         var next_year = parseInt(global_year) + 1; 
+    //         var prev_year = global_year - 1; 
+    //         var next_acadyr =  global_year + '\u2010' + next_year; 
+    //         var prev_acadyr = prev_year  + '\u2010' + global_year;
+    //         var sem; 
+    //         var acad_year;
+
+
+    //     if (global_month == '06' || global_month == '07' || global_month == '08' || global_month == '09' || global_month == '10')
+    //     {
+    //         sem = '2nd'; 
+    //         acad_year = prev_acadyr;
+    //     }
+    //     else
+    //     {
+    //         global_sem = '1st';
+    //         acad_year = next_acadyr;
+    //     }
+
+    //     //DITO MO GAWIN YUNG CODE MO SA AJAX 
+
+    // }
+
 
 
     function checkSubj(arr){

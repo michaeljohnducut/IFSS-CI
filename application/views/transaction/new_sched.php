@@ -115,7 +115,7 @@
                                     <option value="summer">Summer</option> 
                                 </select>   
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label class="control-label">Select Course:</label>
                                 <select class="form-control" id="sec_course">
                                     <option value="0">-COURSE-</option>
@@ -129,8 +129,11 @@
                                     <option value="0">-YEAR AND SECTION-</option>
                                 </select>    
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2" style="text-align: right;">
                                 <button style="margin-top: 25px; margin-left: 10px"  type="button" class="btn btn-info" id="btn_add_minor" data-toggle = "modal" data-target ="#modalAddMinor">Add minor subjects</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button style="margin-top: 25px; margin-left: 10px"  type="button" class="btn btn-success" id="btn_add_minor" data-toggle = "modal" data-target ="#modalAddMinor">Add major subjects</button>
                             </div>
                         </div>
 

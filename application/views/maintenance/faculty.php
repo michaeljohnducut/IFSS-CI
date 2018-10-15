@@ -800,7 +800,7 @@
                         {       
                             if(data['mes'] == 'INSERTED')
                             {
-                                swal("Added!", "The account is added.", "success");
+                                swal("Added!", "The faculty is added.", "success");
                                 $('#fact-profile').hide();
                                 $('#faculty_btn_add').hide();
                                 $('#faculty_btn_update').hide();

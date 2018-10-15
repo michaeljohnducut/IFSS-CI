@@ -278,10 +278,8 @@ class Getdata_model extends CI_Model{
 
 		$subj_code = $this->security->xss_clean($this->input->post('subj_code'));
 
-		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, GROUP_CONCAT(pr.pre_req_desc) AS pre_requisite, s.isMajor, s.specialization')
-				->join('pre_requisite pr','s.subj_id = pr.subj_code', 'left')
-                ->group_by('s.subj_code')
-                ->having('s.subj_id', $subj_code)
+		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, s.isMajor, s.specialization')
+                ->where('s.subj_id', $subj_code)
                 ->get('subject s');
 
 		foreach ($query->result() as $r) 
@@ -293,7 +291,6 @@ class Getdata_model extends CI_Model{
 					$r->units,
 					$r->lab_hrs,
 					$r->lec_hrs,
-					$r->pre_requisite,
 					$r->isMajor,
 					$r->specialization
 					);
@@ -1001,22 +998,22 @@ class Getdata_model extends CI_Model{
 			{
 				if($r->rating_desc == $trackRating)
 				{
-				  $ctr++;
+					$ctr++;
+
+					if($ctr >= 3)
+					{
+						$statement = 'CONSECUTIVE';
+					}
+					else
+					{
+						$statement = 'NONE';
+					}	
 				}
 				else
 				{
 				  $ctr = 0;
-				//$trackRating = $r->rating_desc;
+				 //$trackRating = $r->rating_desc;
 				}
-
-				if($ctr >= 3)
-				{
-					$statement = 'CONSECUTIVE';
-				}
-				else
-				{
-					$statement = 'NONE';
-				}	
 			}
         }
 
@@ -1369,6 +1366,8 @@ class Getdata_model extends CI_Model{
 				->where('faculty_id', $r->faculty_id)
                 ->get('evaluation');
 
+            $eval = '';
+
 			foreach($query1->result() as $t)
 			{		
 				$eval = $t->rate;
@@ -1382,24 +1381,26 @@ class Getdata_model extends CI_Model{
 					->order_by('acad_yr DESC, sem DESC')
 	                ->get('evaluation');
 
+	        $statement = '';
+
 			foreach($query3->result() as $s)
 			{
 				if($s->rating_desc == $trackRating)
 				{
 				  $ctr++;
+
+					if($ctr >= 3)
+					{
+						$statement = 'CONSECUTIVE';
+					}
+					else
+					{
+						$statement = 'NONE';
+					}
 				}
 				else
 				{
 				  $ctr = 0;
-				}
-
-				if($ctr >= 3)
-				{
-					$statement = 'CONSECUTIVE';
-				}
-				else
-				{
-					$statement = 'NONE';
 				}	
 			}
 
@@ -1458,6 +1459,8 @@ class Getdata_model extends CI_Model{
 				->where('faculty_id', $r->faculty_id)
                 ->get('evaluation');
 
+            $eval = '';
+
 			foreach($query1->result() as $t)
 			{		
 				$eval = $t->rate;
@@ -1471,25 +1474,27 @@ class Getdata_model extends CI_Model{
 					->order_by('acad_yr DESC, sem DESC')
 	                ->get('evaluation');
 
+	        $statement = '';
+
 			foreach($query3->result() as $s)
 			{
 				if($s->rating_desc == $trackRating)
 				{
 				  $ctr++;
+
+				  	if($ctr >= 3)
+					{
+						$statement = 'CONSECUTIVE';
+					}
+					else
+					{
+						$statement = 'NONE';
+					}	
 				}
 				else
 				{
 				  $ctr = 0;
 				}
-
-				if($ctr >= 3)
-				{
-					$statement = 'CONSECUTIVE';
-				}
-				else
-				{
-					$statement = 'NONE';
-				}	
 			}
 
 			($statement == 'CONSECUTIVE')?$consec = 'CONSECUTIVE':$consec = 'NONE';
@@ -1501,7 +1506,8 @@ class Getdata_model extends CI_Model{
 					$r->fac_type_desc,
 					$eval,
 					$consec,
-					$btn
+					$btn,
+					$r->faculty_id
 					);
 		}
 

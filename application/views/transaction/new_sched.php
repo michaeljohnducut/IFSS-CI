@@ -3136,7 +3136,7 @@
 
       function viewSubjDetails(subj_code){
             $.ajax({ 
-                url:"<?php echo base_url('Transaction/view_subject')?>", 
+                url:"<?php echo base_url('Transaction/view_subject_gen')?>", 
                 method:"POST", 
                 data:{subj_code:subj_code}, 
                 dataType: "json",
@@ -3279,8 +3279,8 @@
                 day = global_pref_day[3][0];
             if(day_temp == 2)
                 day = global_pref_day[4][0];
-            // if(day_temp == 3)
-            //     day = global_pref_day[1][0];
+            if(day_temp == 3)
+                day = global_pref_day[1][0];
 
             start_time = '0' + hour + ':30'; 
 

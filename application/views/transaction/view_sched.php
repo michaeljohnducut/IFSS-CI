@@ -2369,6 +2369,7 @@
                     $('button[type="button"][value="' + btn_value + '"]').removeClass('plot-regular').addClass('plot-red');
                     $('button[type="button"][value="' + btn_value + '"]').text('');
                     checkTime('OH', btn_value, 'plot-red');
+                    checkVacancy('plot-red', btn_value);
                     countHours('plot-red', 8, 18, 'txt_oh');
                     if(end_oh == 33.5 && global_bool_checker == true)
                     {   
@@ -2382,7 +2383,7 @@
                     swal("Info!", "You have reached the maximum hours for Office Hours. Click the check button to save it!", "info");
                 }
 
-                //OFFICE HOURS
+                //NIGHT OFFICE HOURS
                 var end_no = $('#txt_no').val();
                 if(bool_no == true && end_no < 15)
                 {

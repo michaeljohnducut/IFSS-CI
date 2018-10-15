@@ -15,8 +15,8 @@ class Getdata_model extends CI_Model{
 
 		foreach($q->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-info" id="view_data" data-id="'.$r->faculty_id.'"><span class="fa fa-eye"></span></button>
-					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->faculty_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-info" data-toggle="tooltip" data-placement="top" title="View Profile" id="view_data" data-id="'.$r->faculty_id.'"><span class="fa fa-eye"></span></button>
+					<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Profile" id="edit_data" data-id="'.$r->faculty_id.'"><span class="fa fa-pencil"></span></button>';
 					
 			$result[] = array(
 					$r->account_id,
@@ -44,7 +44,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_educbg_data" data-id="'.$r->educ_bg_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Edit Details" id="edit_educbg_data" data-id="'.$r->educ_bg_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->level,
@@ -160,7 +160,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->course_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Course" id="edit_data" data-id="'.$r->course_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->dept_code,
@@ -208,7 +208,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->dept_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Deparment"  id="edit_data" data-id="'.$r->dept_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->dept_code,
@@ -255,7 +255,7 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->subj_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Subject" id="edit_data" data-id="'.$r->subj_id.'"><span class="fa fa-pencil"></span></button>';
 					
 			$result[] = array(
 					$r->subj_code,
@@ -278,10 +278,8 @@ class Getdata_model extends CI_Model{
 
 		$subj_code = $this->security->xss_clean($this->input->post('subj_code'));
 
-		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, GROUP_CONCAT(pr.pre_req_desc) AS pre_requisite, s.isMajor, s.specialization')
-				->join('pre_requisite pr','s.subj_id = pr.subj_code', 'left')
-                ->group_by('s.subj_code')
-                ->having('s.subj_id', $subj_code)
+		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc, s.units, s.lab_hrs, s.lec_hrs, s.isMajor, s.specialization')
+                ->where('s.subj_id', $subj_code)
                 ->get('subject s');
 
 		foreach ($query->result() as $r) 
@@ -293,7 +291,6 @@ class Getdata_model extends CI_Model{
 					$r->units,
 					$r->lab_hrs,
 					$r->lec_hrs,
-					$r->pre_requisite,
 					$r->isMajor,
 					$r->specialization
 					);
@@ -344,7 +341,7 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r)
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->subj_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Subject Prerequisite" id="edit_data" data-id="'.$r->subj_id.'"><span class="fa fa-pencil"></span></button>';
 					
 			$result[] = array(
 					$r->subj_code,
@@ -391,7 +388,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->fac_type_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Type" id="edit_data" data-id="'.$r->fac_type_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->fac_type_desc,
@@ -433,7 +430,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->load_type_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Limit" id="edit_data" data-id="'.$r->load_type_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->fac_type_desc,
@@ -482,7 +479,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->spec_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Edit Specialization" id="edit_data" data-id="'.$r->spec_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->spec_desc,
@@ -657,7 +654,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->curr_year_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Year" id="edit_data" data-id="'.$r->curr_year_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->curr_year_desc,
@@ -730,7 +727,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->section_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Section" id="edit_data" data-id="'.$r->section_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->acad_yr,
@@ -784,7 +781,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{	
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Room" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->room_code,
@@ -810,7 +807,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Room" id="edit_data" data-id="'.$r->room_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->room_code,
@@ -1001,22 +998,22 @@ class Getdata_model extends CI_Model{
 			{
 				if($r->rating_desc == $trackRating)
 				{
-				  $ctr++;
+					$ctr++;
+
+					if($ctr >= 3)
+					{
+						$statement = 'CONSECUTIVE';
+					}
+					else
+					{
+						$statement = 'NONE';
+					}	
 				}
 				else
 				{
 				  $ctr = 0;
-				//$trackRating = $r->rating_desc;
+				 //$trackRating = $r->rating_desc;
 				}
-
-				if($ctr >= 3)
-				{
-					$statement = 'CONSECUTIVE';
-				}
-				else
-				{
-					$statement = 'NONE';
-				}	
 			}
         }
 
@@ -1057,8 +1054,8 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-info btn-sm" data-id = "'.$r->services_id.'" id = "assign_prof" btn-success">A</button>
-					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Assign professor" data-id = "'.$r->services_id.'" id = "assign_prof" btn-success">A</button>
+					<button class="btn btn-sm  btn-success" id="edit_data" data-toggle="tooltip" data-placement="top" title="Edit services" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->acad_yr,
@@ -1124,7 +1121,7 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r) 
 		{
-			($number_filter_row == 1)?$btn = '<button class="btn btn-sm  btn-success" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>':$btn = '<button class="btn btn-sm  btn-success" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button><button class="btn btn-sm  btn-danger" id="delete_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-trash-o "></span></button>';
+			($number_filter_row == 1)?$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit Schedule" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>':$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit schedule" id="edit_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button><button class="btn btn-sm data-toggle="tooltip" data-placement="top" title="Remove schedule" btn-danger" id="delete_sched_data" data-id="'.$r->services_id.'"><span class="fa fa-trash-o "></span></button>';
 
 			$result[] = array(
 					$r->day,
@@ -1189,8 +1186,8 @@ class Getdata_model extends CI_Model{
 
 		foreach($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success">A</button>
-					<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
+			$btn = '<button class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Assign professor" data-id = "'.$r->services_id.'" id = "assign_prof" btn-success">A</button>
+					<button class="btn btn-sm  btn-success" id="edit_data" data-toggle="tooltip" data-placement="top" title="Edit services" data-id="'.$r->services_id.'"><span class="fa fa-pencil"></span></button>';
 
 			$result[] = array(
 					$r->acad_yr,
@@ -1328,9 +1325,12 @@ class Getdata_model extends CI_Model{
 		$spec = '';
 		$statement = "";
 		$statement2 = "";
+		$eval = '';
 
 		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
 		$type = $this->security->xss_clean($this->input->post('temp_type'));
+		$acad_yr = $this->security->xss_clean($this->input->post('temp_acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('temp_sem'));
 
 		if($type != 0)
 		{	
@@ -1355,10 +1355,24 @@ class Getdata_model extends CI_Model{
 									ON f.faculty_type = ft.fac_type_id
 									JOIN faculty_spec fs
 									ON f.faculty_id = fs.faculty_id
-									WHERE fs.spec_id = '$spec' $statement2");
+									WHERE fs.spec_id = '$spec' $statement2
+									ORDER BY ft.fac_type_desc DESC");
 
         foreach ($query2->result() as $r) 
 		{
+			$query1 = $this->db->select('CONCAT(rating, " - ", rating_desc) AS rate')
+				->where('acad_yr', $acad_yr)
+				->where('sem', $sem)
+				->where('faculty_id', $r->faculty_id)
+                ->get('evaluation');
+
+            $eval = '';
+
+			foreach($query1->result() as $t)
+			{		
+				$eval = $t->rate;
+			}
+
 			$trackRating = "SATISFACTORY";
 			$ctr = 0;
 
@@ -1367,36 +1381,133 @@ class Getdata_model extends CI_Model{
 					->order_by('acad_yr DESC, sem DESC')
 	                ->get('evaluation');
 
+	        $statement = '';
+
 			foreach($query3->result() as $s)
 			{
 				if($s->rating_desc == $trackRating)
 				{
 				  $ctr++;
+
+					if($ctr >= 3)
+					{
+						$statement = 'CONSECUTIVE';
+					}
+					else
+					{
+						$statement = 'NONE';
+					}
+				}
+				else
+				{
+				  $ctr = 0;
+				}	
+			}
+
+			($statement == 'CONSECUTIVE')?$consec = 'CONSECUTIVE':$consec = 'NONE';
+
+			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="View subject assignment" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Assign subject" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
+
+			$result[] = array(
+					$r->fac_name,
+					$r->fac_type_desc,
+					$eval,
+					$consec,
+					$btn
+					);
+		}
+
+		return $result;
+	}
+
+	public function view_other_faculty($id)
+	{
+		$result = array();
+		$spec = '';
+		$statement = "";
+		$statement2 = "";
+		$eval = '';
+
+		$subject = $this->security->xss_clean($this->input->post('temp_subject'));
+		$acad_yr = $this->security->xss_clean($this->input->post('temp_acadyr'));
+		$sem = $this->security->xss_clean($this->input->post('temp_sem'));
+
+		$query = $this->db->select('specialization')
+				->where('subj_id', $subject)
+                ->get('subject');
+
+		foreach($query->result() as $r)
+		{		
+			$spec = $r->specialization;
+		}
+
+		$query2 = $this->db->query("SELECT f.faculty_id, ft.fac_type_desc, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) AS fac_name
+									FROM faculty f JOIN faculty_type ft
+									ON f.faculty_type = ft.fac_type_id
+									WHERE f.faculty_id NOT IN(SELECT f.faculty_id
+													FROM faculty f 
+													JOIN faculty_spec fs
+													ON f.faculty_id = fs.faculty_id
+													WHERE fs.spec_id = '".$spec."')
+									ORDER BY ft.fac_type_desc DESC");
+
+        foreach ($query2->result() as $r) 
+		{
+			$query1 = $this->db->select('CONCAT(rating, " - ", rating_desc) AS rate')
+				->where('acad_yr', $acad_yr)
+				->where('sem', $sem)
+				->where('faculty_id', $r->faculty_id)
+                ->get('evaluation');
+
+            $eval = '';
+
+			foreach($query1->result() as $t)
+			{		
+				$eval = $t->rate;
+			}
+
+			$trackRating = "SATISFACTORY";
+			$ctr = 0;
+
+			$query3 = $this->db->select('acad_yr, sem, faculty_id, rating, rating_desc')
+					->where('faculty_id', $r->faculty_id)
+					->order_by('acad_yr DESC, sem DESC')
+	                ->get('evaluation');
+
+	        $statement = '';
+
+			foreach($query3->result() as $s)
+			{
+				if($s->rating_desc == $trackRating)
+				{
+				  $ctr++;
+
+				  	if($ctr >= 3)
+					{
+						$statement = 'CONSECUTIVE';
+					}
+					else
+					{
+						$statement = 'NONE';
+					}	
 				}
 				else
 				{
 				  $ctr = 0;
 				}
-
-				if($ctr >= 3)
-				{
-					$statement = 'CONSECUTIVE';
-				}
-				else
-				{
-					$statement = 'NONE';
-				}	
 			}
 
-			($statement == 'CONSECUTIVE')?$consec = 'WITH CONSECUTIVE SATISFACTORY RATING':$consec = 'WITHOUT CONSECUTIVE SATISFACTORY RATING';
+			($statement == 'CONSECUTIVE')?$consec = 'CONSECUTIVE':$consec = 'NONE';
 
-			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
+			$btn = '<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="View subject assignment" id = "btn_prof_load"><span class = " ti-user"></span></button> &nbsp;'.'<button type="button" data-id="'.$r->faculty_id.'" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Assign subject" id = "btn_assign"><span class = " ti-arrow-right"></span></button>';
 
 			$result[] = array(
 					$r->fac_name,
 					$r->fac_type_desc,
+					$eval,
 					$consec,
-					$btn
+					$btn,
+					$r->faculty_id
 					);
 		}
 
@@ -1685,7 +1796,7 @@ class Getdata_model extends CI_Model{
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
 
 			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
 			$result[] = array(
@@ -1939,7 +2050,7 @@ FROM subject_match sm
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-danger" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-danger" data-toggle="tooltip" data-placement="top" title="Unassign subject" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
 
 			$result[] = array(
 					$r->section,
@@ -1986,13 +2097,14 @@ FROM subject_match sm
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_yr)
 				->where('sm.sem', $sem)
+				->order_by('s.subj_code')
 				->join('subject_match sm', 's.subj_id = sm.subj_id')
 				->join('faculty f', 'f.faculty_id = sm.faculty_id')
                 ->get('subject s');
 
         foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-danger" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-danger" data-toggle="tooltip" data-placement="top" title="Unassign subject" id="delete_match_data" data-id="'.$r->subj_match_id.'"><span class="ti-minus"></span></button>';
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
@@ -2390,10 +2502,13 @@ FROM subject_match sm
 				->where('s.specialization is null')
 				->where('c.sem ', $sem)
 				->where('s.subj_id NOT IN (SELECT sm.subj_id
-						FROM subject_match sm 
-						WHERE sm.acad_yr = "'.$acad_yr.'"
-						AND sm.sem = "'.$sem.'"
-						AND sm.section = '.$section_id.')',NULL,FALSE)
+											FROM subject_match sm
+											WHERE sm.section = '.$section_id.'
+											AND sm.subj_match_id IN 
+											(SELECT ta.subj_match_id
+											FROM teaching_assign_sched ta 
+											WHERE ta.acad_yr = "'.$acad_yr.'"
+											AND ta.sem = "'.$sem.'"))',NULL,FALSE)
 				->join('subject s','s.subj_id = c.subj_code')
                 ->get('curriculum c ');
 
@@ -2616,7 +2731,7 @@ FROM subject_match sm
 		{	
 
 			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
-			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
 
 			$result[] = array(
 					$r->subj_code,
@@ -2655,7 +2770,7 @@ FROM subject_match sm
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
@@ -2816,7 +2931,7 @@ FROM subject_match sm
 								JOIN room r
 								ON tas.room_id = r.room_id
 								WHERE f.faculty_id = "'.$faculty.'" AND tas.acad_yr = "'.$acadyr.'" AND tas.sem = "'.$sem.'" AND tas.load_type = "'.$load.'"
-								GROUP BY s.subj_id');
+								GROUP BY s.subj_id, section_id');
 
         foreach($query->result() as $t)
         {      
@@ -3678,8 +3793,8 @@ FROM subject_match sm
 
 		foreach ($query->result() as $r) 
 		{
-			$btn = '<button class="btn btn-sm  btn-success" id="edit_data" data-id="'.$r->account_id.'"><span class="fa fa-pencil"></span></button>
-					<button class="btn btn-sm  btn-info" id="view_data" data-id="'.$r->account_id.'"><span class="fa fa-eye"></span></button>';
+			$btn = '<button class="btn btn-sm  btn-success" data-toggle="tooltip" data-placement="top" title="Edit account details" id="edit_data" data-id="'.$r->account_id.'"><span class="fa fa-pencil"></span></button>
+					<button class="btn btn-sm  btn-info" data-toggle="tooltip" data-placement="top" title="View account details" id="view_data" data-id="'.$r->account_id.'"><span class="fa fa-eye"></span></button>';
 
 			$result[] = array(
 					$r->account_id,

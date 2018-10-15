@@ -104,9 +104,9 @@
              <!-- /.right-sidebar -->
                 <div class="container-fluid" id="editService" style="width: 100%; padding-left: 0.5%; padding-right: 0.5%">
                 <div class="white-box">
-                    <h2>Edit Service</h2>
+                    <button type="button" class="close" id="close_edit">X</button>
+                    <h2>Edit Service</h2> 
                     <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
                     </div>
                     <br>
                     <form  id="edit_service_form" method="POST">
@@ -133,15 +133,15 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label class="control-label">Section:</label>
-                            <input class="form-control" name="edit_sec" id="edit_sec" required>
+                            <input class="form-control" pattern="^([A-Z\s]){3,}[A-Z0-9 -]+$" title="Input course year and section." name="edit_sec" id="edit_sec" required>
                         </div>
                         <div class="form-group col-md-2">
                             <label class="control-label">Subject Code:</label>
-                            <input class="form-control" type="text" name="edit_sub_code" id="edit_sub_code" required>
+                            <input class="form-control" type="text" pattern="[A-Za-z]{4}[0-9]{4}" title="e.g. COMP2013" name="edit_sub_code" id="edit_sub_code" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Subject Description:</label>
-                            <input class="form-control" type="text" name="edit_sub_desc" id="edit_sub_desc" required>
+                            <input class="form-control" pattern="([a-zA-Z\s]){2,}" title="Characters only." type="text" name="edit_sub_desc" id="edit_sub_desc" required>
                         </div>
                         <input type="hidden" id="service_id_hid" name="service_id_hid"/>
                     </div>
@@ -204,15 +204,15 @@
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Section:</label>
-                                                        <input class="form-control" name="sec" id="sec" required>
+                                                        <input class="form-control" pattern="^([A-Z\s]){3,}[A-Z0-9 -]+$" title="Input course year and section." maxlength="15" name="sec" id="sec" required>
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label class="control-label">Subject Description:</label>
-                                                    <input class="form-control" type="text" name="sub_desc" id="sub_desc" required>
+                                                    <input class="form-control" pattern="([a-zA-Z\s]){2,}" title="Characters only." type="text" name="sub_desc" id="sub_desc" required>
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">Subject Code:</label>
-                                                    <input class="form-control" type="text" name="sub_code" id="sub_code" required>
+                                                    <input class="form-control" pattern="[A-Za-z]{4}[0-9]{4}" title="e.g. COMP2013" type="text" name="sub_code" id="sub_code" required>
                                                 </div>
                                                 <div class="table-responsive">
                                                 <table class="table colored-table inverse-tabl table-striped" id="dynamic_field">
@@ -245,7 +245,7 @@
                                                                 <input class="form-control" type="time" name="sched_timeout[]" id="sched_timeout" required>
                                                             </td>
                                                             <td>
-                                                                <input class="form-control" type="text" name="sched_room[]" id="sched_room" required>
+                                                                <input class="form-control" type="text" name="sched_room[]" pattern="^([A-Z\s]){1,}[A-Z0-9 -]+$" title="e.g. E408" maxlength="5" id="sched_room" required>
                                                             </td>
                                                             <td>
                                                                 <button class="btn btn-success fa fa-plus" id='add_field' aria-hidden="true"></button>
@@ -336,7 +336,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label class="control-label">Room:</label>
-                                                    <input class="form-control" type="text" name="edit_sched_room" id="edit_sched_room" required>
+                                                    <input class="form-control" type="text" name="edit_sched_room" pattern="^([A-Z\s]){1,}[A-Z0-9 -]+$" title="e.g. E408" maxlength="5" id="edit_sched_room" required>
                                                 </div>
                                                 <input type="hidden" name="sched_id_hid" id="sched_id_hid" />
                                                 <div class="col-md-6">
@@ -500,7 +500,7 @@
                     '</select></td>'+
                 '<td><input class="form-control" type="time" name="sched_timein[]" required></td>'+
                 '<td><input class="form-control" type="time" name="sched_timeout[]" required></td>'+
-                '<td><input class="form-control" type="text" name="sched_room[]" required></td>'+
+                '<td><input class="form-control" type="text" pattern="^([A-Z\s]){1,}[A-Z0-9 -]+$" title="e.g. E408" maxlength="5" name="sched_room[]" required></td>'+
                 '<td><button type="button" name="remove" id="'+x+'" class="btn btn-danger btn_remove">X</button></td>'+
                     '</tr>');  
             });
@@ -723,6 +723,12 @@
                     }
                 });  
             });
+
+            $(document).on('click', '#close_edit', function(e)
+            {  
+                $('#editService').hide();
+                $('#edit_service_form')[0].reset();
+            }); 
 
             $(document).on('click', '#clear_btn', function(e)
             {  

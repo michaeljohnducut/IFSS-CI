@@ -81,6 +81,9 @@ class Transaction extends CI_Controller
 	{
 		$data['faculty_type'] = $this->getdata_model->faculty_type();
 		$data['courses'] = $this->getdata_model->course();
+		$data['curr_month'] = date("m");
+		$data['curr_year'] = date("Y");
+
 		$data['title'] = "IFSS | Load Subjects";
 		$this->load->view('templates/header', $data);
 		$this->load->view('transaction/load_subjects');
@@ -119,6 +122,21 @@ class Transaction extends CI_Controller
 	public function view_subjects_faculty()
 	{
 		$output = $this->getdata_model->view_subject_faculty($_POST);
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+
+		echo json_encode($response);
+		exit();
+	}
+
+	public function view_other_faculty()
+	{
+		$output = $this->getdata_model->view_other_faculty($_POST);
 
 		$response = array(
 			'aaData' => $output,

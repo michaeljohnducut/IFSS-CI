@@ -65,7 +65,7 @@
                                             <form id="add_subj_form" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">Course Code:</label>
-                                                    <input class="form-control" type="text" name="subj_code" id="subj_code" maxlength="10" required>
+                                                    <input class="form-control" type="text" name="subj_code" id="subj_code" maxlength="10" pattern="[A-Za-z]{4}[0-9]{4}" title="e.g. COMP2013" required>
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Course Title:</label>
@@ -135,7 +135,7 @@
                                             <form id="edit_subj_form" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group col-md-4">
                                                     <label class="control-label">Course Code:</label>
-                                                    <input class="form-control" type="text" name="edit_subj_code" id="edit_subj_code" maxlength="10" required>
+                                                    <input class="form-control" type="text" name="edit_subj_code" id="edit_subj_code" maxlength="10" pattern="[A-Za-z]{4}[0-9]{4}" title="e.g. COMP2013" required>
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                         <label class="control-label">Course Title:</label>
@@ -328,8 +328,8 @@
                      $('#edit_units').val(data[0][3]);
                      $('#edit_lec_hrs').val(data[0][5]);
                      $('#edit_lab_hrs').val(data[0][4]);
-                     $('#edit_spec').val(data[0][8]);
-                     $("input[name=edit_major][value="+data[0][7]+"]").prop('checked', true);
+                     $('#edit_spec').val(data[0][7]);
+                     $("input[name=edit_major][value="+data[0][6]+"]").prop('checked', true);
                      $('#showMod').trigger('click');   
                 },
                 error: function (data) {

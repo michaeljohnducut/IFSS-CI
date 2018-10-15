@@ -104,8 +104,6 @@
                                 </div>
                                 <input type="hidden" id="limit" name="limit"/>
                                 
-
-
                                 <div class="table-responsive">
                                     <br>
                                 <table class="table colored-table inverse-table table-striped" style="margin-top: 20px" id="select_faculty">
@@ -113,7 +111,8 @@
                                         <tr>
                                             <th>Faculty Name</th>
                                             <th>Faculty Type</th>
-                                            <th>Evaluation</th>
+                                            <th>Evaluation (Last Semester)</th>
+                                            <th>Remarks</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -123,7 +122,32 @@
                                     </tbody>
                                 </table>
 
-                            </div>
+                                <div class="col-md-3">
+                                    <br>
+                                    <button type="button" class="btn btn-info" id="btn_other_fac">SHOW OTHER FACULTY</button>
+                                    <br><br><br>
+                                </div>
+
+                                </div>
+
+                                <div class="table-responsive" id="div_other">
+                                <table class="table colored-table inverse-table table-striped" style="margin-top: 20px" id="select_other_faculty">
+                                    <thead>
+                                        <tr>
+                                            <th>Faculty Name</th>
+                                            <th>Faculty Type</th>
+                                            <th>Evaluation (Last Semester)</th>
+                                            <th>Remarks</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+
+                                     <tbody>
+
+                                    </tbody>
+                                </table>
+                                </div>
+
                                 </div>
                             </div>
                         </div>        
@@ -202,8 +226,7 @@
 
                                     </tbody>
                                 </table>
-
-                            </div>
+                        </div>
 
                 </div>
             </div>
@@ -368,7 +391,7 @@
 
         }
 
-        function loadfaculty(id, type)
+        function loadfaculty(id, type, acad_yr, sem)
         {
             $('#select_faculty').dataTable().fnClearTable();
             $('#select_faculty').dataTable().fnDraw();
@@ -376,10 +399,11 @@
             $('#select_faculty').dataTable({
                 "processing" : true,
                 "serverSide" : false,
-                "order" : [],
+                "order": false,
+                "aaSorting": [[2, 'desc'],[3, 'desc']],
                 "ajax" : {
                     url:"<?php echo base_url('Transaction/view_subjects_faculty')?>",
-                    data:{temp_subject:id, temp_type:type},
+                    data:{temp_subject:id, temp_type:type, temp_acadyr:acad_yr, temp_sem:sem},
                     type:"POST"
                 }
             });
@@ -395,7 +419,7 @@
             $('#tbl_section_loads').dataTable({
                 "processing" : true,
                 "serverSide" : false,
-                "order" : [],
+                "order": false,
                 "ajax" : {
                     url:"<?php echo base_url('Transaction/get_section_load_tbl')?>",
                     data:{section_id:section_id, acad_yr:acad_yr, sem:sem},
@@ -404,9 +428,23 @@
             });
         }
 
+        function hide_other_fac_table()
+        {
+            $('#select_other_faculty').DataTable( {
+                        "paging":   false,
+                        "ordering": false,
+                        "info":     false,
+                        "searching": false
+            });
+        }
+
         $(document).ready(function()
         {
             // setDivHeight();
+
+            hide_other_fac_table();
+
+            $('#div_other').hide();
 
             $("#select_section").prop("disabled", true);
 
@@ -457,6 +495,7 @@
                 var acad_yr = $('#select_acadyr').val();
                 var type = $('#select_faculty_type').val();
                 var sem = $('#select_sem').val();
+                var year1, sem1;
 
                 $.ajax({
                 method:"POST",
@@ -478,9 +517,27 @@
                 }
                });
 
+                $('#select_other_faculty').dataTable().fnDestroy();
+                hide_other_fac_table();
+                $('#div_other').hide();
+
                 viewSubjectsSection();
                 // setDivHeight();
-                loadfaculty(subject, type);
+                var year = acad_yr[0] + acad_yr[1] + acad_yr[2] + acad_yr[3];
+
+                if(sem == '1st')
+                {
+                    year1 = year - 1;
+                    acad_yr = year1 + '\u2010' + year;
+                    sem1 = '2nd';
+                }
+
+                if(sem == '2nd')
+                {
+                    sem1 = '1st';
+                }
+
+                loadfaculty(subject, type, acad_yr, sem1);
                 
             });
 
@@ -488,10 +545,26 @@
             {
                 var select_type = $('#select_faculty_type').val();
                 var subject = $('#select_subject').val();
+                var acad_yr = $('#select_acadyr').val();
+                var sem = $('#select_sem').val();
+                var year1, sem1;
 
-                if(subject)
+                if(subject && acad_yr && sem)
                 {
-                    loadfaculty(subject, select_type);
+                    var year = acad_yr[0] + acad_yr[1] + acad_yr[2] + acad_yr[3];
+
+                    if(sem == '1st')
+                    {
+                        sem1 = '2nd';
+                        year1 = year - 1;
+                        acad_yr = year1 + '\u2010' + year;
+                    }
+                    if(sem == '2nd')
+                    {
+                        sem1 = '1st';
+                    }
+
+                    loadfaculty(subject, select_type, acad_yr, sem1);
                 }
             });
 
@@ -570,6 +643,43 @@
 
             $('#select_year_sec').on('change', function(){
                 loadSectionSubjects();
+            });
+
+            $(document).on('click', '#btn_other_fac', function(e)
+            {  
+                var subject = $('#select_subject').val();
+                var acad_yr = $('#select_acadyr').val();
+                var sem = $('#select_sem').val();
+                var year1, sem1;
+
+                var year = acad_yr[0] + acad_yr[1] + acad_yr[2] + acad_yr[3];
+
+                if(sem == '1st')
+                {
+                    sem1 = '2nd';
+                    year1 = year - 1;
+                    acad_yr = year1 + '\u2010' + year;
+                }
+                if(sem == '2nd')
+                {
+                    sem1 = '1st';
+                }
+
+               $('#div_other').show();
+               $('#select_other_faculty').dataTable().fnClearTable();
+               $('#select_other_faculty').dataTable().fnDraw();
+               $('#select_other_faculty').dataTable().fnDestroy();
+               $('#select_other_faculty').dataTable({
+                    "processing" : true,
+                    "serverSide" : false,
+                    "order": false,
+                    "aaSorting": [[2, 'desc'],[3, 'desc']],
+                    "ajax" : {
+                        url:"<?php echo base_url('Transaction/view_other_faculty')?>",
+                        data:{temp_subject:subject, temp_acadyr:acad_yr, temp_sem:sem1},
+                        type:"POST"
+                    }
+                });
             });
 
             //8-20 UPDATE

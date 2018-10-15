@@ -261,7 +261,7 @@
                                             <input class="form-control" type="text" name="educ_yr[]" id="educ_yr" required>
                                         </td>
                                         <td>
-                                            <button class="btn btn-success fa fa-plus" id='add_field' aria-hidden="true"></button>
+                                            <button class="btn btn-success fa fa-plus" data-toggle="tooltip" data-placement="top" title="Add row" id='add_field' aria-hidden="true"></button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -684,7 +684,7 @@
                 '<td><input class="form-control" type="text" name="educ_school[]" required></td>'+
                 '<td><input class="form-control" type="text" name="educ_degree[]" required></td>'+
                 '<td><input class="form-control" type="text" name="educ_yr[]" required></td>'+
-                '<td><button type="button" name="remove" id="'+x+'" class="btn btn-danger btn_remove">X</button></td>'+
+                '<td><button type="button" data-toggle="tooltip" data-placement="top" title="Delete row" name="remove" id="'+x+'" class="btn btn-danger btn_remove">X</button></td>'+
                     '</tr>');  
             });
 

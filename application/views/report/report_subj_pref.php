@@ -30,7 +30,7 @@
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
                                 <select class="form-control" name="select_acadyr" id="select_acadyr">
-                                   <option value="">-SELECT ACAD YEAR-</option>
+                                   <option value="" disabled selected>-SELECT ACAD YEAR-</option>
                                    <?php 
                                         for ($i = date("Y"); $i > 1900; $i-- ){
                                             echo '<option value ="' .$i. '&#x2010;'. ($i+1).'">' .$i. '&#x2010;'. ($i+1) .  '</option>'; 
@@ -41,7 +41,7 @@
                             <div class="col-md-2">
                                 <label class="control-label">Select Semester</label>
                                 <select class="form-control" name="select_sem" id="select_sem">
-                                    <option value="">-SELECT SEM-</option>
+                                    <option value="" disabled selected>-SELECT SEM-</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option> 
                                     <option value="summer">Summer</option>        

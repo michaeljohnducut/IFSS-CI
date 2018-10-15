@@ -2157,6 +2157,53 @@
         bool_no = false;
       }
 
+      function checkVacancy(class_name, btn_value){
+        var day_temp = 1; 
+            var start = 8; 
+            var end = 18;
+            var day; 
+            var day_id;
+            var count_vacant = 0; 
+            var start_time; 
+            var first_id; 
+            var second_id;
+            var val_temp; 
+            var day_loop; 
+            var hour;
+            var bool_validity = false;
+            var day_id = btn_value[8] + btn_value[9] + btn_value[10] + btn_value[11];
+            
+            for(hour = start; hour < end; hour ++)
+            { 
+                var first_val = '0' + hour + ':00:00' + day_id; 
+                var second_val = '0' + hour + ':30:00' + day_id; 
+                if(hour > 9)
+                {
+                    first_val = hour + ':00:00' + day_id; 
+                    second_val = hour + ':30:00' + day_id; 
+                }  
+
+                if($('button[type="button"][value="' + first_val + '"]').hasClass('plot-regular'))
+                {
+                    count_vacant += 1;
+                }
+                if($('button[type="button"][value="' + second_val + '"]').hasClass('plot-regular'))
+                {
+                    count_vacant += 1;
+                }
+
+            }
+
+            if(count_vacant == 0)
+            {
+                swal("Invalid", "Alot at least a 30-minute break for each faculty member a day!", "error");
+                $('button[type="button"][value="' + btn_value + '"]').removeClass(class_name).addClass('plot-regular');
+                countHours();
+                global_bool_checker = false;
+            }
+        
+      }
+
       function removeHours(temp_load){
         //var fac_id = $('#sched_faculty').val();
         var acad_year = $('#sched_acad_year').val();
@@ -2300,6 +2347,7 @@
                     $('button[type="button"][value="' + btn_value + '"]').removeClass('plot-regular').addClass('plot-orange');
                     $('button[type="button"][value="' + btn_value + '"]').text('');
                     checkTime('AT', btn_value, 'plot-orange');
+                    checkVacancy('plot-orange', btn_value);
                     countHours('plot-orange', 8, 18, 'txt_at');
                     if(end_at == 9.5 && global_bool_checker == true)
                     {

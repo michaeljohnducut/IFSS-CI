@@ -2434,7 +2434,6 @@ FROM subject_match sm
 		{
 			
 			$time = $r->time_start. ' - '. $r->time_finish;
-
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
@@ -2896,7 +2895,7 @@ FROM subject_match sm
 
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id, ta.load_type')
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2909,8 +2908,19 @@ FROM subject_match sm
                 ->get('teaching_assign_sched ta');
 
 		foreach ($query->result() as $r) 
-		{
-			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+		{	
+
+			if($r->load_type == 'INC')
+			{
+				$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>
+				<button class="btn btn-sm  btn-primary" id="btn_assign_prof" data-toggle="tooltip" data-placement="top" title="Assign Professor" data-id="'.$r->subj_match_id.'"><span class="fa  fa-user"></span></button>';
+			}
+			else
+			{
+				$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			}
+
+			
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,

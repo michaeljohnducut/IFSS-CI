@@ -2279,6 +2279,34 @@ class Savedata_model extends CI_Model
 
 	}
 
+	public function assign_prof_major(){
+
+		$output = "";
+		$id = $this->security->xss_clean($this->input->post('id'));
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$load_type = $this->security->xss_clean($this->input->post('load_type'));
+
+		if($this->db->query("UPDATE subject_match sm 
+		SET faculty_id = $fac_id 
+		WHERE subj_match_id = $id"))
+		{
+			if($this->db->query("UPDATE teaching_assign_sched 
+				SET load_type = '$load_type'
+				WHERE subj_match_id = $id "))
+			{
+				$output = 'UPDATED';
+			}
+			else
+			{
+				$output = 'NOT UPDATED';
+			}
+
+		}
+
+		return $output;
+
+	}
+
 	public function minor_first_save(){
 
 		$output = "";

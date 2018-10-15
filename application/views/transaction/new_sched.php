@@ -912,6 +912,41 @@
             <!-- /.modal-dialog -->
 </div>
 
+<a data-toggle="modal" href="#modalAssignProf" id="openModAssign"></a>
+<div class="modal fade bs-example-modal-lg" id="modalAssignProf" tabindex="-1" role="dialog" aria-labelledby="modalAssignProf" aria-hidden="true" style=" display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Assign Faculty</h4>
+                    </div>
+                    <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+
+                    </div>
+                    <div class="modal-body">
+                        <form id="add_fac_form" method="POST">
+                        <div class="col-md-12">
+                            <label class="control-label">Select professor:</label>
+                            <select id="avail_prof" class="form-control"> 
+                                <option value="0">-Faculty-</option>
+                                <?php foreach($faculty as $r) echo '<option value="'.$r[7].'">'.$r[1].', '.$r[2].' '.$r[3].'</option>';?>
+                            </select>
+                        </div>
+                       
+                    </div>
+                    <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect text-left">Save</button>
+                            <input type="hidden" id="hid_data_id">
+                            <input type="hidden" id="hid_loadtype">
+                            <input type="hidden" id="hid_fac_id">
+                        </form>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+</div>
+
 <a data-toggle="modal" href="#modalAddTime" id="openMod"></a>
 
 <!-- MODAL ADD SUBJET -->
@@ -1081,6 +1116,7 @@
 
 
 
+
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
 
@@ -1122,8 +1158,8 @@
       var global_splitcontrol = 0;
       var global_officehrs;
       var global_bool_next; 
-      var global_fac_set_1 = [];
-      var global_fac_set_2 = [];
+      var global_id;
+      var global_loadtype;
 
       //FUNCTIONS
       //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
@@ -1648,6 +1684,7 @@
                 {  
                     $('#modalAddMajor').modal('hide');
                     reflectSectionMajor();
+                    loadSchedTable();
                 },
                  error: function (data) {
                         alert(JSON.stringify(data));
@@ -1682,6 +1719,22 @@
 
       function getFacultyType(){
         var fac_id =  $('#sched_faculty').val();
+        $.ajax({
+                method:"POST",
+                url:"<?php echo base_url('Transaction/get_faculty_type')?>",
+                dataType: "json",
+                data:{fac_id:fac_id},
+                success:function(data)
+                {   
+                   global_factype = data[0][0];
+                   global_factypedesc = data[0][1];
+                }, 
+                async:false
+
+               });
+      }
+
+      function major_getFacultyType(fac_id){
         $.ajax({
                 method:"POST",
                 url:"<?php echo base_url('Transaction/get_faculty_type')?>",
@@ -1742,6 +1795,85 @@
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
             var fac_id = $('#sched_faculty').val();
+
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_units_used')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                dataType: "json",
+                success:function(data){
+
+                    global_total_hrs = data[0][0];
+                    global_reg_load = data[0][1];
+                    global_pt_load = data[0][2];
+                    global_ts_load = data[0][3];
+
+                    $('#factype_id').empty();
+                    $('#factype_id').append(global_factypedesc);
+                    if(global_reg_load == null)
+                    {
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('<b>Total Units Used:</b> ');
+                        $('#RLoad_id').append('<b>Regular Load:</b> ');
+                        $('#PTLoad_id').append('<b>Part-time Load:</b> ');
+                        $('#TSLoad_id').append('<b>Temporary Substitution:</b> ');
+                    }
+
+                    else
+                    {
+                      if(global_pt_load == null)
+                      {
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('<b>Total Units Used:</b> ' + global_total_hrs + 'hrs');
+                        $('#RLoad_id').append('<b>Regular Load:</b> '+ global_reg_load+ 'hrs');
+                        $('#PTLoad_id').append('<b>Part-time Load:</b> ');
+                        $('#TSLoad_id').append('<b>Temporary Substitution:</b> ');
+                      }
+
+                      else if(global_ts_load == null)
+                      {
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('<b>Total Units Used:</b> ' + global_total_hrs+ 'hrs');
+                        $('#RLoad_id').append('<b>Regular Load:</b> '+ global_reg_load+ 'hrs');
+                        $('#PTLoad_id').append('<b>Part-time Load:</b> ' + global_pt_load+ 'hrs');
+                        $('#TSLoad_id').append('<b>Temporary Substitution:</b> ');
+                      }
+
+                      else
+                      {
+                        $('#units_used').empty();
+                        $('#RLoad_id').empty();
+                        $('#PTLoad_id').empty();
+                        $('#TSLoad_id').empty();
+                        $('#units_used').append('<b>Total Units Used:</b> ' + global_total_hrs+ 'hrs');
+                        $('#RLoad_id').append('<b>Regular Load:</b> '+ global_reg_load+ 'hrs');
+                        $('#PTLoad_id').append('<b>Part-time Load:</b> ' + global_pt_load+ 'hrs');
+                        $('#TSLoad_id').append('<b>Temporary Substitution:</b> '+global_ts_load+ 'hrs');
+                      }
+                    }
+                    
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+
+        }
+
+         function major_getUnitsUsed(fac_id){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
 
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_units_used')?>", 
@@ -6124,5 +6256,102 @@ $(document).on('click', '#btn_reschedule', function(e){
                   }
                 });
             });
+
+$(document).on('click', '#btn_assign_prof', function(e){  
+
+    global_id = $(this).data("id");
+    $('#openModAssign').trigger('click');
+           
+});
+
+$('#avail_prof').on('change', function(){
+
+    var fac_id = $('#avail_prof').val();
+    major_getUnitsUsed(fac_id);
+    major_getFacultyType(fac_id);   
+    var load_type;
+
+    if (global_factype == 1)
+    {
+        if(global_total_hrs == null || global_total_hrs < 15)
+        {
+            load_type = 'R';
+        }
+
+        else if(global_total_hrs >= 15 && global_total_hrs < 27)
+        {
+            load_type = 'PT';
+        }
+
+        else if(global_total_hrs >= 27)
+        {
+            load_type = 'TS';
+        }
+    }
+
+    if (global_factype == 3)
+    {
+        if(global_total_hrs == null || global_total_hrs < 6)
+        {
+            load_type = 'R';
+        }
+
+        else if(global_total_hrs >= 6 && global_total_hrs < 18)
+        {
+            load_type = 'PT';
+        }
+
+        else if(global_total_hrs >= 18)
+        {
+            load_type = 'TS';
+        }
+    }
+
+    if (global_factype == 4 ||global_factype == 5)
+    {
+        if(global_total_hrs < 12)
+        {
+            load_type = 'PT';
+        }
+
+        else if(global_total_hrs >= 12)
+        {
+            load_type = 'TS';
+        }
+    }
+
+    $('#hid_fac_id').val(fac_id);
+    global_loadtype = load_type;
+
+});
+
+$('#add_fac_form').on('submit', function(e){
+        var id = global_id;
+        var fac_id = $('#hid_fac_id').val();
+        var load_type = global_loadtype;
+        e.preventDefault();
+        $.ajax({  
+            url:"<?php echo base_url('Transaction/assign_prof_major')?>", 
+            method:"POST",  
+            data:{id:id, fac_id:fac_id, load_type:load_type},
+            success:function(data){  
+                if(data == 'UPDATED'){
+                    swal("Success!", "Faculty member has been assigned.", "success");
+                    $('#modalAssignProf').modal('hide');
+                    resetPlotForm();
+                    loadSectionTable();
+                    reflectSectionTable();
+                    reflectSectionMinor();
+                    reflectSectionMajor();
+                }
+            },
+            error: function (data) {
+                alert(JSON.stringify(data));
+            }
+       }); 
+
+    });
+
+
 
     </script>

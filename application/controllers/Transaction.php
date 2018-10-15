@@ -607,6 +607,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function assign_prof_major()
+	{
+		echo ($this->savedata_model->assign_prof_major($_POST));
+		exit();
+	}
+
 	public function reflect_section_table(){
 
 		echo json_encode($this->getdata_model->reflect_section_table($_POST));

@@ -2434,7 +2434,6 @@ FROM subject_match sm
 		{
 			
 			$time = $r->time_start. ' - '. $r->time_finish;
-
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
@@ -2525,6 +2524,43 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function get_major_subj(){	//GETS MINOR SUBJECTS FOR A SECTION
+
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$result = array();
+
+		$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
+				->where('c.year_lvl = (SELECT se.year_lvl
+                    FROM section se
+                    WHERE se.section_id = '.$section_id.')', NULL, FALSE)
+				->where('s.isMajor IN (1, 2)')
+				->where('c.sem ', $sem)
+				->where('s.subj_id NOT IN (SELECT sm.subj_id
+											FROM subject_match sm
+											WHERE sm.section = '.$section_id.'
+											AND sm.subj_match_id IN 
+											(SELECT ta.subj_match_id
+											FROM teaching_assign_sched ta 
+											WHERE ta.acad_yr = "'.$acad_yr.'"
+											AND ta.sem = "'.$sem.'"))',NULL,FALSE)
+				->join('subject s','s.subj_id = c.subj_code')
+                ->get('curriculum c ');
+
+		foreach ($query->result() as $r) 
+		{	
+
+			$result[] = array(
+					$r->subj_id,
+					$r->subj_code,
+					$r->subj_desc
+					);
+		}
+
+		return $result;	
+	}
+
 	public function get_avail_prof(){
 
 		$start_time = $this->security->xss_clean($this->input->post('start_time'));
@@ -2586,6 +2622,72 @@ FROM subject_match sm
 
 	}
 
+	public function get_major_prof(){
+
+		$start_time = $this->security->xss_clean($this->input->post('start_time'));
+		$end = $this->security->xss_clean($this->input->post('end'));
+		$day = $this->security->xss_clean($this->input->post('day'));
+		$start_time_b = $this->security->xss_clean($this->input->post('start_time_b'));
+		$end_b = $this->security->xss_clean($this->input->post('end_b'));
+		$day_b = $this->security->xss_clean($this->input->post('day_b'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+				->where('f.faculty_id NOT IN(SELECT sm.faculty_id
+				FROM teaching_assign_sched ta
+					JOIN subject_match sm ON sm.subj_match_id = ta.subj_match_id
+				    JOIN faculty f on f.faculty_id = sm.faculty_id
+				WHERE ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'"
+				AND ta.time_start > "'.$start_time.'"
+				AND ta.time_start < "'.$end.'"
+				AND ta.day = "'.$day.'"
+				OR ta.time_finish > "'.$start_time.'"
+				AND ta.time_finish < "'.$end.'"
+				AND ta.day = "'.$day.'"
+				AND ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'"
+				OR ta.time_start = "'.$start_time.'"
+				AND ta.time_finish = "'.$end.'"
+				AND ta.day = "'.$day.'"
+				AND ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'")', NULL, FALSE)
+				->where('f.faculty_id NOT IN(SELECT sm.faculty_id
+				FROM teaching_assign_sched ta
+					JOIN subject_match sm ON sm.subj_match_id = ta.subj_match_id
+				    JOIN faculty f on f.faculty_id = sm.faculty_id
+				WHERE ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'"
+				AND ta.time_start > "'.$start_time_b.'"
+				AND ta.time_start < "'.$end_b.'"
+				AND ta.day = "'.$day_b.'"
+				OR ta.time_finish > "'.$start_time_b.'"
+				AND ta.time_finish < "'.$end_b.'"
+				AND ta.day = "'.$day_b.'"
+				AND ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'"
+				OR ta.time_start = "'.$start_time_b.'"
+				AND ta.time_finish = "'.$end_b.'"
+				AND ta.day = "'.$day_b.'"
+				AND ta.acad_yr = "'.$acad_year.'"
+				AND ta.sem = "'.$sem.'")', NULL, FALSE)
+                ->get('faculty f');
+
+		foreach ($query->result() as $r) 
+		{	
+
+			$result[] = array(
+					$r->faculty_id,
+					$r->facname
+					);
+		}
+
+		return $result;	
+
+	}
+
 	public function reflect_services(){	//GETS FACULTY'S SUMMARY OF SERVICES
 
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
@@ -2627,6 +2729,43 @@ FROM subject_match sm
 		$result = array();
 
 		$query = $this->db->select("s.subj_code, s.subj_desc, s.units,'MINOR' as 'facname', ta.time_start, ta.time_finish, ta.day, r.room_code")
+				->where('sm.section', $section_id)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->where('sm.faculty_id IS NULL', NULL, FALSE)
+				->join('subject_match sm','ta.subj_match_id = sm.subj_match_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('room r','r.room_id = ta.room_id')
+                ->get('teaching_assign_sched ta');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units, 
+					$r->facname, 
+					$time,
+					$r->day,
+					$r->room_code
+					);
+		}
+
+		return $result;	
+	}
+
+	public function reflect_section_major(){	//GETS SECTION'S SUMMARY OF SCHEDULES
+
+		$section_id = $this->security->xss_clean($this->input->post('section_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("s.subj_code, s.subj_desc, s.units,'UNASSIGNED' as 'facname', ta.time_start, ta.time_finish, ta.day, r.room_code")
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2756,7 +2895,7 @@ FROM subject_match sm
 
 		$result = array();
 
-		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, CONCAT("Prof. ", f.fname, " ", f.lname) as "facname", GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id, ta.load_type')
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2769,8 +2908,19 @@ FROM subject_match sm
                 ->get('teaching_assign_sched ta');
 
 		foreach ($query->result() as $r) 
-		{
-			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+		{	
+
+			if($r->load_type == 'INC')
+			{
+				$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>
+				<button class="btn btn-sm  btn-primary" id="btn_assign_prof" data-toggle="tooltip" data-placement="top" title="Assign Professor" data-id="'.$r->subj_match_id.'"><span class="fa  fa-user"></span></button>';
+			}
+			else
+			{
+				$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+			}
+
+			
 			$result[] = array(
 					$r->subj_code,
 					$r->subj_desc,
@@ -4189,6 +4339,8 @@ FROM subject_match sm
 
 		return $result;	
 	}
+
+
 
 }
 ?>

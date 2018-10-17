@@ -115,6 +115,12 @@ class Transaction extends CI_Controller
 
 	public function view_subject()
 	{
+		echo json_encode($this->getdata_model->view_subject($_POST));
+		exit();
+	}
+
+	public function view_subject_gen()
+	{
 		echo json_encode($this->getdata_model->view_subject_gen($_POST));
 		exit();
 	}
@@ -607,6 +613,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function assign_prof_major()
+	{
+		echo ($this->savedata_model->assign_prof_major($_POST));
+		exit();
+	}
+
 	public function reflect_section_table(){
 
 		echo json_encode($this->getdata_model->reflect_section_table($_POST));
@@ -622,6 +634,12 @@ class Transaction extends CI_Controller
 	public function get_minor_subj(){
 
 		echo json_encode($this->getdata_model->get_minor_subj($_POST));
+		exit();
+	}
+
+	public function get_major_subj(){
+
+		echo json_encode($this->getdata_model->get_major_subj($_POST));
 		exit();
 	}
 
@@ -657,9 +675,21 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function major_first_save()
+	{
+		echo ($this->savedata_model->major_first_save($_POST));
+		exit();
+	}
+
 	public function minor_second_save()
 	{
 		echo ($this->savedata_model->minor_second_save($_POST));
+		exit();
+	}
+
+	public function major_second_save()
+	{
+		echo ($this->savedata_model->major_second_save($_POST));
 		exit();
 	}
 
@@ -668,6 +698,13 @@ class Transaction extends CI_Controller
 		echo json_encode($this->getdata_model->reflect_section_minor($_POST));
 		exit();
 	}
+
+	public function reflect_section_major(){
+
+		echo json_encode($this->getdata_model->reflect_section_major($_POST));
+		exit();
+	}
+
 
 	public function validate_section_sched(){
 
@@ -822,6 +859,12 @@ class Transaction extends CI_Controller
 	public function query_avail_rooms(){
 		
 		echo json_encode($this->getdata_model->query_avail_rooms($_POST));
+		exit();
+	}
+
+	public function get_major_prof(){
+		
+		echo json_encode($this->getdata_model->get_major_prof($_POST));
 		exit();
 	}
 

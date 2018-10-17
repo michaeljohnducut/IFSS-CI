@@ -98,29 +98,31 @@
                                         <option value="5">Top 10 faculty members with highest total loads</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">Start time:</label>
-                                    <input type="time" id="query_start_fac" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">End time:</label>
-                                    <input type="time" id="query_end_fac" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">Day:</label>
-                                    <select class="form-control select2" id="query_day_fac">
-                                        <option value="0" selected="" disabled="">Day</option>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
-                                    </select>
+                                <div class="col-md-12" id="fac_times">
+                                    <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">Start time:</label>
+                                        <input type="time" id="query_start_fac" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">End time:</label>
+                                        <input type="time" id="query_end_fac" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">Day:</label>
+                                        <select class="form-control select2" id="query_day_fac">
+                                            <option value="0" selected="" disabled="">Day</option>
+                                            <option value="Monday">Monday</option>
+                                            <option value="Tuesday">Tuesday</option>
+                                            <option value="Wednesday">Wednesday</option>
+                                            <option value="Thursday">Thursday</option>
+                                            <option value="Friday">Friday</option>
+                                            <option value="Saturday">Saturday</option>
+                                            <option value="Sunday">Sunday</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -134,32 +136,34 @@
                                     <select class="form-control select2" id="query_section">
                                         <option value="0" selected="" disabled="">Queries</option>
                                         <option value="1">Available Sections</option>
-                                        <option value="2">Sections with incomplete schedules</option>
+                                        <!-- <option value="2">Sections with incomplete schedules</option> -->
                                     </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">Start time:</label>
-                                    <input type="time" id="query_start_sec" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">End time:</label>
-                                    <input type="time" id="query_end_sec" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">Day:</label>
-                                    <select class="form-control select2" id="query_day_sec">
-                                        <option value="0" selected="" disabled="">Day</option>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
-                                    </select>
+                                <div class="col-md-12" id="sec_times">
+                                     <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">Start time:</label>
+                                        <input type="time" id="query_start_sec" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">End time:</label>
+                                        <input type="time" id="query_end_sec" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">Day:</label>
+                                        <select class="form-control select2" id="query_day_sec">
+                                            <option value="0" selected="" disabled="">Day</option>
+                                            <option value="Monday">Monday</option>
+                                            <option value="Tuesday">Tuesday</option>
+                                            <option value="Wednesday">Wednesday</option>
+                                            <option value="Thursday">Thursday</option>
+                                            <option value="Friday">Friday</option>
+                                            <option value="Saturday">Saturday</option>
+                                            <option value="Sunday">Sunday</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                         </div>
@@ -176,29 +180,31 @@
                                         <option value="2">Top 10 used rooms / labs</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">Start time:</label>
-                                    <input type="time" id="query_start_room" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">End time:</label>
-                                    <input type="time" id="query_end_room" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    <label class="control-label">Day:</label>
-                                    <select class="form-control select2" id="query_day_room">
-                                        <option value="0" selected="" disabled="">Day</option>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
-                                    </select>
+                                <div class="col-md-12" id="room_times">
+                                     <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">Start time:</label>
+                                        <input type="time" id="query_start_room" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">End time:</label>
+                                        <input type="time" id="query_end_room" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <br>
+                                        <label class="control-label">Day:</label>
+                                        <select class="form-control select2" id="query_day_room">
+                                            <option value="0" selected="" disabled="">Day</option>
+                                            <option value="Monday">Monday</option>
+                                            <option value="Tuesday">Tuesday</option>
+                                            <option value="Wednesday">Wednesday</option>
+                                            <option value="Thursday">Thursday</option>
+                                            <option value="Friday">Friday</option>
+                                            <option value="Saturday">Saturday</option>
+                                            <option value="Sunday">Sunday</option>
+                                        </select>
+                                    </div>
                                 </div>
                         </div>
                     </div>
@@ -365,6 +371,11 @@
       $('.selectpicker').selectpicker();
 
       $(document).ready(function(){
+
+        $('#fac_times').hide();
+        $('#room_times').hide();
+        $('#sec_times').hide();
+
         //FACULTY QUERIES
         $('#query_start_fac').on('blur', function(){
             var picked_query = $('#query_faculty').val();
@@ -372,6 +383,18 @@
             {
                 queryAvailProf();
             }
+        });
+
+        $('#fac_query').trigger('click', function(){
+            $('#txtResult').empty();
+        });
+
+        $('#section_query').trigger('click', function(){
+            $('#txtResult').empty();
+        });
+
+        $('#room_query').trigger('click', function(){
+            $('#txtResult').empty();
         });
 
         $('#query_end_fac').on('blur', function(){
@@ -418,6 +441,15 @@
 
         $('#query_section').on('change', function(){
             var picked_query = $('#query_section').val();
+            if(picked_query == 1)
+            {
+                queryAvailProf();
+                $('#sec_times').show();
+            }
+            else
+            {
+                $('#sec_times').hide();
+            }
             if(picked_query == 2)
             {
                 var acad_year = $('#acad_year_drop').val();
@@ -453,6 +485,11 @@
             if(picked_query == 1)
             {
                 queryAvailProf();
+                $('#fac_times').show();
+            }
+            else
+            {
+                $('#fac_times').hide();
             }
 
             //TOP 10 EVALUATION
@@ -574,6 +611,16 @@
             $('#query_day_room').on('change',function(){
                 queryAvailRooms();
             });
+
+            if(picked_query == 1)
+            {
+                queryAvailProf();
+                $('#room_times').show();
+            }
+            else
+            {
+                $('#room_times').hide();
+            }
 
             if(picked_query == 2)
             {

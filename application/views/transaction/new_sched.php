@@ -833,7 +833,7 @@
                         </div>
                         
                       </div>
-                      <div class="col-md-12">
+                      <div class="col-md-12" hidden="">
                           <div class="col-md-6">
                             <br>
                               <label class="control-label">Select Available Faculty:</label>
@@ -1657,6 +1657,7 @@
                 {  
                     $('#modalAddMinor').modal('hide');
                     reflectSectionMinor();
+                    loadSchedTable();
                 },
                  error: function (data) {
                         alert(JSON.stringify(data));
@@ -3137,6 +3138,23 @@
       function viewSubjDetails(subj_code){
             $.ajax({ 
                 url:"<?php echo base_url('Transaction/view_subject_gen')?>", 
+                method:"POST", 
+                data:{subj_code:subj_code}, 
+                dataType: "json",
+                success:function(data){
+                    global_labhour = data[0][4];
+                    global_lechour = data[0][5];
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+           });
+        }
+
+        function viewSubjDetails_major(subj_code){
+            $.ajax({ 
+                url:"<?php echo base_url('Transaction/view_subject')?>", 
                 method:"POST", 
                 data:{subj_code:subj_code}, 
                 dataType: "json",
@@ -4650,6 +4668,19 @@
           var sem = $('#sec_sem').val();
           var section_id = $('#sec_yearsec').val();
           var acad_yr = $('#sec_acadyr').val();
+          $('#major_start_a').val('');
+          $('#major_end_a').val('');
+          $('#day_major_a').val(0);
+          $('#major_start_b').val('');
+          $('#major_end_b').val('');
+          $('#day_major_b').val(0);
+          $('#sched_b_major').hide();
+          $('#chk_split_major').prop('checked', false);
+          $('#rooms_major_a').empty();
+          $('#rooms_major_b').empty();
+          $('#rooms_major_a').append('<option value = "0">-Rooms-</option>');
+          $('#rooms_major_b').append('<option value = "0">-Rooms-</option>');
+
 
           $.ajax({   
               url:"<?php echo base_url('Transaction/get_major_subj')?>",  
@@ -4659,7 +4690,7 @@
               success: function (data) 
               {   
                   $('#major_subj').empty();
-                  $('#major_subj').append('<option value="0">-Minor Subjects-</option>');
+                  $('#major_subj').append('<option value="0">-Major Subjects-</option>');
                   // $('#modalAddMinor').modal('show');
 
                   var len = data.length;
@@ -4684,7 +4715,7 @@
 
         $('#major_subj').on('change',function(){
             var subj_code = $('#major_subj').val();
-            viewSubjDetails(subj_code);
+            viewSubjDetails_major(subj_code);
             
         });
 
@@ -6199,6 +6230,7 @@
 $('#add_minor_form').on('submit', function(e){
     e.preventDefault();
     minorFirstSave();
+    loadSectionTable();
 });
 
 $('#add_major_form').on('submit', function(e){

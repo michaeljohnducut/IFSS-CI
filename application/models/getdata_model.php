@@ -3766,6 +3766,7 @@ FROM subject_match sm
 	        $result[] = array(
 	        			$r->faculty_type,
                			$fac_type_total,
+               			$total_count,
                			$hours_load,
                			$hours_other,
                			$r->faculty_id

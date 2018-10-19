@@ -1,3 +1,4 @@
+
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                          <h4 class="page-title">Dashboard</h4>
@@ -13,7 +14,7 @@
                     <div class="col-md-12 col-lg-12 col-sm-12">
                         <div class="white-box">
                             <div class="row row-in">
-                                <div class="col-lg-3 col-sm-6 row-in-br">
+                                <div class="col-lg-2 col-sm-6 row-in-br">
                                     <label class="control-label">Select Academic Year</label>
                                      <select class="form-control select2" id="selectAcadYr1">
                                         <!-- <option value="">-Academic Year-</option> -->
@@ -35,7 +36,7 @@
 
                                 <div class="col-lg-3 col-sm-6 row-in-br  b-r-none">
                                     <div class="col-in row">
-                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="C"></i>
                                             <h5 class="text-muted vb">FACULTY MEMBER <BR> WITH COMPLETE SCHEDULE</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -48,9 +49,24 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6 row-in-br">
+                                <div class="col-lg-3 col-sm-6 row-in-br b-r-none">
                                     <div class="col-in row">
-                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#xe000;"></i>
+                                            <h5 class="text-muted vb">SERVICES WITH ASSIGNED FACULTY MEMBER</h5>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <h3 class="counter text-right m-t-15 text-success" id="services_assign"></h3>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="services_prog"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                   <div class="col-lg-2 col-sm-6 row-in-br">
+                                    <div class="col-in row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#57382;"></i>
                                             <h5 class="text-muted vb">SECTIONS WITH <BR>COMPLETE SCHEDULE</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -63,17 +79,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6  b-0">
+                                  <div class="col-lg-2 col-sm-6">
                                     <div class="col-in row">
-                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe016;"></i>
-                                            <h5 class="text-muted vb">SERVICES WITH ASSIGNED FACULTY MEMBER</h5>
+                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#57388;"></i>
+                                            <h5 class="text-muted vb">SECTIONS WITH <BR>INCOMPLETE SCHEDULE</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <h3 class="counter text-right m-t-15 text-success" id="services_assign"></h3>
+                                            <h3 class="counter text-right m-t-15 text-primary" id="sec_incomp"></h3>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="services_prog"></div>
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
                                     </div>

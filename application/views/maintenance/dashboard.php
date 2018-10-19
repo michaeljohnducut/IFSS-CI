@@ -11,11 +11,11 @@
                     </div>
                 </div>  
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12">
+                    <div class="col-md-10">
                         <div class="white-box">
                             <div class="row row-in">
                                 <div class="col-lg-2 col-sm-6 row-in-br">
-                                    <label class="control-label">Select Academic Year</label>
+                                    <label class="control-label">Select Acad Year</label>
                                      <select class="form-control select2" id="selectAcadYr1">
                                         <!-- <option value="">-Academic Year-</option> -->
                                         <?php 
@@ -34,7 +34,7 @@
                                       </select>
                                 </div>
 
-                                <div class="col-lg-3 col-sm-6 row-in-br  b-r-none">
+                                <div class="col-md-3 col-sm-6 row-in-br  b-r-none">
                                     <div class="col-in row">
                                         <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="C"></i>
                                             <h5 class="text-muted vb">FACULTY MEMBER <BR> WITH COMPLETE SCHEDULE</h5>
@@ -49,7 +49,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6 row-in-br b-r-none">
+                                <div class="col-md-3 col-sm-6 row-in-br b-r-none">
                                     <div class="col-in row">
                                         <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#xe000;"></i>
                                             <h5 class="text-muted vb">SERVICES WITH ASSIGNED FACULTY MEMBER</h5>
@@ -64,10 +64,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                   <div class="col-lg-2 col-sm-6 row-in-br">
+                                   <div class="col-md-2 col-sm-6 row-in-br">
                                     <div class="col-in row">
                                         <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#57382;"></i>
-                                            <h5 class="text-muted vb">SECTIONS WITH <BR>COMPLETE SCHEDULE</h5>
+                                            <h5 class="text-muted vb">SECTIONS WITH <BR>COMPLETE SCHEDULE<BR> &nbsp;</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <h3 class="counter text-right m-t-15 text-primary" id="sec_comp"></h3>
@@ -79,10 +79,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                  <div class="col-lg-2 col-sm-6">
+                                  <div class="col-md-2">
                                     <div class="col-in row">
                                         <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#57388;"></i>
-                                            <h5 class="text-muted vb">SECTIONS WITH <BR>INCOMPLETE SCHEDULE</h5>
+                                            <h5 class="text-muted vb">SECTIONS WITH <BR>INCOMPLETE SCHEDULE<br> &nbsp;</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <h3 class="counter text-right m-t-15 text-primary" id="sec_incomp"></h3>
@@ -97,7 +97,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2">
+
+                        <div class="white-box text-center bg-danger" style="height: 93%">
+                            <p class="text-white"><STRONG>PICK UP WHERE YOU LEFT OFF!</STRONG></p>
+                            <hr style="background-color: white;">
+                            <p class="text-white">You were previously working on <STRONG>(section)'s</STRONG> Schedule</p>
+                        </div>
                     </div>
+                  </div>
+                    
                     
                     <!--TOP 5 FACULTY MEMBERS-->
                       <div class="row">
@@ -128,6 +137,7 @@
                                             </select>
                                     </div>
                                  </div>
+                  
                   <hr style="border: 1px solid">
                  <div class="vtabs">
                      <ul class="nav tabs-vertical" >

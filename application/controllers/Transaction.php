@@ -889,7 +889,12 @@ class Transaction extends CI_Controller
 	public function query_faculty_consec()
 	{
 		echo json_encode($this->getdata_model->query_faculty_consec($_POST));
+		exit();
+	}
 
+	public function match_specialization()
+	{
+		echo json_encode($this->getdata_model->match_specialization($_POST));
 		exit();
 	}
 

@@ -4340,6 +4340,26 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function match_specialization(){	
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+
+		$query = $this->db->query('SELECT subj_id
+							FROM subject 
+							WHERE specialization IN (SELECT spec_id
+                       		FROM faculty_spec 
+                           	WHERE faculty_id = '.$fac_id.')');
+
+
+		foreach ($query->result() as $r) 
+		{	
+			$result[] = array(
+					$r->subj_id);
+		}
+
+		return $result;	
+	}
+
 
 
 }

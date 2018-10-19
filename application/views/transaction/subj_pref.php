@@ -379,6 +379,7 @@
     //GLOBAL VARIABLES 
     var global_year = "<?php echo $curr_year?>";
     var global_month = "<?php echo $curr_month?>";
+    var global_pref_subj = [];
     var global_acadyr; 
     var global_sem;
 
@@ -654,8 +655,61 @@ function getPrefTime(faculty_id, acad_year, sem){
                             checkSubj(data);
                         }
 
-                    }
+                    }, 
+               async:false
                 }); 
+    }
+
+    function matchSpecialization(fac_id){
+
+        $.ajax({  
+                url:"<?php echo base_url('Transaction/match_specialization')?>", 
+                method:"POST",  
+                data: {fac_id: fac_id},  
+                dataType: "JSON",
+                success:function(data){  
+                    global_pref_subj = data;
+                }, 
+               async:false
+                });   
+    }
+
+    function checkSubjectSpecialization(subj_id){
+
+        var len = global_pref_subj.length;
+        var bool_match = false;
+
+        for (var x = 0; x < len ; x ++)
+        {
+            if(global_pref_subj[x] == subj_id)
+            {
+                bool_match = true;
+            }
+        }
+
+        if(bool_match == false)
+        {
+            swal({
+                        title: "HOLD ON!",
+                        text: "This subject does not belong to one of your specializations. Do you still want to select this subject?", 
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+              })
+                .then((willApprove) => {
+                    
+                  if (willApprove) {
+                    bool_match = true;
+                  } 
+
+                  else {
+                    swal("Cancelled", "You have chosen to cancel", "info");
+                  }
+                });
+        }
+        alert (bool_match);
+
+        return bool_match;
     }
 
     function disableButtons(){
@@ -667,34 +721,6 @@ function getPrefTime(faculty_id, acad_year, sem){
         $("input[name = 'set_time']").removeAttr('disabled');
         $("input[name = 'chk_subj']").removeAttr('disabled');
     }
-
-    // function displayCurrent(){
-
-    //         var global_year = "<?php echo $curr_year?>";    //HANAPIN MO NALANG TO 
-    //         var global_month = "<?php echo $curr_month?>"; //SA CONTROLLER NG SUBJ PREF
-    //         var next_year = parseInt(global_year) + 1; 
-    //         var prev_year = global_year - 1; 
-    //         var next_acadyr =  global_year + '\u2010' + next_year; 
-    //         var prev_acadyr = prev_year  + '\u2010' + global_year;
-    //         var sem; 
-    //         var acad_year;
-
-
-    //     if (global_month == '06' || global_month == '07' || global_month == '08' || global_month == '09' || global_month == '10')
-    //     {
-    //         sem = '2nd'; 
-    //         acad_year = prev_acadyr;
-    //     }
-    //     else
-    //     {
-    //         global_sem = '1st';
-    //         acad_year = next_acadyr;
-    //     }
-
-    //     //DITO MO GAWIN YUNG CODE MO SA AJAX 
-
-    // }
-
 
 
     function checkSubj(arr){
@@ -724,6 +750,7 @@ function getPrefTime(faculty_id, acad_year, sem){
         }
 
         if(fac_id != 0 ){
+            matchSpecialization(fac_id);
             getPrefTime(fac_id, acad_year, sem);
             getPrefSubj(fac_id, acad_year, sem);
             loadtable(fac_id, acad_year, sem);
@@ -747,12 +774,14 @@ function getPrefTime(faculty_id, acad_year, sem){
         var data = "<?php echo $acc_type?>"; 
         if(data == 'admin'){
             var fac_id = $('#fac_list').val();
+            matchSpecialization(fac_id);
         }
         else{
             var fac_id = "<?php echo $fac_id?>";
         }
 
         if(fac_id != 0){
+            matchSpecialization(fac_id);
             getPrefTime(fac_id, acad_year, sem);
             getPrefSubj(fac_id, acad_year, sem);
             loadtable(fac_id, acad_year, sem);
@@ -777,12 +806,14 @@ function getPrefTime(faculty_id, acad_year, sem){
         var data = "<?php echo $acc_type?>"; 
         if(data == 'admin'){
             var fac_id = $('#fac_list').val();
+            matchSpecialization(fac_id);
         }
         else{
             var fac_id = "<?php echo $fac_id?>";
         }
 
         if(fac_id != 0){
+            matchSpecialization(fac_id);
             getPrefTime(fac_id, acad_year, sem);
             getPrefSubj(fac_id, acad_year, sem);
             loadtable(fac_id, acad_year, sem);
@@ -793,10 +824,6 @@ function getPrefTime(faculty_id, acad_year, sem){
 $(document).ready(function(){
 
     $('#modalDisclaimer').modal('show');
-
-    // $(".select2").select2();
-    // $('.selectpicker').selectpicker();
-
     hide_dropdown();
 
 });
@@ -1332,9 +1359,15 @@ $(document).ready(function(){
     $("input[name = 'chk_subj']").on('change', function(){
 
         var subj_code = $(this).attr('value');
-        var fac_id = $('#fac_list').val();
         var sem = $('#selected_sem').val();
         var acad_year = $('#acad_year').val();
+        var data = "<?php echo $acc_type?>"; 
+        if(data == 'admin'){
+            var fac_id = $('#fac_list').val();
+        }
+        else{
+            var fac_id = "<?php echo $fac_id?>";
+        }
 
 
          if($(this).prop("checked")){
@@ -1345,22 +1378,32 @@ $(document).ready(function(){
                 $(this).prop("checked", false);
             }
 
-            event.preventDefault();  
-            $.ajax({  
-            url:"<?php echo base_url('Transaction/add_pref_subj')?>",   
-            method:"POST",  
-            data:{fac_id:fac_id, subj_code:subj_code, sem:sem, acad_year:acad_year},
+           else{
+            var is_matched = checkSubjectSpecialization(subj_code);
+           }
+           if (is_matched == true)
+           {
+             event.preventDefault();  
+                $.ajax({  
+                url:"<?php echo base_url('Transaction/add_pref_subj')?>",   
+                method:"POST",  
+                data:{fac_id:fac_id, subj_code:subj_code, sem:sem, acad_year:acad_year},
 
-                success:function(data)
-                {  
-                    swal("Success!", "Subject is added.");
-                }, 
+                    success:function(data)
+                    {  
+                        swal("Success!", "Subject is added.");
+                    }, 
 
-                error: function(data)
-                 {
-                       alerts('An error occured. Please reload the page and try again.');
-                 }
-            }); 
+                    error: function(data)
+                     {
+                           alerts('An error occured. Please reload the page and try again.');
+                     }
+                }); 
+               }
+               else
+               {
+                    $(this).prop("checked", false);
+               }
             
          }
 
@@ -1435,7 +1478,7 @@ $(document).ready(function(){
                   } 
 
                   else {
-                    swal("Cancelled", "");
+                    swal("Cancelled", "You have chosen to cancel", "info");
                   }
                 });
         });

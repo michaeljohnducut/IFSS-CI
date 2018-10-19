@@ -82,6 +82,9 @@
                   <li class="tab nav-item" style="background-color:#fff; border:0px;">
                      <a data-toggle="tab" class="nav-link" href="#room_query" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Rooms/Labs</span> </a>
                   </li>
+                  <li class="tab nav-item" style="background-color:#fff; border:0px;">
+                     <a data-toggle="tab" class="nav-link" href="#subject_query" aria-expanded="false"> <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Subjects</span> </a>
+                  </li>
                    </ul>
                    <div class="tab-content" style="width: 100%">
                       <div id="fac_query" class="tab-pane active">
@@ -94,7 +97,7 @@
                                         <option value="1">Available faculty members</option>
                                         <option value="2">Top 10 Faculty Members with highest evaluation</option>
                                         <option value="3">Faculty Members with consecutive satisfactory ratings</option>
-                                        <option value="4">Teaching Assignments with no Schedules</option>
+                                        <!-- <option value="4">Teaching Assignments with no Schedules</option> -->
                                         <option value="5">Top 10 faculty members with highest total loads</option>
                                     </select>
                                 </div>
@@ -128,7 +131,7 @@
                         </div>
                     <div class="clearfix"></div>
                 </div>
-                 <div id="section_query" class="tab-pane">
+                <div id="section_query" class="tab-pane">
                     <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
                         <div>
                             <div class="col-md-12">
@@ -204,6 +207,30 @@
                                             <option value="Saturday">Saturday</option>
                                             <option value="Sunday">Sunday</option>
                                         </select>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="subject_query" class="tab-pane">
+                    <div class="white-box" style="padding-top:0%; padding-bottom:0%;">
+                        <div>
+                            <div class="col-md-12">
+                                    <h3>Select a Query</h3>
+                                    <select class="form-control select2" id="query_subjects">
+                                        <option value="0" selected="" disabled="">Queries</option>
+                                        <option value="1">Unschedules Subjects</option>
+                                        <option value="2">Unassigned Subjects</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-16" id="subj_type">
+                                     <div class="col-md-12">
+                                        <br>
+                                        <input type="radio" name="edit_major" value="1" checked>
+                                        <label class="control-label">Major Subjects</label>
+                                        &nbsp&nbsp
+                                        <input type="radio" name="edit_major" value="0">
+                                        <label class="control-label">Minor Subjects</label>
                                     </div>
                                 </div>
                         </div>
@@ -443,7 +470,7 @@
             var picked_query = $('#query_section').val();
             if(picked_query == 1)
             {
-                queryAvailProf();
+                queryAvailSections();
                 $('#sec_times').show();
             }
             else
@@ -614,7 +641,7 @@
 
             if(picked_query == 1)
             {
-                queryAvailProf();
+                queryAvailRooms();
                 $('#room_times').show();
             }
             else
@@ -649,11 +676,84 @@
                     }
                 });
             }
+        });
+
+        //QUERIES ON SUBJECTS
+        $('#query_subjects').on('change', function(){
+            var picked_query = $('#query_subjects').val();
+            var picked_type = $("input[name='edit_major']:checked").val();
+
+            if(picked_query == 1)
+            {
+                if(picked_type == 1)
+                {
+                    var acad_year = $('#acad_year_drop').val();
+                    var sem = $('#sem_drop').val();
+                    $.ajax({  
+                        url:"<?php echo base_url('Transaction/query_unsched_load')?>", 
+                        method:"POST", 
+                        data:{ acad_year:acad_year, sem:sem}, 
+                        dataType: "json",
+                        success:function(data){
+                            $('#txtResult').empty();
+                            var len = data.length;
+                            for (var x = 0; x < len; x++)
+                            {   
+                                var name = data[x][0] + ', ' + data[x][1] + ' ' + data[x][2];
+                                var section = data[x][3] + ' ' + data[x][4][0] + ' - ' + data[x][5];
+                                var subject = data[x][6];
+     
+                                $('#txtResult').append((x+1) + '. ' + name + ' - ' + section + ' - ' + subject +   '\n');
+                            }
+
+                            if(len == 0)
+                            {
+                                $('#txtResult').append('--NO RESULTS--');
+                            }
+                        },
+                        error: function (data) {
+                        // alert(JSON.stringify(data));
+                        }
+                    });
+                }
+
+                if(picked_type == 0)
+                {
+                    
+                }
+                
+            }
+
+            if(picked_query == 2)
+            {
+                var acad_year = $('#acad_year_drop').val();
+                var sem = $('#sem_drop').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/query_top_used_room')?>", 
+                    method:"POST", 
+                    data:{ acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        $('#txtResult').empty();
+                        var len = data.length;
+                        for (var x = 0; x < len; x++)
+                        {   
+                            $('#txtResult').append((x+1) + '. ' +  data[x][0] +   '\n');
+                        }
+
+                        if(len == 0)
+                        {
+                            $('#txtResult').append('--NO RESULTS--');
+                        }
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+                });
+            }
 
         });
 
       });
-
-
 
     </script>

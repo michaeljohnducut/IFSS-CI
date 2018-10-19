@@ -726,11 +726,11 @@
                         $('#lbl_fac_name').append('<b>FACULTY NAME:</b>&nbsp;' + data[0][1]);
                         $('#lbl_fac_type').append('<b>FACULTY TYPE:</b>&nbsp;' + data[0][2]);
                         $('#lbl_spec').append('<b>SPECIALIZATIONS:</b>&nbsp;' + data[0][3]);
-                        $('#lbl_load_limit').append('<b>TOTAL LOAD LIMIT:</b>&nbsp;' + data[0][5]);
-                        $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data[0][4]);
-                        $('#reg_limit').append(data[0][6]);
-                        $('#pt_limit').append(data[0][7]);
-                        $('#ts_limit').append(data[0][8]);
+                        $('#lbl_load_limit').append('<b>TOTAL LOAD LIMIT:</b>&nbsp;' + data[0][5] + ' hours');
+                        $('#lbl_load').append('<b>CURRENT LOAD COUNT:</b>&nbsp;' + data[0][4] + ' hours');
+                        $('#reg_limit').append(data[0][6] + ' hours');
+                        $('#pt_limit').append(data[0][7] + ' hours');
+                        $('#ts_limit').append(data[0][8] + ' hours');
                         viewFacultyLoadTbl(fac_id_1);
                         $('#openMod').trigger('click');
                     }

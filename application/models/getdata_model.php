@@ -3988,7 +3988,7 @@ FROM subject_match sm
 		$result = array();
 
 		$query = $this->db->select("CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
-				->where('f.faculty_id NOT IN (SELECT sm.faculty_id
+				->where('f.faculty_id IN (SELECT sm.faculty_id
                            FROM subject_match sm 
                            WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
           			FROM teaching_assign_sched ta 
@@ -4032,7 +4032,7 @@ FROM subject_match sm
 
 		$query = $this->db->select('c.course_code, s.year_lvl, s.section_desc')
 				->join('course c', 's.course = c.course_id')
-				->where('s.section_id NOT IN (SELECT sm.section
+				->where('s.section_id IN (SELECT sm.section
                            FROM subject_match sm 
                            WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
           			FROM teaching_assign_sched ta 
@@ -4221,7 +4221,7 @@ FROM subject_match sm
 		$result = array();
 
 		$query = $this->db->select('r.room_id, r.room_code')
-				->where('r.room_id NOT IN (SELECT ta.room_id
+				->where('r.room_id IN (SELECT ta.room_id
 					FROM teaching_assign_sched ta
 					WHERE ta.acad_yr = "'.$acad_year.'"
 					AND ta.sem = "'.$sem.'"

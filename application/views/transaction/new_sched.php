@@ -769,11 +769,11 @@
                       <form id="add_major_form" method="POST">
                       <div class="col-md-12" id="sched_a_major">
                         <div class="col-md-3">
-                          <label class="control-label">Start time:</label>
+                          <label class="control-label">Start time (Lecture):</label>
                           <input type="time" id="major_start_a" name="major_start[]" class="form-control" required="">
                         </div>
                         <div class="col-md-3">
-                          <label class="control-label">End time:</label>
+                          <label class="control-label">End time (Lecture):</label>
                           <input type="time" id="major_end_a" name="major_end[]" readonly="" class="form-control" required="">
                         </div>
                         <div class="col-md-3">
@@ -801,12 +801,12 @@
                     <div class="col-md-12" id="sched_b_major">
                         <div class="col-md-3">
                           <br>
-                          <label class="control-label">Start time:</label>
+                          <label class="control-label" id="major_div_start">Start time:</label>
                           <input type="time" id="major_start_b" name="major_start[]" class="form-control">
                         </div>
                         <div class="col-md-3">
                           <br>
-                          <label class="control-label">End time:</label>
+                          <label class="control-label" id="major_div_end">End time:</label>
                           <input type="time" id="major_end_b" name="major_end[]" readonly="" class="form-control">
                         </div>
                         <div class="col-md-3">
@@ -931,6 +931,10 @@
                                 <option value="0">-Faculty-</option>
                                 <?php foreach($faculty as $r) echo '<option value="'.$r[7].'">'.$r[1].', '.$r[2].' '.$r[3].'</option>';?>
                             </select>
+                        </div>
+                        <div class="col-md-12">
+                            <br><br>
+                            <h5><b>NOTE:</b>&nbsp;<br>Names that will be listed on the drop-down menu will be faculty members who prefer the subject and are available on that specific schedule.</h5>
                         </div>
                        
                     </div>
@@ -4769,6 +4773,10 @@
                 $('#sched_b_major').hide();
                 $('#chk_major_div').show();
                 $('#chk_split_major').prop('checked', false);
+                $('#major_div_start').empty();
+                $('#major_div_end').empty();
+                $('#major_div_start').append('Start Time (Lecture):');
+                $('#major_div_end').append('End Time (Lecture):');
                 global_major_split = 0;
             }
 
@@ -4777,6 +4785,10 @@
                 $('#sched_b_major').show();
                 $('#chk_major_div').hide();
                 $('#chk_split_major').prop('checked', false);
+                $('#major_div_start').empty();
+                $('#major_div_end').empty();
+                $('#major_div_start').append('Start Time (Lab):');
+                $('#major_div_end').append('End Time (Lab):');
                 global_major_split = 1;
             }
             

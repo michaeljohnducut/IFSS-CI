@@ -674,7 +674,7 @@ function getPrefTime(faculty_id, acad_year, sem){
                 });   
     }
 
-    function checkSubjectSpecialization(subj_id){
+    function checkSubjectSpecialization(fac_id, subj_id, sem, acad_year){
 
         var len = global_pref_subj.length;
         var bool_match = false;
@@ -699,16 +699,32 @@ function getPrefTime(faculty_id, acad_year, sem){
                 .then((willApprove) => {
                     
                   if (willApprove) {
-                    bool_match = true;
+                    
+                     event.preventDefault();  
+                        $.ajax({  
+                        url:"<?php echo base_url('Transaction/add_pref_subj')?>",   
+                        method:"POST",  
+                        data:{fac_id:fac_id, subj_code:subj_id, sem:sem, acad_year:acad_year},
+
+                            success:function(data)
+                            {  
+                                swal("Success!", "Subject is added.");
+                                // $(this).prop("checked", true);
+                            }, 
+
+                            error: function(data)
+                             {
+                                   alerts('An error occured. Please reload the page and try again.');
+                             }
+                        }); 
                   } 
 
                   else {
+                    $("input[name = 'chk_subj'][value = '"+subj_id+"'] ").prop('checked', false);
                     swal("Cancelled", "You have chosen to cancel", "info");
                   }
                 });
         }
-        alert (bool_match);
-
         return bool_match;
     }
 
@@ -1379,32 +1395,27 @@ $(document).ready(function(){
             }
 
            else{
-            var is_matched = checkSubjectSpecialization(subj_code);
-           }
-           if (is_matched == true)
-           {
-             event.preventDefault();  
-                $.ajax({  
-                url:"<?php echo base_url('Transaction/add_pref_subj')?>",   
-                method:"POST",  
-                data:{fac_id:fac_id, subj_code:subj_code, sem:sem, acad_year:acad_year},
-
-                    success:function(data)
-                    {  
-                        swal("Success!", "Subject is added.");
-                    }, 
-
-                    error: function(data)
-                     {
-                           alerts('An error occured. Please reload the page and try again.');
-                     }
-                }); 
-               }
-               else
+            var is_matched = checkSubjectSpecialization(fac_id, subj_code, sem, acad_year);
+            if (is_matched == true)
                {
-                    $(this).prop("checked", false);
-               }
-            
+                 event.preventDefault();  
+                    $.ajax({  
+                    url:"<?php echo base_url('Transaction/add_pref_subj')?>",   
+                    method:"POST",  
+                    data:{fac_id:fac_id, subj_code:subj_code, sem:sem, acad_year:acad_year},
+
+                        success:function(data)
+                        {  
+                            swal("Success!", "Subject is added.");
+                        }, 
+
+                        error: function(data)
+                         {
+                               alerts('An error occured. Please reload the page and try again.');
+                         }
+                    }); 
+                   }
+           }            
          }
 
          else{

@@ -761,7 +761,7 @@
                           </select>
                           <br><br>
                         </div>
-                        <div class="col-md-4" style="text-align:right;">
+                        <div class="col-md-4" style="text-align:right;" id="chk_major_div">
                           <input style="margin-top: 35px;" type="checkbox" id="chk_split_major">
                           <label style="margin-top: 35px;" for="chk_split_major">Split hours</label>
                         </div>
@@ -1548,6 +1548,30 @@
            });
         }
 
+        function showAvailRoom_sec(day, start_time, end, dropdown_id){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_rooms')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
+
+                     var len = data.length;
+                     $('#'+ dropdown_id).empty();
+                     $('#'+ dropdown_id).append('<option value = "0">-Room-</option>');
+                     for(var i = 0 ; i < len ; i++){
+                        $('#'+ dropdown_id).append('<option value = "' + data[i][0]+ '">' + data[i][1] + '</option>');
+                     }
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+
         function minorFirstSave(){
             var sem = $('#sec_sem').val();
             var acad_year = $('#sec_acadyr').val();
@@ -1698,6 +1722,30 @@
 
             var sem = $('#sched_sem').val();
             var acad_year = $('#sched_acad_year').val();
+            $.ajax({  
+                url:"<?php echo base_url('Transaction/get_avail_labs')?>", 
+                method:"POST", 
+                data:{sem:sem, day:day, acad_year:acad_year, start_time:start_time, end:end}, 
+                dataType: "json",
+                success:function(data){
+
+                     var len = data.length;
+                     $('#'+ dropdown_id).empty();
+                     $('#'+ dropdown_id).append('<option value = "0">-Room-</option>');
+                     for(var i = 0 ; i < len ; i++){
+                        $('#'+ dropdown_id).append('<option value = "' + data[i][0]+ '">' + data[i][1] + '</option>');
+                     }
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }
+           });
+        }
+
+        function showAvailLab_sec(day, start_time, end, dropdown_id){
+
+            var sem = $('#sec_sem').val();
+            var acad_year = $('#sec_acadyr').val();
             $.ajax({  
                 url:"<?php echo base_url('Transaction/get_avail_labs')?>", 
                 method:"POST", 
@@ -4656,8 +4704,8 @@
                   
               },
               error: function (data) {
-                swal("Error!", "Failed to reschedule.", "error");
-                alert(JSON.stringify(data));
+                swal("Error!", "Complete Parameters First", "error");
+                // alert(JSON.stringify(data));
               }
             });
 
@@ -4716,6 +4764,21 @@
         $('#major_subj').on('change',function(){
             var subj_code = $('#major_subj').val();
             viewSubjDetails_major(subj_code);
+            if(global_labhour == 0)
+            {
+                $('#sched_b_major').hide();
+                $('#chk_major_div').show();
+                $('#chk_split_major').prop('checked', false);
+                global_major_split = 0;
+            }
+
+            else
+            {
+                $('#sched_b_major').show();
+                $('#chk_major_div').hide();
+                $('#chk_split_major').prop('checked', false);
+                global_major_split = 1;
+            }
             
         });
 
@@ -4724,7 +4787,7 @@
             var start = $('#minor_start_a').val();
             var end = $('#minor_end_a').val();
             var day = $('#day_minor_a').val();
-            showAvailRoom(day, start, end, 'rooms_minor_a');
+            showAvailRoom_sec(day, start, end, 'rooms_minor_a');
             validateMinorSched(start, end, day, 'minor_start_a', 'minor_end_a', 'day_minor_a');
         });
 
@@ -4732,7 +4795,7 @@
             var start = $('#minor_start_b').val();
             var end = $('#minor_end_b').val();
             var day = $('#day_minor_b').val();
-            showAvailRoom(day, start, end, 'rooms_minor_b');
+            showAvailRoom_sec(day, start, end, 'rooms_minor_b');
             validateMinorSched(start, end, day, 'minor_start_b', 'minor_end_b', 'day_minor_br');
         });
 
@@ -4740,7 +4803,7 @@
             var start = $('#major_start_a').val();
             var end = $('#major_end_a').val();
             var day = $('#day_major_a').val();
-            showAvailRoom(day, start, end, 'rooms_major_a');
+            showAvailRoom_sec(day, start, end, 'rooms_major_a');
             validateMinorSched(start, end, day, 'major_start_a', 'major_end_a', 'day_major_a');
             if($('#chk_split_major').prop('checked', false))
             {
@@ -4759,11 +4822,11 @@
             var day = $('#day_major_b').val();
             if(global_labhour == 0)
             {
-                showAvailRoom(day, start, end, 'rooms_major_b');
+                showAvailRoom_sec(day, start, end, 'rooms_major_b');
             }
             else
             {
-                showAvailLab(day, start, end, 'rooms_major_b');
+                showAvailLab_sec(day, start, end, 'rooms_major_b');
             }
             validateMinorSched(start, end, day, 'major_start_b', 'major_end_b', 'day_major_b');
             showProfOnSplit();

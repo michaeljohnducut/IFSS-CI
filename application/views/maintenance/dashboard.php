@@ -98,11 +98,12 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-
-                        <div class="white-box text-center bg-danger" style="height: 93%">
-                            <p class="text-white"><STRONG>PICK UP WHERE YOU LEFT OFF!</STRONG></p>
+                          <div class="ribbon-wrapper bg-danger" style="height: 93%">
+                           <div class="ribbon ribbon-bookmark ribbon-vertical-l ribbon-success"><i class="fa fa-exclamation-circle" style="font-size: 170%"></i></div>
+                            <p class="text-white"><STRONG>PICK UP WHERE YOU LEFT OFF</STRONG></p>
                             <hr style="background-color: white;">
                             <p class="text-white">You were previously working on <STRONG>(section)'s</STRONG> Schedule</p>
+                            
                         </div>
                     </div>
                   </div>

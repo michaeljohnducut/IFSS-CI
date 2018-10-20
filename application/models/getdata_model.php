@@ -3833,6 +3833,62 @@ FROM subject_match sm
 		return $ctr;
 	}
 
+	public function get_section_incomplete()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('section_id, year_lvl, course')
+				->where('acad_yr', $acad_yr)
+				->where('status', 1)
+                ->get('section');
+
+        $ctr = 0;
+
+		foreach($query1->result() as $r)
+		{		
+			$query2 = $this->db->select('SUM(lab_hrs + lec_hrs) AS off_total_hrs')
+					->join('curriculum c', 's.subj_id = c.subj_code')
+					->where('sem', $sem)
+					->where('year_lvl', $r->year_lvl)
+					->where('course', $r->course)
+	                ->get('subject s');
+
+		    foreach($query2->result() as $s)
+		    {
+		       	($s->off_total_hrs == '')?$off_total_hrs = 0:$off_total_hrs = $s->off_total_hrs;
+		    }
+
+	        $query3 = $this->db->query('SELECT SUM(lec_hrs + lab_hrs) AS total_hours
+										FROM subject sub
+										JOIN subject_match sm
+										ON sub.subj_id = sm.subj_id
+										JOIN section sec
+										ON sm.section = sec.section_id
+										WHERE sec.section_id = "'.$r->section_id.'" AND sm.acad_yr = "'.$acad_yr.'" AND sm.sem = "'.$sem.'"');
+
+	        foreach($query3->result() as $t)
+	        {
+	        	($t->total_hours == '')?$total_hours = 0:$total_hours = $t->total_hours;
+	        }
+
+	        if($off_total_hrs != $total_hours)
+	        {
+	        	$ctr++;
+	        }
+
+	        $result[] = array(
+	        			$r->section_id,
+	        			$off_total_hrs,
+	        			$total_hours
+						);
+		}
+
+		return $ctr;
+	}
+
 	public function get_services_complete()
 	{
 		$result = array();
@@ -3932,6 +3988,24 @@ FROM subject_match sm
 		}
 
 		return $result;	
+	}
+
+	public function get_latest()
+	{
+		$result = '';
+
+		$user_id = $this->security->xss_clean($this->input->post('id'));
+
+		$query1 = $this->db->query('SELECT schedule_name 
+									FROM track_schedule 
+									WHERE user_id = "'.$user_id.'" AND date_added = (SELECT MAX(date_added) FROM track_schedule)');
+
+		foreach($query1->result() as $r)
+		{		
+			$result = $r->schedule_name;
+		}
+
+		return $result;
 	}
 
 	public function get_account()
@@ -4243,16 +4317,14 @@ FROM subject_match sm
 	{
 		$result = array();
 
-		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_year'));
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 
-		$query1 = $this->db->select('s.section_id, s.year_lvl, s.course, CONCAT(c.course_code + " " + LEFT(s.year_lvl, 1) + " - " + s.section_desc) AS "section_name"')
+		$query1 = $this->db->select('s.section_id, s.year_lvl, s.course, s.section_desc, CONCAT(c.course_code," ",LEFT(s.year_lvl, 1)," - ",s.section_desc) AS "section_name"')
 				->where('s.acad_yr', $acad_yr)
 				->where('s.status', 1)
 				->join('course c', 'c.course_id = s.course')
                 ->get('section s');
-
-        $ctr = 0;
 
 		foreach($query1->result() as $r)
 		{		
@@ -4284,9 +4356,7 @@ FROM subject_match sm
 	        if($off_total_hrs != $total_hours)
 	        {
 	        	array_push($result, $r->section_name);
-	        }
-
-	        
+	        }  
 		}
 
 		return $result;

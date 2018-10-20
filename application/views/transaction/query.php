@@ -139,7 +139,7 @@
                                     <select class="form-control select2" id="query_section">
                                         <option value="0" selected="" disabled="">Queries</option>
                                         <option value="1">Available Sections</option>
-                                        <!-- <option value="2">Sections with incomplete schedules</option> -->
+                                        <option value="2">Sections with incomplete schedules</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12" id="sec_times">
@@ -551,22 +551,18 @@
                 $.ajax({  
                     url:"<?php echo base_url('Transaction/query_inc_sec')?>", 
                     method:"POST", 
-                    data:{ acad_year:acad_year, sem:sem}, 
+                    data:{acad_year:acad_year, sem:sem}, 
                     dataType: "json",
                     success:function(data){
-                        // $('#txtResult').empty();
-                        // var len = data.length;
-                        // for (var x = 0; x < len; x++)
-                        // {   
-                        //     var name = data[x][0] + ', ' + data[x][1] + ' ' + data[x][2];
-                        //     var rating = data[x][3].substring(0,5);
-
-                        //     $('#txtResult').append((x+1) + '. ' + name + ' - ' + rating + '%\n');
-                        // }
-                        alert(data);
+                        $('#txtResult').empty();
+                        var len = data.length;
+                        for (var x = 0; x < len; x++)
+                        {   
+                            $('#txtResult').append((x+1) + '. ' + data[x]+ '\n');
+                        }
                     },
                     error: function (data) {
-                    // alert(JSON.stringify(data));
+                    alert(JSON.stringify(data));
                     }
                 });
             }

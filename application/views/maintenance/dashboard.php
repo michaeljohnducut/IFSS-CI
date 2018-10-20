@@ -89,7 +89,7 @@
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="insec_prog"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +102,7 @@
                            <div class="ribbon ribbon-bookmark ribbon-vertical-l ribbon-success"><i class="fa fa-exclamation-circle" style="font-size: 170%"></i></div>
                             <p class="text-white"><STRONG>PICK UP WHERE YOU LEFT OFF</STRONG></p>
                             <hr style="background-color: white;">
-                            <p class="text-white">You were previously working on <STRONG>(section)'s</STRONG> Schedule</p>
+                            <p class="text-white">You were previously working on <STRONG><span id="sched_name"></span></STRONG> Schedule</p>
                             
                         </div>
                     </div>
@@ -666,6 +666,21 @@
                         alert(JSON.stringify(data));
                     }
                 }); 
+
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_section_incomplete')?>", 
+                    method:"POST",
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#sec_incomp').html(data);
+                        $('#insec_prog').css('width', data + "%");
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
             }       
         }
 
@@ -727,6 +742,24 @@
             }
         }
 
+        function fetch_latest()
+        {
+            var id = "<?php echo $id?>";
+            $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_latest')?>", 
+                    method:"POST",
+                    data: {id:id},
+                    success:function(data)
+                    {
+                        $('#sched_name').html(data);
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
+        }
+
         $(document).ready(function()
         {
             show_total_sec();
@@ -738,6 +771,8 @@
             getTotalFaculty();
 
             show_top_specialization();
+
+            fetch_latest();
 
             get_pref_time($('#selectAcadYr3').val());
 

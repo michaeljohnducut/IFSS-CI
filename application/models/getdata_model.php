@@ -4129,6 +4129,87 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function query_unassign_load()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query = $this->db->select('c.course_code, s.year_lvl, s.section_desc, sb.subj_desc')
+				->join('section s ', 's.section_id = sm.section ')
+				->join('course c ', 'c.course_id = s.course ')
+				->join('subject sb', 'sb.subj_id = sm.subj_id')
+				->group_start()
+                	->where('sb.isMajor', 1)
+                	->or_where('sb.isMajor', 2)
+                ->group_end()
+				->where('sm.faculty_id', NULL)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->where('sm.subj_match_id IN (SELECT ta.subj_match_id
+                             FROM teaching_assign_sched ta
+                             WHERE sm.acad_yr = "'.$acad_year.'" 
+                             AND sm.sem = "'.$sem.'") ')
+                ->get('subject_match sm');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array( 
+					$r->course_code,
+					$r->year_lvl,
+					$r->section_desc,
+					$r->subj_desc
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_unsched_minor()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query1 = $this->db->select('section_id, section_desc, year_lvl, course_code')
+							->join('course c', 'c.course_id = s.course')
+							->get('section s');
+
+		foreach($query1->result() as $t)
+		{
+			$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
+				->where('c.year_lvl = (SELECT se.year_lvl
+                    FROM section se
+                    WHERE se.section_id = '.$t->section_id.')', NULL, FALSE)
+				->where('s.specialization is null')
+				->where('c.sem ', $sem)
+				->where('s.subj_id NOT IN (SELECT sm.subj_id
+											FROM subject_match sm
+											WHERE sm.section = '.$t->section_id.'
+											AND sm.subj_match_id IN 
+											(SELECT ta.subj_match_id
+											FROM teaching_assign_sched ta 
+											WHERE ta.acad_yr = "'.$acad_year.'"
+											AND ta.sem = "'.$sem.'"))',NULL,FALSE)
+				->join('subject s','s.subj_id = c.subj_code')
+                ->get('curriculum c ');
+
+	        foreach ($query->result() as $r){
+
+				$result[] = array(
+						$t->course_code,
+						$t->year_lvl,
+						$t->section_desc,
+						$r->subj_desc
+						);
+			}
+		}
+
+		return $result;
+	}
+
+
+
 	public function query_top_loads()
 	{
 		$result = array();

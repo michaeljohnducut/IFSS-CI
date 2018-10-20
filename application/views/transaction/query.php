@@ -223,7 +223,7 @@
                                         <option value="2">Unassigned Subjects</option>
                                     </select>
                                 </div>
-                                <div class="col-md-16" id="subj_type">
+                                <!-- <div class="col-md-16" id="subj_type">
                                      <div class="col-md-12">
                                         <br>
                                         <input type="radio" name="edit_major" value="1" checked>
@@ -232,7 +232,7 @@
                                         <input type="radio" name="edit_major" value="0">
                                         <label class="control-label">Minor Subjects</label>
                                     </div>
-                                </div>
+                                </div> -->
                         </div>
                     </div>
                 </div>
@@ -392,6 +392,73 @@
                 }
             });
     }
+
+    function getSubjType(picked_type)
+    {
+        if(picked_type == 1)
+                {
+                    var acad_year = $('#acad_year_drop').val();
+                    var sem = $('#sem_drop').val();
+                    $.ajax({  
+                        url:"<?php echo base_url('Transaction/query_unsched_load')?>", 
+                        method:"POST", 
+                        data:{ acad_year:acad_year, sem:sem}, 
+                        dataType: "json",
+                        success:function(data){
+                            $('#txtResult').empty();
+                            var len = data.length;
+                            for (var x = 0; x < len; x++)
+                            {   
+                                var name = data[x][0] + ', ' + data[x][1] + ' ' + data[x][2];
+                                var section = data[x][3] + ' ' + data[x][4][0] + ' - ' + data[x][5];
+                                var subject = data[x][6];
+     
+                                $('#txtResult').append((x+1) + '. ' + section + ' - ' + subject + ' - ' + name +   '\n');
+                            }
+
+                            if(len == 0)
+                            {
+                                $('#txtResult').append('--NO RESULTS--');
+                            }
+                        },
+                        error: function (data) {
+                        // alert(JSON.stringify(data));
+                        }
+                    });
+                }
+
+                if(picked_type == 0)
+                {
+                    var acad_year = $('#acad_year_drop').val();
+                    var sem = $('#sem_drop').val();
+                    $.ajax({  
+                        url:"<?php echo base_url('Transaction/query_unsched_minor')?>", 
+                        method:"POST", 
+                        data:{ acad_year:acad_year, sem:sem}, 
+                        dataType: "json",
+                        success:function(data){
+                            $('#txtResult').empty();
+                            var len = data.length;
+                            for (var x = 0; x < len; x++)
+                            {   
+                                var section = data[x][0] + ' ' + data[x][1][0] + ' - ' + data[x][2];
+                                var subject = data[x][3];
+     
+                                $('#txtResult').append((x+1) + '. ' + section + ' - ' + subject +   '\n');
+                            }
+
+                            if(len == 0)
+                            {
+                                $('#txtResult').append('--NO RESULTS--');
+                            }
+                        },
+                        error: function (data) {
+                        // alert(JSON.stringify(data));
+                        }
+                    });
+                }
+    }
+
 
     //SELECT2
       $(".select2").select2();
@@ -683,14 +750,23 @@
             var picked_query = $('#query_subjects').val();
             var picked_type = $("input[name='edit_major']:checked").val();
 
+            $('input[type=radio][name=edit_major]').change(function() 
+            {
+                picked_type = $("input[name='edit_major']:checked").val();
+                getSubjType(picked_type);
+            });
+
             if(picked_query == 1)
             {
-                if(picked_type == 1)
-                {
-                    var acad_year = $('#acad_year_drop').val();
-                    var sem = $('#sem_drop').val();
-                    $.ajax({  
-                        url:"<?php echo base_url('Transaction/query_unsched_load')?>", 
+                getSubjType(1);
+            }
+
+            if(picked_query == 2)
+            {
+                var acad_year = $('#acad_year_drop').val();
+                var sem = $('#sem_drop').val();
+                $.ajax({  
+                        url:"<?php echo base_url('Transaction/query_unassign_load')?>", 
                         method:"POST", 
                         data:{ acad_year:acad_year, sem:sem}, 
                         dataType: "json",
@@ -699,11 +775,10 @@
                             var len = data.length;
                             for (var x = 0; x < len; x++)
                             {   
-                                var name = data[x][0] + ', ' + data[x][1] + ' ' + data[x][2];
-                                var section = data[x][3] + ' ' + data[x][4][0] + ' - ' + data[x][5];
-                                var subject = data[x][6];
+                                var section = data[x][0] + ' ' + data[x][1][0] + ' - ' + data[x][2];
+                                var subject = data[x][3];
      
-                                $('#txtResult').append((x+1) + '. ' + name + ' - ' + section + ' - ' + subject +   '\n');
+                                $('#txtResult').append((x+1) + '. ' + section + ' - ' + subject +   '\n');
                             }
 
                             if(len == 0)
@@ -714,41 +789,6 @@
                         error: function (data) {
                         // alert(JSON.stringify(data));
                         }
-                    });
-                }
-
-                if(picked_type == 0)
-                {
-                    
-                }
-                
-            }
-
-            if(picked_query == 2)
-            {
-                var acad_year = $('#acad_year_drop').val();
-                var sem = $('#sem_drop').val();
-                $.ajax({  
-                    url:"<?php echo base_url('Transaction/query_top_used_room')?>", 
-                    method:"POST", 
-                    data:{ acad_year:acad_year, sem:sem}, 
-                    dataType: "json",
-                    success:function(data){
-                        $('#txtResult').empty();
-                        var len = data.length;
-                        for (var x = 0; x < len; x++)
-                        {   
-                            $('#txtResult').append((x+1) + '. ' +  data[x][0] +   '\n');
-                        }
-
-                        if(len == 0)
-                        {
-                            $('#txtResult').append('--NO RESULTS--');
-                        }
-                    },
-                    error: function (data) {
-                    // alert(JSON.stringify(data));
-                    }
                 });
             }
 

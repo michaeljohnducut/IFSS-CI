@@ -233,6 +233,7 @@ class Transaction extends CI_Controller
 	{	
 		$data['courses'] = $this->getdata_model->course();
 		$data['rooms'] = $this->getdata_model->room_sorted();
+		$data['fac_id'] = $this->session->userdata('USERID');
 
 		if(isset($_POST['subj_id'])){
 			print_r('subj_id');
@@ -913,11 +914,13 @@ class Transaction extends CI_Controller
 	public function publish_teaching_load()
 	{
 		echo ($this->savedata_model->publish_teaching_load($_POST));
+		exit();
 	}
 
 	public function unpublish_teaching_load()
 	{
 		echo ($this->savedata_model->unpublish_teaching_load($_POST));
+		exit();
 	}
 
 	public function reflect_published_load()
@@ -959,6 +962,12 @@ class Transaction extends CI_Controller
 	public function load_published_table()
 	{
 		echo json_encode($this->getdata_model->load_published_table($_POST));
+		exit();
+	}
+
+	public function add_to_track()
+	{
+		echo ($this->savedata_model->add_to_track($_POST));
 		exit();
 	}
 

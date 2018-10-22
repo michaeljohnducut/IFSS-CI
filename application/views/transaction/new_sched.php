@@ -3492,12 +3492,29 @@ function unpublishTeachingLoads(){
     });  
 }
 
+
+function addToTrack(tracking){
+
+var user_id = "<?php echo $fac_id?>";
+    $.ajax({  
+        url:"<?php echo base_url('Transaction/add_to_track')?>",  
+        type:"POST",  
+        data: {tracking:tracking, user_id:user_id},
+        success:function(data)
+        {  
+
+        },
+         error: function (data) {
+                alert(JSON.stringify(data));
+        },
+    }); 
+}
+
       //SELECT2
       $(".select2").select2();
       $('.selectpicker').selectpicker();
 
       $(document).ready(function(){
-
         $('#sched_b').hide();
         $('#sched_b_major').hide();
         // $('#divsplit').hide();
@@ -4302,7 +4319,6 @@ function unpublishTeachingLoads(){
             $('#btnPublish').show();
             getFacultyType();
             displayLegends();
-
           }
 
             getPrefDay_gen();
@@ -4330,6 +4346,9 @@ function unpublishTeachingLoads(){
                 reflectPartTime();
                 reflectTS();
             }
+
+            var fac_text = $("#sched_faculty option:selected").text();
+            addToTrack(fac_text);
         });
 
         $('#sched_acad_year').on('change', function(){
@@ -4402,10 +4421,14 @@ function unpublishTeachingLoads(){
         });
 
         $('#sec_yearsec').on('change', function(){
-          resetPlotForm();
-          reflectSectionTable();
-          reflectSectionMinor();
-          loadSectionTable();
+            resetPlotForm();
+            reflectSectionTable();
+            reflectSectionMinor();
+            loadSectionTable();
+            var sec_course = $("#sec_course option:selected").text();
+            var sec_text = $("#sec_yearsec option:selected").text();
+            var section = sec_course + ' ' + sec_text;
+            addToTrack(section);
         });
 
 

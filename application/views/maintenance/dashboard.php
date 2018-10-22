@@ -102,7 +102,7 @@
                            <div class="ribbon ribbon-bookmark ribbon-vertical-l ribbon-success"><i class="fa fa-exclamation-circle" style="font-size: 170%"></i></div>
                             <p class="text-white"><STRONG>PICK UP WHERE YOU LEFT OFF</STRONG></p>
                             <hr style="background-color: white;">
-                            <p class="text-white">You were previously working on <STRONG><span id="sched_name"></span></STRONG> Schedule</p>
+                            <p class="text-white">You were previously working on <STRONG><span id="sched_name"></span></STRONG>'s Schedule</p>
                             
                         </div>
                     </div>

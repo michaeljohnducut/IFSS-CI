@@ -696,6 +696,8 @@
             }
         }
 
+
+
       function showSpec(id)
         {   
             event.preventDefault();  

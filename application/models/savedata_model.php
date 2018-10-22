@@ -2716,5 +2716,19 @@ class Savedata_model extends CI_Model
 
 		return $output;
 	}
+
+	public function add_to_track()
+	{
+		$output = '';
+
+		$tracking = $this->security->xss_clean($this->input->post('tracking'));
+		$user_id = $this->security->xss_clean($this->input->post('user_id'));
+
+		$this->db->insert('track_schedule', array('user_id' => $user_id, 'schedule_name' => $tracking, 'date_added' => date('Y-m-d H:i:s')));
+
+		$output = 'ADDED';
+
+		return $output;
+	}
 }
 ?>

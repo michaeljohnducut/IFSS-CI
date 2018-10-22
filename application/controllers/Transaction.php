@@ -915,6 +915,53 @@ class Transaction extends CI_Controller
 		echo ($this->savedata_model->publish_teaching_load($_POST));
 	}
 
+	public function unpublish_teaching_load()
+	{
+		echo ($this->savedata_model->unpublish_teaching_load($_POST));
+	}
+
+	public function reflect_published_load()
+	{
+		echo json_encode($this->getdata_model->reflect_published_load($_POST));
+		exit();
+	}
+
+	public function reflect_published_at()
+	{
+		echo json_encode($this->getdata_model->reflect_published_at($_POST));
+		exit();
+	}
+
+	public function reflect_published_no()
+	{
+		echo json_encode($this->getdata_model->reflect_published_no($_POST));
+		exit();
+	}
+
+	public function reflect_published_oh()
+	{
+		echo json_encode($this->getdata_model->reflect_published_oh($_POST));
+		exit();
+	}
+
+	public function reflect_published_services()
+	{
+		echo json_encode($this->getdata_model->reflect_published_services($_POST));
+		exit();
+	}
+
+	public function check_published()
+	{
+		echo json_encode($this->getdata_model->check_published($_POST));
+		exit();
+	}
+
+	public function load_published_table()
+	{
+		echo json_encode($this->getdata_model->load_published_table($_POST));
+		exit();
+	}
+
 } 
 
 ?>

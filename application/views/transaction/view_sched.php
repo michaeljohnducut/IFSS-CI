@@ -742,22 +742,34 @@
             var account = "<?php echo $acc_type?>"; 
             if(account == 'admin'){
                 var fac_id = $('#sched_faculty').val();
+                var dataTable = $('#tbl_sched_sum').DataTable({           
+                  "processing" : true,
+                  "serverSide" : true,
+                  "order" : [],
+                  destroy:true,
+                  "ajax" : {
+                   url:"<?php echo base_url('Transaction/load_sched_table')?>",
+                   data:{sem: sem, acad_year:acad_year, fac_id:fac_id},
+                   type:"POST"
+                  }
+                 });
             }
             else{
                 var fac_id = "<?php echo $fac_id?>";
+                var dataTable = $('#tbl_sched_sum').DataTable({           
+                  "processing" : true,
+                  "serverSide" : true,
+                  "order" : [],
+                  destroy:true,
+                  "ajax" : {
+                   url:"<?php echo base_url('Transaction/load_published_table')?>",
+                   data:{sem: sem, acad_year:acad_year, fac_id:fac_id},
+                   type:"POST"
+                  }
+                 });
             }
 
-            var dataTable = $('#tbl_sched_sum').DataTable({           
-              "processing" : true,
-              "serverSide" : true,
-              "order" : [],
-              destroy:true,
-              "ajax" : {
-               url:"<?php echo base_url('Transaction/load_sched_table')?>",
-               data:{sem: sem, acad_year:acad_year, fac_id:fac_id},
-               type:"POST"
-              }
-             });
+            
 
         }
 
@@ -787,24 +799,36 @@
             var data = "<?php echo $acc_type?>"; 
             if(data == 'admin'){
                 var fac_id = $('#sched_faculty').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_advise_time')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                        showTeachingLoads();
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               });
             }
             else{
                 var fac_id = "<?php echo $fac_id?>";
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_published_at')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                        showTeachingLoads();
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               });
             }
-
-             $.ajax({  
-                url:"<?php echo base_url('Transaction/reflect_advise_time')?>", 
-                method:"POST", 
-                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
-                dataType: "json",
-                success:function(data){
-                    changeSchedColor(data);
-                    showTeachingLoads();
-                },
-                error: function (data) {
-                // alert(JSON.stringify(data));
-                }
-           });
         }
 
         function getNightOffice(){
@@ -813,23 +837,36 @@
             var data = "<?php echo $acc_type?>"; 
             if(data == 'admin'){
                 var fac_id = $('#sched_faculty').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_night_office')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               }); 
             }
             else{
                 var fac_id = "<?php echo $fac_id?>";
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_published_no')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               }); 
             }
 
-             $.ajax({  
-                url:"<?php echo base_url('Transaction/reflect_night_office')?>", 
-                method:"POST", 
-                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
-                dataType: "json",
-                success:function(data){
-                    changeSchedColor(data);
-                },
-                error: function (data) {
-                // alert(JSON.stringify(data));
-                }
-           }); 
+             
         }
 
         function getOfficeHours(){
@@ -838,23 +875,36 @@
             var data = "<?php echo $acc_type?>"; 
             if(data == 'admin'){
                 var fac_id = $('#sched_faculty').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_office_hours')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               }); 
             }
             else{
                 var fac_id = "<?php echo $fac_id?>";
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_published_oh')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               }); 
             }
 
-             $.ajax({  
-                url:"<?php echo base_url('Transaction/reflect_office_hours')?>", 
-                method:"POST", 
-                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
-                dataType: "json",
-                success:function(data){
-                    changeSchedColor(data);
-                },
-                error: function (data) {
-                // alert(JSON.stringify(data));
-                }
-           }); 
+             
         }
 
         function loadRoomTable(){
@@ -883,13 +933,9 @@
             var acad_year = $('#sched_acad_year').val();
             var data = "<?php echo $acc_type?>"; 
             if(data == 'admin'){
-                var fac_id = $('#sched_faculty').val();
-            }
-            else{
-                var fac_id = "<?php echo $fac_id?>";
-            }
 
-             $.ajax({  
+                var fac_id = $('#sched_faculty').val();
+                $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
                 method:"POST", 
                 data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'R'}, 
@@ -902,6 +948,23 @@
                 }
            });
 
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+                $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_published_load')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'R'}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+            }
+
         }
 
         function reflectPartTime(){
@@ -911,12 +974,7 @@
             var data = "<?php echo $acc_type?>"; 
             if(data == 'admin'){
                 var fac_id = $('#sched_faculty').val();
-            }
-            else{
-                var fac_id = "<?php echo $fac_id?>";
-            }
-
-             $.ajax({  
+                $.ajax({  
                 url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
                 method:"POST", 
                 data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'PT'}, 
@@ -928,6 +986,23 @@
                 // alert(JSON.stringify(data));
                 }
            });
+            }
+            else{
+                var fac_id = "<?php echo $fac_id?>";
+                $.ajax({  
+                url:"<?php echo base_url('Transaction/reflect_published_load')?>", 
+                method:"POST", 
+                data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'PT'}, 
+                dataType: "json",
+                success:function(data){
+                    changeSchedColor(data);
+                },
+                error: function (data) {
+                // alert(JSON.stringify(data));
+                }
+           });
+            }
+
 
         }
 
@@ -938,23 +1013,36 @@
             var data = "<?php echo $acc_type?>"; 
             if(data == 'admin'){
                 var fac_id = $('#sched_faculty').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'TS'}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+                });
             }
             else{
                 var fac_id = "<?php echo $fac_id?>";
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_published_load')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'TS'}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               });
             }
 
-             $.ajax({  
-                url:"<?php echo base_url('Transaction/reflect_sched_table')?>", 
-                method:"POST", 
-                data:{fac_id:fac_id, acad_year:acad_year, sem:sem, load_type:'TS'}, 
-                dataType: "json",
-                success:function(data){
-                    changeSchedColor(data);
-                },
-                error: function (data) {
-                // alert(JSON.stringify(data));
-                }
-           });
+             
 
         }
 
@@ -965,23 +1053,36 @@
             var data = "<?php echo $acc_type?>"; 
             if(data == 'admin'){
                 var fac_id = $('#sched_faculty').val();
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_services')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               });
             }
             else{
                 var fac_id = "<?php echo $fac_id?>";
+                $.ajax({  
+                    url:"<?php echo base_url('Transaction/reflect_published_services')?>", 
+                    method:"POST", 
+                    data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
+                    dataType: "json",
+                    success:function(data){
+                        changeSchedColor(data);
+                    },
+                    error: function (data) {
+                    // alert(JSON.stringify(data));
+                    }
+               });
             }
 
-             $.ajax({  
-                url:"<?php echo base_url('Transaction/reflect_services')?>", 
-                method:"POST", 
-                data:{fac_id:fac_id, acad_year:acad_year, sem:sem}, 
-                dataType: "json",
-                success:function(data){
-                    changeSchedColor(data);
-                },
-                error: function (data) {
-                // alert(JSON.stringify(data));
-                }
-           });
+             
 
         }
 
@@ -1186,6 +1287,7 @@
       }
 
       function showTeachingLoads(){
+
         reflectRegular();
         reflectPartTime();
         reflectTS();
@@ -2453,6 +2555,7 @@
 
 
         $('#sched_faculty').on('change', function(){
+
           global_total_hrs = 0;
           var data = "<?php echo $acc_type?>"; 
             if(data == 'admin'){
@@ -2461,6 +2564,7 @@
             else{
                 var temp_fac = "<?php echo $fac_id?>";
             }
+
           var temp_sem = $('#sched_sem').val();
           var temp_acadyr = $('#sched_acad_year').val();
           if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
@@ -2489,6 +2593,8 @@
             reflectServices();
             showSpec(temp_fac);
             resetPlotForm();
+
+
             if(global_factype == 1)
             {
                 getAdviseTime();

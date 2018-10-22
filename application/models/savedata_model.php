@@ -2677,5 +2677,44 @@ class Savedata_model extends CI_Model
 
 		return $output;
 	}
+
+	public function unpublish_teaching_load()
+	{
+		$output = '';
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+			if($this->db->query("UPDATE teaching_assign_sched 
+						SET isPublished = 0
+						WHERE subj_match_id IN (SELECT subj_match_id
+                       	FROM subject_match 
+                       	WHERE faculty_id = $fac_id
+                       	AND acad_yr = '$acad_year'
+                       	AND sem = '$sem' )"))
+			{	
+
+				$this->db->query("UPDATE services_assign
+						SET isPublished = 0
+						WHERE faculty_id = $fac_id
+						AND sem = '$sem'
+						AND acad_yr = '$acad_year'");
+
+				$this->db->query("UPDATE other_time_sched
+						SET isPublished = 0
+						WHERE faculty_id = $fac_id
+						AND sem = '$sem'
+						AND acad_yr = '$acad_year'");
+
+				$output = 'UNPUBLISHED';
+			}
+			else
+			{
+				$output = 'NOT PUBLISHED';
+			}
+
+		return $output;
+	}
 }
 ?>

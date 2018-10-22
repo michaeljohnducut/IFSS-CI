@@ -1815,6 +1815,48 @@ class Getdata_model extends CI_Model{
 		return $result;	
 	}
 
+	public function load_published_table(){	//GETS FACULTY'S SUMMARY OF SCHEDULES
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, GROUP_CONCAT(CONCAT(TIME_FORMAT(ta.time_start, "%h:%i %p"), "-", TIME_FORMAT(ta.time_finish, "%h:%i %p")) ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "times", GROUP_CONCAT(ta.day ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "days", GROUP_CONCAT(r.room_code ORDER BY ta.teaching_sched_id asc SEPARATOR "/") as "rooms", ta.subj_match_id')
+				->where('sm.faculty_id', $fac_id)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->where('ta.isPublished', 1)
+				->join('subject_match sm ','ta.subj_match_id = sm.subj_match_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('section se','se.section_id = sm.section')
+				->join('course c','se.course = c.course_id')
+				->join('room r','r.room_id = ta.room_id')
+				->group_by('ta.subj_match_id')
+				->order_by('FIELD(ta.day, "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")')
+                ->get('teaching_assign_sched ta');
+                
+
+		foreach ($query->result() as $r) 
+		{
+			$btn = '<button class="btn btn-sm  btn-info" id="btn_reschedule" data-toggle="tooltip" data-placement="top" title="Reschedule" data-id="'.$r->subj_match_id.'"><span class="fa  fa-rotate-left"></span></button>';
+
+			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units, 
+					$section, 
+					$r->times,
+					$r->days,
+					$r->rooms,
+					$btn
+					);
+		}
+
+		return $result;	
+	}
+
 	public function get_units_used(){	//GETS FACULTY'S PREFERRED SUBJECTS
 
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
@@ -2308,6 +2350,48 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function reflect_published_load(){	
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$load_type = $this->security->xss_clean($this->input->post('load_type'));
+		$result = array();
+
+		$query = $this->db->select('s.subj_code, s.subj_desc, s.units, c.course_code, se.year_lvl, se.section_desc, ta.time_start, ta.time_finish, ta.day, r.room_code, ta.load_type')
+				->where('sm.faculty_id', $fac_id)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->where('ta.load_type', $load_type)
+				->where('ta.isPublished', 1)
+				->join('subject_match sm ','ta.subj_match_id = sm.subj_match_id')
+				->join('subject s','sm.subj_id = s.subj_id')
+				->join('section se','se.section_id = sm.section')
+				->join('course c','se.course = c.course_id')
+				->join('room r','r.room_id = ta.room_id')
+                ->get('teaching_assign_sched ta');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$section = $r->course_code. ' ' . $r->year_lvl[0] . ' - ' . $r->section_desc;
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->units, 
+					$section, 
+					$time,
+					$r->day,
+					$r->room_code,
+					$r->load_type
+					);
+		}
+
+		return $result;	
+	}
+
 	public function reflect_advise_time(){
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
@@ -2319,6 +2403,42 @@ FROM subject_match sm
 				->where('ot.acad_yr', $acad_year)
 				->where('ot.sem', $sem)
 				->where('ot.load_type', 'AT')
+                ->get('other_time_sched ot');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$blank = ' ';
+			$label = 'Advising Time';
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$label,
+					$blank,
+					$blank, 
+					$blank, 
+					$time,
+					$r->day,
+					$blank,
+					$r->load_type
+					);
+		}
+
+		return $result;
+	}
+
+	public function reflect_published_at(){
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("`time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type` ")
+				->where('ot.faculty_id', $fac_id)
+				->where('ot.acad_yr', $acad_year)
+				->where('ot.sem', $sem)
+				->where('ot.load_type', 'AT')
+				->where('ot.isPublished', 1)
                 ->get('other_time_sched ot');
                 // ->order_by('ta.day', 'asc');
 
@@ -2378,6 +2498,42 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function reflect_published_no(){
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("`time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type` ")
+				->where('ot.faculty_id', $fac_id)
+				->where('ot.acad_yr', $acad_year)
+				->where('ot.sem', $sem)
+				->where('ot.load_type', 'NO')
+				->where('ot.isPublished', 1)
+                ->get('other_time_sched ot');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$blank = ' ';
+			$label = 'Night Office';
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$label,
+					$blank,
+					$blank, 
+					$blank, 
+					$time,
+					$r->day,
+					$blank,
+					$r->load_type
+					);
+		}
+
+		return $result;
+	}
+
 	public function reflect_office_hours(){
 		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
 		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
@@ -2389,6 +2545,42 @@ FROM subject_match sm
 				->where('ot.acad_yr', $acad_year)
 				->where('ot.sem', $sem)
 				->where('ot.load_type', 'OH')
+                ->get('other_time_sched ot');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+			$blank = ' ';
+			$label = 'Office Hours';
+			$time = $r->time_start. ' - '. $r->time_finish;
+
+			$result[] = array(
+					$label,
+					$blank,
+					$blank, 
+					$blank, 
+					$time,
+					$r->day,
+					$blank,
+					$r->load_type
+					);
+		}
+
+		return $result;
+	}
+
+	public function reflect_published_oh(){
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("`time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type` ")
+				->where('ot.faculty_id', $fac_id)
+				->where('ot.acad_yr', $acad_year)
+				->where('ot.sem', $sem)
+				->where('ot.load_type', 'OH')
+				->where('ot.isPublished', 1)
                 ->get('other_time_sched ot');
                 // ->order_by('ta.day', 'asc');
 
@@ -2700,6 +2892,40 @@ FROM subject_match sm
 				->where('sa.faculty_id', $fac_id)
 				->where('sa.acad_yr', $acad_year)
 				->where('sa.sem', $sem)
+                ->get('services_assign sa');
+                // ->order_by('ta.day', 'asc');
+
+		foreach ($query->result() as $r) 
+		{
+
+			$time = $r->time_start. ' - '. $r->time_end;
+
+			$result[] = array(
+					$r->subj_code,
+					$r->subj_desc,
+					$r->sem, 
+					$r->section,
+					$time,
+					$r->day,
+					$r->room
+					);
+		}
+
+		return $result;	
+	}
+
+	public function reflect_published_services(){	
+
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select('sa.subj_code, sa.subj_desc, sa.sem, sa.section, sa.time_start, sa.time_end, sa.day, sa.room')
+				->where('sa.faculty_id', $fac_id)
+				->where('sa.acad_yr', $acad_year)
+				->where('sa.sem', $sem)
+				->where('sa.isPublished', 1)
                 ->get('services_assign sa');
                 // ->order_by('ta.day', 'asc');
 
@@ -4510,6 +4736,35 @@ FROM subject_match sm
 		}
 
 		return $result;	
+	}
+
+	public function check_published(){
+		$fac_id = $this->security->xss_clean($this->input->post('fac_id'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$result = array();
+
+		$query = $this->db->select("*")
+				->where('isPublished', 1)
+				->where("subj_match_id IN (SELECT subj_match_id
+                           FROM subject_match sm 
+                           WHERE faculty_id = ".$fac_id."
+                           AND acad_yr = '".$acad_year."'
+                           AND sem = '".$sem."')", NULL, FALSE)
+                ->get('teaching_assign_sched ta');
+
+		$number_filter_row = $query->num_rows();
+
+		if($number_filter_row == 0)
+		{
+			$result = 'UNPUBLISHED';
+		}
+		else
+		{
+			$result = 'PUBLISHED';
+		}
+
+		return $result;
 	}
 
 

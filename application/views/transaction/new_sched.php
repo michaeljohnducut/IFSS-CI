@@ -75,11 +75,11 @@
                             <div class="col-md-2" style="text-align: right; color: red;">
                                 <p id="factype_id">Faculty Type:</p>
                             
-                                <button type="button" id="btnGenerate" class="btn btn-info" data-toggle = "modal" data-target ="#modalGenerate"><span class="fa fa-calendar"></span>&nbsp;AUTO GENERATE LOADS</button>
+                                <button type="button" id="btnGenerate" class="btn btn-info" data-toggle = "modal" data-target ="#modalGenerate">AUTO GENERATE LOADS</button>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="RLoad_id">Regular Load: </p>
-                                <button type="button" id="btnPublish" class="btn legend-green"><span class="fa fa-upload"></span>&nbsp; PUBLISH SCHEDULE</button>
+                                <button type="button" id="btnPublish" class="btn legend-green">PUBLISH SCHEDULE</button>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="PTLoad_id">Part-time Load: </p>
@@ -1165,6 +1165,7 @@
       var global_bool_next; 
       var global_id;
       var global_loadtype;
+      var global_isPublished;
 
       //FUNCTIONS
       //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
@@ -3414,6 +3415,38 @@
 //========================================================================
 
 
+function checkPublished()
+{
+    var acad_year = $('#sched_acad_year').val();
+    var fac_id = $('#sched_faculty').val();
+    var sem = $('#sched_sem').val();
+     $.ajax({  
+        url:"<?php echo base_url('Transaction/check_published')?>",  
+        type:"POST",  
+        dataType:'JSON',
+        data: {acad_year:acad_year, sem:sem, fac_id:fac_id},
+        success:function(data)
+        {  
+            if (data == 'UNPUBLISHED')
+            {   
+                $('#btnPublish').text('PUBLISH SCHEDULE');
+                $('#btnPublish').removeClass('legend-green').addClass('legend-purple')
+                global_isPublished = false;
+            }
+            else
+            {   
+                $('#btnPublish').text('UNPUBLISH SCHEDULE');
+                $('#btnPublish').removeClass('legend-purple').addClass('legend-green')
+                global_isPublished = true;
+            }
+        },
+        //  error: function (data) {
+        //         alert(JSON.stringify(data));
+        // },
+        async:false
+    });  
+}
+
 
 function publishTeachingLoad(){
 
@@ -3428,7 +3461,7 @@ function publishTeachingLoad(){
         {  
             if(data == 'PUBLISHED')
             {
-                swal('Success!', "This faculty's schedule has been successfully published and is now availabe for viewing.", 'success');
+                swal('Success!', "This faculty's schedule has been successfully published and is now availabe for viewing for faculty accounts.", 'success');
             }
         },
          error: function (data) {
@@ -3448,7 +3481,10 @@ function unpublishTeachingLoads(){
         data: {acad_year:acad_year, sem:sem, fac_id:fac_id},
         success:function(data)
         {  
-
+            if(data == 'UNPUBLISHED')
+            {
+                swal('Success!', "This faculty's schedule has been unpublished and is hidden from faculty accounts.", 'success');
+            }
         },
          error: function (data) {
                 alert(JSON.stringify(data));
@@ -4275,6 +4311,7 @@ function unpublishTeachingLoads(){
             getUnitsUsed();
             loadSchedTable();
             reflectServices();
+            checkPublished();
             showSpec(temp_fac);
             resetPlotForm();
             if(global_factype == 1)
@@ -4316,6 +4353,7 @@ function unpublishTeachingLoads(){
             getUnitsUsed();
             loadSchedTable();
             showTeachingLoads();
+            checkPublished();
             reflectServices();
             resetPlotForm();
         });
@@ -4341,6 +4379,7 @@ function unpublishTeachingLoads(){
             getUnitsUsed();
             loadSchedTable();
             showTeachingLoads();
+            checkPublished();
             reflectServices();
             resetPlotForm();
         });
@@ -4733,7 +4772,17 @@ function unpublishTeachingLoads(){
         });
 
         $('#btnPublish').on('click', function(){
-            publishTeachingLoad();
+
+            if(global_isPublished == true)
+            {
+                unpublishTeachingLoads();
+                checkPublished();
+            }
+            else
+            {
+                publishTeachingLoad();
+                checkPublished();
+            }
         });
 
 

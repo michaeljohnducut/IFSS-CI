@@ -891,7 +891,7 @@ class Getdata_model extends CI_Model{
 					$r->sem,
 					$r->dept_code,
 					$r->faculty_name,
-					$r->rating,
+					round($r->rating, 2),
 					$r->rating_desc,
 					$r->evaluation_id
 					);
@@ -963,7 +963,7 @@ class Getdata_model extends CI_Model{
 					$r->sem,
 					$r->dept_code,
 					$r->faculty_name,
-					$r->rating,
+					round($r->rating, 2),
 					$r->rating_desc,
 					$btn,
 					$r->evaluation_id
@@ -1035,7 +1035,7 @@ class Getdata_model extends CI_Model{
 			$result[] = array(
 					$r->acad_yr,
 					$r->sem,
-					$r->rating,
+					round($r->rating, 2),
 					$r->rating_desc,
 					);
 		}
@@ -1411,7 +1411,7 @@ class Getdata_model extends CI_Model{
 			$result[] = array(
 					$r->fac_name,
 					$r->fac_type_desc,
-					$eval,
+					round($eval, 2),
 					$consec,
 					$btn
 					);
@@ -1504,7 +1504,7 @@ class Getdata_model extends CI_Model{
 			$result[] = array(
 					$r->fac_name,
 					$r->fac_type_desc,
-					$eval,
+					round($eval, 2),
 					$consec,
 					$btn,
 					$r->faculty_id

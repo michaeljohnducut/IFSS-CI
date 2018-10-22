@@ -75,10 +75,11 @@
                             <div class="col-md-2" style="text-align: right; color: red;">
                                 <p id="factype_id">Faculty Type:</p>
                             
-                                <button type="button" id="btnGenerate" class="btn btn-info" data-toggle = "modal" data-target ="#modalGenerate">AUTO GENERATE LOADS</button>
+                                <button type="button" id="btnGenerate" class="btn btn-info" data-toggle = "modal" data-target ="#modalGenerate"><span class="fa fa-calendar"></span>&nbsp;AUTO GENERATE LOADS</button>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="RLoad_id">Regular Load: </p>
+                                <button type="button" id="btnPublish" class="btn legend-green"><span class="fa fa-upload"></span>&nbsp; PUBLISH SCHEDULE</button>
                             </div>
                             <div class="col-md-2" style="text-align: right;">
                                 <p id="PTLoad_id">Part-time Load: </p>
@@ -1010,11 +1011,11 @@
                       <form id="add_sched_form" method="POST">
                       <div class="col-md-12" id="sched_a">
                         <div class="col-md-3">
-                          <label class="control-label">Start time:</label>
+                          <label class="control-label">Start time (Lec):</label>
                           <input type="time" id="starttime_a" name="start_time[]" class="form-control" required="">
                         </div>
                         <div class="col-md-3">
-                          <label class="control-label">End time:</label>
+                          <label class="control-label">End time (Lec):</label>
                           <input type="time" id="endtime_a" name="end_time[]" readonly="" class="form-control"required="">
                         </div>
                         <div class="col-md-3">
@@ -1042,12 +1043,12 @@
                     <div class="col-md-12" id="sched_b">
                         <div class="col-md-3">
                           <br>
-                          <label class="control-label">Start time:</label>
+                          <label class="control-label">Start time (Lec):</label>
                           <input type="time" id="starttime_b" name="start_time[]" class="form-control">
                         </div>
                         <div class="col-md-3">
                           <br>
-                          <label class="control-label">End time:</label>
+                          <label class="control-label">End time (Lec):</label>
                           <input type="time" id="endtime_b" name="end_time[]" readonly="" class="form-control">
                         </div>
                         <div class="col-md-3">
@@ -3412,6 +3413,49 @@
 //END OF AUTO GENERATION FUNCTIONS 
 //========================================================================
 
+
+
+function publishTeachingLoad(){
+
+    var acad_year = $('#sched_acad_year').val();
+    var fac_id = $('#sched_faculty').val();
+    var sem = $('#sched_sem').val();
+     $.ajax({  
+        url:"<?php echo base_url('Transaction/publish_teaching_load')?>",  
+        type:"POST",  
+        data: {acad_year:acad_year, sem:sem, fac_id:fac_id},
+        success:function(data)
+        {  
+            if(data == 'PUBLISHED')
+            {
+                swal('Success!', "This faculty's schedule has been successfully published and is now availabe for viewing.", 'success');
+            }
+        },
+         error: function (data) {
+                alert(JSON.stringify(data));
+        },
+    });  
+}
+
+function unpublishTeachingLoads(){
+
+    var acad_year = $('#sched_acad_year').val();
+    var fac_id = $('#sched_faculty').val();
+    var sem = $('#sched_sem').val();
+     $.ajax({  
+        url:"<?php echo base_url('Transaction/unpublish_teaching_load')?>",  
+        type:"POST",  
+        data: {acad_year:acad_year, sem:sem, fac_id:fac_id},
+        success:function(data)
+        {  
+
+        },
+         error: function (data) {
+                alert(JSON.stringify(data));
+        },
+    });  
+}
+
       //SELECT2
       $(".select2").select2();
       $('.selectpicker').selectpicker();
@@ -3428,6 +3472,7 @@
         $('#section_table').hide();
         $('#room_table').hide();
         $('#btnGenerate').hide();
+        $('#btnPublish').hide();
 
         $('#starttime_a').on('blur',function(){
 
@@ -4207,6 +4252,7 @@
           if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
           {
             $('#btnGenerate').hide();
+            $('#btnPublish').hide();
             $('#reg_box').hide();
             $('#pt_box').hide();
             $('#ts_box').hide();
@@ -4217,6 +4263,7 @@
           else
           {
             $('#btnGenerate').show();
+            $('#btnPublish').show();
             getFacultyType();
             displayLegends();
 
@@ -4256,10 +4303,12 @@
           if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
           {
             $('#btnGenerate').hide();
+            $('#btnPublish').hide();
           }
           else
           {
             $('#btnGenerate').show();
+            $('#btnPublish').show();
           }
             getPrefDay_gen();
             getFacultyType();
@@ -4279,10 +4328,12 @@
           if(temp_fac == 0 || temp_sem == 0 || temp_acadyr == 0)
           {
             $('#btnGenerate').hide();
+            $('#btnPublish').hide();
           }
           else
           {
             $('#btnGenerate').show();
+            $('#btnPublish').show();
           }
             getPrefDay_gen();
             getFacultyType();
@@ -4404,6 +4455,7 @@
             $('#section_table').hide();
             $('#room_table').hide();
             $('#btnGenerate').hide();
+            $('#btnPublish').hide();
             $('#legend_div').show();
             resetLegends();
           }
@@ -4425,6 +4477,7 @@
             $('#section_table').show();
             $('#room_table').hide();
             $('#btnGenerate').hide();
+            $('#btnPublish').hide();
             $('#legend_div').hide();
           }
 
@@ -4446,6 +4499,7 @@
             $('#section_table').hide();
             $('#room_table').show();
             $('#btnGenerate').hide();
+            $('#btnPublish').hide();
             $('#legend_div').hide();
           }
         });
@@ -4676,6 +4730,10 @@
               $('#minor_end_a').val('');
             }
 
+        });
+
+        $('#btnPublish').on('click', function(){
+            publishTeachingLoad();
         });
 
 

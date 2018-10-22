@@ -910,6 +910,11 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function publish_teaching_load()
+	{
+		echo ($this->savedata_model->publish_teaching_load($_POST));
+	}
+
 } 
 
 ?>

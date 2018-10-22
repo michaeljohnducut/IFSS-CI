@@ -1,3 +1,4 @@
+
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                          <h4 class="page-title">Dashboard</h4>
@@ -10,11 +11,11 @@
                     </div>
                 </div>  
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12">
+                    <div class="col-md-10">
                         <div class="white-box">
                             <div class="row row-in">
-                                <div class="col-lg-3 col-sm-6 row-in-br">
-                                    <label class="control-label">Select Academic Year</label>
+                                <div class="col-lg-2 col-sm-6 row-in-br">
+                                    <label class="control-label">Select Acad Year</label>
                                      <select class="form-control select2" id="selectAcadYr1">
                                         <!-- <option value="">-Academic Year-</option> -->
                                         <?php 
@@ -33,9 +34,9 @@
                                       </select>
                                 </div>
 
-                                <div class="col-lg-3 col-sm-6 row-in-br  b-r-none">
+                                <div class="col-md-3 col-sm-6 row-in-br  b-r-none">
                                     <div class="col-in row">
-                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="C"></i>
                                             <h5 class="text-muted vb">FACULTY MEMBER <BR> WITH COMPLETE SCHEDULE</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -48,24 +49,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6 row-in-br">
+                                <div class="col-md-3 col-sm-6 row-in-br b-r-none">
                                     <div class="col-in row">
-                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
-                                            <h5 class="text-muted vb">SECTIONS WITH <BR>COMPLETE SCHEDULE</h5>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <h3 class="counter text-right m-t-15 text-primary" id="sec_comp"></h3>
-                                        </div>
-                                        <div class="col-md-12 col-sm-12 col-xs-12">
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="sec_prog"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-sm-6  b-0">
-                                    <div class="col-in row">
-                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe016;"></i>
+                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#xe000;"></i>
                                             <h5 class="text-muted vb">SERVICES WITH ASSIGNED FACULTY MEMBER</h5>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -78,10 +64,50 @@
                                         </div>
                                     </div>
                                 </div>
+                                   <div class="col-md-2 col-sm-6 row-in-br">
+                                    <div class="col-in row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#57382;"></i>
+                                            <h5 class="text-muted vb">SECTIONS WITH <BR>COMPLETE SCHEDULE<BR> &nbsp;</h5>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <h3 class="counter text-right m-t-15 text-primary" id="sec_comp"></h3>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="sec_prog"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                  <div class="col-md-2">
+                                    <div class="col-in row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-elaborate" data-icon="&#57388;"></i>
+                                            <h5 class="text-muted vb">SECTIONS WITH <BR>INCOMPLETE SCHEDULE<br> &nbsp;</h5>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <h3 class="counter text-right m-t-15 text-primary" id="sec_incomp"></h3>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="insec_prog"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2">
+                          <div class="ribbon-wrapper bg-danger" style="height: 93%">
+                           <div class="ribbon ribbon-bookmark ribbon-vertical-l ribbon-success"><i class="fa fa-exclamation-circle" style="font-size: 170%"></i></div>
+                            <p class="text-white"><STRONG>PICK UP WHERE YOU LEFT OFF</STRONG></p>
+                            <hr style="background-color: white;">
+                            <p class="text-white">You were previously working on <STRONG><span id="sched_name"></span></STRONG> Schedule</p>
+                            
+                        </div>
                     </div>
+                  </div>
+                    
                     
                     <!--TOP 5 FACULTY MEMBERS-->
                       <div class="row">
@@ -112,6 +138,7 @@
                                             </select>
                                     </div>
                                  </div>
+                  
                   <hr style="border: 1px solid">
                  <div class="vtabs">
                      <ul class="nav tabs-vertical" >
@@ -639,6 +666,21 @@
                         alert(JSON.stringify(data));
                     }
                 }); 
+
+                $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_section_incomplete')?>", 
+                    method:"POST",
+                    data: {acad_yr:acad_yr, sem:sem},
+                    success:function(data)
+                    {
+                        $('#sec_incomp').html(data);
+                        $('#insec_prog').css('width', data + "%");
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
             }       
         }
 
@@ -700,6 +742,24 @@
             }
         }
 
+        function fetch_latest()
+        {
+            var id = "<?php echo $id?>";
+            $.ajax({  
+                    url:"<?php echo base_url('Maintenance/get_latest')?>", 
+                    method:"POST",
+                    data: {id:id},
+                    success:function(data)
+                    {
+                        $('#sched_name').html(data);
+                    },
+                    error: function (data)
+                    {
+                        alert(JSON.stringify(data));
+                    }
+                });
+        }
+
         $(document).ready(function()
         {
             show_total_sec();
@@ -711,6 +771,8 @@
             getTotalFaculty();
 
             show_top_specialization();
+
+            fetch_latest();
 
             get_pref_time($('#selectAcadYr3').val());
 

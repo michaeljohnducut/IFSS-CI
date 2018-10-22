@@ -844,6 +844,18 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function query_unassign_load(){
+		
+		echo json_encode($this->getdata_model->query_unassign_load($_POST));
+		exit();
+	}
+
+	public function query_unsched_minor(){
+		
+		echo json_encode($this->getdata_model->query_unsched_minor($_POST));
+		exit();
+	}
+
 	public function query_top_loads(){
 		
 		echo json_encode($this->getdata_model->query_top_loads($_POST));

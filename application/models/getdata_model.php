@@ -3833,6 +3833,62 @@ FROM subject_match sm
 		return $ctr;
 	}
 
+	public function get_section_incomplete()
+	{
+		$result = array();
+
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+
+		$query1 = $this->db->select('section_id, year_lvl, course')
+				->where('acad_yr', $acad_yr)
+				->where('status', 1)
+                ->get('section');
+
+        $ctr = 0;
+
+		foreach($query1->result() as $r)
+		{		
+			$query2 = $this->db->select('SUM(lab_hrs + lec_hrs) AS off_total_hrs')
+					->join('curriculum c', 's.subj_id = c.subj_code')
+					->where('sem', $sem)
+					->where('year_lvl', $r->year_lvl)
+					->where('course', $r->course)
+	                ->get('subject s');
+
+		    foreach($query2->result() as $s)
+		    {
+		       	($s->off_total_hrs == '')?$off_total_hrs = 0:$off_total_hrs = $s->off_total_hrs;
+		    }
+
+	        $query3 = $this->db->query('SELECT SUM(lec_hrs + lab_hrs) AS total_hours
+										FROM subject sub
+										JOIN subject_match sm
+										ON sub.subj_id = sm.subj_id
+										JOIN section sec
+										ON sm.section = sec.section_id
+										WHERE sec.section_id = "'.$r->section_id.'" AND sm.acad_yr = "'.$acad_yr.'" AND sm.sem = "'.$sem.'"');
+
+	        foreach($query3->result() as $t)
+	        {
+	        	($t->total_hours == '')?$total_hours = 0:$total_hours = $t->total_hours;
+	        }
+
+	        if($off_total_hrs != $total_hours)
+	        {
+	        	$ctr++;
+	        }
+
+	        $result[] = array(
+	        			$r->section_id,
+	        			$off_total_hrs,
+	        			$total_hours
+						);
+		}
+
+		return $ctr;
+	}
+
 	public function get_services_complete()
 	{
 		$result = array();
@@ -3934,6 +3990,24 @@ FROM subject_match sm
 		return $result;	
 	}
 
+	public function get_latest()
+	{
+		$result = '';
+
+		$user_id = $this->security->xss_clean($this->input->post('id'));
+
+		$query1 = $this->db->query('SELECT schedule_name 
+									FROM track_schedule 
+									WHERE user_id = "'.$user_id.'" AND date_added = (SELECT MAX(date_added) FROM track_schedule)');
+
+		foreach($query1->result() as $r)
+		{		
+			$result = $r->schedule_name;
+		}
+
+		return $result;
+	}
+
 	public function get_account()
 	{
 		$result = array();
@@ -3988,7 +4062,7 @@ FROM subject_match sm
 		$result = array();
 
 		$query = $this->db->select("CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
-				->where('f.faculty_id NOT IN (SELECT sm.faculty_id
+				->where('f.faculty_id IN (SELECT sm.faculty_id
                            FROM subject_match sm 
                            WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
           			FROM teaching_assign_sched ta 
@@ -4032,7 +4106,7 @@ FROM subject_match sm
 
 		$query = $this->db->select('c.course_code, s.year_lvl, s.section_desc')
 				->join('course c', 's.course = c.course_id')
-				->where('s.section_id NOT IN (SELECT sm.section
+				->where('s.section_id IN (SELECT sm.section
                            FROM subject_match sm 
                            WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
           			FROM teaching_assign_sched ta 
@@ -4129,6 +4203,87 @@ FROM subject_match sm
 		return $result;
 	}
 
+	public function query_unassign_load()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query = $this->db->select('c.course_code, s.year_lvl, s.section_desc, sb.subj_desc')
+				->join('section s ', 's.section_id = sm.section ')
+				->join('course c ', 'c.course_id = s.course ')
+				->join('subject sb', 'sb.subj_id = sm.subj_id')
+				->group_start()
+                	->where('sb.isMajor', 1)
+                	->or_where('sb.isMajor', 2)
+                ->group_end()
+				->where('sm.faculty_id', NULL)
+				->where('sm.acad_yr', $acad_year)
+				->where('sm.sem', $sem)
+				->where('sm.subj_match_id IN (SELECT ta.subj_match_id
+                             FROM teaching_assign_sched ta
+                             WHERE sm.acad_yr = "'.$acad_year.'" 
+                             AND sm.sem = "'.$sem.'") ')
+                ->get('subject_match sm');
+
+        foreach ($query->result() as $r){
+
+			$result[] = array( 
+					$r->course_code,
+					$r->year_lvl,
+					$r->section_desc,
+					$r->subj_desc
+					);
+		}
+
+		return $result;
+	}
+
+	public function query_unsched_minor()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$result = array();
+
+		$query1 = $this->db->select('section_id, section_desc, year_lvl, course_code')
+							->join('course c', 'c.course_id = s.course')
+							->get('section s');
+
+		foreach($query1->result() as $t)
+		{
+			$query = $this->db->select('s.subj_id, s.subj_code, s.subj_desc')
+				->where('c.year_lvl = (SELECT se.year_lvl
+                    FROM section se
+                    WHERE se.section_id = '.$t->section_id.')', NULL, FALSE)
+				->where('s.specialization is null')
+				->where('c.sem ', $sem)
+				->where('s.subj_id NOT IN (SELECT sm.subj_id
+											FROM subject_match sm
+											WHERE sm.section = '.$t->section_id.'
+											AND sm.subj_match_id IN 
+											(SELECT ta.subj_match_id
+											FROM teaching_assign_sched ta 
+											WHERE ta.acad_yr = "'.$acad_year.'"
+											AND ta.sem = "'.$sem.'"))',NULL,FALSE)
+				->join('subject s','s.subj_id = c.subj_code')
+                ->get('curriculum c ');
+
+	        foreach ($query->result() as $r){
+
+				$result[] = array(
+						$t->course_code,
+						$t->year_lvl,
+						$t->section_desc,
+						$r->subj_desc
+						);
+			}
+		}
+
+		return $result;
+	}
+
+
+
 	public function query_top_loads()
 	{
 		$result = array();
@@ -4162,16 +4317,14 @@ FROM subject_match sm
 	{
 		$result = array();
 
-		$acad_yr = $this->security->xss_clean($this->input->post('acad_yr'));
+		$acad_yr = $this->security->xss_clean($this->input->post('acad_year'));
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 
-		$query1 = $this->db->select('s.section_id, s.year_lvl, s.course, CONCAT(c.course_code + " " + LEFT(s.year_lvl, 1) + " - " + s.section_desc) AS "section_name"')
+		$query1 = $this->db->select('s.section_id, s.year_lvl, s.course, s.section_desc, CONCAT(c.course_code," ",LEFT(s.year_lvl, 1)," - ",s.section_desc) AS "section_name"')
 				->where('s.acad_yr', $acad_yr)
 				->where('s.status', 1)
 				->join('course c', 'c.course_id = s.course')
                 ->get('section s');
-
-        $ctr = 0;
 
 		foreach($query1->result() as $r)
 		{		
@@ -4203,9 +4356,7 @@ FROM subject_match sm
 	        if($off_total_hrs != $total_hours)
 	        {
 	        	array_push($result, $r->section_name);
-	        }
-
-	        
+	        }  
 		}
 
 		return $result;
@@ -4221,7 +4372,7 @@ FROM subject_match sm
 		$result = array();
 
 		$query = $this->db->select('r.room_id, r.room_code')
-				->where('r.room_id NOT IN (SELECT ta.room_id
+				->where('r.room_id IN (SELECT ta.room_id
 					FROM teaching_assign_sched ta
 					WHERE ta.acad_yr = "'.$acad_year.'"
 					AND ta.sem = "'.$sem.'"

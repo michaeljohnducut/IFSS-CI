@@ -14,6 +14,7 @@ class Maintenance extends CI_Controller {
     	if($this->session->userdata('USERTYPE') == 'admin')
     	{
     		$data['fac_type'] = $this->getdata_model->faculty_type();
+    		$data['id'] = $this->session->userdata('USERID');
 
     		$data['title'] = "IFSS | Dashboard";
 			$this->load->view('templates/header', $data);
@@ -990,6 +991,12 @@ class Maintenance extends CI_Controller {
 		exit();
 	}
 
+	public function get_section_incomplete()
+	{
+		echo ($this->getdata_model->get_section_incomplete($_POST));
+		exit();
+	}
+
 	public function get_top_outstanding()
 	{
 		echo json_encode($this->getdata_model->get_top_outstanding($_POST));
@@ -999,6 +1006,12 @@ class Maintenance extends CI_Controller {
 	public function get_fullload_outstanding()
 	{
 		echo json_encode($this->getdata_model->get_fullload_outstanding($_POST));
+		exit();
+	}
+
+	public function get_latest()
+	{
+		echo ($this->getdata_model->get_latest($_POST));
 		exit();
 	}
 

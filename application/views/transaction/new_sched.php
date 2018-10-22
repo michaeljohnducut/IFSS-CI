@@ -561,9 +561,14 @@
 </div>
 <h3 class="box-title m-b-0">Legend:</h3>
                         <div class="row" style="margin-left: 50px; margin-top: 5px;">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <button class="btn btn-info"><span class="fa  fa-rotate-left"></span></button>&nbsp;
                                 <label style="margin-top: 5px;">Reschedule</label>
+                                <br><br>
+                            </div>
+                            <div class="col-md-2" id="div_assignprof">
+                                <button class="btn btn-primary"><span class="fa  fa-user"></span></button>&nbsp;
+                                <label style="margin-top: 5px;">Assign Professor</label>
                             </div>
                         </div>
 
@@ -3526,6 +3531,7 @@ var user_id = "<?php echo $fac_id?>";
         $('#room_table').hide();
         $('#btnGenerate').hide();
         $('#btnPublish').hide();
+        $('#div_assignprof').hide();
 
         $('#starttime_a').on('blur',function(){
 
@@ -4519,6 +4525,7 @@ var user_id = "<?php echo $fac_id?>";
             $('#btnGenerate').hide();
             $('#btnPublish').hide();
             $('#legend_div').show();
+            $('#div_assignprof').hide();
             resetLegends();
           }
 
@@ -4541,6 +4548,7 @@ var user_id = "<?php echo $fac_id?>";
             $('#btnGenerate').hide();
             $('#btnPublish').hide();
             $('#legend_div').hide();
+            $('#div_assignprof').show();
           }
 
           else{
@@ -4563,6 +4571,7 @@ var user_id = "<?php echo $fac_id?>";
             $('#btnGenerate').hide();
             $('#btnPublish').hide();
             $('#legend_div').hide();
+            $('#div_assignprof').hide();
           }
         });
 

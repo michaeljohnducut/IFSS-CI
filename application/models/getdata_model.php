@@ -2955,7 +2955,7 @@ FROM subject_match sm
 		$sem = $this->security->xss_clean($this->input->post('sem'));
 		$result = array();
 
-		$query = $this->db->select("s.subj_code, s.subj_desc, s.units,'MINOR' as 'facname', ta.time_start, ta.time_finish, ta.day, r.room_code")
+		$query = $this->db->select("s.subj_code, s.subj_desc, s.units,'UNASSIGNED' as 'facname', ta.time_start, ta.time_finish, ta.day, r.room_code")
 				->where('sm.section', $section_id)
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
@@ -2964,7 +2964,6 @@ FROM subject_match sm
 				->join('subject s','sm.subj_id = s.subj_id')
 				->join('room r','r.room_id = ta.room_id')
                 ->get('teaching_assign_sched ta');
-                // ->order_by('ta.day', 'asc');
 
 		foreach ($query->result() as $r) 
 		{
@@ -2997,11 +2996,11 @@ FROM subject_match sm
 				->where('sm.acad_yr', $acad_year)
 				->where('sm.sem', $sem)
 				->where('sm.faculty_id IS NULL', NULL, FALSE)
+				// ->where('s.isMajor IN (1, 2)')
 				->join('subject_match sm','ta.subj_match_id = sm.subj_match_id')
 				->join('subject s','sm.subj_id = s.subj_id')
 				->join('room r','r.room_id = ta.room_id')
                 ->get('teaching_assign_sched ta');
-                // ->order_by('ta.day', 'asc');
 
 		foreach ($query->result() as $r) 
 		{
@@ -4777,6 +4776,7 @@ FROM subject_match sm
 		$result = array();
 		$output = array();
 		$unique_result = array();
+		$unique_result2 = array();
 		$final_result = array();
 		$diff_arr = array();
 
@@ -4813,37 +4813,37 @@ FROM subject_match sm
 				}
 
 				$unique_result = array_unique($result);	
+
+				$query4 = $this->db->query('SELECT faculty_id
+                       	FROM subject_match 
+                       	WHERE subj_match_id IN (SELECT subj_match_id
+	          			FROM teaching_assign_sched 
+	          			WHERE acad_yr = "'.$acad_year.'"
+						AND sem = "'.$sem.'"
+						AND time_start > "'.$r->time_start.'"
+						AND time_start < "'.$r->time_finish.'"
+						AND day = "'.$r->day.'"
+						AND acad_yr = "'.$acad_year.'"
+						AND sem = "'.$sem.'"
+						OR time_finish > "'.$r->time_start.'"
+						AND time_finish < "'.$r->time_finish.'"
+						AND day = "'.$r->day.'"
+						AND acad_yr = "'.$acad_year.'"
+						AND sem = "'.$sem.'"
+						OR time_start = "'.$r->time_start.'"
+						AND time_finish = "'.$r->time_finish.'"
+						AND day = "'.$r->day.'"
+						AND acad_yr = "'.$acad_year.'"
+						AND sem = "'.$sem.'")');
+
+				foreach ($query4->result() as $v) 
+				{
+					array_push($output, $v->faculty_id);
+				}
 		}
 
-		$query4 = $this->db->query('SELECT faculty_id
-                           FROM subject_match 
-                           WHERE subj_match_id IN (SELECT subj_match_id
-          			FROM teaching_assign_sched 
-          			WHERE acad_yr = "'.$acad_year.'"
-					AND sem = "'.$sem.'"
-					AND time_start > "'.$r->time_start.'"
-					AND time_start < "'.$r->time_finish.'"
-					AND day = "'.$r->day.'"
-					AND acad_yr = "'.$acad_year.'"
-					AND sem = "'.$sem.'"
-					OR time_finish > "'.$r->time_start.'"
-					AND time_finish < "'.$r->time_finish.'"
-					AND day = "'.$r->day.'"
-					AND acad_yr = "'.$acad_year.'"
-					AND sem = "'.$sem.'"
-					OR time_start = "'.$r->time_start.'"
-					AND time_finish = "'.$r->time_finish.'"
-					AND day = "'.$r->day.'"
-					AND acad_yr = "'.$acad_year.'"
-					AND sem = "'.$sem.'")');
-
-		foreach ($query4->result() as $v) 
-		{
-			array_push($output, $v->faculty_id);
-		}
-
-
-		$diff_arr = array_diff($unique_result, $output);
+		$unique_result2 = array_unique($output);	
+		$diff_arr = array_diff($unique_result, $unique_result2);
 
 		foreach ($diff_arr as $t) {
 
@@ -4858,13 +4858,29 @@ FROM subject_match sm
 						$x->facname
 				);
 			}
-
 		}
 
 		return $final_result;
 	}
 
+	public function get_subject_code(){
 
+		$match_id = $this->security->xss_clean($this->input->post('match_id'));
+		$result = array();
 
+		$query = $this->db->query('SELECT subj_id
+								FROM subject_match 
+								WHERE subj_match_id = '.$match_id);
+
+		foreach ($query->result() as $r) 
+		{
+			$result[] = array(
+					$r->subj_id
+					);
+		}
+
+		return $result;	
+
+	}
 }
 ?>

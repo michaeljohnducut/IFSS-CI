@@ -945,7 +945,7 @@
                        
                     </div>
                     <div class="modal-footer">
-                            <button type="submit" class="btn btn-info waves-effect text-left">Save</button>
+                            <button type="submit" class="btn btn-info waves-effect text-left" id="btn_save_assigned">Save</button>
                             <input type="hidden" id="hid_data_id">
                             <input type="hidden" id="hid_loadtype">
                             <input type="hidden" id="hid_fac_id">
@@ -1171,6 +1171,8 @@
       var global_id;
       var global_loadtype;
       var global_isPublished;
+      var global_statement;
+      var global_subject_hours;
 
       //FUNCTIONS
       //SHOWS IF FACULTY HAS CONSECUTIVE S GRADES
@@ -1692,6 +1694,7 @@
                 {  
                     $('#modalAddMinor').modal('hide');
                     reflectSectionMinor();
+                    loadSectionTable();
                     loadSchedTable();
                 },
                  error: function (data) {
@@ -1721,6 +1724,7 @@
                     $('#modalAddMajor').modal('hide');
                     reflectSectionMajor();
                     loadSchedTable();
+                    loadSectionTable();
                 },
                  error: function (data) {
                         alert(JSON.stringify(data));
@@ -3212,8 +3216,9 @@
                     {
                         var id = data[x][0];
                         var name = data[x][1];
-                        $('#avail_prof').append('<option value = "'+id+'">'+name+'</option>')
+                        $('#avail_prof').append('<option value = "'+id+'">'+name+'</option>');
                     }
+                    $('#avail_prof').append('<option value = "other">Show All Avail Professor</option>');
                 },  
                 error: function (data) {
                 alert(JSON.stringify(data));
@@ -3222,6 +3227,43 @@
        });
 
 
+      }
+
+      function getConsec(){
+
+        var fac_id = $('#avail_prof').val();
+        var acad_yr = $('#sec_acadyr').val();
+        var sem = $('#sec_sem').val();
+        var statement2;
+        $.ajax({  
+            url:"<?php echo base_url('Transaction/get_consec')?>",  
+            method:"POST",  
+            async: false,
+            data:{faculty_id:fac_id},
+            success:function(data)
+            {  
+                statement2 = data;
+                global_statement = statement2;
+            },
+            error: function (data) {
+                alert(JSON.stringify(data));
+            }
+        }); 
+
+        $.ajax({
+                        method:"POST",
+                        url:"<?php echo base_url('Transaction/get_faculty_specs')?>",
+                        dataType: "json",
+                        async:false,
+                        data:{fac_id:fac_id, acad_yr:acad_yr, sem:sem, eval:global_statement},
+                        success:function(data)
+                        {   
+                            global_limit = data[0][5];
+                        },
+                        error: function (data) {
+                            alert(JSON.stringify(data));
+                        }
+                    });
       }
 
       function viewSubjDetails(subj_code){
@@ -3250,6 +3292,7 @@
                 success:function(data){
                     global_labhour = data[0][4];
                     global_lechour = data[0][5];
+                    global_subject_hours = parseInt(global_labhour) + parseInt(global_lechour);
                 },  
                 error: function (data) {
                 alert(JSON.stringify(data));
@@ -4446,6 +4489,7 @@ var user_id = "<?php echo $fac_id?>";
           resetPlotForm();
           reflectSectionTable();
           reflectSectionMinor();
+          reflectSectionMajor();
           loadSectionTable();
         });
 
@@ -4453,6 +4497,7 @@ var user_id = "<?php echo $fac_id?>";
           resetPlotForm();
           reflectSectionTable();
           reflectSectionMinor();
+          reflectSectionMajor();
           loadSectionTable();
         });
 
@@ -4460,6 +4505,7 @@ var user_id = "<?php echo $fac_id?>";
             resetPlotForm();
             reflectSectionTable();
             reflectSectionMinor();
+            reflectSectionMajor();
             loadSectionTable();
             var sec_course = $("#sec_course option:selected").text();
             var sec_text = $("#sec_yearsec option:selected").text();
@@ -6536,6 +6582,21 @@ $(document).on('click', '#btn_reschedule', function(e){
 $(document).on('click', '#btn_assign_prof', function(e){  
 
     global_id = $(this).data("id");
+    $.ajax({ 
+        url:"<?php echo base_url('Transaction/get_subject_code')?>", 
+        method:"POST", 
+        data:{match_id:global_id}, 
+        dataType: "json",
+        success:function(data){
+
+            var subj_code = data[0][0];
+            viewSubjDetails_major(subj_code);
+        },  
+        error: function (data) {
+        alert(JSON.stringify(data));
+        }, 
+        async:false
+   });
     filterProf();
     $('#openModAssign').trigger('click');
            
@@ -6544,9 +6605,31 @@ $(document).on('click', '#btn_assign_prof', function(e){
 $('#avail_prof').on('change', function(){
 
     var fac_id = $('#avail_prof').val();
-    major_getUnitsUsed(fac_id);
-    major_getFacultyType(fac_id);   
-    var load_type;
+    
+    if(fac_id == 'other')
+    {
+        $('#avail_prof').append('<option value = "hello">Hello</option>');
+    }
+    
+    else
+    {
+        major_getUnitsUsed(fac_id);
+        major_getFacultyType(fac_id);   
+        getConsec();
+        var load_type;
+        var added_hour = parseInt(global_total_hrs) + parseInt(global_subject_hours);
+
+    }
+
+    if(added_hour > global_limit)
+    {
+        swal("Warning", "This faculty will exceed his/her load limit. Assign schedule to other faculty", 'warning');
+    }
+
+    // else
+    // {
+    //     $('#avail_prof').removeAttr('disabled');
+    // }
 
     if (global_factype == 1)
     {

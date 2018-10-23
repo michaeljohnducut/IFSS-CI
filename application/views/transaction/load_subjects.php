@@ -816,7 +816,7 @@
                        }
                        if(data == 'EQUAL')
                        {
-                            swal("Equal!", "You can't assign anymore to faculty " + fac_name + " because it reached the total load limit.\n Please choose another faculty.", "error");
+                            swal("Equal!", "You can't assign anymore to faculty " + fac_name + " because it has reached the total load limit.\n Please choose another faculty.", "error");
                             loadSectionSubjects();
                        }
                     },

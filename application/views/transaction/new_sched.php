@@ -940,7 +940,7 @@
                         </div>
                         <div class="col-md-12">
                             <br><br>
-                            <h5><b>NOTE:</b>&nbsp;<br>Names that will be listed on the drop-down menu will be faculty members who prefer the subject and are available on that specific schedule.</h5>
+                            <h5><b>NOTE:</b>&nbsp;<br>Names that will be listed on the drop-down menu will be faculty members who prefer the subject, day and teaching time and are available for that specific schedule.</h5>
                         </div>
                        
                     </div>
@@ -3194,6 +3194,36 @@
         }
       }
 
+      function filterProf(){
+
+        var sem = $('#sec_sem').val();
+        var acad_year = $('#sec_acadyr').val();
+        var match_id = global_id;
+        $.ajax({ 
+                url:"<?php echo base_url('Transaction/filter_prof')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, match_id:match_id}, 
+                dataType: "json",
+                success:function(data){
+                    $('#avail_prof').empty();
+                    $('#avail_prof').append('<option value = "0">-Professor-</option>')
+                    var len = data.length;
+                    for (var x = 0; x < len ; x++)
+                    {
+                        var id = data[x][0];
+                        var name = data[x][1];
+                        $('#avail_prof').append('<option value = "'+id+'">'+name+'</option>')
+                    }
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+       });
+
+
+      }
+
       function viewSubjDetails(subj_code){
             $.ajax({ 
                 url:"<?php echo base_url('Transaction/view_subject_gen')?>", 
@@ -3466,7 +3496,7 @@ function publishTeachingLoad(){
         {  
             if(data == 'PUBLISHED')
             {
-                swal('Success!', "This faculty's schedule has been successfully published and is now availabe for viewing for faculty accounts.", 'success');
+                swal('Notice!', "This faculty's schedule has been successfully published and is now availabe for viewing for faculty account.", 'info');
             }
         },
          error: function (data) {
@@ -3488,7 +3518,7 @@ function unpublishTeachingLoads(){
         {  
             if(data == 'UNPUBLISHED')
             {
-                swal('Success!', "This faculty's schedule has been unpublished and is hidden from faculty accounts.", 'success');
+                swal('Notice!', "This faculty's schedule has been unpublished and is hidden from faculty account.", 'info');
             }
         },
          error: function (data) {
@@ -6506,6 +6536,7 @@ $(document).on('click', '#btn_reschedule', function(e){
 $(document).on('click', '#btn_assign_prof', function(e){  
 
     global_id = $(this).data("id");
+    filterProf();
     $('#openModAssign').trigger('click');
            
 });

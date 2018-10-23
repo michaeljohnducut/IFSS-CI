@@ -961,13 +961,27 @@ class Transaction extends CI_Controller
 
 	public function load_published_table()
 	{
-		echo json_encode($this->getdata_model->load_published_table($_POST));
+		$output = $this->getdata_model->load_published_table();
+
+		$response = array(
+			'aaData' => $output,
+			'iTotalRecords' => count($output),
+			'iTotalDisplayRecords' => count($output),
+			'iDisplayStart' => 0
+		);
+		echo json_encode($response);
 		exit();
 	}
 
 	public function add_to_track()
 	{
 		echo ($this->savedata_model->add_to_track($_POST));
+		exit();
+	}
+
+	public function filter_prof()
+	{
+		echo json_encode($this->getdata_model->filter_prof($_POST));
 		exit();
 	}
 

@@ -4288,7 +4288,7 @@ FROM subject_match sm
 		$result = array();
 
 		$query = $this->db->select("CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
-				->where('f.faculty_id IN (SELECT sm.faculty_id
+				->where('f.faculty_id NOT IN (SELECT sm.faculty_id
                            FROM subject_match sm 
                            WHERE sm.subj_match_id IN (SELECT ta.subj_match_id
           			FROM teaching_assign_sched ta 
@@ -4765,6 +4765,103 @@ FROM subject_match sm
 		}
 
 		return $result;
+	}
+
+
+	public function filter_prof()
+	{
+		$sem = $this->security->xss_clean($this->input->post('sem'));
+		$acad_year = $this->security->xss_clean($this->input->post('acad_year'));
+		$match_id = $this->security->xss_clean($this->input->post('match_id'));
+
+		$result = array();
+		$output = array();
+		$unique_result = array();
+		$final_result = array();
+		$diff_arr = array();
+
+		$query = $this->db->select("ta.day, ta.time_start, ta.time_finish, sm.subj_id")
+				->where('ta.subj_match_id', $match_id)
+				->where('ta.acad_yr', $acad_year)
+				->where('ta.sem', $sem)
+				->join('subject_match sm', 'sm.subj_match_id = ta.subj_match_id')
+                ->get('teaching_assign_sched ta ');
+
+        foreach ($query->result() as $r){
+
+        	$query2 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+        		->where('f.faculty_id IN (SELECT faculty_id
+									FROM preferred_subj 
+									WHERE subj_code = '.$r->subj_id.'
+									AND acad_yr = "'.$acad_year.'"
+									AND sem = "'.$sem.'" )')
+
+        		->where('f.faculty_id IN (SELECT pt.faculty_id
+				FROM preferred_time pt
+				WHERE pt.start_time BETWEEN "'.$r->time_start.'" and "'.$r->time_finish.'"
+				AND pt.acad_yr = "'.$acad_year.'"
+				AND pt.sem =  "'.$sem.'"
+				OR
+				pt.end_time BETWEEN "'.$r->time_start.'" and "'.$r->time_finish.'"
+				AND pt.acad_yr = "'.$acad_year.'"
+				AND pt.sem =  "'.$sem.'")', NULL, FALSE)
+                ->get('faculty f');
+
+                foreach ($query2->result() as $s) 
+				{	
+					array_push($result, $s->faculty_id);
+				}
+
+				$unique_result = array_unique($result);	
+		}
+
+		$query4 = $this->db->query('SELECT faculty_id
+                           FROM subject_match 
+                           WHERE subj_match_id IN (SELECT subj_match_id
+          			FROM teaching_assign_sched 
+          			WHERE acad_yr = "'.$acad_year.'"
+					AND sem = "'.$sem.'"
+					AND time_start > "'.$r->time_start.'"
+					AND time_start < "'.$r->time_finish.'"
+					AND day = "'.$r->day.'"
+					AND acad_yr = "'.$acad_year.'"
+					AND sem = "'.$sem.'"
+					OR time_finish > "'.$r->time_start.'"
+					AND time_finish < "'.$r->time_finish.'"
+					AND day = "'.$r->day.'"
+					AND acad_yr = "'.$acad_year.'"
+					AND sem = "'.$sem.'"
+					OR time_start = "'.$r->time_start.'"
+					AND time_finish = "'.$r->time_finish.'"
+					AND day = "'.$r->day.'"
+					AND acad_yr = "'.$acad_year.'"
+					AND sem = "'.$sem.'")');
+
+		foreach ($query4->result() as $v) 
+		{
+			array_push($output, $v->faculty_id);
+		}
+
+
+		$diff_arr = array_diff($unique_result, $output);
+
+		foreach ($diff_arr as $t) {
+
+			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+			->where('f.faculty_id', $t)
+			->get('faculty f');
+
+			foreach ($query3->result() as $x) 
+			{	
+				$final_result[] = array(
+						$x->faculty_id,
+						$x->facname
+				);
+			}
+
+		}
+
+		return $final_result;
 	}
 
 

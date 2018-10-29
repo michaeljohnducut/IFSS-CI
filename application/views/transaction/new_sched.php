@@ -24,8 +24,8 @@
                             <div class="col-md-3">
                                 <label class="control-label">View Schedules by:</label>
                                 <select class="form-control " id="change_view">
-                                  <option selected="" value="1">Faculty</option>
-                                  <option value="2">Sections</option>
+                                  <option selected="" value="2">Sections</option>
+                                  <option value="1">Faculty</option>
                                   <option value="3">Rooms/Labs</option>
                                 </select>
                                 <br><br>
@@ -3210,7 +3210,8 @@
                 dataType: "json",
                 success:function(data){
                     $('#avail_prof').empty();
-                    $('#avail_prof').append('<option value = "0">-Professor-</option>')
+                    $('#avail_prof').append('<option value = "0" >-Professor-</option>');
+                    $('#avail_prof').append('<optgroup label="Available Professors">');
                     var len = data.length;
                     for (var x = 0; x < len ; x++)
                     {
@@ -3218,16 +3219,42 @@
                         var name = data[x][1];
                         $('#avail_prof').append('<option value = "'+id+'">'+name+'</option>');
                     }
-                    $('#avail_prof').append('<option value = "other">Show All Avail Professor</option>');
                 },  
                 error: function (data) {
                 alert(JSON.stringify(data));
                 }, 
                 async:false
        });
-
-
       }
+
+      function getOtherProf(){
+
+        var sem = $('#sec_sem').val();
+        var acad_year = $('#sec_acadyr').val();
+        var match_id = global_id;
+        $.ajax({ 
+                url:"<?php echo base_url('Transaction/get_other_prof')?>", 
+                method:"POST", 
+                data:{sem:sem, acad_year:acad_year, match_id:match_id}, 
+                dataType: "json",
+                success:function(data){
+                    $('#avail_prof').append('<optgroup label="Other Available Professors">');
+                    var len = data.length;
+                    for (var x = 0; x < len ; x++)
+                    {
+                        var id = data[x][0];
+                        var name = data[x][1];
+                        $('#avail_prof').append('<option value = "'+id+'">'+name+'</option>');
+                    }
+                },  
+                error: function (data) {
+                alert(JSON.stringify(data));
+                }, 
+                async:false
+       });
+      }
+
+
 
       function getConsec(){
 
@@ -3598,13 +3625,17 @@ var user_id = "<?php echo $fac_id?>";
         // $('#divsplit').hide();
         $('#sched_lab').hide();
         $('#div_by_room').hide();
-        $('#div_by_section').hide();
+        $('#div_by_faculty_a').hide();
+        $('#div_by_faculty_b').hide();
+        $('#legend_div').hide();
+        $('#div_by_section').show();
         $('#sched_b_minor').hide();
-        $('#section_table').hide();
+        $('#section_table').show();
+        $('#faculty_table').hide();
         $('#room_table').hide();
         $('#btnGenerate').hide();
         $('#btnPublish').hide();
-        $('#div_assignprof').hide();
+        $('#div_assignprof').show();
 
         $('#starttime_a').on('blur',function(){
 
@@ -6598,6 +6629,7 @@ $(document).on('click', '#btn_assign_prof', function(e){
         async:false
    });
     filterProf();
+    getOtherProf(); 
     $('#openModAssign').trigger('click');
            
 });

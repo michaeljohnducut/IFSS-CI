@@ -98,8 +98,8 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                          <div class="ribbon-wrapper bg-danger" style="height: 93%">
-                           <div class="ribbon ribbon-bookmark ribbon-vertical-l ribbon-success"><i class="fa fa-exclamation-circle" style="font-size: 170%"></i></div>
+                          <div class="ribbon-wrapper bg-success" style="height: 93%">
+                           <div class="ribbon ribbon-bookmark ribbon-vertical-l ribbon-warning"><i class="fa fa-exclamation-circle" style="font-size: 170%"></i></div>
                             <p class="text-white"><STRONG>PICK UP WHERE YOU LEFT OFF</STRONG></p>
                             <hr style="background-color: white;">
                             <p class="text-white">You were previously working on <STRONG><span id="sched_name"></span></STRONG>'s Schedule</p>
@@ -290,7 +290,7 @@
                  </div>
                  <div class="row">
                     <div class="col-md-12">
-                        <div class="white-box text-center bg-purple">
+                        <div class="white-box text-center legend-darkBlue">
                             <h1 class="text-white">
                                 <?php
                                     $year = date('Y');

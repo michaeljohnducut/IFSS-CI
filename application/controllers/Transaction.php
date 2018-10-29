@@ -985,6 +985,12 @@ class Transaction extends CI_Controller
 		exit();
 	}
 
+	public function get_other_prof()
+	{
+		echo json_encode($this->getdata_model->get_other_prof($_POST));
+		exit();
+	}
+
 	public function get_subject_code()
 	{
 		echo json_encode($this->getdata_model->get_subject_code($_POST));

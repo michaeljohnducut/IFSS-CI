@@ -6605,21 +6605,12 @@ $(document).on('click', '#btn_assign_prof', function(e){
 $('#avail_prof').on('change', function(){
 
     var fac_id = $('#avail_prof').val();
-    
-    if(fac_id == 'other')
-    {
-        $('#avail_prof').append('<option value = "hello">Hello</option>');
-    }
-    
-    else
-    {
+
         major_getUnitsUsed(fac_id);
         major_getFacultyType(fac_id);   
         getConsec();
         var load_type;
         var added_hour = parseInt(global_total_hrs) + parseInt(global_subject_hours);
-
-    }
 
     if(added_hour > global_limit)
     {

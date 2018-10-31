@@ -2035,6 +2035,8 @@ FROM subject_match sm
 		$query2 = $this->db->select("SUM(lec_hrs + lab_hrs) AS total_load_hrs")
 							->join('subject s ', 'sm.subj_id = s.subj_id')
 							->where('faculty_id', $fac_id)
+							->where('acad_yr', $acad_yr)
+							->where('sem', $sem)
 							->get('subject_match sm');
 
 		foreach ($query2->result() as $s) 

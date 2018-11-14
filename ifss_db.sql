@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2018 at 06:53 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 5.6.38
+-- Generation Time: Nov 14, 2018 at 02:51 PM
+-- Server version: 10.1.21-MariaDB
+-- PHP Version: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -45,7 +43,7 @@ INSERT INTO `account` (`account_id`, `password`, `faculty_id`, `account_type`, `
 ('1003423', 'rachel', 1, 'admin', '32563495_10214899388851090_7077005131891343360_n.jpg', 1),
 ('1242342', 'monina', 3, 'faculty', '7e2eb7fd-d837-4520-ba60-6140ccb28d88.jpg', 1),
 ('13142415', '2b757e', 2, 'faculty', 'undefined', 1),
-('135341', 'be08b9', 5, 'faculty', 'undefined', 1),
+('135341', 'lyn123', 5, 'faculty', 'undefined', 1),
 ('321423', 'dustin', 4, 'faculty', '12305646_958990620814307_681912155_n.jpg', 1),
 ('35254658', 'ed1782', 7, 'faculty', 'IMG_0801.jpg', 1),
 ('35465346', 'c6a0f7', 8, '', 'undefined', 1);
@@ -298,7 +296,7 @@ INSERT INTO `faculty` (`faculty_id`, `lname`, `fname`, `mname`, `email`, `contac
 (4, 'Santos', 'John Dustin', '', 'jsantos@pup.com', '09242353345', '1996-05-23', 'male', 'Single', '', '', '', '', '', 5, 1, 1),
 (5, 'Dastas', 'Lydinar', '', 'ldastas@pup.com', '09123434543', '1973-01-23', 'female', '', '', '', '', '', '', 1, 1, 1),
 (7, 'Buena', 'Annthonite', 'Nanez', 'annthoniteb@gmail.com', '09485044516', '1999-09-02', 'female', '', '', '', '', '', '', 1, 1, 1),
-(8, 'Salvador', 'Donn Lawrence', '', 'salvador_donn@gmail.com', '09124345653', '1985-01-01', 'male', '', '', '', '', '', '', 4, 1, 1);
+(8, 'Salvador', 'Donn ', '', 'salvador_donn@gmail.com', '09124345653', '1985-01-01', 'male', '', '', '', '', '', '', 4, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -401,8 +399,32 @@ CREATE TABLE `other_time_sched` (
   `acad_yr` varchar(10) CHARACTER SET utf16 NOT NULL,
   `sem` varchar(10) NOT NULL,
   `faculty_id` int(11) NOT NULL,
-  `load_type` varchar(20) NOT NULL
+  `load_type` varchar(20) NOT NULL,
+  `isPublished` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `other_time_sched`
+--
+
+INSERT INTO `other_time_sched` (`other_time_id`, `time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `faculty_id`, `load_type`, `isPublished`) VALUES
+(179, '17:00:00', '20:00:00', 'Monday', '2018‐2019', '1st', 1, 'NO', 0),
+(180, '17:00:00', '20:00:00', 'Tuesday', '2018‐2019', '1st', 1, 'NO', 0),
+(181, '17:00:00', '20:00:00', 'Wednesday', '2018‐2019', '1st', 1, 'NO', 0),
+(182, '17:00:00', '20:00:00', 'Thursday', '2018‐2019', '1st', 1, 'NO', 0),
+(183, '17:00:00', '20:00:00', 'Friday', '2018‐2019', '1st', 1, 'NO', 0),
+(213, '15:00:00', '17:00:00', 'Monday', '2018‐2019', '1st', 1, 'OH', 0),
+(214, '08:00:00', '12:00:00', 'Tuesday', '2018‐2019', '1st', 1, 'OH', 0),
+(215, '13:00:00', '17:00:00', 'Tuesday', '2018‐2019', '1st', 1, 'OH', 0),
+(216, '08:00:00', '12:00:00', 'Wednesday', '2018‐2019', '1st', 1, 'OH', 0),
+(217, '13:00:00', '17:00:00', 'Wednesday', '2018‐2019', '1st', 1, 'OH', 0),
+(218, '08:00:00', '12:00:00', 'Thursday', '2018‐2019', '1st', 1, 'OH', 0),
+(219, '13:00:00', '17:00:00', 'Thursday', '2018‐2019', '1st', 1, 'OH', 0),
+(220, '08:00:00', '12:00:00', 'Friday', '2018‐2019', '1st', 1, 'OH', 0),
+(221, '13:00:00', '17:00:00', 'Friday', '2018‐2019', '1st', 1, 'OH', 0),
+(225, '09:30:00', '10:30:00', 'Monday', '2018‐2019', '1st', 5, 'AT', 0),
+(226, '13:00:00', '18:00:00', 'Monday', '2018‐2019', '1st', 5, 'AT', 0),
+(227, '08:00:00', '12:00:00', 'Tuesday', '2018‐2019', '1st', 5, 'AT', 0);
 
 -- --------------------------------------------------------
 
@@ -431,13 +453,14 @@ INSERT INTO `preferred_subj` (`preferred_subj_id`, `acad_yr`, `sem`, `subj_code`
 (6, '2018‐2019', '2nd', 28, 1),
 (7, '2018‐2019', '2nd', 13, 2),
 (8, '2018‐2019', '2nd', 29, 2),
-(10, '2018‐2019', '2nd', 26, 5),
-(11, '2018‐2019', '2nd', 27, 5),
 (12, '2018‐2019', '1st', 29, 1),
 (14, '2018‐2019', '1st', 28, 1),
 (15, '2017‐2018', '1st', 29, 1),
 (17, '2018‐2019', '1st', 29, 7),
-(18, '2018‐2019', '1st', 29, 5);
+(18, '2018‐2019', '1st', 29, 5),
+(22, '2018‐2019', '2nd', 29, 5),
+(23, '2018‐2019', '2nd', 13, 5),
+(24, '2018‐2019', '2nd', 25, 3);
 
 -- --------------------------------------------------------
 
@@ -496,7 +519,6 @@ INSERT INTO `preferred_time` (`preferred_time_id`, `day`, `start_time`, `end_tim
 (46, 'Friday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 2),
 (47, 'Thursday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 2),
 (48, 'Saturday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 5),
-(50, 'Wednesday', '07:30:00', '12:00:00', '2018‐2019', '1st', 3),
 (51, 'Tuesday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 3),
 (52, 'Monday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 3),
 (53, 'Friday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 3),
@@ -507,14 +529,15 @@ INSERT INTO `preferred_time` (`preferred_time_id`, `day`, `start_time`, `end_tim
 (58, 'Tuesday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 5),
 (59, 'Monday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 5),
 (60, 'Tuesday', '07:30:00', '20:30:00', '2017‐2018', '1st', 5),
-(61, 'Saturday', '13:00:00', '17:00:00', '2018‐2019', '1st', 3),
 (62, 'Tuesday', '07:30:00', '17:00:00', '2017‐2018', '2nd', 5),
 (63, 'Tuesday', '12:00:00', '18:00:00', '2018‐2019', '1st', 1),
-(64, 'Saturday', '12:00:00', '18:00:00', '2018‐2019', '1st', 3),
 (65, 'Friday', '18:00:00', '21:00:00', '2018‐2019', '1st', 3),
 (66, 'Friday', '07:30:00', '12:00:00', '2018‐2019', '1st', 3),
 (67, 'Tuesday', '12:00:00', '18:00:00', '2018‐2019', '1st', 3),
-(68, 'Monday', '07:30:00', '12:00:00', '2018‐2019', '1st', 3);
+(68, 'Monday', '07:30:00', '12:00:00', '2018‐2019', '1st', 3),
+(69, 'Wednesday', '07:30:00', '12:00:00', '2018‐2019', '2nd', 1),
+(70, 'Wednesday', '12:00:00', '18:00:00', '2018‐2019', '1st', 1),
+(71, 'Wednesday', '12:00:00', '18:00:00', '2018‐2019', '2nd', 1);
 
 -- --------------------------------------------------------
 
@@ -628,17 +651,17 @@ CREATE TABLE `services_assign` (
   `room` varchar(5) NOT NULL,
   `acad_yr` varchar(10) CHARACTER SET utf16 NOT NULL,
   `sem` varchar(10) NOT NULL,
-  `faculty_id` int(11) DEFAULT NULL
+  `faculty_id` int(11) DEFAULT NULL,
+  `isPublished` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
 -- Dumping data for table `services_assign`
 --
 
-INSERT INTO `services_assign` (`services_id`, `subj_code`, `subj_desc`, `time_start`, `time_end`, `section`, `day`, `room`, `acad_yr`, `sem`, `faculty_id`) VALUES
-(1, 'COMP1153', 'Introduction to Information and Communication Technology', '07:30:00', '09:30:00', 'ABE 1-1', 'Tuesday', 'E407', '2018‐2019', '1st', 5),
-(3, 'COMP1153', 'Introduction to Information and Communication Technology', '13:30:00', '16:30:00', 'BAJ 1-1', 'Tuesday', 'MC203', '2018‐2019', '1st', NULL),
-(4, 'COMP1023', 'Software Packages', '07:30:00', '10:30:00', 'BBF 3-1', 'Wednesday', 'N509', '2017‐2018', '2nd', 7);
+INSERT INTO `services_assign` (`services_id`, `subj_code`, `subj_desc`, `time_start`, `time_end`, `section`, `day`, `room`, `acad_yr`, `sem`, `faculty_id`, `isPublished`) VALUES
+(3, 'COMP1153', 'Introduction to Information and Communication Technology', '13:30:00', '16:30:00', 'BAJ 1-1', 'Tuesday', 'MC203', '2018‐2019', '1st', NULL, 0),
+(4, 'COMP1023', 'Software Packages', '07:30:00', '10:30:00', 'BBF 3-1', 'Wednesday', 'N509', '2017‐2018', '2nd', 7, 0);
 
 -- --------------------------------------------------------
 
@@ -780,13 +803,10 @@ INSERT INTO `subject_match` (`subj_match_id`, `acad_yr`, `sem`, `subj_id`, `sect
 (6, '2018‐2019', '1st', 5, 6, 2),
 (14, '2018‐2019', '1st', 1, 2, NULL),
 (19, '2018‐2019', '1st', 5, 5, 3),
-(23, '2018‐2019', '1st', 6, 4, 1),
 (26, '2018‐2019', '1st', 5, 1, 3),
 (27, '2018‐2019', '1st', 6, 2, 5),
 (32, '2018‐2019', '1st', 6, 3, 5),
-(37, '2018‐2019', '1st', 6, 1, 1),
 (38, '2018‐2019', '1st', 5, 2, 3),
-(39, '2018‐2019', '1st', 34, 8, 3),
 (40, '2018‐2019', '1st', 37, 8, 3),
 (41, '2018‐2019', '1st', 21, 7, 4),
 (42, '2018‐2019', '1st', 19, 7, 7),
@@ -794,7 +814,26 @@ INSERT INTO `subject_match` (`subj_match_id`, `acad_yr`, `sem`, `subj_id`, `sect
 (53, '2018‐2019', '1st', 6, 1, 8),
 (54, '2018‐2019', '1st', 6, 5, 7),
 (55, '2018‐2019', '1st', 6, 6, 7),
-(56, '2018‐2019', '1st', 37, 9, 7);
+(56, '2018‐2019', '1st', 37, 9, 7),
+(57, '2018‐2019', '1st', 5, 3, 8),
+(58, '2018‐2019', '1st', 34, 8, 3),
+(59, '2018‐2019', '1st', 4, 4, NULL),
+(60, '2018‐2019', '1st', 4, 4, NULL),
+(61, '2018‐2019', '1st', 5, 4, NULL),
+(62, '2018‐2019', '1st', 6, 4, NULL),
+(63, '2018‐2019', '1st', 1, 4, NULL),
+(65, '2018‐2019', '1st', 2, 4, NULL),
+(66, '2018‐2019', '1st', 7, 4, NULL),
+(67, '2018‐2019', '1st', 3, 4, NULL),
+(68, '2018‐2019', '1st', 8, 4, NULL),
+(69, '2018‐2019', '1st', 50, 10, 1),
+(70, '2018‐2019', '1st', 50, 11, 1),
+(71, '2018‐2019', '1st', 5, 6, NULL),
+(72, '2018‐2019', '1st', 5, 1, 4),
+(73, '2018‐2019', '1st', 1, 1, NULL),
+(74, '2018‐2019', '1st', 5, 2, NULL),
+(75, '2018‐2019', '1st', 50, 16, NULL),
+(76, '2018‐2019', '2nd', 29, 7, 1);
 
 -- --------------------------------------------------------
 
@@ -811,23 +850,90 @@ CREATE TABLE `teaching_assign_sched` (
   `acad_yr` varchar(10) CHARACTER SET utf16 NOT NULL,
   `sem` varchar(10) NOT NULL,
   `subj_match_id` int(11) NOT NULL,
-  `load_type` varchar(20) NOT NULL
+  `load_type` varchar(20) NOT NULL,
+  `isPublished` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `teaching_assign_sched`
 --
 
-INSERT INTO `teaching_assign_sched` (`teaching_sched_id`, `room_id`, `time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `subj_match_id`, `load_type`) VALUES
-(7, 3, '12:00:00', '14:00:00', 'Monday', '2018‐2019', '1st', 6, 'PT'),
-(8, 14, '12:00:00', '15:00:00', 'Thursday', '2018‐2019', '1st', 6, 'PT'),
-(10, 3, '10:30:00', '13:30:00', 'Friday', '2018‐2019', '1st', 14, 'M'),
-(71, 3, '07:30:00', '09:30:00', 'Tuesday', '2018‐2019', '1st', 53, 'PT'),
-(72, 14, '07:30:00', '10:30:00', 'Friday', '2018‐2019', '1st', 53, 'PT'),
-(75, 3, '07:30:00', '09:30:00', 'Monday', '2018‐2019', '1st', 27, 'R'),
-(76, 14, '07:30:00', '10:30:00', 'Wednesday', '2018‐2019', '1st', 27, 'R'),
-(77, 10, '10:30:00', '12:30:00', 'Monday', '2018‐2019', '1st', 32, 'R'),
-(78, 14, '11:30:00', '14:30:00', 'Wednesday', '2018‐2019', '1st', 32, 'R');
+INSERT INTO `teaching_assign_sched` (`teaching_sched_id`, `room_id`, `time_start`, `time_finish`, `day`, `acad_yr`, `sem`, `subj_match_id`, `load_type`, `isPublished`) VALUES
+(10, 3, '10:30:00', '13:30:00', 'Friday', '2018‐2019', '1st', 14, 'M', 0),
+(71, 3, '07:30:00', '09:30:00', 'Tuesday', '2018‐2019', '1st', 53, 'PT', 0),
+(72, 14, '07:30:00', '10:30:00', 'Friday', '2018‐2019', '1st', 53, 'PT', 0),
+(113, 3, '07:30:00', '09:30:00', 'Tuesday', '2018‐2019', '1st', 57, 'PT', 0),
+(114, 15, '07:30:00', '10:30:00', 'Friday', '2018‐2019', '1st', 57, 'PT', 0),
+(142, 3, '07:30:00', '10:30:00', 'Monday', '2018‐2019', '1st', 60, 'INC', 0),
+(143, 3, '12:30:00', '14:30:00', 'Monday', '2018‐2019', '1st', 61, 'INC', 0),
+(144, 15, '12:30:00', '15:30:00', 'Thursday', '2018‐2019', '1st', 61, 'INC', 0),
+(145, 3, '07:30:00', '09:30:00', 'Tuesday', '2018‐2019', '1st', 62, 'INC', 0),
+(146, 6, '07:30:00', '10:30:00', 'Friday', '2018‐2019', '1st', 62, 'INC', 0),
+(147, 3, '09:30:00', '12:30:00', 'Tuesday', '2018‐2019', '1st', 63, 'M', 0),
+(148, 3, '14:30:00', '17:30:00', 'Monday', '2018‐2019', '1st', 65, 'M', 0),
+(149, 3, '13:30:00', '16:30:00', 'Tuesday', '2018‐2019', '1st', 66, 'M', 0),
+(150, 10, '07:30:00', '10:30:00', 'Thursday', '2018‐2019', '1st', 67, 'M', 0),
+(151, 3, '07:30:00', '10:30:00', 'Sunday', '2018‐2019', '1st', 68, 'M', 0),
+(165, 10, '07:30:00', '10:30:00', 'Monday', '2018‐2019', '1st', 69, 'R', 0),
+(166, 10, '11:30:00', '14:30:00', 'Monday', '2018‐2019', '1st', 70, 'R', 0),
+(167, 3, '07:30:00', '09:30:00', 'Monday', '2018‐2019', '1st', 71, 'INC', 0),
+(168, 14, '07:30:00', '10:30:00', 'Thursday', '2018‐2019', '1st', 71, 'INC', 0),
+(169, 10, '07:30:00', '09:30:00', 'Monday', '2018‐2019', '1st', 72, 'PT', 0),
+(170, 15, '07:30:00', '10:30:00', 'Thursday', '2018‐2019', '1st', 72, 'PT', 0),
+(171, 3, '10:30:00', '13:30:00', 'Monday', '2018‐2019', '1st', 73, 'M', 0),
+(172, 10, '07:30:00', '09:30:00', 'Monday', '2018‐2019', '1st', 74, 'INC', 0),
+(173, 2, '09:30:00', '12:30:00', 'Monday', '2018‐2019', '1st', 74, 'INC', 0),
+(174, 12, '07:30:00', '09:30:00', 'Monday', '2018‐2019', '1st', 19, 'R', 1),
+(175, 2, '07:30:00', '10:30:00', 'Thursday', '2018‐2019', '1st', 19, 'R', 1),
+(176, 3, '10:30:00', '12:30:00', 'Monday', '2018‐2019', '1st', 26, 'R', 1),
+(177, 14, '11:30:00', '14:30:00', 'Thursday', '2018‐2019', '1st', 26, 'R', 1),
+(178, 12, '13:30:00', '15:30:00', 'Monday', '2018‐2019', '1st', 38, 'R', 1),
+(179, 14, '15:30:00', '18:30:00', 'Thursday', '2018‐2019', '1st', 38, 'R', 1),
+(180, 10, '07:30:00', '09:30:00', 'Tuesday', '2018‐2019', '1st', 40, 'PT', 1),
+(181, 2, '08:30:00', '11:30:00', 'Friday', '2018‐2019', '1st', 40, 'PT', 1),
+(182, 10, '10:30:00', '13:30:00', 'Tuesday', '2018‐2019', '1st', 58, 'PT', 1),
+(183, 7, '07:30:00', '09:30:00', 'Monday', '2018‐2019', '1st', 27, 'R', 0),
+(184, 14, '07:30:00', '10:30:00', 'Wednesday', '2018‐2019', '1st', 27, 'R', 0),
+(185, 12, '10:30:00', '12:30:00', 'Monday', '2018‐2019', '1st', 32, 'R', 0),
+(186, 14, '11:30:00', '14:30:00', 'Wednesday', '2018‐2019', '1st', 32, 'R', 0),
+(187, 3, '07:30:00', '09:00:00', 'Wednesday', '2018‐2019', '1st', 75, 'INC', 0),
+(188, 3, '10:30:00', '12:00:00', 'Wednesday', '2018‐2019', '1st', 75, 'INC', 0),
+(189, 3, '07:30:00', '09:30:00', 'Wednesday', '2018‐2019', '2nd', 76, 'R', 0),
+(190, 15, '10:30:00', '13:30:00', 'Wednesday', '2018‐2019', '2nd', 76, 'R', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `track_schedule`
+--
+
+CREATE TABLE `track_schedule` (
+  `track_sched_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `schedule_name` varchar(80) NOT NULL,
+  `date_added` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `track_schedule`
+--
+
+INSERT INTO `track_schedule` (`track_sched_id`, `user_id`, `schedule_name`, `date_added`) VALUES
+(1, 1, 'BSIT 4-1', '2018-09-29 08:30:00'),
+(2, 1, 'Monina Barretto', '2018-10-02 10:30:00'),
+(3, 1, 'BSIT 1-6', '2018-10-02 15:00:00'),
+(4, 1, 'BSIT 1-1', '2018-10-26 12:18:32'),
+(5, 1, 'BSIT 3-1', '2018-10-26 12:18:42'),
+(6, 1, 'Barretto, Monina ', '2018-10-26 12:19:10'),
+(7, 1, 'BSIT 1-1', '2018-10-30 10:00:15'),
+(8, 1, 'BSIT 1-3', '2018-10-30 10:00:29'),
+(9, 1, 'BSIT 4-2N', '2018-10-30 10:00:39'),
+(10, 1, 'BSIT 4-2N', '2018-10-30 10:05:22'),
+(11, 1, 'BSIT 4-2N', '2018-10-30 10:06:44'),
+(12, 1, 'BSIT 4-2N', '2018-10-30 10:20:45'),
+(13, 1, 'BSIT 2-1', '2018-10-30 10:27:57'),
+(14, 1, 'BSIT 1-1', '2018-10-30 10:27:59'),
+(15, 1, 'BSIT 2-1', '2018-10-30 10:28:37');
 
 --
 -- Indexes for dumped tables
@@ -992,6 +1098,13 @@ ALTER TABLE `teaching_assign_sched`
   ADD KEY `subj_match_id` (`subj_match_id`);
 
 --
+-- Indexes for table `track_schedule`
+--
+ALTER TABLE `track_schedule`
+  ADD PRIMARY KEY (`track_sched_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1000,127 +1113,111 @@ ALTER TABLE `teaching_assign_sched`
 --
 ALTER TABLE `course`
   MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `curriculum`
 --
 ALTER TABLE `curriculum`
   MODIFY `curriculum_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
-
 --
 -- AUTO_INCREMENT for table `curriculum_year`
 --
 ALTER TABLE `curriculum_year`
   MODIFY `curr_year_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
   MODIFY `dept_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `educ_bg`
 --
 ALTER TABLE `educ_bg`
   MODIFY `educ_bg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
 --
 -- AUTO_INCREMENT for table `evaluation`
 --
 ALTER TABLE `evaluation`
   MODIFY `evaluation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
-
 --
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
   MODIFY `faculty_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
 --
 -- AUTO_INCREMENT for table `faculty_load_type`
 --
 ALTER TABLE `faculty_load_type`
   MODIFY `load_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
 --
 -- AUTO_INCREMENT for table `faculty_spec`
 --
 ALTER TABLE `faculty_spec`
   MODIFY `fac_spec_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
-
 --
 -- AUTO_INCREMENT for table `faculty_type`
 --
 ALTER TABLE `faculty_type`
-  MODIFY `fac_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
+  MODIFY `fac_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `other_time_sched`
 --
 ALTER TABLE `other_time_sched`
-  MODIFY `other_time_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
-
+  MODIFY `other_time_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=228;
 --
 -- AUTO_INCREMENT for table `preferred_subj`
 --
 ALTER TABLE `preferred_subj`
-  MODIFY `preferred_subj_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
+  MODIFY `preferred_subj_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `preferred_time`
 --
 ALTER TABLE `preferred_time`
-  MODIFY `preferred_time_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
-
+  MODIFY `preferred_time_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 --
 -- AUTO_INCREMENT for table `pre_requisite`
 --
 ALTER TABLE `pre_requisite`
   MODIFY `pre_requisite_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
   MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
 --
 -- AUTO_INCREMENT for table `section`
 --
 ALTER TABLE `section`
   MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
 --
 -- AUTO_INCREMENT for table `services_assign`
 --
 ALTER TABLE `services_assign`
   MODIFY `services_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT for table `specialization`
 --
 ALTER TABLE `specialization`
   MODIFY `spec_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
-
 --
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
   MODIFY `subj_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
-
 --
 -- AUTO_INCREMENT for table `subject_match`
 --
 ALTER TABLE `subject_match`
-  MODIFY `subj_match_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
-
+  MODIFY `subj_match_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 --
 -- AUTO_INCREMENT for table `teaching_assign_sched`
 --
 ALTER TABLE `teaching_assign_sched`
-  MODIFY `teaching_sched_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
-
+  MODIFY `teaching_sched_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=191;
+--
+-- AUTO_INCREMENT for table `track_schedule`
+--
+ALTER TABLE `track_schedule`
+  MODIFY `track_sched_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- Constraints for dumped tables
 --
@@ -1235,7 +1332,12 @@ ALTER TABLE `subject_match`
 ALTER TABLE `teaching_assign_sched`
   ADD CONSTRAINT `teaching_assign_sched_ibfk_5` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `teaching_assign_sched_ibfk_6` FOREIGN KEY (`subj_match_id`) REFERENCES `subject_match` (`subj_match_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
+
+--
+-- Constraints for table `track_schedule`
+--
+ALTER TABLE `track_schedule`
+  ADD CONSTRAINT `track_schedule_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `faculty` (`faculty_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

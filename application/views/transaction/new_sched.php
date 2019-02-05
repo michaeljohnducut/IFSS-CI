@@ -3238,7 +3238,7 @@
                 data:{sem:sem, acad_year:acad_year, match_id:match_id}, 
                 dataType: "json",
                 success:function(data){
-                    $('#avail_prof').append('<optgroup label="Other Available Professors">');
+                    $('#avail_prof').append('<optgroup label="Other Professors">');
                     var len = data.length;
                     for (var x = 0; x < len ; x++)
                     {

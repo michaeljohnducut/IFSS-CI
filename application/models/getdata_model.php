@@ -2249,15 +2249,23 @@ FROM subject_match sm
 		$query = $this->db->select('r.room_id, r.room_code')
 				->where('r.room_id NOT IN (SELECT ta.room_id
 					FROM teaching_assign_sched ta
-					WHERE ta.time_start > "'.$start_time.'"
+					WHERE ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					AND ta.time_start > "'.$start_time.'"
 					AND ta.time_start < "'.$end.'"
 					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
 					OR ta.time_finish > "'.$start_time.'"
 					AND ta.time_finish < "'.$end.'"
 					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
 					OR ta.time_start = "'.$start_time.'"
 					AND ta.time_finish = "'.$end.'"
-					AND ta.day = "'.$day.'")', NULL, FALSE)
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'")', NULL, FALSE)
 				->where('r.room_desc = "Laboratory Room"', NULL, FALSE)
 				->order_by('room_code', 'asc')
                 ->get('room r');

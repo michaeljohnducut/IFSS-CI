@@ -4787,10 +4787,10 @@ FROM subject_match sm
 				->where('ta.acad_yr', $acad_year)
 				->where('ta.sem', $sem)
 				->join('subject_match sm', 'sm.subj_match_id = ta.subj_match_id')
-                ->get('teaching_assign_sched ta ');
+                ->get('teaching_assign_sched ta');
 
-        foreach ($query->result() as $r){
-
+        foreach ($query->result() as $r)
+        {
         	$query2 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
         		->where('f.faculty_id IN (SELECT faculty_id
 									FROM preferred_subj 
@@ -4849,7 +4849,7 @@ FROM subject_match sm
 
 		foreach ($diff_arr as $t) {
 
-			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
 			->where('f.faculty_id', $t)
 			->get('faculty f');
 
@@ -4907,7 +4907,7 @@ FROM subject_match sm
 
         foreach ($query->result() as $r){
 
-        	$query2 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+        	$query2 = $this->db->select("f.faculty_id, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
         		->where('f.faculty_id IN (SELECT faculty_id
 									FROM preferred_subj 
 									WHERE subj_code = '.$r->subj_id.'
@@ -4965,7 +4965,7 @@ FROM subject_match sm
 
 		foreach ($diff_arr as $t) {
 
-			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
 			->where('f.faculty_id', $t)
 			->get('faculty f');
 

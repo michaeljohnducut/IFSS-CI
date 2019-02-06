@@ -4930,6 +4930,18 @@ var user_id = "<?php echo $fac_id?>";
           var sem = $('#sec_sem').val();
           var section_id = $('#sec_yearsec').val();
           var acad_yr = $('#sec_acadyr').val();
+          $('#minor_start_a').val('');
+          $('#minor_end_a').val('');
+          $('#day_minor_a').val(0);
+          $('#minor_start_b').val('');
+          $('#minoe_end_b').val('');
+          $('#day_minor_b').val(0);
+          $('#sched_b_minor').hide();
+          $('#chk_split_minor').prop('checked', false);
+          $('#rooms_minor_a').empty();
+          $('#rooms_minor_b').empty();
+          $('#rooms_minor_a').append('<option value = "0">-Rooms-</option>');
+          $('#rooms_minor_b').append('<option value = "0">-Rooms-</option>');
 
           $.ajax({   
               url:"<?php echo base_url('Transaction/get_minor_subj')?>",  
@@ -6582,13 +6594,12 @@ $(document).on('click', '#btn_reschedule', function(e){
                       success: function (data) 
                       {
                          if(data == 'DELETED'){
-                            swal("Success!", "Teaching load available for rescheduling.", "success");  
+                            swal("Success!", "Teaching load available for rescheduling.", "success");
+                            loadSchedTable();
                             getFacultyLoads();
                             resetPlotForm();
                             showTeachingLoads();
                             reflectServices();
-                            loadSchedTable();
-
                          }
 
                          else{
@@ -6600,7 +6611,7 @@ $(document).on('click', '#btn_reschedule', function(e){
                       error: function (data) {
                         swal("Error!", "Failed to reschedule.", "error");
                         alert(JSON.stringify(data));
-                      }
+                      },
                     });
                   } 
 

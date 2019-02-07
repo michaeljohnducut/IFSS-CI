@@ -1,4 +1,4 @@
-		</div>
+		<!-- </div> -->
     </div>
 		<footer class="footer text-center"> 2018 &copy; Faculty Scheduling System</footer>
         <!-- /#page-wrapper -->

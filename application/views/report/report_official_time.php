@@ -1,6 +1,6 @@
 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                         <h4 class="page-title">Reports</h4>
+                         <h4 class="page-title">Official Time</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <ol class="breadcrumb">
@@ -16,13 +16,11 @@
                 <div class="col-sm-12">
                     <div class="white-box">                        
                         <div class="row">
-                            <h2>Report on Official Time (for Regular-Designee Only)</h2>
+                            <h2>Search Filter</h2>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
                             </div>
                             <br>
-                            <br>
                         </div>
-
                         <div class="row">
                             <div class="col-md-3">
                                 <label class="control-label">Select Faculty:</label>
@@ -57,9 +55,8 @@
                                 <button type="button" class="btn btn-info" id="btn_pdf" onclick="pdf_()" style="margin-top: 10px;">Print Official Time</button>
                             </div>
                         </div>
-                        <br><br>
+                        <br>
                         <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
                         </div>
                         <br>
                         <div class="row">

@@ -299,20 +299,14 @@
                                             </div> 
                                         </div>
 
-
-                                        <!-- <div class="modal-footer">
-                                            
-                                        </div> -->
-
                                     </div>
-                                    <!-- /.modal-content -->
                                 </div>
-                                <!-- /.modal-dialog -->
+                               
     </div>
 
-   <div class="ajax-loader">
+    <!-- <div class="ajax-loader">
         <img src="<?php echo base_url(); ?>assets/images/loader.gif" class="img-responsive" />
-    </div>
+    </div> -->
 
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>

@@ -12,20 +12,31 @@
 			line-height: 13.2px;
 		}
 
+    table, th, td 
+    {
+        border: 1px solid black;
+        border-collapse: collapse;
+
+    }
+
+    th, td 
+    {
+        padding: 5px;
+    }
+
 	</style>
 </head>
 <body style="font-family: 'Arial Narrow',Arial,sans-serif;">
 	 	<table id="tblExport">
             <div>
-            	
             		<tr>
-            			<td><center>COURSE OFFERINGS</center></td>
+            			<td colspan="8"><center>COURSE OFFERINGS</center></td>
             		</tr>
             		<tr>
-            			<td><center><strong><?php echo $course; ?></strong></center></td>
+            			<td colspan="8"><center><strong><?php echo $course; ?></strong></center></td>
             		</tr>
             		<tr>
-            			<td><center><strong><?php echo $sem; ?>&nbsp;Semester, AY&nbsp;<?php echo $acadyr; ?></strong></center></td>
+            			<td colspan="8"><center><strong><?php echo $sem; ?>&nbsp;Semester, AY&nbsp;<?php echo $acadyr; ?></strong></center></td>
             		</tr>
             </div>
             <tr><td></td></tr>
@@ -218,6 +229,7 @@
                 		{
                 			$section_id = $s[0];
                 			$result2 = $this->getdata_model->get_section_schedule($acadyr, $sem, $section_id);
+                      $result3 = $this->getdata_model->get_section_total($acadyr, $sem, $section_id);
                 			echo '<tr><td><b>'.$s[1].'</b></td></tr>';
                 			echo '<tr>
 					                        	<th>Course Code</th>
@@ -306,12 +318,55 @@
     <script src="<?php echo base_url(); ?>assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.battatech.excelexport.js"></script>
     <script type="text/javascript">
-    	$("#tblExport").battatech_excelexport({
-           containerid: "tblExport"
-          , datatype: 'table'
-          , worksheetName: "Subject Offering"
-       });
-    window.close();
+      function createExcel(tableID, filename)
+      {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        
+        // Specify file name
+        filename = filename?filename+'.xls':'excel_data.xls';
+        
+        // Create download link element
+        downloadLink = document.createElement("a");
+        
+        document.body.appendChild(downloadLink);
+        
+        if(navigator.msSaveOrOpenBlob){
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob( blob, filename);
+        }else{
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        
+            // Setting the file name
+            downloadLink.download = filename;
+            
+            //triggering the function
+            downloadLink.click();
+        }
+      }
+
+      $(document).ready(function()
+      {
+        var acadyr = "<?php echo $acadyr; ?>";
+
+        createExcel('tblExport', 'Course Offering AY '+acadyr);
+
+        setTimeout(function() {
+          window.close();
+          }, 1000);
+      });
+
+    	// $("#tblExport").battatech_excelexport({
+     //       containerid: "tblExport"
+     //      , datatype: 'table'
+     //      , worksheetName: "Subject Offering"
+     //   });
+    //window.close();
     </script>
 
 </body>

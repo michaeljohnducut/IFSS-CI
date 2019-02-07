@@ -955,7 +955,8 @@
 	           			<?php echo date("d/m/Y"); ?><br>
 	           			<span style="font-size:90%; margin-right: 10%;">Date
                         <span style="font-size:90%; margin-left: 30%;">Signature of Faculty
-                        <span style="font-size:90%; margin-left: 20%;">Immediate Supervisor(Signature over printed name)
+                        <span style="font-size:90%; margin-left: 20%;">Immediate Supervisor<br>
+                        <span style="font-size:90%; margin-left: 61%;">(Signature over printed name)
 	           		</p>
 	           	</div>
            	</div>

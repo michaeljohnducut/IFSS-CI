@@ -14,7 +14,6 @@
             <div class="row">      
                 <div class="col-sm-12">
                     <div class="white-box">
-
                         <div class="row">
                             <h2>Queries</h2>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">

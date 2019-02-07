@@ -21,6 +21,9 @@
                             </div> -->
                            <div class="col-md-12">
                                 <h2>Search Filter</h2>
+                                <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+                                </div>
+                                <br>
                             </div>
                                 <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
@@ -57,11 +60,8 @@
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
                             </div> 
-
-
                         </div>
-    
-                        <br><br>
+                        <br>
                         <div class="table-responsive">
                             <table id="eval-table" class="table table-striped">
                                 <thead>

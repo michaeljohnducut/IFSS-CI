@@ -14,9 +14,6 @@
             <div class="row">      
                 <div class="col-sm-12">
                     <div class="white-box">
-                        <br>
-                        <br>
-                        
                         <div class="row">
                             <div class="col-md-9">
                                 <h2 style="margin-top: 30px;">Plotting Form</h2>

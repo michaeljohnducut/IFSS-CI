@@ -14,11 +14,11 @@
                     <div class="col-sm-12">
                         <div class="white-box">          
                     <div class="col-sm-12">                            
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-10">
                                     <h2>Lists of Accounts</h2>
                                 </div>
-                            </div>
+                            </div> -->
                             <h3 class="box-title m-b-0">Legend:</h3>
                             <div class="row" style="margin-left: 20px; margin-top: 5px;">
                                 <div class="col-md-2">

@@ -1178,7 +1178,7 @@ class Getdata_model extends CI_Model{
 			$statement .= " AND sem ='$sem'";
 		}
 
-		$query = $this->db->query("SELECT acad_yr, sem, subj_code, subj_desc, section, GROUP_CONCAT(DAY, time_start, time_end SEPARATOR '\n') AS schedule, GROUP_CONCAT(room SEPARATOR '\n') AS room, CONCAT(lname,', ',fname,' ', mname) AS faculty, services_id
+		$query = $this->db->query("SELECT acad_yr, sem, subj_code, subj_desc, section, GROUP_CONCAT(DAY, ' ', time_start, '-', time_end SEPARATOR '<br>') AS schedule, GROUP_CONCAT(room SEPARATOR '<br>') AS room, CONCAT(lname,', ',fname,' ', mname) AS faculty, services_id
 									FROM services_assign sa LEFT JOIN faculty f
 									ON sa.faculty_id = f.faculty_id
 									WHERE 1 = 1 $statement

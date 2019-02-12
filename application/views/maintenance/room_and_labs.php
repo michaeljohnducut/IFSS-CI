@@ -13,13 +13,12 @@
                  <div class="white-box">
             <div class="row">
                     <!-- <div class="col-sm-12"> -->
-
-                <div class="col-md-12">
+                <div class="col-sm-12">
                     <br>
                     <h2>Search Filter</h2>
                     
                 </div>
-                <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+                <div  class="col-sm-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
                 </div> 
                         

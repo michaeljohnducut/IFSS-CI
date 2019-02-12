@@ -1178,7 +1178,7 @@ class Getdata_model extends CI_Model{
 			$statement .= " AND sem ='$sem'";
 		}
 
-		$query = $this->db->query("SELECT acad_yr, sem, subj_code, subj_desc, section, GROUP_CONCAT(DAY, time_start, time_end SEPARATOR '\n') AS schedule, GROUP_CONCAT(room SEPARATOR '\n') AS room, CONCAT(lname,', ',fname,' ', mname) AS faculty, services_id
+		$query = $this->db->query("SELECT acad_yr, sem, subj_code, subj_desc, section, GROUP_CONCAT(DAY, ' ', time_start, '-', time_end SEPARATOR '<br>') AS schedule, GROUP_CONCAT(room SEPARATOR '<br>') AS room, CONCAT(lname,', ',fname,' ', mname) AS faculty, services_id
 									FROM services_assign sa LEFT JOIN faculty f
 									ON sa.faculty_id = f.faculty_id
 									WHERE 1 = 1 $statement
@@ -2249,15 +2249,23 @@ FROM subject_match sm
 		$query = $this->db->select('r.room_id, r.room_code')
 				->where('r.room_id NOT IN (SELECT ta.room_id
 					FROM teaching_assign_sched ta
-					WHERE ta.time_start > "'.$start_time.'"
+					WHERE ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
+					AND ta.time_start > "'.$start_time.'"
 					AND ta.time_start < "'.$end.'"
 					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
 					OR ta.time_finish > "'.$start_time.'"
 					AND ta.time_finish < "'.$end.'"
 					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'"
 					OR ta.time_start = "'.$start_time.'"
 					AND ta.time_finish = "'.$end.'"
-					AND ta.day = "'.$day.'")', NULL, FALSE)
+					AND ta.day = "'.$day.'"
+					AND ta.acad_yr = "'.$acad_year.'"
+					AND ta.sem = "'.$sem.'")', NULL, FALSE)
 				->where('r.room_desc = "Laboratory Room"', NULL, FALSE)
 				->order_by('room_code', 'asc')
                 ->get('room r');
@@ -4787,10 +4795,10 @@ FROM subject_match sm
 				->where('ta.acad_yr', $acad_year)
 				->where('ta.sem', $sem)
 				->join('subject_match sm', 'sm.subj_match_id = ta.subj_match_id')
-                ->get('teaching_assign_sched ta ');
+                ->get('teaching_assign_sched ta');
 
-        foreach ($query->result() as $r){
-
+        foreach ($query->result() as $r)
+        {
         	$query2 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
         		->where('f.faculty_id IN (SELECT faculty_id
 									FROM preferred_subj 
@@ -4849,7 +4857,7 @@ FROM subject_match sm
 
 		foreach ($diff_arr as $t) {
 
-			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
 			->where('f.faculty_id', $t)
 			->get('faculty f');
 
@@ -4907,7 +4915,7 @@ FROM subject_match sm
 
         foreach ($query->result() as $r){
 
-        	$query2 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+        	$query2 = $this->db->select("f.faculty_id, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
         		->where('f.faculty_id IN (SELECT faculty_id
 									FROM preferred_subj 
 									WHERE subj_code = '.$r->subj_id.'
@@ -4965,7 +4973,7 @@ FROM subject_match sm
 
 		foreach ($diff_arr as $t) {
 
-			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, '. ', f.fname, ' ', f.mname) as 'facname'")
+			$query3 = $this->db->select("f.faculty_id, CONCAT(f.lname, ', ', f.fname, ' ', f.mname) as 'facname'")
 			->where('f.faculty_id', $t)
 			->get('faculty f');
 

@@ -1,6 +1,6 @@
 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                         <h4 class="page-title">Reports</h4>
+                         <h4 class="page-title">Room Schedules</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <ol class="breadcrumb">
@@ -15,18 +15,12 @@
             <div class="row">      
                 <div class="col-sm-12">
                     <div class="white-box">
-                        
                         <div class="row">
-                            <h2>Room Schedules</h2>
+                            <h2>Search Filter</h2>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
                             </div>
                             <br>
-                            <br>
-
-
                         </div>
-
                         <div class="row" id="div_by_room" >
                             <div class="col-md-2">
                                 <label class="control-label">Select A.Y.</label>
@@ -59,12 +53,8 @@
                                 <button style="margin-top: 25px" type="btn" class="btn btn-info" id="btnPrint">Print Room Schedule</button>
                             </div>
                         </div>
-
-
-
-                         <br><br><br>
+                        <br>
                         <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
                         </div>
                         <br>
                         <div class="row">

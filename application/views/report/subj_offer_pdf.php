@@ -292,6 +292,7 @@
                 		{
                 			$section_id = $s[0];
                 			$result2 = $this->getdata_model->get_section_schedule($acadyr, $sem, $section_id);
+                			$result3 = $this->getdata_model->get_section_total($acadyr, $sem, $section_id);
                 			echo '<label><b>'.$s[1].'</b></label>';
                 			echo '<div style="font-size:11px; page-break-inside: avoid;">
                 					<table style="width:100%">

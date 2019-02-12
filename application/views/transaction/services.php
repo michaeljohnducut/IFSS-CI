@@ -16,8 +16,8 @@
                     <div class="white-box">
                         <div class="row">
                             <h2>Search Filter</h2>
-                            <!-- <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-                            </div> -->
+                            <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+                            </div>
                             <br>
                         </div>
                         <div class="row">
@@ -51,6 +51,7 @@
                         <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
 
                         </div>
+                        <br>
                         <h3 class="box-title m-b-0">Legend:</h3>
                         <div class="row" style="margin-left: 20px; margin-top: 5px;">
                             <div class="col-md-2">
@@ -62,8 +63,7 @@
                                 <label style="margin-top: 5px;">Edit Services</label>
                             </div>
                          </div>
-
-                        <br><br><br>
+                        <br><br>
                         <div class="table-responsive">
                             <table id="services-table" class="table table-striped">
                                 <thead>

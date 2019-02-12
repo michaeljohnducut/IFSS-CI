@@ -294,8 +294,8 @@
                             <h1 class="text-white">
                                 <?php
                                     $year = date('Y');
-                                    (date('m') < 6) ? $year - 1 : $year;
-                                    echo $year.'-'.($year+1); 
+                                    (date('m') < 06) ? $year_used = $year - 1 : $year_used = $year;
+                                    echo $year_used.'-'.($year_used+1); 
                                 ?>
                             </h1>
                             <p class="text-white">Academic Year</p>

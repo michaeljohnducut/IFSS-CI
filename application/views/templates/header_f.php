@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<!-- Mirrored from eliteMaintenance.themedesigner.in/demos/eliteMaintenance-horizontal-nav-fullwidth/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 07 Mar 2018 02:42:28 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -222,7 +220,7 @@
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top m-b-0">
             <div class="navbar-header" style="background-color: #2D3640;"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="ti-menu"></i></a>
-                <div class="top-left-part"><a href="index.php"><span><img src="<?php echo base_url(); ?>assets/plugins/images/header.png" alt="home" height="60px" style="margin-left: 10px;" /></span></a></div>
+                <div class="top-left-part"><a href="<?php echo base_url();?>Maintenance/faculty_prof"><span><img src="<?php echo base_url(); ?>assets/plugins/images/header.png" alt="home" height="60px" style="margin-left: 10px;" /></span></a></div>
                 <ul class="nav navbar-top-links navbar-left hidden-xs">
                     <li><a href="javascript:void(0)" class="open-close hidden-xs waves-effect waves-light"><i class="icon-arrow-left-circle ti-menu"></i></a></li>
                     <!-- <li>
@@ -252,11 +250,11 @@
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
-                    <li><a href="<?php echo base_url();?>Maintenance/faculty_prof" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Faculty Profile<span class="fa arrow"></span></span></a>
+                    <li><a href="<?php echo base_url();?>Maintenance/faculty_prof" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Faculty Profile</span></a>
                     </li>
-                    <li><a href="<?php echo base_url();?>Transaction/subject_pref" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Subject Preference<span class="fa arrow"></span></span></a>
+                    <li><a href="<?php echo base_url();?>Transaction/subject_pref" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Subject Preference</span></a>
                     </li>
-                    <li><a href="<?php echo base_url();?>Transaction/view_schedule" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">View Schedule<span class="fa arrow"></span></span></a>
+                    <li><a href="<?php echo base_url();?>Transaction/view_schedule" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">View Schedule</span></a>
                     </li>
                 </ul>
             </div>

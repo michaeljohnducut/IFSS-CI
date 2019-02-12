@@ -747,7 +747,7 @@ function getPrefTime(faculty_id, acad_year, sem){
 
                 code_temp = arr[i][0];
                 $("input[value ="+ "'" + code_temp + "'" + "]").prop('checked',true);
-                // alert(code_temp);
+                //alert(code_temp);
             }
     }
 

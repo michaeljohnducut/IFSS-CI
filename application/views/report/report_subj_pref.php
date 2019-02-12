@@ -1,6 +1,6 @@
 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                         <h4 class="page-title">Reports</h4>
+                         <h4 class="page-title">Subject Preferences</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <ol class="breadcrumb">
@@ -15,15 +15,10 @@
             <div class="row">      
                 <div class="col-sm-12">
                     <div class="white-box">
-                        <br>
-                        <br>
-                        
                         <div class="row">
-                            <h2>Reports on Faculty Subject Preferences</h2>
+                            <h2>Search Filter</h2>
                             <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
-
                             </div>
-                            <br>
                             <br>
                         </div>
                         <div class="row">
@@ -54,8 +49,10 @@
                                 
                             </div>
                         </div>
-                        <br><br>
-
+                        <br>
+                        <div  class="col-md-12" style="background-color: gray; height: 3px; margin-top: -5px;">
+                        </div>
+                        <br>
                         <div class="table-responsive">
                             <table class="table table-striped" id="faculty_table">
                                 <thead>

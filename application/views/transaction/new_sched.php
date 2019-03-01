@@ -6593,6 +6593,7 @@ $(document).on('click', '#btn_reschedule', function(e){
                          if(data == 'DELETED'){
                             swal("Success!", "Teaching load available for rescheduling.", "success");
                             loadSchedTable();
+                            loadSectionTable();
                             getFacultyLoads();
                             resetPlotForm();
                             showTeachingLoads();
